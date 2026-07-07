@@ -1,10 +1,19 @@
-import { auth } from "@/auth";
+import { NextRequest, NextResponse } from "next/server";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 
-export { auth } from "@/auth";
+export async function proxy(request: NextRequest) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-export const proxy = auth((req) => {
-  if (!req.auth && req.nextUrl.pathname !== "/sign-in") {
-    const newUrl = new URL("/sign-in", req.nextUrl.origin);
-    return Response.redirect(newUrl);
+  if (!session) {
+    return NextResponse.redirect(new URL("/auth/sign-in", request.url));
   }
-});
+
+  return NextResponse.next();
+}
+
+export const config = {
+  matcher: ["/admin/:path*"], // Specify the routes the middleware applies to
+};

@@ -11,20 +11,64 @@ import {
 } from "@heroui/react";
 import { ChartBar } from "@gravity-ui/icons";
 import { redirect } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
+import type { FormEvent, SubmitEvent } from "react";
 
-export default function SignUp({
+export default function SignIn({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    redirect("/category");
-  };
+    const formData = new FormData(event.currentTarget);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    console.log("Login:", { email, password });
+
+    const { data, error } = await authClient.signIn.email(
+      {
+        email, // user email address
+        password, // user password -> min 8 characters by default
+        callbackURL: "/admin/category", // A URL to redirect to after the user verifies their email (optional)
+      },
+      {
+        onRequest: (ctx) => {
+          //show loading
+          console.log("Loading...");
+        },
+        onSuccess: (ctx) => {
+          //redirect to the dashboard or sign in page
+          console.log("Success...");
+        },
+        onError: async (ctx) => {
+          if (ctx.error.status === 403) {
+            alert(
+              "Email no verificado. Por favor, verifica tu email para continuar.",
+            );
+            await authClient.sendVerificationEmail({
+              email: email,
+              callbackURL: "/", // The redirect URL after verification
+            });
+            return;
+          }
+
+          // display the error message
+          alert(ctx.error.message);
+          console.log("Error...");
+          console.log("Error details:", ctx.error);
+        },
+      },
+    );
+  }
+
   return (
     <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10">
       <div className="w-full max-w-sm">
         <div className={cn("flex flex-col gap-6", className)} {...props}>
-          <Form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+          <Form
+            className="flex flex-col gap-4"
+            onSubmit={(event) => handleSubmit(event)}
+          >
             {/*  <FieldGroup> */}
             <div className="flex flex-col items-center gap-2 text-center">
               <a
@@ -36,9 +80,9 @@ export default function SignUp({
                 </div>
                 <span className="sr-only">Acme Inc.</span>
               </a>
-              <h1 className="text-xl font-bold">Regístrate en Zentlet</h1>
+              <h1 className="text-xl font-bold">Bienvenido a Zentlet</h1>
               <Description>
-                ¿Ya tienes una cuenta? <a href="/sign-in">Inicia sesión</a>
+                ¿No tienes una cuenta? <a href="/auth/sign-up">Regístrate</a>
               </Description>
             </div>
             <TextField>
@@ -59,17 +103,8 @@ export default function SignUp({
                 required
               />
             </TextField>
-            <TextField>
-              <Label htmlFor="confirm-password">Confirm Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                required
-              />
-            </TextField>
             <Button type="submit" className="w-full">
-              Registrarse
+              Login
             </Button>
             <Separator />
             <div className="grid gap-4 sm:grid-cols-2">

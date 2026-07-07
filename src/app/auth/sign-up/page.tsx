@@ -10,22 +10,88 @@ import {
   TextField,
 } from "@heroui/react";
 import { ChartBar } from "@gravity-ui/icons";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
-export default function SignIn({
+import { z } from "zod";
+
+export const signUpSchema = z
+  .object({
+    name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
+    email: z.email("Correo inválido"),
+    password: z
+      .string()
+      .min(8, "La contraseña debe tener al menos 8 caracteres"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Las contraseñas no coinciden",
+    path: ["confirmPassword"],
+  });
+
+export type SignUpSchema = z.infer<typeof signUpSchema>;
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+export default function SignUp({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    redirect("/category");
-  };
+  const router = useRouter();
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<SignUpSchema>({
+    resolver: zodResolver(signUpSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
+
+  const onSubmit = async (values: SignUpSchema) => {
+    console.log("Sign Up:", values);
+    console.log(errors);
+    const { data, error } = await authClient.signUp.email(
+      {
+        email: values.email, // user email address
+        password: values.password, // user password -> min 8 characters by default
+        name: values.name, // user display name
+        callbackURL: "/admin/category", // A URL to redirect to after the user verifies their email (optional)
+      },
+      {
+        onRequest: (ctx) => {
+          //show loading
+          console.log("Loading...");
+        },
+        onSuccess: (ctx) => {
+          //redirect to the dashboard or sign in page
+          console.log("Success...");
+          router.push("/"); // pantalla de verificacion de email
+        },
+        onError: (ctx) => {
+          // display the error message
+          alert(ctx.error.message);
+          console.log("Error...");
+        },
+      },
+    );
+
+    console.log({ data, error });
+  };
   return (
     <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10">
       <div className="w-full max-w-sm">
         <div className={cn("flex flex-col gap-6", className)} {...props}>
-          <Form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+          <Form
+            className="flex flex-col gap-4"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             {/*  <FieldGroup> */}
             <div className="flex flex-col items-center gap-2 text-center">
               <a
@@ -37,11 +103,21 @@ export default function SignIn({
                 </div>
                 <span className="sr-only">Acme Inc.</span>
               </a>
-              <h1 className="text-xl font-bold">Bienvenido a Zentlet</h1>
+              <h1 className="text-xl font-bold">Regístrate en Zentlet</h1>
               <Description>
-                ¿No tienes una cuenta? <a href="/sign-up">Regístrate</a>
+                ¿Ya tienes una cuenta? <a href="/sign-in">Inicia sesión</a>
               </Description>
             </div>
+            <TextField>
+              <Label htmlFor="">Nombre</Label>
+              <Input
+                id="name"
+                type="text"
+                placeholder="John Doe"
+                required
+                {...register("name")}
+              />
+            </TextField>
             <TextField>
               <Label htmlFor="email">Email</Label>
               <Input
@@ -49,6 +125,7 @@ export default function SignIn({
                 type="email"
                 placeholder="m@example.com"
                 required
+                {...register("email")}
               />
             </TextField>
             <TextField>
@@ -58,10 +135,21 @@ export default function SignIn({
                 type="password"
                 placeholder="••••••••"
                 required
+                {...register("password")}
+              />
+            </TextField>
+            <TextField>
+              <Label htmlFor="confirm-password">Confirm Password</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="••••••••"
+                required
+                {...register("confirmPassword")}
               />
             </TextField>
             <Button type="submit" className="w-full">
-              Login
+              Registrarse
             </Button>
             <Separator />
             <div className="grid gap-4 sm:grid-cols-2">
