@@ -55,8 +55,6 @@ export default function SignUp({
   });
 
   const onSubmit = async (values: SignUpSchema) => {
-    console.log("Sign Up:", values);
-    console.log(errors);
     const { data, error } = await authClient.signUp.email(
       {
         email: values.email, // user email address
@@ -72,7 +70,7 @@ export default function SignUp({
         onSuccess: (ctx) => {
           //redirect to the dashboard or sign in page
           console.log("Success...");
-          router.push("/"); // pantalla de verificacion de email
+          router.push("/admin/category"); // pantalla de verificacion de email
         },
         onError: (ctx) => {
           // display the error message
