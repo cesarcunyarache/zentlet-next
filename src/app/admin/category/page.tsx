@@ -1,7 +1,9 @@
 "use client";
 
+import { useCategory } from "@/features/category/hooks/useCategory";
 import { Check, Plus } from "@gravity-ui/icons";
-import { useState } from "react";
+import { Button, Drawer, useOverlayState } from "@heroui/react";
+import React, { useState } from "react";
 
 const CATEGORIES = [
   { id: 1, label: "Compras", emoji: "🥑", color: "bg-[#D4E8A8]" },
@@ -12,7 +14,22 @@ const CATEGORIES = [
   { id: 6, label: "Mascotas", emoji: "🐕", color: "bg-[#E8D4F0]" },
 ];
 
+import { z } from "zod";
+import CategoryForm from "./CategoryForm";
+
+export const categorySchema = z.object({
+  name: z.string().min(2, "El nombre debe tener mínimo 2 caracteres"),
+
+  icon: z.string().min(1, "Selecciona un icono"),
+
+  description: z.string().optional(),
+});
+
+export type CategoryFormValues = z.infer<typeof categorySchema>;
+
 export default function CategorySelector() {
+  const { categories, createCategory } = useCategory();
+
   const [selected, setSelected] = useState<number[]>([]);
 
   const toggleCategory = (id: number) => {
@@ -21,12 +38,43 @@ export default function CategorySelector() {
     );
   };
 
+  console.log(categories);
+
   const handleSave = () => {
     console.log("Categorías seleccionadas:", selected);
   };
 
+  const [isOpen, setIsOpen] = React.useState(false);
+  const state = useOverlayState();
+
   return (
     <div className="flex items-center justify-center min-h-screen px-4">
+      <div className="flex flex-wrap gap-4 max-w-3xl justify-center align-center">
+        <Drawer isOpen={isOpen} onOpenChange={setIsOpen}>
+          <Drawer.Backdrop variant="blur" className="">
+            <Drawer.Content
+              placement="bottom"
+              className="w-full md:max-w-xl md:mx-auto h-screen"
+            >
+              <Drawer.Dialog className="h-screen">
+                <Drawer.CloseTrigger />
+                <Drawer.Handle />
+
+                <Drawer.Body>
+                  <CategoryForm onSuccess={() => setIsOpen(false)} />
+                </Drawer.Body>
+                {/*  <Drawer.Footer>
+                  <Button slot="close" variant="secondary">
+                    Cancel
+                  </Button>
+                  <Button slot="close">Done</Button>
+                </Drawer.Footer> */}
+              </Drawer.Dialog>
+            </Drawer.Content>
+          </Drawer.Backdrop>
+        </Drawer>
+      </div>
+
       <div className="w-full max-w-sm">
         {/* Header */}
         <div className="mb-8">
@@ -37,7 +85,7 @@ export default function CategorySelector() {
 
         {/* Categories Grid */}
         <div className="grid grid-cols-3 gap-4 mb-6">
-          {CATEGORIES.map((category) => (
+          {categories.map((category: any) => (
             <button
               key={category.id}
               onClick={() => toggleCategory(category.id)}
@@ -48,8 +96,11 @@ export default function CategorySelector() {
                   ? "ring-2 ring-gray-800 scale-95"
                   : "hover:scale-105"
               }`}
+              style={{
+                backgroundColor: category.color,
+              }}
             >
-              <div className="text-4xl mb-2">{category.emoji}</div>
+              <div className="text-4xl mb-2">{category.icon}</div>
               <p className="text-xs font-medium text-gray-700 text-center px-1">
                 {category.label}
               </p>
@@ -64,7 +115,10 @@ export default function CategorySelector() {
 
         {/* Add Category Button */}
         <div className="flex justify-start mb-8">
-          <button className="flex flex-col items-center justify-center w-24 h-24 border-2 border-dashed border-gray-400 rounded-2xl text-gray-500 hover:border-gray-600 hover:text-gray-700 transition-colors">
+          <button
+            className="flex flex-col items-center justify-center w-24 h-24 border-2 border-dashed border-gray-400 rounded-2xl text-gray-500 hover:border-gray-600 hover:text-gray-700 transition-colors"
+            onClick={() => setIsOpen(true)}
+          >
             <Plus /* size={24}  */ />
             <span className="text-xs mt-2 text-center text-gray-600 px-2">
               Añadir
