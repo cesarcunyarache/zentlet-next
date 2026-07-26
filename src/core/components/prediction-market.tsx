@@ -1,4 +1,4 @@
-"use client";
+/* "use client";
 // beui.dev/components/blocks/prediction-market
 
 import { Banknote, ChevronDown } from "lucide-react";
@@ -681,3 +681,4 @@ export function PredictionMarket({
     </div>
   );
 }
+ */
