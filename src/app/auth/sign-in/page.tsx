@@ -10,6 +10,8 @@ import {
   TextField,
 } from "@heroui/react";
 import { ChartBar } from "@gravity-ui/icons";
+import Link from "next/link";
+import { AuthLink } from "@/core/components/auth-transition";
 import { redirect } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import type { FormEvent, SubmitEvent } from "react";
@@ -71,18 +73,18 @@ export default function SignIn({
           >
             {/*  <FieldGroup> */}
             <div className="flex flex-col items-center gap-2 text-center">
-              <a
-                href="#"
-                className="flex flex-col items-center gap-2 font-medium"
+              <Link
+                href="/"
+                className="hidden flex-col items-center gap-2 font-medium lg:flex"
               >
                 <div className="bg-app-fg text-app-bg flex size-12 items-center justify-center rounded-2xl shadow-[0_10px_24px_-8px_color-mix(in_oklch,var(--app-fg)_55%,transparent)]">
                   <ChartBar className="size-6" />
                 </div>
                 <span className="sr-only">Zentlet</span>
-              </a>
-              <h1 className="font-display mt-2 text-[28px] leading-tight font-bold tracking-[-0.03em]">Bienvenido a Zentlet</h1>
+              </Link>
+              <h1 className="font-display m-0 lg:mt-2 text-[28px] leading-tight font-bold tracking-[-0.03em]">Bienvenido a Zentlet</h1>
               <Description className="text-app-muted">
-                ¿No tienes una cuenta? <a href="/auth/sign-up">Regístrate</a>
+                ¿No tienes una cuenta? <AuthLink href="/auth/sign-up">Regístrate</AuthLink>
               </Description>
             </div>
             <TextField>
@@ -116,7 +118,7 @@ export default function SignIn({
               <Button
                 variant="outline"
                 type="button"
-                className="h-11 rounded-xl"
+                className="h-11 w-full rounded-xl"
                 onClick={async () => {
                   await authClient.signIn.social({
                     provider: "github",
@@ -136,7 +138,7 @@ export default function SignIn({
               <Button
                 variant="outline"
                 type="button"
-                className="h-11 rounded-xl"
+                className="h-11 w-full rounded-xl"
                 onClick={() => {
                   authClient.signIn.social({
                     provider: "google",

@@ -11,6 +11,8 @@ import {
   useTransform,
   type MotionValue,
 } from "framer-motion";
+import Link from "next/link";
+import { AuthTransition } from "@/core/components/auth-transition";
 import { cn } from "@heroui/react";
 import { CategoryEmoji } from "@/features/transaction/components/category-emoji";
 import { formatNumber } from "@/features/transaction/lib/format";
@@ -21,6 +23,9 @@ import { SPRING_MOUSE } from "@/lib/ease";
  * siguiendo al puntero. A la izquierda, piezas de la propia app (balance,
  * movimientos, gasto por categoría) flotando a distintas profundidades;
  * a la derecha, el formulario tal cual.
+ *
+ * En móvil no hay tarjeta: la pantalla entera es la app, con una banda de
+ * marca arriba y el formulario debajo (la inclinación no existe en táctil).
  */
 
 const SLIDES = [
@@ -78,7 +83,8 @@ export function AuthScene({ children }: { children: React.ReactNode }) {
   const glare = useMotionTemplate`radial-gradient(420px circle at ${glareX}% ${glareY}%, color-mix(in oklch, var(--app-surface) 16%, transparent), transparent 70%)`;
 
   function handlePointerMove(event: React.PointerEvent<HTMLDivElement>) {
-    if (reduceMotion || event.pointerType !== "mouse") return;
+    // en móvil la escena es plana: sin tarjeta que inclinar
+    if (reduceMotion || event.pointerType !== "mouse" || window.innerWidth < 640) return;
     pointerX.set(event.clientX / window.innerWidth - 0.5);
     pointerY.set(event.clientY / window.innerHeight - 0.5);
   }
@@ -92,12 +98,12 @@ export function AuthScene({ children }: { children: React.ReactNode }) {
     <div
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
-      className="bg-app-bg text-app-fg relative flex min-h-svh items-center justify-center overflow-hidden p-4 sm:p-6 md:p-10"
+      className="bg-app-surface sm:bg-app-bg text-app-fg relative flex min-h-svh justify-center overflow-hidden sm:items-center sm:p-6 md:p-10"
     >
       {/* halo suave detrás de la tarjeta para despegarla del fondo */}
       <div
         aria-hidden
-        className="pointer-events-none absolute top-1/2 left-1/2 size-[70vmin] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[color-mix(in_oklch,var(--app-fg)_6%,transparent)] blur-3xl"
+        className="pointer-events-none absolute top-1/2 left-1/2 hidden size-[70vmin] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[color-mix(in_oklch,var(--app-fg)_6%,transparent)] blur-3xl sm:block"
       />
 
       {PETALS.map((petal, index) => (
@@ -106,7 +112,7 @@ export function AuthScene({ children }: { children: React.ReactNode }) {
           x={x}
           y={y}
           depth={-petal.depth}
-          className={cn("pointer-events-none absolute opacity-80", petal.className)}
+          className={cn("pointer-events-none absolute hidden opacity-80 sm:block", petal.className)}
           style={{ background: petal.color }}
         />
       ))}
@@ -114,12 +120,15 @@ export function AuthScene({ children }: { children: React.ReactNode }) {
       <div className="relative w-full max-w-5xl [perspective:1600px]">
         <motion.div
           style={{ rotateX, rotateY }}
-          className="bg-app-surface grid overflow-hidden rounded-[28px] shadow-[0_40px_80px_-32px_color-mix(in_oklch,var(--app-fg)_38%,transparent),0_2px_6px_color-mix(in_oklch,var(--app-fg)_6%,transparent)] lg:min-h-[620px] lg:grid-cols-[1.05fr_1fr]"
+          className="bg-app-surface grid min-h-svh overflow-hidden sm:min-h-0 sm:rounded-[28px] sm:shadow-[0_40px_80px_-32px_color-mix(in_oklch,var(--app-fg)_38%,transparent),0_2px_6px_color-mix(in_oklch,var(--app-fg)_6%,transparent)] lg:min-h-[680px] lg:grid-cols-[1.05fr_1fr]"
         >
           <Showcase x={x} y={y} glare={glare} />
 
-          <div className="flex items-center justify-center px-6 py-10 sm:px-10 md:py-14">
-            {children}
+          <div className="flex flex-col">
+            <MobileBrand />
+            <div className="flex flex-1 items-start justify-center px-6 pt-8 pb-10 sm:items-center sm:px-10 md:py-14">
+              <AuthTransition>{children}</AuthTransition>
+            </div>
           </div>
         </motion.div>
       </div>
@@ -175,9 +184,9 @@ function Showcase({
     <div className="bg-app-fg text-app-bg relative hidden flex-col justify-between overflow-hidden p-10 lg:flex">
       <motion.div aria-hidden style={{ background: glare }} className="pointer-events-none absolute inset-0" />
 
-      <span className="font-display relative text-2xl font-bold tracking-[-0.03em]">
+      <Link href="/" className="font-display relative w-fit text-2xl font-bold tracking-[-0.03em]">
         Zentlet<span className="text-app-expense">.</span>
-      </span>
+      </Link>
 
       <div className="relative mx-auto h-[330px] w-full max-w-[380px]">
         {/* balance del mes */}
@@ -301,6 +310,38 @@ function Showcase({
             </button>
           ))}
         </div>
+      </div>
+    </div>
+  );
+}
+
+/** Cabecera de marca sólo en móvil: sustituye al panel oscuro de escritorio. */
+function MobileBrand() {
+  return (
+    <div className="bg-app-fg text-app-bg relative overflow-hidden rounded-b-[32px] px-6 pt-7 pb-8 sm:rounded-none lg:hidden">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-16 -right-10 size-48 rounded-full bg-[color-mix(in_oklch,var(--app-expense)_45%,transparent)] blur-3xl"
+      />
+      <Link href="/" className="font-display relative text-xl font-bold tracking-[-0.03em]">
+        Zentlet<span className="text-app-expense">.</span>
+      </Link>
+
+      <div className="relative mt-6 flex items-end justify-between gap-4">
+        <div>
+          <p className="font-display m-0 text-[22px] leading-tight font-bold tracking-[-0.02em]">
+            {SLIDES[0].title}
+          </p>
+          <p className="m-0 mt-1 text-sm text-[color-mix(in_oklch,var(--app-bg)_70%,transparent)]">
+            {SLIDES[0].body}
+          </p>
+        </div>
+        <FloatCard delay={0} className="shrink-0 -rotate-[4deg] px-3 py-2.5">
+          <p className="text-app-muted m-0 text-[10px] font-semibold">Balance</p>
+          <p className="font-display text-app-income m-0 text-lg leading-none font-bold tracking-[-0.03em] tabular-nums">
+            {formatNumber(1185.7)}
+          </p>
+        </FloatCard>
       </div>
     </div>
   );
