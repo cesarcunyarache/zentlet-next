@@ -20,7 +20,7 @@ import { Check } from "@gravity-ui/icons";
 import { EASE_OUT } from "@/lib/ease";
 import { GestureCarousel } from "@/core/components/carrusel";
 import { generateCategory } from "@/features/category/ai/actions/category-generator";
-import { useSyncStatus } from "@/core/offline/sync-status";
+import { useIsOnline } from "@/core/offline/sync-status";
 
 interface CategoryIcon {
   icon: string;
@@ -41,6 +41,17 @@ const FALLBACK_ICONS: CategoryIcon[] = [
   { icon: "🎉", color: "#F8D9EA" },
   { icon: "💼", color: "#D5F0DD" },
 ];
+
+/** Iconos sugeridos por la IA, o `null` si no está disponible. */
+async function suggestIcons(name: string): Promise<CategoryIcon[] | null> {
+  // sin red la llamada fallaría seguro
+  if (!navigator.onLine) return null;
+  try {
+    return (await generateCategory(name)).categories;
+  } catch {
+    return null;
+  }
+}
 
 export interface EditableCategory {
   id: string;
@@ -71,7 +82,7 @@ export default function CategoryForm({
   );
   const [loadingAI, setLoadingAI] = useState(false);
   const [aiUnavailable, setAiUnavailable] = useState(false);
-  const { online } = useSyncStatus();
+  const online = useIsOnline();
 
   const form = useForm<CategoryFormValues>({
     resolver: zodResolver(categorySchema),
@@ -96,17 +107,10 @@ export default function CategoryForm({
     async function generate() {
       try {
         setLoadingAI(true);
-        let suggested: CategoryIcon[];
-        try {
-          // sin red la llamada fallaría seguro: directo a los básicos
-          if (!navigator.onLine) throw new Error("offline");
-          suggested = (await generateCategory(debouncedName)).categories;
-          setAiUnavailable(false);
-        } catch {
-          suggested = FALLBACK_ICONS;
-          setAiUnavailable(true);
-        }
+        const fromAI = await suggestIcons(debouncedName);
         if (cancelled) return;
+        setAiUnavailable(!fromAI);
+        const suggested = fromAI ?? FALLBACK_ICONS;
         // al editar, el icono actual sigue siendo una opción del carrusel
         const icons = current
           ? [current, ...suggested.filter((s) => s.icon !== current.icon)]

@@ -80,14 +80,13 @@ export function CategoryStrip({
         {data.map(({ category, total }, index) => {
           const isSelected = selectedId === category.id;
           const idle = total === 0;
-          const income = total > 0;
           const height = idle
             ? IDLE_HEIGHT
             : BAR_BASE +
               Math.round((Math.abs(total) / max) * (CHART_HEIGHT - BAR_BASE));
-          const amount = idle
+          const amountLabel = idle
             ? "sin movimientos"
-            : `${income ? "ingresos" : "gastos"} ${formatMoney(total, currency)}`;
+            : `${total > 0 ? "ingresos" : "gastos"} ${formatMoney(total, currency)}`;
 
           return (
             <motion.button
@@ -95,8 +94,8 @@ export function CategoryStrip({
               layout={!reduceMotion}
               type="button"
               aria-pressed={isSelected}
-              aria-label={`${category.name}, ${amount}`}
-              title={`${category.name} · ${amount}`}
+              aria-label={`${category.name}, ${amountLabel}`}
+              title={`${category.name} · ${amountLabel}`}
               onClick={() => onSelect(isSelected ? null : category.id)}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: selectedId && !isSelected ? 0.4 : 1, y: 0 }}

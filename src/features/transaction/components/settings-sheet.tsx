@@ -81,6 +81,17 @@ export function SettingsSheet({
   );
 }
 
+function countChanges(count: number) {
+  return `${count} ${count === 1 ? "cambio" : "cambios"}`;
+}
+
+function connectionHint(online: boolean, pendingCount: number, syncingCount: number) {
+  if (online) {
+    return syncingCount > 0 ? `Sincronizando ${countChanges(syncingCount)}…` : "Tus datos están sincronizados";
+  }
+  return pendingCount > 0 ? `${countChanges(pendingCount)} sin sincronizar` : "Sin cambios pendientes";
+}
+
 /**
  * Estado de la conexión. Sin internet se sigue pudiendo trabajar: los
  * cambios quedan en el dispositivo y se envían al volver la conexión.
@@ -96,13 +107,7 @@ function ConnectionRow() {
             Conexión
           </span>
           <span className="text-app-muted mt-px block text-xs">
-            {online
-              ? syncingCount > 0
-                ? `Sincronizando ${syncingCount} ${syncingCount === 1 ? "cambio" : "cambios"}…`
-                : "Tus datos están sincronizados"
-              : pendingCount > 0
-                ? `${pendingCount} ${pendingCount === 1 ? "cambio pendiente" : "cambios pendientes"} de sincronizar`
-                : "Sin cambios pendientes"}
+            {connectionHint(online, pendingCount, syncingCount)}
           </span>
         </span>
         <span
@@ -172,7 +177,7 @@ function SignOutRow() {
   const hint = !online
     ? "Conéctate a internet para cerrar sesión"
     : confirming
-      ? `Tienes ${pendingCount} ${pendingCount === 1 ? "cambio" : "cambios"} sin sincronizar. Toca de nuevo para cerrar sesión y descartarlos`
+      ? `Tienes ${countChanges(pendingCount)} sin sincronizar. Toca de nuevo para cerrar sesión y descartarlos`
       : "También borra los datos guardados en este dispositivo";
 
   return (

@@ -26,7 +26,7 @@ export type OfflineSyncState = "paused" | "syncing";
  * `paused` = guardada en el dispositivo, esperando red; `syncing` = pasó
  * por la cola y se está enviando ahora. `null` = guardado normal con red.
  */
-export function offlineSyncState(mutation: Mutation<unknown, unknown, unknown>): OfflineSyncState | null {
+export function offlineSyncState(mutation: Mutation): OfflineSyncState | null {
   if (mutation.state.status !== "pending") return null;
   if (mutation.state.isPaused) return "paused";
   return queuedOffline.has(mutation) ? "syncing" : null;

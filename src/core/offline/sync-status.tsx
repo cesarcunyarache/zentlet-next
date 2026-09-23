@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { onlineManager, useMutationState, type Mutation } from "@tanstack/react-query";
+import { onlineManager, useMutationState } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "motion/react";
 import { Check, CloudOff, RefreshCw } from "lucide-react";
 import { SPRING_SWAP } from "@/lib/ease";
@@ -13,11 +13,15 @@ function subscribe(listener: () => void) {
   return onlineManager.subscribe(listener);
 }
 
+export function useIsOnline() {
+  return useSyncExternalStore(subscribe, () => onlineManager.isOnline(), () => true);
+}
+
 export function useSyncStatus() {
-  const online = useSyncExternalStore(subscribe, () => onlineManager.isOnline(), () => true);
+  const online = useIsOnline();
   const pending = useMutationState({
     filters: { status: "pending" },
-    select: (mutation) => offlineSyncState(mutation as Mutation<unknown, unknown, unknown>),
+    select: offlineSyncState,
   });
 
   return {
@@ -30,6 +34,9 @@ export function useSyncStatus() {
 }
 
 type Tone = "offline" | "syncing" | "synced";
+
+/** Cuánto se ve "Sincronizado" tras vaciarse la cola. */
+const SYNCED_VISIBLE_MS = 1800;
 
 const LABEL: Record<Tone, (count: number) => string> = {
   offline: (count) =>
@@ -51,7 +58,7 @@ export function SyncStatusPill() {
   useEffect(() => {
     if (online && previous.current > 0 && syncingCount === 0) {
       setJustSynced(true);
-      const timer = setTimeout(() => setJustSynced(false), 1800);
+      const timer = setTimeout(() => setJustSynced(false), SYNCED_VISIBLE_MS);
       previous.current = syncingCount;
       return () => clearTimeout(timer);
     }

@@ -187,7 +187,7 @@ export function usePendingTransactions() {
     select: (mutation) => {
       const change = toPendingChange(mutation as Mutation<unknown, unknown, unknown>);
       const id = change?.kind === "create" ? change.row.id : change?.id;
-      return { id, state: offlineSyncState(mutation as Mutation<unknown, unknown, unknown>) };
+      return { id, state: offlineSyncState(mutation) };
     },
   });
 
