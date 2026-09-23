@@ -1,20 +1,17 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { auth } from "@/lib/auth";
+import { updateCategorySchema } from "@/features/category/schemas/category-api.schema";
+import {
+  errorResponse,
+  getSessionUserId,
+  isForeignKeyViolation,
+  parseBody,
+  unauthorized,
+} from "@/lib/api/route-helpers";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
-/** Devuelve la sesión o null; centraliza la lectura de cabeceras. */
-async function getSessionUserId(req: Request) {
-  const session = await auth.api.getSession({ headers: req.headers });
-  return session?.user.id ?? null;
-}
-
-const unauthorized = () =>
-  NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-
-const notFound = () =>
-  NextResponse.json({ message: "Category not found" }, { status: 404 });
+const notFound = () => errorResponse("Category not found", 404);
 
 export async function GET(req: Request, { params }: RouteContext) {
   try {
@@ -28,10 +25,7 @@ export async function GET(req: Request, { params }: RouteContext) {
 
     return NextResponse.json(category);
   } catch {
-    return NextResponse.json(
-      { message: "Error fetching category" },
-      { status: 500 },
-    );
+    return errorResponse("Error fetching category", 500);
   }
 }
 
@@ -41,11 +35,12 @@ export async function PATCH(req: Request, { params }: RouteContext) {
     if (!userId) return unauthorized();
 
     const { id } = await params;
-    const { name, icon, color, description } = await req.json();
+    const parsed = await parseBody(req, updateCategorySchema);
+    if ("error" in parsed) return parsed.error;
 
     const { count } = await prisma.category.updateMany({
       where: { id, userId },
-      data: { name, icon, color, description },
+      data: parsed.data,
     });
 
     if (count === 0) return notFound();
@@ -54,13 +49,14 @@ export async function PATCH(req: Request, { params }: RouteContext) {
 
     return NextResponse.json(category);
   } catch {
-    return NextResponse.json(
-      { message: "Error updating category" },
-      { status: 500 },
-    );
+    return errorResponse("Error updating category", 500);
   }
 }
 
+/**
+ * 404 si no existe (el cliente lo trata como éxito). 409 si tiene
+ * movimientos: la clave foránea es RESTRICT y antes esto era un 500.
+ */
 export async function DELETE(req: Request, { params }: RouteContext) {
   try {
     const userId = await getSessionUserId(req);
@@ -74,10 +70,10 @@ export async function DELETE(req: Request, { params }: RouteContext) {
     if (count === 0) return notFound();
 
     return new NextResponse(null, { status: 204 });
-  } catch {
-    return NextResponse.json(
-      { message: "Error deleting category" },
-      { status: 500 },
-    );
+  } catch (error) {
+    if (isForeignKeyViolation(error)) {
+      return errorResponse("Esta categoría tiene movimientos y no se puede eliminar", 409);
+    }
+    return errorResponse("Error deleting category", 500);
   }
 }

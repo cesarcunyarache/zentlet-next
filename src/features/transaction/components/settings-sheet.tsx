@@ -1,7 +1,12 @@
 "use client";
 
-import { ChevronsUpDown } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ChevronsUpDown, LogOut } from "lucide-react";
+import { cn } from "@heroui/react";
 import { Sheet } from "@/core/components/ui/sheet";
+import { useOfflineSession } from "@/core/offline/offline-query-provider";
+import { useSyncStatus } from "@/core/offline/sync-status";
+import { authClient } from "@/lib/auth-client";
 
 const CURRENCIES = [
   { value: "S/", label: "S/ · sol" },
@@ -54,7 +59,7 @@ export function SettingsSheet({
         </span>
       </div>
 
-      <div className="flex items-center justify-between gap-3.5 py-3.5">
+      <div className="border-app-border flex items-center justify-between gap-3.5 border-b py-3.5">
         <span>
           <span className="text-app-fg block text-[14.5px] font-semibold">
             Datos
@@ -68,6 +73,71 @@ export function SettingsSheet({
           </span>
         </span>
       </div>
+
+      <SignOutRow />
     </Sheet>
+  );
+}
+
+/**
+ * Cerrar sesión borra también la cache local del usuario (IndexedDB y las
+ * páginas guardadas): en un dispositivo compartido no deben quedar sus
+ * datos. Si hay cambios sin sincronizar se perderían, así que se pide un
+ * segundo toque; sin conexión no se puede cerrar la sesión en el servidor.
+ */
+function SignOutRow() {
+  const { clearLocalData } = useOfflineSession();
+  const { online, pendingCount } = useSyncStatus();
+  const [confirming, setConfirming] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
+
+  // la confirmación caduca sola, como la de eliminar un movimiento
+  useEffect(() => {
+    if (!confirming) return;
+    const timer = setTimeout(() => setConfirming(false), 4000);
+    return () => clearTimeout(timer);
+  }, [confirming]);
+
+  async function signOut() {
+    if (pendingCount > 0 && !confirming) {
+      setConfirming(true);
+      return;
+    }
+    setSigningOut(true);
+    const { error } = await authClient.signOut();
+    if (error) {
+      setSigningOut(false);
+      return;
+    }
+    await clearLocalData();
+    window.location.replace("/auth/sign-in");
+  }
+
+  const hint = !online
+    ? "Conéctate a internet para cerrar sesión"
+    : confirming
+      ? `Tienes ${pendingCount} ${pendingCount === 1 ? "cambio" : "cambios"} sin sincronizar. Toca de nuevo para cerrar sesión y descartarlos`
+      : "También borra los datos guardados en este dispositivo";
+
+  return (
+    <button
+      type="button"
+      onClick={signOut}
+      disabled={!online || signingOut}
+      className="flex w-full items-center justify-between gap-3.5 py-3.5 text-left disabled:opacity-50"
+    >
+      <span>
+        <span
+          className={cn(
+            "block text-[14.5px] font-semibold",
+            confirming ? "text-app-expense" : "text-app-fg",
+          )}
+        >
+          {signingOut ? "Cerrando sesión…" : "Cerrar sesión"}
+        </span>
+        <span className="text-app-muted mt-px block text-xs">{hint}</span>
+      </span>
+      <LogOut className="text-app-muted size-4 shrink-0" aria-hidden />
+    </button>
   );
 }

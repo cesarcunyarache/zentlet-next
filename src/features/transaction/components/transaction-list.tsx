@@ -13,8 +13,12 @@ interface TransactionListProps {
   currency: string;
   /** Distingue "no hay nada" de "el filtro no encontró nada". */
   hasAnyTransaction: boolean;
+  /** Movimientos aún no confirmados por el servidor. */
+  syncStateById?: Map<string, "paused" | "syncing">;
   onSelect: (transaction: TTransaction) => void;
 }
+
+const SYNC_LABEL = { paused: "Pendiente", syncing: "Sincronizando…" } as const;
 
 interface DayGroup {
   date: string;
@@ -47,6 +51,7 @@ export function TransactionList({
   categoriesById,
   currency,
   hasAnyTransaction,
+  syncStateById,
   onSelect,
 }: TransactionListProps) {
   const reduceMotion = useReducedMotion();
@@ -89,6 +94,7 @@ export function TransactionList({
               {group.items.map((tx) => {
                 const category = categoriesById.get(tx.categoryId);
                 const amount = signedAmount(tx);
+                const syncState = syncStateById?.get(tx.id);
                 const delay = Math.min(row++, 8) * 0.03;
 
                 return (
@@ -112,8 +118,25 @@ export function TransactionList({
                       className="size-12 rounded-full text-[22px] transition-transform duration-200 group-hover:scale-105 group-hover:-rotate-6"
                     />
                     <span className="min-w-0 flex-1">
-                      <span className="text-app-muted block text-xs leading-[1.3]">
+                      <span className="text-app-muted flex items-center gap-1.5 text-xs leading-[1.3]">
                         {category?.name ?? "Sin categoría"}
+                        {syncState && (
+                          <span
+                            className={cn(
+                              "inline-flex items-center gap-1 rounded-full px-1.5 py-px text-[10.5px] font-semibold",
+                              syncState === "paused" ? "bg-app-fill text-app-fg" : "text-app-muted",
+                            )}
+                          >
+                            <span
+                              aria-hidden
+                              className={cn(
+                                "size-1.5 rounded-full",
+                                syncState === "paused" ? "bg-[oklch(0.78_0.15_75)]" : "bg-app-muted animate-pulse",
+                              )}
+                            />
+                            {SYNC_LABEL[syncState]}
+                          </span>
+                        )}
                       </span>
                       <span className="text-app-fg block truncate text-base font-semibold tracking-[-0.01em]">
                         {tx.description}

@@ -9,6 +9,15 @@ export const auth = betterAuth({
     provider: "postgresql",
   }),
 
+  /*
+   * La sesión viaja firmada en una cookie durante 5 min: el middleware y
+   * cada Route Handler la validan sin consultar la base de datos. A cambio,
+   * cerrar sesión en otro dispositivo tarda hasta 5 min en surtir efecto.
+   */
+  session: {
+    cookieCache: { enabled: true, maxAge: 5 * 60 },
+  },
+
   // Email Providers
   emailAndPassword: {
     enabled: true,

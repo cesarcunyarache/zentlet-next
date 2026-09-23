@@ -19,7 +19,8 @@ export class CategoryService extends APIService {
     return response.data;
   }
 
-  async createCategory(data: TCategoryPayload): Promise<TCategory> {
+  /** Idempotente: el id viaja en el cuerpo y repetirlo no duplica. */
+  async createCategory(data: TCategoryPayload & { id: string }): Promise<TCategory> {
     const response = await this.post<TCategory>("/api/category", data);
 
     return response.data;

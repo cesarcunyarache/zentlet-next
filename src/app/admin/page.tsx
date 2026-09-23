@@ -1,12 +1,16 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { LayoutGrid, Plus, Search, Settings, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { SPRING_LAYOUT, SPRING_PRESS } from "@/lib/ease";
 import { useCategoryStore } from "@/features/category/stores/category.store";
-import { getApiErrorMessage } from "@/core/services/api-error";
-import { useTransactionStore } from "@/features/transaction/stores/transaction.store";
+import { onSyncError } from "@/core/offline/sync-events";
+import { SyncStatusPill } from "@/core/offline/sync-status";
+import {
+  usePendingTransactions,
+  useTransactionStore,
+} from "@/features/transaction/stores/transaction.store";
 import { useCurrency } from "@/features/transaction/hooks/useCurrency";
 import { useToast } from "@/features/transaction/hooks/useToast";
 import { SummaryHeader } from "@/features/transaction/components/summary-header";
@@ -51,11 +55,15 @@ export default function HomePage() {
     [categories],
   );
 
-  const { transactions, createTransaction, deleteTransaction } =
+  const { transactions, isLoading, createTransaction, deleteTransaction } =
     useTransactionStore();
+  const syncStateById = usePendingTransactions();
   const { currency, setCurrency } = useCurrency();
 
   const { message, show: toast } = useToast();
+
+  // un rechazo del servidor llega después de haber cerrado el formulario
+  useEffect(() => onSyncError(toast), [toast]);
 
   const [period, setPeriod] = useState<Period>("month");
   const [kind, setKind] = useState<TransactionType | null>(null);
@@ -182,7 +190,8 @@ export default function HomePage() {
   return (
     <div className="app-shell bg-app-bg text-app-fg min-h-dvh">
       <main className="mx-auto flex max-w-xl flex-col px-5 pt-[calc(14px+env(safe-area-inset-top))] pb-36 sm:px-6">
-        <div className="flex h-11 items-center justify-end">
+        <div className="flex h-11 items-center justify-between">
+          <SyncStatusPill />
           <IconButton label="Ajustes" onClick={() => setSheet("settings")}>
             <Settings className="size-5" strokeWidth={1.7} />
           </IconButton>
@@ -254,13 +263,18 @@ export default function HomePage() {
         </AnimatePresence>
 
         <div className="mt-6">
-          <TransactionList
-            transactions={visibleRows}
-            categoriesById={categoriesById}
-            currency={currency}
-            hasAnyTransaction={transactions.length > 0}
-            onSelect={setDetail}
-          />
+          {isLoading ? (
+            <ListSkeleton />
+          ) : (
+            <TransactionList
+              transactions={visibleRows}
+              categoriesById={categoriesById}
+              currency={currency}
+              hasAnyTransaction={transactions.length > 0}
+              syncStateById={syncStateById}
+              onSelect={setDetail}
+            />
+          )}
         </div>
       </main>
 
@@ -315,20 +329,15 @@ export default function HomePage() {
         onOpenChange={(open) => setSheet(open ? "new" : null)}
         categories={categories}
         currency={currency}
-        onSubmit={async (values) => {
-          try {
-            await createTransaction({ ...values, reference: null });
-            setCategoryFilter(null);
-            setKind(null);
-            setPeriod("month");
-            toast(
-              values.type === "expense"
-                ? "Gasto registrado"
-                : "Ingreso registrado",
-            );
-          } catch (error) {
-            toast(getApiErrorMessage(error, "No se pudo guardar"));
-          }
+        onSubmit={(values) => {
+          // aparece al instante; se sincroniza por detrás (o en cola sin red)
+          createTransaction({ ...values, reference: null });
+          setCategoryFilter(null);
+          setKind(null);
+          setPeriod("month");
+          toast(
+            values.type === "expense" ? "Gasto registrado" : "Ingreso registrado",
+          );
         }}
       />
 
@@ -337,14 +346,10 @@ export default function HomePage() {
         category={detail ? categoriesById.get(detail.categoryId) : undefined}
         currency={currency}
         onOpenChange={(open) => !open && setDetail(null)}
-        onDelete={async (id) => {
+        onDelete={(id) => {
           setDetail(null);
-          try {
-            await deleteTransaction(id);
-            toast("Movimiento eliminado");
-          } catch (error) {
-            toast(getApiErrorMessage(error, "No se pudo eliminar"));
-          }
+          deleteTransaction(id);
+          toast("Movimiento eliminado");
         }}
       />
 
@@ -361,6 +366,25 @@ export default function HomePage() {
         transactionCount={transactions.length}
         onCurrencyChange={setCurrency}
       />
+    </div>
+  );
+}
+
+/** Primera carga sin nada guardado en el dispositivo: filas fantasma. */
+function ListSkeleton() {
+  return (
+    <div aria-hidden className="flex flex-col gap-1">
+      <span className="bg-app-fill mb-2 ml-1 h-3 w-16 animate-pulse rounded-full" />
+      {Array.from({ length: 5 }, (_, index) => (
+        <div key={index} className="flex min-h-[64px] items-center gap-3.5 px-1 py-2">
+          <span className="bg-app-fill size-12 shrink-0 animate-pulse rounded-full" />
+          <span className="flex flex-1 flex-col gap-2">
+            <span className="bg-app-fill h-2.5 w-20 animate-pulse rounded-full" />
+            <span className="bg-app-fill h-3.5 w-36 animate-pulse rounded-full" />
+          </span>
+          <span className="bg-app-fill h-3.5 w-16 animate-pulse rounded-full" />
+        </div>
+      ))}
     </div>
   );
 }

@@ -22,5 +22,8 @@ export interface CategoryLike {
   color?: string | null;
 }
 
-/** Campos que el cliente envía al crear o actualizar un movimiento. */
+/**
+ * Campos de un movimiento sin su id. Al crear, el id lo genera el cliente
+ * (`crypto.randomUUID`) para poder guardar sin conexión.
+ */
 export type TTransactionPayload = Omit<TTransaction, "id">;

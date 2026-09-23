@@ -36,12 +36,10 @@ export abstract class APIService {
     this.axiosInstance.interceptors.response.use(
       (response) => response,
       (error) => {
-        // El redirect por sesión caducada sólo tiene sentido en el navegador.
+        // Sesión caducada: al login (no a `/`, que es la landing). Las
+        // operaciones pendientes siguen guardadas y se reanudan al volver.
         if (typeof window !== "undefined" && error?.response?.status === 401) {
-          const currentPath = window.location.pathname;
-          window.location.replace(
-            `/${currentPath ? `?next_path=${currentPath}` : ``}`,
-          );
+          window.location.replace("/auth/sign-in");
         }
         return Promise.reject(error);
       },

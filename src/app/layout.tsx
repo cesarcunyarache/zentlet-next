@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { QueryProvider } from "@/providers/query-provider";
 import { siteConfig } from "@/lib/site";
+import { ServiceWorkerRegister } from "@/core/offline/service-worker-register";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,6 +19,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: "Zentlet",
   description: "Zentlet es una plataforma de finanzas personales.",
+  // instalada en iOS: pantalla completa y su propio icono
+  appleWebApp: { capable: true, title: "Zentlet", statusBarStyle: "default" },
+  icons: { apple: "/icons/apple-touch-icon.png" },
 };
 
 export default function RootLayout({
@@ -36,6 +40,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <QueryProvider>{children}</QueryProvider>
+        <ServiceWorkerRegister />
       </body>
     </html>
   );

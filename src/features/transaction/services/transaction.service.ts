@@ -20,7 +20,8 @@ export class TransactionService extends APIService {
     return response.data;
   }
 
-  async createTransaction(data: TTransactionPayload): Promise<TTransaction> {
+  /** Idempotente: el id viaja en el cuerpo y repetirlo no duplica. */
+  async createTransaction(data: TTransaction): Promise<TTransaction> {
     const response = await this.post<TTransaction>("/api/transaction", data);
 
     return response.data;

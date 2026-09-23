@@ -16,7 +16,6 @@ import {
   type CategoryFormValues,
 } from "@/features/category/schemas/category.schema";
 import { useCategoryStore } from "@/features/category/stores/category.store";
-import { getApiErrorMessage } from "@/core/services/api-error";
 import { Check } from "@gravity-ui/icons";
 import { EASE_OUT } from "@/lib/ease";
 import { GestureCarousel } from "@/core/components/carrusel";
@@ -26,6 +25,21 @@ interface CategoryIcon {
   icon: string;
   color: string;
 }
+
+/**
+ * Iconos de reserva cuando la IA no responde (sin conexión, sin sesión):
+ * la categoría se puede crear igual y se sincroniza al volver la red.
+ */
+const FALLBACK_ICONS: CategoryIcon[] = [
+  { icon: "🏷️", color: "#E9E4F5" },
+  { icon: "🛒", color: "#FDECC8" },
+  { icon: "🍽️", color: "#FBDDD5" },
+  { icon: "🚌", color: "#D6E8F7" },
+  { icon: "🏠", color: "#E4DDF3" },
+  { icon: "💡", color: "#FFF1B8" },
+  { icon: "🎉", color: "#F8D9EA" },
+  { icon: "💼", color: "#D5F0DD" },
+];
 
 export interface EditableCategory {
   id: string;
@@ -46,9 +60,7 @@ export default function CategoryForm({
   /** Si llega, el formulario edita esta categoría en lugar de crear una. */
   category?: EditableCategory;
 }) {
-  const { createCategory, updateCategory, isCreating, isUpdating } =
-    useCategoryStore();
-  const isSaving = isCreating || isUpdating;
+  const { createCategory, updateCategory } = useCategoryStore();
   // al editar, el carrusel ya arranca con el icono actual
   const current = category?.icon
     ? { icon: category.icon, color: category.color || "" }
@@ -57,7 +69,7 @@ export default function CategoryForm({
     current ? [current] : [],
   );
   const [loadingAI, setLoadingAI] = useState(false);
-  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [aiUnavailable, setAiUnavailable] = useState(false);
 
   const form = useForm<CategoryFormValues>({
     resolver: zodResolver(categorySchema),
@@ -82,12 +94,19 @@ export default function CategoryForm({
     async function generate() {
       try {
         setLoadingAI(true);
-        const suggestion = await generateCategory(debouncedName);
+        let suggested: CategoryIcon[];
+        try {
+          suggested = (await generateCategory(debouncedName)).categories;
+          setAiUnavailable(false);
+        } catch {
+          suggested = FALLBACK_ICONS;
+          setAiUnavailable(true);
+        }
         if (cancelled) return;
         // al editar, el icono actual sigue siendo una opción del carrusel
         const icons = current
-          ? [current, ...suggestion.categories.filter((s) => s.icon !== current.icon)]
-          : suggestion.categories;
+          ? [current, ...suggested.filter((s) => s.icon !== current.icon)]
+          : suggested;
         setCategoriesIcons(icons);
 
         // el carrusel muestra el primero si el icono actual no está en la
@@ -113,28 +132,23 @@ export default function CategoryForm({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedName]);
 
-  async function onSubmit(values: CategoryFormValues) {
-    try {
-      if (category) {
-        const { description, ...rest } = values;
-        await updateCategory({
-          categoryId: category.id,
-          data: category.description === undefined ? rest : { ...rest, description },
-        });
-      } else {
-        await createCategory(values);
-      }
-      form.reset();
-      onSuccess();
-    } catch (error) {
-      // El panel sigue abierto para reintentar; el store conserva el error.
-      setSubmitError(
-        getApiErrorMessage(
-          error,
-          category ? "No se pudo guardar la categoría" : "No se pudo crear la categoría",
-        ),
+  /**
+   * No se espera al servidor: la categoría aparece al instante y se
+   * sincroniza por detrás (en cola si no hay conexión). Si el servidor la
+   * rechaza después, el aviso llega por `onSyncError`.
+   */
+  function onSubmit(values: CategoryFormValues) {
+    if (category) {
+      const { description, ...rest } = values;
+      updateCategory(
+        category.id,
+        category.description === undefined ? rest : { ...rest, description },
       );
+    } else {
+      createCategory(values);
     }
+    form.reset();
+    onSuccess();
   }
 
   return (
@@ -236,19 +250,19 @@ export default function CategoryForm({
         />
       </div>
 
-      {submitError && (
-        <p role="alert" className="text-danger w-full text-center text-sm">
-          {submitError}
+      {aiUnavailable && (
+        <p className="text-app-muted w-full text-center text-sm">
+          Sin conexión: elige un icono básico. Se guardará y sincronizará al volver la red.
         </p>
       )}
 
       <Button
         type="submit"
         className="w-full"
-        isDisabled={!form.formState.isValid || isSaving}
+        isDisabled={!form.formState.isValid}
       >
         <Check />
-        {isSaving ? "Guardando…" : "Guardar"}
+        Guardar
       </Button>
     </Form>
   );

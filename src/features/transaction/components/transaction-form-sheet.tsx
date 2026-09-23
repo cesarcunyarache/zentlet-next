@@ -159,6 +159,8 @@ export function TransactionFormSheet({
         });
         cache.current.set(text, result);
         if (!cancelled) apply(result);
+      } catch {
+        // sin conexión la Server Action falla: sin sugerencia, el alta sigue
       } finally {
         if (!cancelled) setThinking(false);
       }

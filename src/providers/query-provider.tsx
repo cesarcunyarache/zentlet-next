@@ -8,7 +8,7 @@ import { isAxiosError } from "axios";
  * No reintentamos errores del cliente (4xx): un 401/403/404 no se arregla
  * repitiendo la petición. Para fallos de red o 5xx, dos reintentos.
  */
-function shouldRetry(failureCount: number, error: unknown) {
+export function shouldRetry(failureCount: number, error: unknown) {
   const status = isAxiosError(error) ? error.response?.status : undefined;
   if (status && status >= 400 && status < 500) return false;
   return failureCount < 2;
