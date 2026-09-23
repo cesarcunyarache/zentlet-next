@@ -1,6 +1,5 @@
 "use client";
 import {
-  cn,
   Form,
   Input,
   Label,
@@ -16,10 +15,7 @@ import { AuthLink } from "@/core/components/auth-transition";
 import { authClient } from "@/lib/auth-client";
 import type { FormEvent } from "react";
 
-export default function SignIn({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+export default function SignIn() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -54,7 +50,7 @@ export default function SignIn({
   return (
     <div className="w-full max-w-sm">
       <div>
-        <div className={cn("flex flex-col gap-6", className)} {...props}>
+        <div className="flex flex-col gap-6">
           <Form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <AuthFormHeader title="Bienvenido a Zentlet">
               ¿No tienes una cuenta? <AuthLink href="/auth/sign-up">Regístrate</AuthLink>

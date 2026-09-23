@@ -1,6 +1,5 @@
 "use client";
 import {
-  cn,
   Form,
   Input,
   Label,
@@ -35,10 +34,7 @@ const signUpSchema = z
 
 type SignUpValues = z.infer<typeof signUpSchema>;
 
-export default function SignUp({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+export default function SignUp() {
   const router = useRouter();
 
   const { register, handleSubmit } = useForm<SignUpValues>({
@@ -72,7 +68,7 @@ export default function SignUp({
   return (
     <div className="w-full max-w-sm">
       <div>
-        <div className={cn("flex flex-col gap-6", className)} {...props}>
+        <div className="flex flex-col gap-6">
           <Form
             className="flex flex-col gap-4"
             onSubmit={handleSubmit(onSubmit)}

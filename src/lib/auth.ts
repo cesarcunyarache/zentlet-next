@@ -25,9 +25,8 @@ export const auth = betterAuth({
     sendOnSignIn: true,
     sendOnSignUp: true,
     autoSignInAfterVerification: true,
-    sendVerificationEmail: async ({ user, url, token }) => {
-      console.log("sendVerificationEmail", { user, url, token });
-    },
+    // pendiente de un servicio de correo: por ahora no se envía nada
+    sendVerificationEmail: async () => {},
   },
 
   socialProviders: {
