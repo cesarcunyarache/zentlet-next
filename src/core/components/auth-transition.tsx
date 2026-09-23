@@ -1,10 +1,9 @@
 "use client";
 
-import { createContext, useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useLayoutEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { motion, useAnimate, useReducedMotion } from "framer-motion";
-import { EASE_OUT } from "@/lib/ease";
+import { useAnimate, useReducedMotion } from "framer-motion";
 
 /*
  * Salida animada entre login y registro. El App Router desmonta la página
@@ -12,19 +11,17 @@ import { EASE_OUT } from "@/lib/ease";
  * primero anima la salida del formulario y después navega (sin recargar).
  * La entrada de la página nueva la hace app/auth/template.tsx.
  *
- * Registro es más alto que login: el alto del contenedor sigue al del
- * contenido con un resorte suave para que la tarjeta no salte de tamaño.
+ * Sólo opacidad y un desplazamiento lateral corto: nada se mueve en
+ * vertical (la tarjeta tiene alto fijo y el formulario va alineado arriba).
  */
 
-/** Desplazamiento de las transiciones, compartido con el template. */
-export const AUTH_SHIFT = 12;
-
-const HEIGHT_SPRING = { type: "spring", stiffness: 170, damping: 26, mass: 0.9 } as const;
+/** Desplazamiento lateral de las transiciones, compartido con el template. */
+export const AUTH_SHIFT = 10;
 
 const SIGN_UP = "/auth/sign-up";
 
 /** Registro va "hacia la derecha": sale por la izquierda y entra por la derecha. */
-function directionTo(href: string) {
+export function directionTo(href: string) {
   return href.endsWith(SIGN_UP) ? 1 : -1;
 }
 
@@ -36,46 +33,27 @@ export function AuthTransition({ children }: { children: React.ReactNode }) {
   const [scope, animate] = useAnimate<HTMLDivElement>();
   const pathname = usePathname();
   const reduceMotion = useReducedMotion();
-  const contentRef = useRef<HTMLDivElement>(null);
-  const [height, setHeight] = useState<number | "auto">("auto");
-
-  useLayoutEffect(() => {
-    const element = contentRef.current;
-    if (!element) return;
-    const observer = new ResizeObserver(([entry]) => setHeight(entry.borderBoxSize[0].blockSize));
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, []);
 
   // al llegar la página nueva, el contenedor vuelve a estar visible (la
   // entrada propia la anima el template)
   useLayoutEffect(() => {
-    if (scope.current) animate(scope.current, { opacity: 1, x: 0, filter: "blur(0px)" }, { duration: 0 });
+    if (scope.current) animate(scope.current, { opacity: 1, x: 0 }, { duration: 0 });
   }, [pathname, animate, scope]);
 
   async function leave(href: string) {
     if (reduceMotion || !scope.current) return;
     await animate(
       scope.current,
-      { opacity: 0, x: -AUTH_SHIFT * directionTo(href), filter: "blur(2px)" },
-      { duration: 0.2, ease: EASE_OUT },
+      { opacity: 0, x: -AUTH_SHIFT * directionTo(href) },
+      { duration: 0.16, ease: [0.4, 0, 1, 1] },
     );
   }
 
   return (
     <AuthTransitionContext.Provider value={leave}>
-      <motion.div
-        initial={false}
-        animate={{ height }}
-        transition={reduceMotion ? { duration: 0 } : HEIGHT_SPRING}
-        className="w-full"
-      >
-        <div ref={contentRef}>
-          <div ref={scope} className="flex w-full justify-center">
-            {children}
-          </div>
-        </div>
-      </motion.div>
+      <div ref={scope} className="flex w-full justify-center">
+        {children}
+      </div>
     </AuthTransitionContext.Provider>
   );
 }

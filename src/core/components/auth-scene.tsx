@@ -98,7 +98,7 @@ export function AuthScene({ children }: { children: React.ReactNode }) {
     <div
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
-      className="bg-app-surface sm:bg-app-bg text-app-fg relative flex min-h-svh justify-center overflow-hidden sm:items-center sm:p-6 md:p-10"
+      className="bg-app-surface sm:bg-app-bg text-app-fg relative flex min-h-svh justify-center overflow-hidden sm:items-start sm:p-6 md:p-10 lg:items-center"
     >
       {/* halo suave detrás de la tarjeta para despegarla del fondo */}
       <div
@@ -120,13 +120,15 @@ export function AuthScene({ children }: { children: React.ReactNode }) {
       <div className="relative w-full max-w-5xl [perspective:1600px]">
         <motion.div
           style={{ rotateX, rotateY }}
-          className="bg-app-surface grid min-h-svh overflow-hidden sm:min-h-0 sm:rounded-[28px] sm:shadow-[0_40px_80px_-32px_color-mix(in_oklch,var(--app-fg)_38%,transparent),0_2px_6px_color-mix(in_oklch,var(--app-fg)_6%,transparent)] lg:min-h-[680px] lg:grid-cols-[1.05fr_1fr]"
+          className="bg-app-surface grid min-h-svh overflow-hidden sm:min-h-0 sm:rounded-[28px] sm:shadow-[0_40px_80px_-32px_color-mix(in_oklch,var(--app-fg)_38%,transparent),0_2px_6px_color-mix(in_oklch,var(--app-fg)_6%,transparent)] lg:h-[760px] lg:grid-cols-[1.05fr_1fr]"
         >
           <Showcase x={x} y={y} glare={glare} />
 
           <div className="flex flex-col">
             <MobileBrand />
-            <div className="flex flex-1 items-start justify-center px-6 pt-8 pb-10 sm:items-center sm:px-10 md:py-14">
+            {/* centrado en escritorio: la tarjeta tiene alto fijo y el cambio es un
+                fundido, así que cada formulario aparece ya en su sitio */}
+            <div className="flex flex-1 items-start justify-center px-6 pt-8 pb-10 sm:px-10 md:py-14 lg:items-center">
               <AuthTransition>{children}</AuthTransition>
             </div>
           </div>
