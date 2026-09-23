@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
+import { siteConfig } from "@/lib/site";
 
 export async function proxy(request: NextRequest) {
   const session = await auth.api.getSession({
@@ -8,12 +9,12 @@ export async function proxy(request: NextRequest) {
   });
 
   if (!session) {
-    return NextResponse.redirect(new URL("/auth/sign-in", request.url));
+    return NextResponse.redirect(new URL(siteConfig.routes.signIn, request.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/admin/:path*"], // Specify the routes the middleware applies to
+  matcher: ["/admin/:path*"],
 };

@@ -97,9 +97,11 @@ export function SummaryHeader({
             onChange={(event) => onPeriodChange(event.target.value as Period)}
             className="absolute -inset-y-[5px] -inset-x-1 cursor-pointer appearance-none border-0 opacity-0"
           >
-            <option value="month">Este mes</option>
-            <option value="previous">Mes pasado</option>
-            <option value="all">Todo</option>
+            {Object.entries(PERIOD_LABEL).map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
           </select>
         </span>
       </div>

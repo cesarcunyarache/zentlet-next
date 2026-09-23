@@ -8,11 +8,6 @@ import { siteConfig } from "@/lib/site";
 import type { LandingContent, Testimonial } from "../content";
 import { SectionHeading } from "./shared/section-heading";
 
-/*
- * Testimonios. Con la lista vacía (content/es.ts → testimonials.items)
- * muestra una invitación; en cuanto haya opiniones, un carrusel doble
- * que se detiene al pasar el ratón.
- */
 export function TestimonialsSection({ testimonials }: { testimonials: LandingContent["testimonials"] }) {
   const { items } = testimonials;
   const half = Math.ceil(items.length / 2);

@@ -1,4 +1,5 @@
 import { isAxiosError } from "axios";
+import { getApiErrorStatus } from "@/core/services/api-error";
 
 /*
  * Reglas de sincronización compartidas por todas las mutaciones offline.
@@ -25,7 +26,7 @@ export function isNetworkError(error: unknown) {
  */
 export function shouldRetryMutation(failureCount: number, error: unknown) {
   if (isNetworkError(error)) return true;
-  const status = isAxiosError(error) ? error.response?.status : undefined;
+  const status = getApiErrorStatus(error);
   if (status && status >= 500) return failureCount < 3;
   return false;
 }
@@ -37,5 +38,5 @@ export function mutationRetryDelay(failureCount: number) {
 
 /** 404 al borrar = ya no existe: el objetivo de la operación se cumplió. */
 export function isNotFound(error: unknown) {
-  return isAxiosError(error) && error.response?.status === 404;
+  return getApiErrorStatus(error) === 404;
 }

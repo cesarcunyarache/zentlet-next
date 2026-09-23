@@ -45,6 +45,12 @@ const LABEL: Record<Tone, (count: number) => string> = {
   synced: () => "Sincronizado",
 };
 
+const TONE_CLASS: Record<Tone, string> = {
+  offline: "bg-app-fg text-app-bg",
+  syncing: "bg-app-fill text-app-fg",
+  synced: "bg-app-income-soft text-app-income",
+};
+
 /**
  * Píldora discreta: sólo aparece sin conexión, mientras se envía lo que se
  * hizo sin red y un instante después ("Sincronizado"). Un guardado normal
@@ -56,13 +62,13 @@ export function SyncStatusPill() {
   const previous = useRef(syncingCount);
 
   useEffect(() => {
-    if (online && previous.current > 0 && syncingCount === 0) {
-      setJustSynced(true);
-      const timer = setTimeout(() => setJustSynced(false), SYNCED_VISIBLE_MS);
-      previous.current = syncingCount;
-      return () => clearTimeout(timer);
-    }
+    const wasSyncing = previous.current > 0;
     previous.current = syncingCount;
+    if (!online || !wasSyncing || syncingCount > 0) return;
+
+    setJustSynced(true);
+    const timer = setTimeout(() => setJustSynced(false), SYNCED_VISIBLE_MS);
+    return () => clearTimeout(timer);
   }, [online, syncingCount]);
 
   const tone: Tone | null = !online ? "offline" : syncingCount > 0 ? "syncing" : justSynced ? "synced" : null;
@@ -77,13 +83,7 @@ export function SyncStatusPill() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -4, scale: 0.96 }}
             transition={SPRING_SWAP}
-            className={
-              tone === "offline"
-                ? "bg-app-fg text-app-bg inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-xs font-semibold"
-                : tone === "syncing"
-                  ? "bg-app-fill text-app-fg inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-xs font-semibold"
-                  : "bg-app-income-soft text-app-income inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-xs font-semibold"
-            }
+            className={`${TONE_CLASS[tone]} inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-xs font-semibold`}
           >
             {tone === "offline" && <CloudOff className="size-3.5" aria-hidden />}
             {tone === "syncing" && <RefreshCw className="size-3.5 animate-spin" aria-hidden />}

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { siteConfig } from "@/lib/site";
 import type { LandingContent } from "../content";
 import { sectionHref } from "../lib/format";
-import { Logo } from "./site-header";
+import { Logo } from "./shared/logo";
 
 interface SiteFooterProps {
   footer: LandingContent["footer"];

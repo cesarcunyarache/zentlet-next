@@ -6,6 +6,7 @@
 
 import type { AxiosInstance, AxiosRequestConfig } from "axios";
 import { create } from "axios";
+import { siteConfig } from "@/lib/site";
 
 /**
  * URL base de la API. Hoy apunta al propio Next.js; cuando el backend se
@@ -39,7 +40,7 @@ export abstract class APIService {
         // Sesión caducada: al login (no a `/`, que es la landing). Las
         // operaciones pendientes siguen guardadas y se reanudan al volver.
         if (typeof window !== "undefined" && error?.response?.status === 401) {
-          window.location.replace("/auth/sign-in");
+          window.location.replace(siteConfig.routes.signIn);
         }
         return Promise.reject(error);
       },

@@ -5,8 +5,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { useCategoryStore } from "@/features/category/stores/category.store";
 import { CategoryGrid } from "@/features/category/components/category-grid";
-import { Sheet } from "@/core/components/ui/sheet";
-import CategoryForm, { type EditableCategory } from "./CategoryForm";
+import { CategoryFormSheet, type EditableCategory } from "./CategoryForm";
 
 export default function CategoryPage() {
   const { categories, isLoading } = useCategoryStore();
@@ -49,22 +48,7 @@ export default function CategoryPage() {
         )}
       </main>
 
-      <Sheet
-        isOpen={formOpen}
-        onOpenChange={(open) => !open && closeForm()}
-        title={editing ? "Editar categoría" : "Nueva categoría"}
-        hideTitle
-        className="min-h-[70dvh]"
-        bodyClassName="flex flex-col"
-      >
-        <div className="flex flex-1 flex-col pb-4">
-          <CategoryForm
-            key={editing?.id ?? "new"}
-            category={editing ?? undefined}
-            onSuccess={closeForm}
-          />
-        </div>
-      </Sheet>
+      <CategoryFormSheet isOpen={formOpen} category={editing} onClose={closeForm} />
     </div>
   );
 }

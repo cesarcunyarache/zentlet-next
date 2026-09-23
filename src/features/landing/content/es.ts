@@ -52,6 +52,7 @@ export const es: LandingContent = {
     openMenu: "Abrir menú",
     closeMenu: "Cerrar menú",
     home: "Zentlet, inicio",
+    label: "Principal",
   },
   hero: {
     badge: "Con sugerencias de IA para cada movimiento",

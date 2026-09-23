@@ -36,14 +36,14 @@ export function ExpenseComposerDemo({ demo, common, locale }: ExpenseComposerDem
   useEffect(() => {
     if (reduceMotion) return;
 
-    const typed = Array.from(entry.typed).length * TYPE_SPEED + 250;
+    const typingMs = Array.from(entry.typed).length * TYPE_SPEED + 250;
     const timers = [
-      setTimeout(() => setPhase("reading"), typed),
-      setTimeout(() => setPhase("suggested"), typed + READING_MS),
+      setTimeout(() => setPhase("reading"), typingMs),
+      setTimeout(() => setPhase("suggested"), typingMs + READING_MS),
       setTimeout(() => {
         setPhase("typing");
         setIndex((value) => (value + 1) % demo.entries.length);
-      }, typed + READING_MS + SUGGESTED_MS),
+      }, typingMs + READING_MS + SUGGESTED_MS),
     ];
     return () => timers.forEach(clearTimeout);
   }, [entry.typed, demo.entries.length, reduceMotion]);

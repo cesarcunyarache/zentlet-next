@@ -10,29 +10,21 @@ import { siteConfig } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import type { LandingContent } from "../content";
 import { sectionHref } from "../lib/format";
-
-export function Logo({ className }: { className?: string }) {
-  return (
-    <span className={cn("font-display text-2xl font-bold tracking-[-0.03em]", className)}>
-      Zentlet<span className="text-app-expense">.</span>
-    </span>
-  );
-}
+import { Logo } from "./shared/logo";
 
 export function SiteHeader({ nav }: { nav: LandingContent["nav"] }) {
-  const [scrolled, setScrolled] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { scrollY } = useScroll();
 
-  useMotionValueEvent(scrollY, "change", (latest) => setScrolled(latest > 24));
+  useMotionValueEvent(scrollY, "change", (latest) => setIsScrolled(latest > 24));
 
-  // Escape cierra el menú móvil
   useEffect(() => {
-    if (!open) return;
-    const onKey = (event: KeyboardEvent) => event.key === "Escape" && setOpen(false);
+    if (!isMenuOpen) return;
+    const onKey = (event: KeyboardEvent) => event.key === "Escape" && setIsMenuOpen(false);
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [open]);
+  }, [isMenuOpen]);
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
@@ -41,7 +33,7 @@ export function SiteHeader({ nav }: { nav: LandingContent["nav"] }) {
       <div
         className={cn(
           "mx-auto mt-3 flex max-w-6xl items-center justify-between rounded-full px-4 py-2 transition-[background-color,box-shadow,margin] duration-300 sm:px-5",
-          scrolled || open
+          isScrolled || isMenuOpen
             ? "bg-app-surface/80 mx-3 shadow-[0_8px_30px_-12px_color-mix(in_oklch,var(--app-fg)_25%,transparent)] ring-1 ring-[var(--app-border)] backdrop-blur-xl sm:mx-auto"
             : "bg-transparent",
         )}
@@ -50,7 +42,7 @@ export function SiteHeader({ nav }: { nav: LandingContent["nav"] }) {
           <Logo className="text-xl" />
         </Link>
 
-        <nav aria-label="Principal" className="hidden md:block">
+        <nav aria-label={nav.label} className="hidden md:block">
           <ul className="m-0 flex list-none items-center gap-1 p-0">
             {nav.links.map((link) => (
               <li key={link.section}>
@@ -80,22 +72,22 @@ export function SiteHeader({ nav }: { nav: LandingContent["nav"] }) {
           </Link>
           <button
             type="button"
-            aria-expanded={open}
+            aria-expanded={isMenuOpen}
             aria-controls="menu-movil"
-            aria-label={open ? nav.closeMenu : nav.openMenu}
-            onClick={() => setOpen((value) => !value)}
+            aria-label={isMenuOpen ? nav.closeMenu : nav.openMenu}
+            onClick={() => setIsMenuOpen((value) => !value)}
             className="text-app-fg hover:bg-app-fill grid size-10 place-items-center rounded-full md:hidden"
           >
-            {open ? <X className="size-5" /> : <Menu className="size-5" />}
+            {isMenuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
           </button>
         </div>
       </div>
 
       <AnimatePresence>
-        {open && (
+        {isMenuOpen && (
           <motion.nav
             id="menu-movil"
-            aria-label="Principal"
+            aria-label={nav.label}
             initial={{ opacity: 0, y: -8, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.98 }}
@@ -107,7 +99,7 @@ export function SiteHeader({ nav }: { nav: LandingContent["nav"] }) {
                 <li key={link.section}>
                   <a
                     href={sectionHref(link.section)}
-                    onClick={() => setOpen(false)}
+                    onClick={() => setIsMenuOpen(false)}
                     className="text-app-fg hover:bg-app-fill block rounded-2xl px-4 py-3 text-base font-semibold"
                   >
                     {link.label}

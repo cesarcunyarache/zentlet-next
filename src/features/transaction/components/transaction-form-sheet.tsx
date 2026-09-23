@@ -8,7 +8,7 @@ import { useDebounce } from "use-debounce";
 import { Button, cn } from "@heroui/react";
 import { Check, ChevronDown, Plus, Sparkles } from "lucide-react";
 import { Sheet } from "@/core/components/ui/sheet";
-import CategoryForm from "@/app/admin/category/CategoryForm";
+import { CategoryFormSheet } from "@/app/admin/category/CategoryForm";
 import { SPRING_LAYOUT, SPRING_PRESS } from "@/lib/ease";
 import { CategoryEmoji } from "./category-emoji";
 import {
@@ -387,25 +387,11 @@ export function TransactionFormSheet({
         </div>
       </Sheet>
 
-      <Sheet
+      <CategoryFormSheet
         isOpen={isOpen && creatingCategory}
-        onOpenChange={(open) => {
-          if (!open) {
-            setCreatingCategory(false);
-          }
-        }}
-        title="Nueva categoría"
-        hideTitle
-        className="min-h-[70dvh]"
-        bodyClassName="flex flex-col"
-      >
-        <div className="flex flex-1 flex-col pb-4">
-          <CategoryForm
-            initialName={description.trim().split(/\s+/)[0] ?? ""}
-            onSuccess={() => setCreatingCategory(false)}
-          />
-        </div>
-      </Sheet>
+        initialName={description.trim().split(/\s+/)[0] ?? ""}
+        onClose={() => setCreatingCategory(false)}
+      />
     </>
   );
 }

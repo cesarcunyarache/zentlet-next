@@ -65,6 +65,7 @@ export interface LandingContent {
     openMenu: string;
     closeMenu: string;
     home: string;
+    label: string;
   };
   hero: {
     badge: string;

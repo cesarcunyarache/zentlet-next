@@ -13,12 +13,15 @@ import { formatAmount, vivid } from "../../lib/format";
  * de cada paso ya describe lo que se ve.
  */
 
-const frame =
+const FRAME_CLASS =
   "relative flex h-88 w-full flex-col justify-center overflow-hidden rounded-[28px] p-8 lg:h-full";
+
+const DONUT_RADIUS = 52;
+const DONUT_CIRCUMFERENCE = 2 * Math.PI * DONUT_RADIUS;
 
 export function SignUpPreview({ preview }: { preview: LandingContent["steps"]["preview"] }) {
   return (
-    <div aria-hidden className={`${frame} bg-app-fg text-app-bg`}>
+    <div aria-hidden className={`${FRAME_CLASS} bg-app-fg text-app-bg`}>
       <div className="pointer-events-none absolute -top-20 -right-16 size-64 rounded-full bg-[color-mix(in_oklch,var(--app-expense)_40%,transparent)] blur-3xl" />
       <p className="relative m-0 text-sm font-semibold opacity-70">{preview.signUpLabel}</p>
       <ul className="relative m-0 mt-4 flex list-none flex-col gap-3 p-0">
@@ -49,7 +52,7 @@ export function TypePreview({
   const reduceMotion = useReducedMotion();
 
   return (
-    <div aria-hidden className={`${frame} bg-app-surface ring-1 ring-[var(--app-border)]`}>
+    <div aria-hidden className={`${FRAME_CLASS} bg-app-surface ring-1 ring-[var(--app-border)]`}>
       <div className="bg-app-bg flex min-h-14 items-center rounded-2xl px-4 ring-1 ring-[var(--app-border)]">
         {reduceMotion ? (
           <span className="text-app-fg text-lg font-medium">{phrases[0]}</span>
@@ -86,21 +89,20 @@ export function MonthPreview({
 }) {
   const reduceMotion = useReducedMotion();
   const total = dashboard.categories.reduce((sum, category) => sum + category.total, 0);
-  const radius = 52;
-  const circumference = 2 * Math.PI * radius;
 
-  const arcs = dashboard.categories.reduce<{ offset: number; items: { key: string; color: string; length: number; offset: number }[] }>(
-    (acc, category) => {
-      const length = (category.total / total) * circumference;
-      acc.items.push({ key: category.name, color: category.color, length, offset: acc.offset });
-      acc.offset += length;
-      return acc;
-    },
-    { offset: 0, items: [] },
-  ).items;
+  const arcs: { key: string; color: string; length: number; offset: number }[] = [];
+  for (const category of dashboard.categories) {
+    const previous = arcs.at(-1);
+    arcs.push({
+      key: category.name,
+      color: category.color,
+      length: (category.total / total) * DONUT_CIRCUMFERENCE,
+      offset: previous ? previous.offset + previous.length : 0,
+    });
+  }
 
   return (
-    <div aria-hidden className={`${frame} bg-app-surface ring-1 ring-[var(--app-border)]`}>
+    <div aria-hidden className={`${FRAME_CLASS} bg-app-surface ring-1 ring-[var(--app-border)]`}>
       <div className="flex items-center gap-6">
         <svg viewBox="0 0 128 128" className="size-36 shrink-0 -rotate-90">
           {arcs.map((arc, index) => (
@@ -108,11 +110,11 @@ export function MonthPreview({
               key={arc.key}
               cx="64"
               cy="64"
-              r={radius}
+              r={DONUT_RADIUS}
               fill="none"
               strokeWidth="16"
               stroke={vivid(arc.color)}
-              strokeDasharray={`${arc.length - 2} ${circumference}`}
+              strokeDasharray={`${arc.length - 2} ${DONUT_CIRCUMFERENCE}`}
               strokeDashoffset={-arc.offset}
               initial={reduceMotion ? false : { opacity: 0 }}
               animate={{ opacity: 1 }}

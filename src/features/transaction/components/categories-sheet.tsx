@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Sheet } from "@/core/components/ui/sheet";
-import CategoryForm, { type EditableCategory } from "@/app/admin/category/CategoryForm";
+import { CategoryFormSheet, type EditableCategory } from "@/app/admin/category/CategoryForm";
 import { CategoryGrid } from "@/features/category/components/category-grid";
 import type { CategoryLike } from "../types";
 
@@ -13,8 +13,7 @@ interface CategoriesSheetProps {
 }
 
 /**
- * Rejilla de categorías del usuario; tocar una abre su edición. Las categorías son las
- * reales del usuario; el alta reutiliza el formulario existente.
+ * Rejilla de categorías del usuario; tocar una abre su edición.
  */
 export function CategoriesSheet({
   isOpen,
@@ -49,22 +48,7 @@ export function CategoriesSheet({
         />
       </Sheet>
 
-      <Sheet
-        isOpen={formOpen}
-        onOpenChange={(open) => !open && closeForm()}
-        title={editing ? "Editar categoría" : "Nueva categoría"}
-        hideTitle
-        className="min-h-[70dvh]"
-        bodyClassName="flex flex-col"
-      >
-        <div className="flex flex-1 flex-col pb-4">
-          <CategoryForm
-            key={editing?.id ?? "new"}
-            category={editing ?? undefined}
-            onSuccess={closeForm}
-          />
-        </div>
-      </Sheet>
+      <CategoryFormSheet isOpen={formOpen} category={editing} onClose={closeForm} />
     </>
   );
 }

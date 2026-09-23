@@ -65,7 +65,6 @@ export function HeroSection({ hero, common, totals, locale }: HeroSectionProps) 
           />
         ))}
 
-        {/* texto */}
         <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
           <span
             style={{ animationDelay: "0ms" }}
@@ -138,7 +137,6 @@ export function HeroSection({ hero, common, totals, locale }: HeroSectionProps) 
           </p>
         </div>
 
-        {/* demo del producto */}
         <motion.div
           initial={reduceMotion ? false : { opacity: 0, y: 40, scale: 0.96 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}

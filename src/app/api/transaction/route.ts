@@ -47,7 +47,6 @@ export async function POST(req: Request) {
         : errorResponse("Transaction id already in use", 409);
     }
 
-    // La categoría tiene que ser del propio usuario.
     const category = await prisma.category.findFirst({
       where: { id: categoryId, userId },
       select: { id: true },

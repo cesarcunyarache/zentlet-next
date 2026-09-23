@@ -21,6 +21,7 @@ import { EASE_OUT } from "@/lib/ease";
 import { GestureCarousel } from "@/core/components/carrusel";
 import { generateCategory } from "@/features/category/ai/actions/category-generator";
 import { useIsOnline } from "@/core/offline/sync-status";
+import { Sheet } from "@/core/components/ui/sheet";
 
 interface CategoryIcon {
   icon: string;
@@ -41,6 +42,8 @@ const FALLBACK_ICONS: CategoryIcon[] = [
   { icon: "🎉", color: "#F8D9EA" },
   { icon: "💼", color: "#D5F0DD" },
 ];
+
+const TOUCH_FIELD = { shouldValidate: true, shouldDirty: true } as const;
 
 /** Iconos sugeridos por la IA, o `null` si no está disponible. */
 async function suggestIcons(name: string): Promise<CategoryIcon[] | null> {
@@ -98,6 +101,11 @@ export default function CategoryForm({
   const name = form.watch("name");
   const [debouncedName] = useDebounce(name, 700);
 
+  function selectIcon({ icon, color }: CategoryIcon) {
+    form.setValue("icon", icon, TOUCH_FIELD);
+    form.setValue("color", color, TOUCH_FIELD);
+  }
+
   useEffect(() => {
     if (!debouncedName.trim()) return;
     // editando sin cambiar el nombre no hace falta pedir iconos nuevos
@@ -123,8 +131,7 @@ export default function CategoryForm({
         const selected = form.getValues("icon");
         const first = icons[0];
         if (first && !icons.some((item) => item.icon === selected)) {
-          form.setValue("icon", first.icon, { shouldValidate: true, shouldDirty: true });
-          form.setValue("color", first.color, { shouldValidate: true, shouldDirty: true });
+          selectIcon(first);
         }
       } finally {
         if (!cancelled) {
@@ -165,29 +172,6 @@ export default function CategoryForm({
       onSubmit={form.handleSubmit(onSubmit)}
     >
       <div className="flex flex-1 flex-col  justify-center gap-5">
-        {/* {categoriesIcons.length > 0 && (
-          <div className="h-32 w-32">
-            <GestureCarousel
-              items={categoriesIcons}
-              value={{
-                icon: form.watch("icon"),
-                color: form.watch("color"),
-              }}
-              onChange={({ icon, color }) => {
-                form.setValue("icon", icon, {
-                  shouldValidate: true,
-                  shouldDirty: true,
-                });
-
-                form.setValue("color", color, {
-                  shouldValidate: true,
-                  shouldDirty: true,
-                });
-              }}
-            />
-          </div>
-        )} */}
-
         <div className="h-32 w-32">
           <AnimatePresence mode="wait">
             {loadingAI ? (
@@ -225,17 +209,7 @@ export default function CategoryForm({
                     icon: form.watch("icon"),
                     color: form.watch("color"),
                   }}
-                  onChange={({ icon, color }) => {
-                    form.setValue("icon", icon, {
-                      shouldValidate: true,
-                      shouldDirty: true,
-                    });
-
-                    form.setValue("color", color, {
-                      shouldValidate: true,
-                      shouldDirty: true,
-                    });
-                  }}
+                  onChange={selectIcon}
                 />
               </motion.div>
             ) : null}
@@ -244,17 +218,10 @@ export default function CategoryForm({
 
         <GhostInput
           id=""
-          value={form.watch("name")}
-          disabled={false}
+          value={name}
           inputSize="text-4xl sm:text-3xl"
-          reduce={false}
           placeholder="Categoría"
-          onChange={(value) =>
-            form.setValue("name", value, {
-              shouldValidate: true,
-              shouldDirty: true,
-            })
-          }
+          onChange={(value) => form.setValue("name", value, TOUCH_FIELD)}
         />
       </div>
 
@@ -278,7 +245,39 @@ export default function CategoryForm({
   );
 }
 
-function keyedAmountChars(value: string) {
+export function CategoryFormSheet({
+  isOpen,
+  category,
+  initialName,
+  onClose,
+}: {
+  isOpen: boolean;
+  category?: EditableCategory | null;
+  initialName?: string;
+  onClose: () => void;
+}) {
+  return (
+    <Sheet
+      isOpen={isOpen}
+      onOpenChange={(open) => !open && onClose()}
+      title={category ? "Editar categoría" : "Nueva categoría"}
+      hideTitle
+      className="min-h-[70dvh]"
+      bodyClassName="flex flex-col"
+    >
+      <div className="flex flex-1 flex-col pb-4">
+        <CategoryForm
+          key={category?.id ?? "new"}
+          category={category ?? undefined}
+          initialName={initialName}
+          onSuccess={onClose}
+        />
+      </div>
+    </Sheet>
+  );
+}
+
+function keyedChars(value: string) {
   const seen = new Map<string, number>();
   return value.split("").map((char) => {
     const count = seen.get(char) ?? 0;
@@ -287,27 +286,23 @@ function keyedAmountChars(value: string) {
   });
 }
 
-const DIGIT_TRANSITION = { duration: 0.18, ease: EASE_OUT } as const;
+const CHAR_TRANSITION = { duration: 0.18, ease: EASE_OUT } as const;
 
 function GhostInput({
   id,
   value,
   placeholder,
   inputSize,
-  disabled,
-  reduce,
   onChange,
 }: {
   id: string;
   value: string;
   placeholder?: string;
   inputSize: string;
-  disabled: boolean;
-  reduce: boolean;
   onChange: (value: string) => void;
 }) {
   const displayValue = value || placeholder || "";
-  const chars = keyedAmountChars(displayValue);
+  const chars = keyedChars(displayValue);
 
   return (
     <div className="flex min-w-0 items-center overflow-hidden">
@@ -315,7 +310,6 @@ function GhostInput({
         <input
           id={id}
           value={value}
-          disabled={disabled}
           onChange={(event) => onChange(event.target.value)}
           placeholder={placeholder}
           inputMode="text"
@@ -338,23 +332,11 @@ function GhostInput({
             {chars.map(({ id: charId, char }) => (
               <motion.span
                 key={charId}
-                layout={reduce ? false : "position"}
-                initial={
-                  reduce
-                    ? { opacity: 0 }
-                    : { opacity: 0, y: 18, filter: "blur(10px)" }
-                }
-                animate={
-                  reduce
-                    ? { opacity: 1 }
-                    : { opacity: 1, y: 0, filter: "blur(0px)" }
-                }
-                exit={
-                  reduce
-                    ? { opacity: 0 }
-                    : { opacity: 0, y: -14, filter: "blur(10px)" }
-                }
-                transition={DIGIT_TRANSITION}
+                layout="position"
+                initial={{ opacity: 0, y: 18, filter: "blur(10px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                exit={{ opacity: 0, y: -14, filter: "blur(10px)" }}
+                transition={CHAR_TRANSITION}
                 className="inline-block text-center will-change-[transform,opacity,filter]"
               >
                 {char}

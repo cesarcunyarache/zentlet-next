@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
+import { AnimatePresence, motion, type PanInfo } from "framer-motion";
 
 export interface CarouselItem {
   color: string;
@@ -13,6 +13,27 @@ interface GestureCarouselProps {
   value?: CarouselItem;
   onChange?: (item: CarouselItem) => void;
 }
+
+const slideVariants = {
+  enter: (dir: number) => ({
+    x: dir > 0 ? 1000 : -1000,
+    opacity: 0,
+  }),
+  center: {
+    zIndex: 1,
+    x: 0,
+    opacity: 1,
+  },
+  exit: (dir: number) => ({
+    x: dir < 0 ? 1000 : -1000,
+    opacity: 0,
+  }),
+};
+
+const SWIPE_CONFIDENCE_THRESHOLD = 10000;
+
+const swipePower = (offset: number, velocity: number) =>
+  Math.abs(offset) * velocity;
 
 export function GestureCarousel({
   items,
@@ -28,52 +49,18 @@ export function GestureCarousel({
 
   const currentItem = items[currentIndex];
 
-  const slideVariants = {
-    enter: (dir: number) => ({
-      x: dir > 0 ? 1000 : -1000,
-      opacity: 0,
-    }),
-    center: {
-      zIndex: 1,
-      x: 0,
-      opacity: 1,
-    },
-    exit: (dir: number) => ({
-      x: dir < 0 ? 1000 : -1000,
-      opacity: 0,
-    }),
+  const paginate = (newDirection: number) => {
+    setDirection(newDirection);
+    const next = (currentIndex + newDirection + items.length) % items.length;
+    onChange?.(items[next]);
   };
 
-  const swipeConfidenceThreshold = 10000;
-
-  const swipePower = (offset: number, velocity: number) =>
-    Math.abs(offset) * velocity;
-
-  const paginate = useCallback(
-    (newDirection: number) => {
-      setDirection(newDirection);
-
-      let next = currentIndex + newDirection;
-
-      if (next < 0) {
-        next = items.length - 1;
-      }
-
-      if (next >= items.length) {
-        next = 0;
-      }
-
-      onChange?.(items[next]);
-    },
-    [currentIndex, items, onChange],
-  );
-
-  const handleDragEnd = (_event: unknown, info: any) => {
+  const handleDragEnd = (_event: unknown, info: PanInfo) => {
     const swipe = swipePower(info.offset.x, info.velocity.x);
 
-    if (swipe < -swipeConfidenceThreshold) {
+    if (swipe < -SWIPE_CONFIDENCE_THRESHOLD) {
       paginate(1);
-    } else if (swipe > swipeConfidenceThreshold) {
+    } else if (swipe > SWIPE_CONFIDENCE_THRESHOLD) {
       paginate(-1);
     }
   };

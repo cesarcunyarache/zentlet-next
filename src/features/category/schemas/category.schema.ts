@@ -1,4 +1,3 @@
-import { color } from "framer-motion";
 import { z } from "zod";
 
 export const categorySchema = z.object({

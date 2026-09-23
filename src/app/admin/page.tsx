@@ -34,6 +34,43 @@ import type {
 
 type Sheet = "new" | "categories" | "settings" | null;
 
+function rowsInPeriod(transactions: TTransaction[], period: Period) {
+  if (period === "all") return transactions;
+
+  const now = today();
+  const target =
+    period === "previous"
+      ? new Date(now.getFullYear(), now.getMonth() - 1, 1)
+      : now;
+  const month = target.getMonth();
+  const year = target.getFullYear();
+
+  return transactions.filter((tx) => {
+    const date = parseISODate(tx.transactionDate);
+    return date.getMonth() === month && date.getFullYear() === year;
+  });
+}
+
+function sumTotals(transactions: TTransaction[]) {
+  let expenseTotal = 0;
+  let incomeTotal = 0;
+  const totalsByCategory = new Map<string, { expense: number; income: number }>();
+
+  for (const tx of transactions) {
+    const totals = totalsByCategory.get(tx.categoryId) ?? { expense: 0, income: 0 };
+    if (tx.type === "expense") {
+      expenseTotal += tx.amount;
+      totals.expense += tx.amount;
+    } else {
+      incomeTotal += tx.amount;
+      totals.income += tx.amount;
+    }
+    totalsByCategory.set(tx.categoryId, totals);
+  }
+
+  return { expenseTotal, incomeTotal, totalsByCategory };
+}
+
 export default function HomePage() {
   const { categories: rawCategories } = useCategoryStore();
 
@@ -75,25 +112,10 @@ export default function HomePage() {
   const [detail, setDetail] = useState<TTransaction | null>(null);
 
   /** Movimientos del periodo, antes de los filtros de la vista. */
-  const periodRows = useMemo(() => {
-    if (period === "all") return transactions;
-
-    const now = today();
-    let month = now.getMonth();
-    let year = now.getFullYear();
-    if (period === "previous") {
-      month -= 1;
-      if (month < 0) {
-        month = 11;
-        year -= 1;
-      }
-    }
-
-    return transactions.filter((tx) => {
-      const date = parseISODate(tx.transactionDate);
-      return date.getMonth() === month && date.getFullYear() === year;
-    });
-  }, [transactions, period]);
+  const periodRows = useMemo(
+    () => rowsInPeriod(transactions, period),
+    [transactions, period],
+  );
 
   const visibleRows = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -113,30 +135,10 @@ export default function HomePage() {
       .sort((a, b) => b.transactionDate.localeCompare(a.transactionDate));
   }, [periodRows, kind, categoryFilter, query, categoriesById]);
 
-  const { expenseTotal, incomeTotal, totalsByCategory } =
-    useMemo(() => {
-      let expense = 0;
-      let income = 0;
-      const byCategory = new Map<string, { expense: number; income: number }>();
-
-      for (const tx of periodRows) {
-        const totals = byCategory.get(tx.categoryId) ?? { expense: 0, income: 0 };
-        if (tx.type === "expense") {
-          expense += tx.amount;
-          totals.expense += tx.amount;
-        } else {
-          income += tx.amount;
-          totals.income += tx.amount;
-        }
-        byCategory.set(tx.categoryId, totals);
-      }
-
-      return {
-        expenseTotal: expense,
-        incomeTotal: income,
-        totalsByCategory: byCategory,
-      };
-    }, [periodRows]);
+  const { expenseTotal, incomeTotal, totalsByCategory } = useMemo(
+    () => sumTotals(periodRows),
+    [periodRows],
+  );
 
   /**
    * Lo que suma o resta una categoría según el filtro de tipo: sólo sus
@@ -292,7 +294,6 @@ export default function HomePage() {
         </div>
       </main>
 
-      {/* barra flotante: a la izquierda navegar, a la derecha registrar */}
       <div className="pointer-events-none fixed inset-x-0 bottom-[calc(20px+env(safe-area-inset-bottom))] z-30">
         <div className="mx-auto flex max-w-xl items-center justify-between px-5 sm:px-6">
           <motion.div

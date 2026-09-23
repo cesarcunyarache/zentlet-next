@@ -43,12 +43,16 @@ export async function parseBody<T extends z.ZodType>(
   return { data: result.data };
 }
 
+function hasPrismaErrorCode(error: unknown, code: string) {
+  return typeof error === "object" && error !== null && (error as { code?: string }).code === code;
+}
+
 /** Violación de clave única de Prisma (p. ej. un id que ya existe). */
 export function isUniqueViolation(error: unknown) {
-  return typeof error === "object" && error !== null && (error as { code?: string }).code === "P2002";
+  return hasPrismaErrorCode(error, "P2002");
 }
 
 /** Violación de clave foránea de Prisma (p. ej. borrar una categoría en uso). */
 export function isForeignKeyViolation(error: unknown) {
-  return typeof error === "object" && error !== null && (error as { code?: string }).code === "P2003";
+  return hasPrismaErrorCode(error, "P2003");
 }
