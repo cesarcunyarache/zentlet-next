@@ -83,6 +83,8 @@ export function HeroSection({ hero, common, totals, locale }: HeroSectionProps) 
             className="animate-rise-in font-display text-app-fg mt-6 mb-0 text-5xl leading-[0.95] font-bold tracking-[-0.05em] sm:text-6xl lg:text-7xl"
           >
             <span className="block">{hero.titleLead}</span>
+            {/* sin este espacio el título se lee "clarosen" (SEO y lectores) */}
+            {" "}
             <WordRotate
               words={hero.titleWords}
               duration={2800}
