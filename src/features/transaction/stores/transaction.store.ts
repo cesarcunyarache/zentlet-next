@@ -22,6 +22,7 @@ import {
   pendingMutations,
   type PendingChange,
 } from "@/core/offline/pending-changes";
+import { offlineSyncState, type OfflineSyncState } from "@/core/offline/offline-queue";
 import { transactionService } from "../services/transaction.service";
 import type { TTransaction, TTransactionPayload } from "../types";
 
@@ -176,8 +177,9 @@ export function useTransaction(transactionId: string | null | undefined) {
 }
 
 /**
- * Estado de sincronización por movimiento: `paused` = guardado en el
- * dispositivo, esperando conexión; `syncing` = enviándose.
+ * Movimientos con cambios hechos sin conexión: `paused` = guardado en el
+ * dispositivo, esperando red; `syncing` = enviándose al volver la red. Un
+ * guardado normal con conexión no aparece.
  */
 export function usePendingTransactions() {
   const states = useMutationState({
@@ -185,14 +187,15 @@ export function usePendingTransactions() {
     select: (mutation) => {
       const change = toPendingChange(mutation as Mutation<unknown, unknown, unknown>);
       const id = change?.kind === "create" ? change.row.id : change?.id;
-      return { id, paused: mutation.state.isPaused };
+      return { id, state: offlineSyncState(mutation as Mutation<unknown, unknown, unknown>) };
     },
   });
 
   return useMemo(() => {
-    const byId = new Map<string, "paused" | "syncing">();
-    for (const { id, paused } of states) {
-      if (id) byId.set(id, paused ? "paused" : "syncing");
+    const byId = new Map<string, OfflineSyncState>();
+    for (const { id, state } of states) {
+      // "paused" gana: el movimiento sigue teniendo algo en espera
+      if (id && state && byId.get(id) !== "paused") byId.set(id, state);
     }
     return byId;
   }, [states]);

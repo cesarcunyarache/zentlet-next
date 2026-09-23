@@ -20,6 +20,7 @@ import { Check } from "@gravity-ui/icons";
 import { EASE_OUT } from "@/lib/ease";
 import { GestureCarousel } from "@/core/components/carrusel";
 import { generateCategory } from "@/features/category/ai/actions/category-generator";
+import { useSyncStatus } from "@/core/offline/sync-status";
 
 interface CategoryIcon {
   icon: string;
@@ -27,8 +28,8 @@ interface CategoryIcon {
 }
 
 /**
- * Iconos de reserva cuando la IA no responde (sin conexión, sin sesión):
- * la categoría se puede crear igual y se sincroniza al volver la red.
+ * Iconos de reserva cuando la IA no está disponible (sin conexión, cuota
+ * agotada, sin sesión): la categoría se puede crear igual.
  */
 const FALLBACK_ICONS: CategoryIcon[] = [
   { icon: "🏷️", color: "#E9E4F5" },
@@ -70,6 +71,7 @@ export default function CategoryForm({
   );
   const [loadingAI, setLoadingAI] = useState(false);
   const [aiUnavailable, setAiUnavailable] = useState(false);
+  const { online } = useSyncStatus();
 
   const form = useForm<CategoryFormValues>({
     resolver: zodResolver(categorySchema),
@@ -96,6 +98,8 @@ export default function CategoryForm({
         setLoadingAI(true);
         let suggested: CategoryIcon[];
         try {
+          // sin red la llamada fallaría seguro: directo a los básicos
+          if (!navigator.onLine) throw new Error("offline");
           suggested = (await generateCategory(debouncedName)).categories;
           setAiUnavailable(false);
         } catch {
@@ -252,7 +256,9 @@ export default function CategoryForm({
 
       {aiUnavailable && (
         <p className="text-app-muted w-full text-center text-sm">
-          Sin conexión: elige un icono básico. Se guardará y sincronizará al volver la red.
+          {online
+            ? "No pudimos sugerir iconos ahora. Elige uno básico."
+            : "Sin conexión: elige un icono básico. Se guardará en este dispositivo."}
         </p>
       )}
 

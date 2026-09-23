@@ -11,6 +11,7 @@ import { del, get, set } from "idb-keyval";
 import { shouldRetry } from "@/providers/query-provider";
 import { registerCategoryMutations } from "@/features/category/stores/category.store";
 import { registerTransactionMutations } from "@/features/transaction/stores/transaction.store";
+import { trackOfflineQueue } from "./offline-queue";
 
 /*
  * Server state de la app privada, persistido en IndexedDB:
@@ -71,6 +72,7 @@ function createOfflineQueryClient() {
   // antes de restaurar: las mutaciones guardadas necesitan su mutationFn
   registerTransactionMutations(client);
   registerCategoryMutations(client);
+  trackOfflineQueue(client);
   return client;
 }
 

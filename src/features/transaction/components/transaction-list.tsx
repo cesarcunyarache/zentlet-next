@@ -2,10 +2,12 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { cn } from "@heroui/react";
+import { CloudOff, RefreshCw } from "lucide-react";
 import { SPRING_LAYOUT } from "@/lib/ease";
 import { CategoryEmoji } from "./category-emoji";
 import { dayLabel, formatSigned, signedAmount } from "../lib/format";
 import type { CategoryLike, TTransaction } from "../types";
+import type { OfflineSyncState } from "@/core/offline/offline-queue";
 
 interface TransactionListProps {
   transactions: TTransaction[];
@@ -13,12 +15,15 @@ interface TransactionListProps {
   currency: string;
   /** Distingue "no hay nada" de "el filtro no encontró nada". */
   hasAnyTransaction: boolean;
-  /** Movimientos aún no confirmados por el servidor. */
-  syncStateById?: Map<string, "paused" | "syncing">;
+  /** Movimientos con cambios hechos sin conexión. */
+  syncStateById?: Map<string, OfflineSyncState>;
   onSelect: (transaction: TTransaction) => void;
 }
 
-const SYNC_LABEL = { paused: "Pendiente", syncing: "Sincronizando…" } as const;
+const SYNC_LABEL: Record<OfflineSyncState, string> = {
+  paused: "Guardado en este dispositivo, se sincronizará al volver la conexión",
+  syncing: "Sincronizando",
+};
 
 interface DayGroup {
   date: string;
@@ -120,23 +125,26 @@ export function TransactionList({
                     <span className="min-w-0 flex-1">
                       <span className="text-app-muted flex items-center gap-1.5 text-xs leading-[1.3]">
                         {category?.name ?? "Sin categoría"}
-                        {syncState && (
-                          <span
-                            className={cn(
-                              "inline-flex items-center gap-1 rounded-full px-1.5 py-px text-[10.5px] font-semibold",
-                              syncState === "paused" ? "bg-app-fill text-app-fg" : "text-app-muted",
-                            )}
-                          >
-                            <span
-                              aria-hidden
-                              className={cn(
-                                "size-1.5 rounded-full",
-                                syncState === "paused" ? "bg-[oklch(0.78_0.15_75)]" : "bg-app-muted animate-pulse",
+                        <AnimatePresence initial={false}>
+                          {syncState && (
+                            <motion.span
+                              key="sync"
+                              title={SYNC_LABEL[syncState]}
+                              initial={{ opacity: 0, scale: 0.6 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              exit={{ opacity: 0, scale: 0.6 }}
+                              transition={{ duration: 0.2 }}
+                              className="inline-flex"
+                            >
+                              {syncState === "paused" ? (
+                                <CloudOff className="size-3" aria-hidden />
+                              ) : (
+                                <RefreshCw className="size-3 animate-spin" aria-hidden />
                               )}
-                            />
-                            {SYNC_LABEL[syncState]}
-                          </span>
-                        )}
+                              <span className="sr-only">{SYNC_LABEL[syncState]}</span>
+                            </motion.span>
+                          )}
+                        </AnimatePresence>
                       </span>
                       <span className="text-app-fg block truncate text-base font-semibold tracking-[-0.01em]">
                         {tx.description}

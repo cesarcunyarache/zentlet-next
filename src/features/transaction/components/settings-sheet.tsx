@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ChevronsUpDown, LogOut } from "lucide-react";
+import { ChevronsUpDown, CloudOff, LogOut } from "lucide-react";
 import { cn } from "@heroui/react";
 import { Sheet } from "@/core/components/ui/sheet";
 import { useOfflineSession } from "@/core/offline/offline-query-provider";
@@ -32,6 +32,8 @@ export function SettingsSheet({
 }: SettingsSheetProps) {
   return (
     <Sheet isOpen={isOpen} onOpenChange={onOpenChange} title="Ajustes">
+      <ConnectionRow />
+
       <div className="border-app-border flex items-center justify-between gap-3.5 border-b py-3.5">
         <span>
           <span className="text-app-fg block text-[14.5px] font-semibold">
@@ -76,6 +78,60 @@ export function SettingsSheet({
 
       <SignOutRow />
     </Sheet>
+  );
+}
+
+/**
+ * Estado de la conexión. Sin internet se sigue pudiendo trabajar: los
+ * cambios quedan en el dispositivo y se envían al volver la conexión.
+ */
+function ConnectionRow() {
+  const { online, pendingCount, syncingCount } = useSyncStatus();
+
+  return (
+    <div role="status" aria-live="polite" className="border-app-border border-b py-3.5">
+      <div className="flex items-center justify-between gap-3.5">
+        <span>
+          <span className="text-app-fg block text-[14.5px] font-semibold">
+            Conexión
+          </span>
+          <span className="text-app-muted mt-px block text-xs">
+            {online
+              ? syncingCount > 0
+                ? `Sincronizando ${syncingCount} ${syncingCount === 1 ? "cambio" : "cambios"}…`
+                : "Tus datos están sincronizados"
+              : pendingCount > 0
+                ? `${pendingCount} ${pendingCount === 1 ? "cambio pendiente" : "cambios pendientes"} de sincronizar`
+                : "Sin cambios pendientes"}
+          </span>
+        </span>
+        <span
+          className={cn(
+            "inline-flex min-h-[28px] shrink-0 items-center gap-1.5 rounded-full px-2.5 text-xs font-semibold",
+            online ? "bg-app-income-soft text-app-income" : "bg-app-expense-soft text-app-expense",
+          )}
+        >
+          <span
+            aria-hidden
+            className={cn("size-1.5 rounded-full", online ? "bg-app-income" : "bg-app-expense")}
+          />
+          {online ? "En línea" : "Sin conexión"}
+        </span>
+      </div>
+
+      {!online && (
+        <p className="bg-app-fill text-app-fg mt-3 flex gap-2.5 rounded-2xl p-3 text-xs leading-relaxed">
+          <CloudOff className="text-app-expense mt-px size-4 shrink-0" aria-hidden />
+          <span>
+            <span className="block font-semibold">Estás trabajando sin internet</span>
+            <span className="text-app-muted">
+              Lo que registres se guarda en este dispositivo y se sincronizará
+              automáticamente cuando vuelvas a conectarte.
+            </span>
+          </span>
+        </p>
+      )}
+    </div>
   );
 }
 

@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { onlineManager, useMutationState } from "@tanstack/react-query";
+import { onlineManager, useMutationState, type Mutation } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "motion/react";
 import { Check, CloudOff, RefreshCw } from "lucide-react";
 import { SPRING_SWAP } from "@/lib/ease";
+import { offlineSyncState } from "./offline-queue";
 
 /* Estado de conexión y de la cola de escrituras, para la UI. */
 
@@ -16,13 +17,15 @@ export function useSyncStatus() {
   const online = useSyncExternalStore(subscribe, () => onlineManager.isOnline(), () => true);
   const pending = useMutationState({
     filters: { status: "pending" },
-    select: (mutation) => mutation.state.isPaused,
+    select: (mutation) => offlineSyncState(mutation as Mutation<unknown, unknown, unknown>),
   });
 
   return {
     online,
     /** Escrituras aún no confirmadas por el servidor. */
     pendingCount: pending.length,
+    /** Las hechas sin conexión que se están enviando al volver la red. */
+    syncingCount: pending.filter((state) => state === "syncing").length,
   };
 }
 
@@ -36,25 +39,26 @@ const LABEL: Record<Tone, (count: number) => string> = {
 };
 
 /**
- * Píldora discreta: sólo aparece sin conexión, mientras se envía la cola y
- * un instante después ("Sincronizado"). Con todo al día no ocupa sitio.
+ * Píldora discreta: sólo aparece sin conexión, mientras se envía lo que se
+ * hizo sin red y un instante después ("Sincronizado"). Un guardado normal
+ * con conexión no la muestra.
  */
 export function SyncStatusPill() {
-  const { online, pendingCount } = useSyncStatus();
+  const { online, pendingCount, syncingCount } = useSyncStatus();
   const [justSynced, setJustSynced] = useState(false);
-  const previous = useRef(pendingCount);
+  const previous = useRef(syncingCount);
 
   useEffect(() => {
-    if (online && previous.current > 0 && pendingCount === 0) {
+    if (online && previous.current > 0 && syncingCount === 0) {
       setJustSynced(true);
       const timer = setTimeout(() => setJustSynced(false), 1800);
-      previous.current = pendingCount;
+      previous.current = syncingCount;
       return () => clearTimeout(timer);
     }
-    previous.current = pendingCount;
-  }, [online, pendingCount]);
+    previous.current = syncingCount;
+  }, [online, syncingCount]);
 
-  const tone: Tone | null = !online ? "offline" : pendingCount > 0 ? "syncing" : justSynced ? "synced" : null;
+  const tone: Tone | null = !online ? "offline" : syncingCount > 0 ? "syncing" : justSynced ? "synced" : null;
 
   return (
     <div role="status" aria-live="polite" className="min-h-8">
@@ -77,7 +81,7 @@ export function SyncStatusPill() {
             {tone === "offline" && <CloudOff className="size-3.5" aria-hidden />}
             {tone === "syncing" && <RefreshCw className="size-3.5 animate-spin" aria-hidden />}
             {tone === "synced" && <Check className="size-3.5" aria-hidden />}
-            {LABEL[tone](pendingCount)}
+            {LABEL[tone](tone === "syncing" ? syncingCount : pendingCount)}
           </motion.span>
         )}
       </AnimatePresence>
