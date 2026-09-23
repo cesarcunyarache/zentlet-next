@@ -124,9 +124,9 @@ export function CategoryStrip({
                   idle
                     ? "flex-row justify-center gap-1"
                     : "flex-col gap-1.5 pb-3.5",
-                  isSelected
-                    ? "text-app-fg"
-                    : "bg-app-fill-strong text-app-fg group-hover:bg-[color-mix(in_oklch,var(--app-fg)_16%,transparent)]",
+                  !isSelected &&
+                    "bg-app-fill-strong group-hover:bg-[color-mix(in_oklch,var(--app-fg)_16%,transparent)]",
+                  isSelected && category.color ? "text-app-on-pastel" : "text-app-fg",
                 )}
               >
                 <motion.span

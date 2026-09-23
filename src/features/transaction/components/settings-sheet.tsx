@@ -2,11 +2,21 @@
 
 import { useEffect, useState } from "react";
 import { ChevronsUpDown, CloudOff, LogOut } from "lucide-react";
+import { motion } from "motion/react";
 import { cn } from "@heroui/react";
 import { Sheet } from "@/core/components/ui/sheet";
 import { useOfflineSession } from "@/core/offline/offline-query-provider";
 import { useSyncStatus } from "@/core/offline/sync-status";
+import { useThemePreference } from "@/core/theme/use-theme";
+import type { ThemePreference } from "@/core/theme/theme";
 import { authClient } from "@/lib/auth-client";
+import { SPRING_LAYOUT } from "@/lib/ease";
+
+const THEMES: { value: ThemePreference; label: string }[] = [
+  { value: "system", label: "Auto" },
+  { value: "light", label: "Claro" },
+  { value: "dark", label: "Oscuro" },
+];
 
 const CURRENCIES = [
   { value: "S/", label: "S/ · sol" },
@@ -61,6 +71,8 @@ export function SettingsSheet({
         </span>
       </div>
 
+      <AppearanceRow />
+
       <div className="border-app-border flex items-center justify-between gap-3.5 border-b py-3.5">
         <span>
           <span className="text-app-fg block text-[14.5px] font-semibold">
@@ -78,6 +90,53 @@ export function SettingsSheet({
 
       <SignOutRow />
     </Sheet>
+  );
+}
+
+function AppearanceRow() {
+  const { preference, setPreference } = useThemePreference();
+
+  return (
+    <div className="border-app-border flex items-center justify-between gap-3.5 border-b py-3.5">
+      <span>
+        <span className="text-app-fg block text-[14.5px] font-semibold">
+          Apariencia
+        </span>
+        <span className="text-app-muted mt-px block text-xs">
+          {preference === "system" ? "Igual que tu dispositivo" : "Solo en este dispositivo"}
+        </span>
+      </span>
+      <div
+        role="group"
+        aria-label="Apariencia"
+        className="bg-app-fill inline-flex shrink-0 items-center gap-0.5 rounded-full p-[3px]"
+      >
+        {THEMES.map(({ value, label }) => {
+          const active = preference === value;
+          return (
+            <button
+              key={value}
+              type="button"
+              aria-pressed={active}
+              onClick={() => setPreference(value)}
+              className={cn(
+                "relative min-h-[30px] rounded-full px-3 text-[13px] font-semibold transition-colors",
+                active ? "text-app-fg" : "text-app-muted hover:text-app-fg",
+              )}
+            >
+              {active && (
+                <motion.span
+                  layoutId="settings-theme-pill"
+                  transition={SPRING_LAYOUT}
+                  className="bg-app-surface absolute inset-0 rounded-full shadow-[0_1px_3px_color-mix(in_oklch,var(--app-ink)_14%,transparent)]"
+                />
+              )}
+              <span className="relative">{label}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
   );
 }
 

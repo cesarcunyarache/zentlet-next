@@ -143,8 +143,8 @@ body {
 [data-theme="dark"] {
   color-scheme: dark;
   /* Theme Colors (Dark Mode) */
-  --accent: oklch(29.22% 0.0156 264.30);
-  --accent-foreground: oklch(99.11% 0 0);
+  --accent: oklch(96% 0.004 300);
+  --accent-foreground: oklch(21.03% 0.0059 264.30);
   --background: oklch(12.00% 0.0015 264.30);
   --border: oklch(28.00% 0.0015 264.30);
   --danger: oklch(59.40% 0.1973 25.89);
@@ -155,7 +155,7 @@ body {
   --field-border: transparent;
   --field-foreground: oklch(99.11% 0.0015 264.30);
   --field-placeholder: oklch(70.50% 0.0030 264.30);
-  --focus: oklch(29.22% 0.0156 264.30);
+  --focus: oklch(96% 0.004 300);
   --foreground: oklch(99.11% 0.0015 264.30);
   --muted: oklch(70.50% 0.0030 264.30);
   --overlay: oklch(21.03% 0.0030 264.30);
@@ -182,7 +182,8 @@ body {
    frío, rojo para gasto, verde para ingreso. Único lugar con colores
    literales de la app. Prefijo `app-` para no chocar con HeroUI.
    ───────────────────────────────────────────────────────────────────── */
-:root {
+:root,
+[data-theme="light"] {
   --app-bg: oklch(0.974 0.004 300);
   --app-surface: oklch(0.995 0.003 300);
   --app-fg: oklch(0.215 0.014 290);
@@ -190,20 +191,39 @@ body {
   --app-border: oklch(0.895 0.011 300);
   --app-expense: oklch(0.598 0.212 22);
   --app-income: oklch(0.545 0.152 148);
+  --app-ink: var(--app-fg);
+  /* texto sobre el pastel de una categoría: oscuro en ambos temas */
+  --app-on-pastel: oklch(0.215 0.014 290);
+}
 
-  /* derivados — no editar */
+[data-theme="dark"] {
+  --app-bg: oklch(0.165 0.008 290);
+  --app-surface: oklch(0.215 0.01 290);
+  --app-fg: oklch(0.96 0.004 300);
+  --app-muted: oklch(0.7 0.014 290);
+  --app-border: oklch(0.31 0.012 290);
+  --app-expense: oklch(0.68 0.19 22);
+  --app-income: oklch(0.74 0.15 148);
+  --app-ink: oklch(0 0 0);
+}
+
+/* derivados — se recalculan en cada ámbito de tema; no editar */
+:root,
+[data-theme] {
   --app-expense-soft: color-mix(in oklch, var(--app-expense) 12%, var(--app-surface));
   --app-income-soft: color-mix(in oklch, var(--app-income) 13%, var(--app-surface));
   --app-fill: color-mix(in oklch, var(--app-fg) 5%, transparent);
   --app-fill-strong: color-mix(in oklch, var(--app-fg) 9%, transparent);
-  --app-scrim: color-mix(in oklch, var(--app-fg) 42%, transparent);
+  --app-scrim: color-mix(in oklch, var(--app-ink) 42%, transparent);
 
+  --shadow-sheet: 0 -8px 40px color-mix(in oklch, var(--app-ink) 16%, transparent);
+  --shadow-fab: 0 6px 18px color-mix(in oklch, var(--app-expense) 34%, transparent);
+}
+
+:root {
   --font-display: ui-rounded, "SF Pro Rounded", "Hiragino Maru Gothic ProN",
     "Varela Round", system-ui, sans-serif;
   --font-numeric: ui-monospace, "SF Mono", Menlo, monospace;
-
-  --shadow-sheet: 0 -8px 40px color-mix(in oklch, var(--app-fg) 16%, transparent);
-  --shadow-fab: 0 6px 18px color-mix(in oklch, var(--app-expense) 34%, transparent);
 }
 
 @theme inline {
@@ -218,6 +238,7 @@ body {
   --color-app-income-soft: var(--app-income-soft);
   --color-app-fill: var(--app-fill);
   --color-app-fill-strong: var(--app-fill-strong);
+  --color-app-on-pastel: var(--app-on-pastel);
 
   --font-display: var(--font-display);
   --font-numeric: var(--font-numeric);

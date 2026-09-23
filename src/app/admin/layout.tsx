@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { OfflineQueryProvider } from "@/core/offline/offline-query-provider";
+import { ThemeController } from "@/core/theme/theme-controller";
 
 /**
  * La sesión se lee aquí (servidor) y el id del usuario viaja en el HTML:
@@ -14,6 +15,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <OfflineQueryProvider key={session.user.id} userId={session.user.id}>
+      <ThemeController />
       {children}
     </OfflineQueryProvider>
   );
