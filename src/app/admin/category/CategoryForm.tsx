@@ -15,7 +15,8 @@ import {
   categorySchema,
   type CategoryFormValues,
 } from "@/features/category/schemas/category.schema";
-import { useCategory } from "@/features/category/hooks/useCategory";
+import { useCategoryStore } from "@/features/category/stores/category.store";
+import { getApiErrorMessage } from "@/core/services/api-error";
 import { Check } from "@gravity-ui/icons";
 import { EASE_OUT } from "@/lib/ease";
 import { GestureCarousel } from "@/core/components/carrusel";
@@ -26,19 +27,46 @@ interface CategoryIcon {
   color: string;
 }
 
-export default function CategoryForm({ onSuccess }: { onSuccess: () => void }) {
-  const { createCategory } = useCategory();
-  const [categoriesIcons, setCategoriesIcons] = useState<CategoryIcon[]>([]);
+export interface EditableCategory {
+  id: string;
+  name: string;
+  icon?: string | null;
+  color?: string | null;
+  description?: string | null;
+}
+
+export default function CategoryForm({
+  onSuccess,
+  initialName = "",
+  category,
+}: {
+  onSuccess: () => void;
+  /** Nombre con el que arranca, p. ej. la primera palabra del asunto. */
+  initialName?: string;
+  /** Si llega, el formulario edita esta categoría en lugar de crear una. */
+  category?: EditableCategory;
+}) {
+  const { createCategory, updateCategory, isCreating, isUpdating } =
+    useCategoryStore();
+  const isSaving = isCreating || isUpdating;
+  // al editar, el carrusel ya arranca con el icono actual
+  const current = category?.icon
+    ? { icon: category.icon, color: category.color || "" }
+    : null;
+  const [categoriesIcons, setCategoriesIcons] = useState<CategoryIcon[]>(
+    current ? [current] : [],
+  );
   const [loadingAI, setLoadingAI] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const form = useForm<CategoryFormValues>({
     resolver: zodResolver(categorySchema),
     mode: "onChange",
     defaultValues: {
-      name: "",
-      icon: "",
-      description: "",
-      color: "",
+      name: category?.name ?? initialName,
+      icon: category?.icon ?? "",
+      description: category?.description ?? "",
+      color: category?.color ?? "",
     },
   });
 
@@ -47,6 +75,8 @@ export default function CategoryForm({ onSuccess }: { onSuccess: () => void }) {
 
   useEffect(() => {
     if (!debouncedName.trim()) return;
+    // editando sin cambiar el nombre no hace falta pedir iconos nuevos
+    if (category && debouncedName === category.name) return;
     let cancelled = false;
 
     async function generate() {
@@ -54,7 +84,21 @@ export default function CategoryForm({ onSuccess }: { onSuccess: () => void }) {
         setLoadingAI(true);
         const suggestion = await generateCategory(debouncedName);
         if (cancelled) return;
-        setCategoriesIcons(suggestion.categories);
+        // al editar, el icono actual sigue siendo una opción del carrusel
+        const icons = current
+          ? [current, ...suggestion.categories.filter((s) => s.icon !== current.icon)]
+          : suggestion.categories;
+        setCategoriesIcons(icons);
+
+        // el carrusel muestra el primero si el icono actual no está en la
+        // lista; sin esto el form queda vacío y Guardar no se habilita
+        // hasta deslizar
+        const selected = form.getValues("icon");
+        const first = icons[0];
+        if (first && !icons.some((item) => item.icon === selected)) {
+          form.setValue("icon", first.icon, { shouldValidate: true, shouldDirty: true });
+          form.setValue("color", first.color, { shouldValidate: true, shouldDirty: true });
+        }
       } finally {
         if (!cancelled) {
           setLoadingAI(false);
@@ -65,17 +109,37 @@ export default function CategoryForm({ onSuccess }: { onSuccess: () => void }) {
     return () => {
       cancelled = true;
     };
+    // category/current sólo cambian al abrir otra categoría (se remonta)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedName]);
 
   async function onSubmit(values: CategoryFormValues) {
-    await createCategory(values);
-    form.reset();
-    onSuccess();
+    try {
+      if (category) {
+        const { description, ...rest } = values;
+        await updateCategory({
+          categoryId: category.id,
+          data: category.description === undefined ? rest : { ...rest, description },
+        });
+      } else {
+        await createCategory(values);
+      }
+      form.reset();
+      onSuccess();
+    } catch (error) {
+      // El panel sigue abierto para reintentar; el store conserva el error.
+      setSubmitError(
+        getApiErrorMessage(
+          error,
+          category ? "No se pudo guardar la categoría" : "No se pudo crear la categoría",
+        ),
+      );
+    }
   }
 
   return (
     <Form
-      className="flex flex-col gap-5 h-full justify-center justify-items-center"
+      className="flex flex-1 flex-col gap-5 h-full justify-center justify-items-center"
       onSubmit={form.handleSubmit(onSubmit)}
     >
       <div className="flex flex-1 flex-col  justify-center gap-5">
@@ -172,13 +236,19 @@ export default function CategoryForm({ onSuccess }: { onSuccess: () => void }) {
         />
       </div>
 
+      {submitError && (
+        <p role="alert" className="text-danger w-full text-center text-sm">
+          {submitError}
+        </p>
+      )}
+
       <Button
         type="submit"
         className="w-full"
-        isDisabled={!form.formState.isValid}
+        isDisabled={!form.formState.isValid || isSaving}
       >
         <Check />
-        Guardar
+        {isSaving ? "Guardando…" : "Guardar"}
       </Button>
     </Form>
   );
@@ -236,7 +306,7 @@ function GhostInput({
           aria-hidden
           className={cn(
             "pointer-events-none absolute inset-0 flex min-w-0 items-center justify-start overflow-hidden font-semibold leading-none tracking-normal text-foreground transition-[font-size] duration-200",
-            !value && "text-muted-foreground/55",
+            !value && "text-app-muted/40",
             inputSize,
           )}
         >

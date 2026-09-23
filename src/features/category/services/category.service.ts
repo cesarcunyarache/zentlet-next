@@ -1,51 +1,46 @@
 import { APIService } from "@/core/services/api.service";
-import { TCategory } from "../types";
+import type { TCategory, TCategoryPayload } from "../types";
 
+/**
+ * Capa de acceso a la API de categorías. Sólo HTTP: sin estado de React,
+ * sin cache y sin transformar errores (se propaga el `AxiosError`).
+ * Las rutas son relativas; la URL base la aporta `APIService`.
+ */
 export class CategoryService extends APIService {
-  constructor() {
-    super("");
-  }
-
-  async createCategory(data: Partial<TCategory>): Promise<TCategory> {
-    return this.post(`/api/category`, data)
-      .then((response) => response?.data)
-      .catch((error) => {
-        throw error?.response;
-      });
-  }
-
   async getCategories(): Promise<TCategory[]> {
-    return this.get(`/api/categories`)
-      .then((response) => response?.data)
-      .catch((error) => {
-        throw error?.response?.data;
-      });
+    const response = await this.get<TCategory[]>("/api/category");
+
+    return response.data;
   }
 
   async getCategory(categoryId: string): Promise<TCategory> {
-    return this.get(`/api/category/${categoryId}/`)
-      .then((response) => response?.data)
-      .catch((error) => {
-        throw error?.response;
-      });
+    const response = await this.get<TCategory>(`/api/category/${categoryId}`);
+
+    return response.data;
+  }
+
+  async createCategory(data: TCategoryPayload): Promise<TCategory> {
+    const response = await this.post<TCategory>("/api/category", data);
+
+    return response.data;
   }
 
   async updateCategory(
     categoryId: string,
-    data: Partial<TCategory>,
+    data: Partial<TCategoryPayload>,
   ): Promise<TCategory> {
-    return this.patch(`/api/category/${categoryId}/`, data)
-      .then((response) => response?.data)
-      .catch((error) => {
-        throw error?.response?.data;
-      });
+    const response = await this.patch<TCategory>(
+      `/api/category/${categoryId}`,
+      data,
+    );
+
+    return response.data;
   }
 
   async deleteCategory(categoryId: string): Promise<void> {
-    return this.delete(`/api/category/${categoryId}/`)
-      .then((response) => response?.data)
-      .catch((error) => {
-        throw error?.response?.data;
-      });
+    await this.delete(`/api/category/${categoryId}`);
   }
 }
+
+/** Instancia única: el servicio no tiene estado propio. */
+export const categoryService = new CategoryService();

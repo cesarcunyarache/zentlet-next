@@ -1,143 +1,70 @@
 "use client";
 
-import { useCategory } from "@/features/category/hooks/useCategory";
-import { Check, Plus } from "@gravity-ui/icons";
-import { Button, Drawer, useOverlayState } from "@heroui/react";
-import React, { useState } from "react";
+import { useState } from "react";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+import { useCategoryStore } from "@/features/category/stores/category.store";
+import { CategoryGrid } from "@/features/category/components/category-grid";
+import { Sheet } from "@/core/components/ui/sheet";
+import CategoryForm, { type EditableCategory } from "./CategoryForm";
 
-const CATEGORIES = [
-  { id: 1, label: "Compras", emoji: "🥑", color: "bg-[#D4E8A8]" },
-  { id: 2, label: "Ropa", emoji: "👖", color: "bg-[#C5D5F0]" },
-  { id: 3, label: "Comer afuera", emoji: "🍔", color: "bg-[#F0D4C8]" },
-  { id: 4, label: "Lujo", emoji: "💎", color: "bg-[#E8D4F0]" },
-  { id: 5, label: "Auto", emoji: "🚗", color: "bg-[#E0D8F0]" },
-  { id: 6, label: "Mascotas", emoji: "🐕", color: "bg-[#E8D4F0]" },
-];
+export default function CategoryPage() {
+  const { categories, isLoading } = useCategoryStore();
+  const [isCreating, setIsCreating] = useState(false);
+  const [editing, setEditing] = useState<EditableCategory | null>(null);
+  const formOpen = isCreating || Boolean(editing);
 
-import { z } from "zod";
-import CategoryForm from "./CategoryForm";
-
-export const categorySchema = z.object({
-  name: z.string().min(2, "El nombre debe tener mínimo 2 caracteres"),
-
-  icon: z.string().min(1, "Selecciona un icono"),
-
-  description: z.string().optional(),
-});
-
-export type CategoryFormValues = z.infer<typeof categorySchema>;
-
-export default function CategorySelector() {
-  const { categories, createCategory } = useCategory();
-
-  const [selected, setSelected] = useState<number[]>([]);
-
-  const toggleCategory = (id: number) => {
-    setSelected((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
-    );
-  };
-
-  console.log(categories);
-
-  const handleSave = () => {
-    console.log("Categorías seleccionadas:", selected);
-  };
-
-  const [isOpen, setIsOpen] = React.useState(false);
-  const state = useOverlayState();
+  function closeForm() {
+    setIsCreating(false);
+    setEditing(null);
+  }
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-4">
-      <div className="flex flex-wrap gap-4 max-w-3xl justify-center align-center">
-        <Drawer isOpen={isOpen} onOpenChange={setIsOpen}>
-          <Drawer.Backdrop variant="blur" className="">
-            <Drawer.Content
-              placement="bottom"
-              className="w-full md:max-w-xl md:mx-auto h-screen"
-            >
-              <Drawer.Dialog className="h-screen">
-                <Drawer.CloseTrigger />
-                <Drawer.Handle />
+    <div className="bg-app-bg text-app-fg min-h-dvh">
+      <main className="mx-auto flex max-w-md flex-col px-5 pt-[calc(16px+env(safe-area-inset-top))] pb-12">
+        <Link
+          href="/admin"
+          aria-label="Volver"
+          className="bg-app-fill hover:bg-app-fill-strong grid size-10 place-items-center rounded-full transition-colors"
+        >
+          <ArrowLeft className="size-5" strokeWidth={1.9} />
+        </Link>
 
-                <Drawer.Body>
-                  <CategoryForm onSuccess={() => setIsOpen(false)} />
-                </Drawer.Body>
-                {/*  <Drawer.Footer>
-                  <Button slot="close" variant="secondary">
-                    Cancel
-                  </Button>
-                  <Button slot="close">Done</Button>
-                </Drawer.Footer> */}
-              </Drawer.Dialog>
-            </Drawer.Content>
-          </Drawer.Backdrop>
-        </Drawer>
-      </div>
+        <h1 className="font-display mt-8 mb-8 text-[32px] leading-tight font-bold tracking-[-0.03em]">
+          Tus categorías
+        </h1>
 
-      <div className="w-full max-w-sm">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 text-center">
-            Categorías
-          </h1>
+        {isLoading ? (
+          <div className="grid grid-cols-3 gap-x-4 gap-y-5">
+            {Array.from({ length: 6 }, (_, index) => (
+              <span key={index} className="bg-app-fill aspect-square animate-pulse rounded-[26px]" />
+            ))}
+          </div>
+        ) : (
+          <CategoryGrid
+            categories={Array.isArray(categories) ? categories : []}
+            onSelect={setEditing}
+            onAdd={() => setIsCreating(true)}
+          />
+        )}
+      </main>
+
+      <Sheet
+        isOpen={formOpen}
+        onOpenChange={(open) => !open && closeForm()}
+        title={editing ? "Editar categoría" : "Nueva categoría"}
+        hideTitle
+        className="min-h-[70dvh]"
+        bodyClassName="flex flex-col"
+      >
+        <div className="flex flex-1 flex-col pb-4">
+          <CategoryForm
+            key={editing?.id ?? "new"}
+            category={editing ?? undefined}
+            onSuccess={closeForm}
+          />
         </div>
-
-        {/* Categories Grid */}
-        <div className="grid grid-cols-3 gap-4 mb-6">
-          {categories.map((category: any) => (
-            <button
-              key={category.id}
-              onClick={() => toggleCategory(category.id)}
-              className={`relative flex flex-col items-center justify-center w-24 h-24 rounded-2xl transition-all duration-200 ${
-                category.color
-              } ${
-                selected.includes(category.id)
-                  ? "ring-2 ring-gray-800 scale-95"
-                  : "hover:scale-105"
-              }`}
-              style={{
-                backgroundColor: category.color,
-              }}
-            >
-              <div className="text-4xl mb-2">{category.icon}</div>
-              <p className="text-xs font-medium text-gray-700 text-center px-1">
-                {category.label}
-              </p>
-              {selected.includes(category.id) && (
-                <div className="absolute top-2 right-2 bg-gray-800 text-white rounded-full p-1">
-                  <Check /* size={12} */ />
-                </div>
-              )}
-            </button>
-          ))}
-        </div>
-
-        {/* Add Category Button */}
-        <div className="flex justify-start mb-8">
-          <button
-            className="flex flex-col items-center justify-center w-24 h-24 border-2 border-dashed border-gray-400 rounded-2xl text-gray-500 hover:border-gray-600 hover:text-gray-700 transition-colors"
-            onClick={() => setIsOpen(true)}
-          >
-            <Plus /* size={24}  */ />
-            <span className="text-xs mt-2 text-center text-gray-600 px-2">
-              Añadir
-              <br />
-              categoría
-            </span>
-          </button>
-        </div>
-
-        {/* Save Button */}
-        {/* <div className="flex justify-center w-full">
-          <button
-            onClick={handleSave}
-            className="bg-gray-800 text-white px-8 py-3 rounded-full font-semibold hover:bg-gray-900 transition-colors flex items-center gap-2"
-          >
-            <span>→</span> Guardar
-          </button>
-        </div> */}
-      </div>
+      </Sheet>
     </div>
   );
 }

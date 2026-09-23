@@ -1,14 +1,21 @@
-import { User } from "@/generated/prisma/client";
-
+/**
+ * Forma de una categoría tal y como la devuelve la API (JSON: las fechas
+ * viajan como string ISO, no como `Date`).
+ */
 export interface TCategory {
   id: string;
   name: string;
-  icon: string | null;
+  icon: string;
+  color: string;
   description: string | null;
 
   userId: string;
-  user?: User | null;
 
-  created_at?: Date;
-  updated_at?: Date;
+  createdAt: string;
+  updatedAt: string;
 }
+
+/** Campos que el cliente puede enviar al crear o actualizar. */
+export type TCategoryPayload = Pick<TCategory, "name" | "icon" | "color"> & {
+  description?: string;
+};
