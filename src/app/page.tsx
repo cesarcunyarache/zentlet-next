@@ -1,12 +1,16 @@
-import { redirect } from "next/navigation";
+import type { Metadata, Viewport } from "next";
+import { getLandingContent } from "@/features/landing/content";
+import { LandingPage } from "@/features/landing/components/landing-page";
+import { buildLandingMetadata } from "@/features/landing/lib/seo";
+
+const content = getLandingContent();
+
+export const metadata: Metadata = buildLandingMetadata(content);
+
+export const viewport: Viewport = {
+  themeColor: "#f6f4f9",
+};
 
 export default function Home() {
-  redirect("/admin/category");
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 dark:bg-black sm:items-start">
-        Hi Zentlet
-      </main>
-    </div>
-  );
+  return <LandingPage content={content} />;
 }

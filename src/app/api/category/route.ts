@@ -1,0 +1,61 @@
+import { NextResponse } from "next/server";
+import prisma from "@/lib/prisma";
+import { createCategorySchema } from "@/features/category/schemas/category-api.schema";
+import {
+  errorResponse,
+  getSessionUserId,
+  isUniqueViolation,
+  parseBody,
+  unauthorized,
+} from "@/lib/api/route-helpers";
+
+/** Sólo las categorías del usuario de la sesión. */
+export async function GET(req: Request) {
+  try {
+    const userId = await getSessionUserId(req);
+    if (!userId) return unauthorized();
+
+    const categories = await prisma.category.findMany({
+      where: { userId },
+      orderBy: { createdAt: "desc" },
+    });
+
+    return NextResponse.json(categories);
+  } catch {
+    return errorResponse("Error fetching categories", 500);
+  }
+}
+
+/** Idempotente por `id` (lo genera el cliente), igual que los movimientos. */
+export async function POST(req: Request) {
+  try {
+    const userId = await getSessionUserId(req);
+    if (!userId) return unauthorized();
+
+    const parsed = await parseBody(req, createCategorySchema);
+    if ("error" in parsed) return parsed.error;
+    const { id, name, icon, color, description } = parsed.data;
+
+    const existing = await prisma.category.findUnique({ where: { id } });
+    if (existing) {
+      return existing.userId === userId
+        ? NextResponse.json(existing, { status: 200 })
+        : errorResponse("Category id already in use", 409);
+    }
+
+    try {
+      const category = await prisma.category.create({
+        data: { id, name, icon, color, description: description ?? null, userId },
+      });
+      return NextResponse.json(category, { status: 201 });
+    } catch (error) {
+      if (!isUniqueViolation(error)) throw error;
+      const winner = await prisma.category.findFirst({ where: { id, userId } });
+      return winner
+        ? NextResponse.json(winner, { status: 200 })
+        : errorResponse("Category id already in use", 409);
+    }
+  } catch {
+    return errorResponse("Error creating category", 500);
+  }
+}
