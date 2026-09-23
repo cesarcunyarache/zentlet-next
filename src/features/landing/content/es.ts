@@ -49,6 +49,7 @@ export const es: LandingContent = {
     ],
     signIn: "Iniciar sesión",
     cta: "Crear cuenta",
+    dashboard: "Ir al dashboard",
     openMenu: "Abrir menú",
     closeMenu: "Cerrar menú",
     home: "Zentlet, inicio",

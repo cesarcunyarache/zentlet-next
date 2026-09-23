@@ -62,6 +62,7 @@ export interface LandingContent {
     links: { label: string; section: SectionId }[];
     signIn: string;
     cta: string;
+    dashboard: string;
     openMenu: string;
     closeMenu: string;
     home: string;

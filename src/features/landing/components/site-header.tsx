@@ -10,11 +10,16 @@ import { siteConfig } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import type { LandingContent } from "../content";
 import { sectionHref } from "../lib/format";
+import { useHasSession } from "../lib/use-has-session";
 import { Logo } from "./shared/logo";
+
+const PRIMARY_LINK =
+  "bg-app-fg text-app-bg inline-flex rounded-full px-4 py-2 text-sm font-semibold shadow-[0_10px_20px_-10px_color-mix(in_oklch,var(--app-fg)_70%,transparent)] transition-transform hover:-translate-y-0.5";
 
 export function SiteHeader({ nav }: { nav: LandingContent["nav"] }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const hasSession = useHasSession();
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, "change", (latest) => setIsScrolled(latest > 24));
@@ -57,19 +62,24 @@ export function SiteHeader({ nav }: { nav: LandingContent["nav"] }) {
           </ul>
         </nav>
 
-        <div className="flex items-center gap-2">
-          <Link
-            href={siteConfig.routes.signIn}
-            className="text-app-fg hover:bg-app-fill hidden rounded-full px-4 py-2 text-sm font-semibold transition-colors sm:inline-flex"
-          >
-            {nav.signIn}
-          </Link>
-          <Link
-            href={siteConfig.routes.signUp}
-            className="bg-app-fg text-app-bg inline-flex rounded-full px-4 py-2 text-sm font-semibold shadow-[0_10px_20px_-10px_color-mix(in_oklch,var(--app-fg)_70%,transparent)] transition-transform hover:-translate-y-0.5"
-          >
-            {nav.cta}
-          </Link>
+        <div className={cn("flex items-center gap-2", hasSession === null && "[&>a]:invisible")}>
+          {hasSession ? (
+            <Link href={siteConfig.routes.app} className={PRIMARY_LINK}>
+              {nav.dashboard}
+            </Link>
+          ) : (
+            <>
+              <Link
+                href={siteConfig.routes.signIn}
+                className="text-app-fg hover:bg-app-fill hidden rounded-full px-4 py-2 text-sm font-semibold transition-colors sm:inline-flex"
+              >
+                {nav.signIn}
+              </Link>
+              <Link href={siteConfig.routes.signUp} className={PRIMARY_LINK}>
+                {nav.cta}
+              </Link>
+            </>
+          )}
           <button
             type="button"
             aria-expanded={isMenuOpen}
@@ -106,14 +116,16 @@ export function SiteHeader({ nav }: { nav: LandingContent["nav"] }) {
                   </a>
                 </li>
               ))}
-              <li>
-                <Link
-                  href={siteConfig.routes.signIn}
-                  className="text-app-muted hover:bg-app-fill block rounded-2xl px-4 py-3 text-base font-semibold"
-                >
-                  {nav.signIn}
-                </Link>
-              </li>
+              {hasSession === false && (
+                <li>
+                  <Link
+                    href={siteConfig.routes.signIn}
+                    className="text-app-muted hover:bg-app-fill block rounded-2xl px-4 py-3 text-base font-semibold"
+                  >
+                    {nav.signIn}
+                  </Link>
+                </li>
+              )}
             </ul>
           </motion.nav>
         )}
