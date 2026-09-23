@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { LayoutGrid, Plus, Search, Settings, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { SPRING_LAYOUT, SPRING_PRESS } from "@/lib/ease";
@@ -113,52 +113,66 @@ export default function HomePage() {
       .sort((a, b) => b.transactionDate.localeCompare(a.transactionDate));
   }, [periodRows, kind, categoryFilter, query, categoriesById]);
 
-  const { expenseTotal, incomeTotal, expenseByCategory } =
+  const { expenseTotal, incomeTotal, totalsByCategory } =
     useMemo(() => {
       let expense = 0;
       let income = 0;
-      const byExpense = new Map<string, number>();
+      const byCategory = new Map<string, { expense: number; income: number }>();
 
       for (const tx of periodRows) {
+        const totals = byCategory.get(tx.categoryId) ?? { expense: 0, income: 0 };
         if (tx.type === "expense") {
           expense += tx.amount;
-          byExpense.set(
-            tx.categoryId,
-            (byExpense.get(tx.categoryId) ?? 0) + tx.amount,
-          );
+          totals.expense += tx.amount;
         } else {
           income += tx.amount;
+          totals.income += tx.amount;
         }
+        byCategory.set(tx.categoryId, totals);
       }
 
       return {
         expenseTotal: expense,
         incomeTotal: income,
-        expenseByCategory: byExpense,
+        totalsByCategory: byCategory,
       };
     }, [periodRows]);
+
+  /**
+   * Lo que suma o resta una categoría según el filtro de tipo: sólo sus
+   * gastos (negativo), sólo sus ingresos (positivo) o, sin filtro, el neto.
+   */
+  const categoryValue = useCallback(
+    (categoryId: string) => {
+      const totals = totalsByCategory.get(categoryId);
+      if (!totals) return 0;
+      if (kind === "expense") return -totals.expense;
+      if (kind === "income") return totals.income;
+      return totals.income - totals.expense;
+    },
+    [totalsByCategory, kind],
+  );
 
   const stripData = useMemo<CategoryTotal[]>(
     () =>
       categories
-        .map((category) => ({
-          category,
-          total: expenseByCategory.get(category.id) ?? 0,
-        }))
-        .sort((a, b) => b.total - a.total),
-    [categories, expenseByCategory],
+        .map((category) => ({ category, total: categoryValue(category.id) }))
+        .sort((a, b) => Math.abs(b.total) - Math.abs(a.total)),
+    [categories, categoryValue],
   );
 
   /**
    * La cifra grande sigue al filtro activo: sin filtro es el balance del
-   * periodo; con una categoría seleccionada, su gasto.
+   * periodo; con una categoría seleccionada, lo que suma o resta esa
+   * categoría.
    */
   const headline = useMemo(() => {
     if (categoryFilter) {
+      const value = categoryValue(categoryFilter);
       return {
-        value: -(expenseByCategory.get(categoryFilter) ?? 0),
+        value,
         label: categoriesById.get(categoryFilter)?.name ?? "Categoría",
-        tone: "expense" as const,
+        tone: value > 0 ? ("income" as const) : ("expense" as const),
       };
     }
     if (kind === "expense") {
@@ -179,7 +193,7 @@ export default function HomePage() {
     kind,
     expenseTotal,
     incomeTotal,
-    expenseByCategory,
+    categoryValue,
     categoriesById,
   ]);
 

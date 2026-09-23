@@ -1,7 +1,6 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { cn } from "@heroui/react";
 import { CloudOff, RefreshCw } from "lucide-react";
 import { SPRING_LAYOUT } from "@/lib/ease";
 import { CategoryEmoji } from "./category-emoji";
@@ -150,12 +149,7 @@ export function TransactionList({
                         {tx.description}
                       </span>
                     </span>
-                    <span
-                      className={cn(
-                        "num shrink-0 text-[15px] font-semibold",
-                        amount < 0 ? "text-app-fg" : "text-app-income",
-                      )}
-                    >
+                    <span className="num text-app-fg shrink-0 text-[15px] font-semibold">
                       {formatSigned(amount, currency)}
                     </span>
                   </motion.button>

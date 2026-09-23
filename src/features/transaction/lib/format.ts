@@ -67,12 +67,29 @@ export function formatSigned(value: number, currency: string) {
   return `${value < 0 ? "−" : "+"} ${currency} ${formatNumber(value)}`;
 }
 
-/** Abreviado para las barras del gráfico: 1,2k / 12k / 219 */
+const SHORT_UNITS = [
+  { size: 1e3, suffix: "k" },
+  { size: 1e6, suffix: "M" },
+  { size: 1e9, suffix: "B" },
+];
+
+/**
+ * Abreviado para las barras del gráfico, sin signo: 219 / 1k / 4.5k /
+ * 12.3k / 250k / 1M. Un decimal sólo si la cifra tiene menos de 3 dígitos.
+ */
 export function formatShort(value: number) {
-  if (value >= 1000) {
-    return `${(value / 1000).toFixed(value >= 10000 ? 0 : 1).replace(".", ",")}k`;
+  const abs = Math.abs(value);
+  if (Math.round(abs) < 1000) return String(Math.round(abs));
+
+  for (const [index, { size, suffix }] of SHORT_UNITS.entries()) {
+    const scaled = abs / size;
+    const rounded = Number(scaled.toFixed(scaled < 100 ? 1 : 0));
+    // 999.96k redondea a 1000k: pasa a la unidad siguiente (1M)
+    if (rounded < 1000 || index === SHORT_UNITS.length - 1) {
+      return `${rounded}${suffix}`;
+    }
   }
-  return String(Math.round(value));
+  return String(abs);
 }
 
 export function dayLabel(isoDate: string) {
