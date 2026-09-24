@@ -11,6 +11,7 @@ import {
   showAuthError,
 } from "@/core/components/auth-form";
 import { AuthLink } from "@/core/components/auth-transition";
+import { useTurnstile } from "@/core/components/turnstile";
 import { authClient } from "@/lib/auth-client";
 import { authErrorKey } from "@/lib/auth-errors";
 import { siteConfig } from "@/lib/site";
@@ -20,6 +21,7 @@ export default function SignIn() {
   const t = useTranslations("auth");
   const locale = useLocale();
   const [isPending, setIsPending] = useState(false);
+  const captcha = useTurnstile();
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -31,15 +33,18 @@ export default function SignIn() {
         email: String(formData.get("email")),
         password: String(formData.get("password")),
         callbackURL: getPathname({ href: siteConfig.routes.app, locale }),
+        fetchOptions: { headers: captcha.headers },
       });
       // con éxito, el cliente ya redirige a `callbackURL`
       if (error) {
         showAuthError(t(`errors.${authErrorKey(error)}`));
         setIsPending(false);
+        captcha.reset();
       }
     } catch {
       showAuthError(t(`errors.${authErrorKey(null)}`));
       setIsPending(false);
+      captcha.reset();
     }
   }
 
@@ -80,7 +85,8 @@ export default function SignIn() {
           >
             {t("signIn.forgot")}
           </AuthLink>
-          <AuthSubmitButton isPending={isPending} pendingLabel={t("signIn.pending")}>
+          {captcha.widget}
+          <AuthSubmitButton isPending={isPending} isDisabled={!captcha.ready} pendingLabel={t("signIn.pending")}>
             {t("signIn.submit")}
           </AuthSubmitButton>
           <SocialSignInButtons />

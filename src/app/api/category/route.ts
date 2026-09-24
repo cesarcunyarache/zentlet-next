@@ -8,7 +8,11 @@ import {
   isUniqueViolation,
   parseBody,
   unauthorized,
+  writeLimit,
 } from "@/lib/api/route-helpers";
+
+/** Tope por usuario: muy por encima del uso real, evita llenar la base de datos. */
+const MAX_CATEGORIES = 200;
 
 /** Sólo las categorías del usuario de la sesión. */
 export async function GET(req: Request) {
@@ -33,6 +37,9 @@ export async function POST(req: Request) {
     const userId = await getSessionUserId(req);
     if (!userId) return unauthorized();
 
+    const limited = await writeLimit(userId);
+    if (limited) return limited;
+
     const parsed = await parseBody(req, createCategorySchema);
     if ("error" in parsed) return parsed.error;
     const { id, name, icon, color, description } = parsed.data;
@@ -42,6 +49,10 @@ export async function POST(req: Request) {
       return existing.userId === userId
         ? NextResponse.json(existing, { status: 200 })
         : errorResponse("Category id already in use", 409);
+    }
+
+    if ((await prisma.category.count({ where: { userId } })) >= MAX_CATEGORIES) {
+      return errorResponse("Category limit reached", 422);
     }
 
     try {

@@ -71,3 +71,13 @@ export type Category = Prisma.CategoryModel
  * 
  */
 export type Transaction = Prisma.TransactionModel
+/**
+ * Model RateLimit
+ * Límite de intentos de Better Auth (login, registro…), compartido entre instancias
+ */
+export type RateLimit = Prisma.RateLimitModel
+/**
+ * Model UsageLimit
+ * Cupos de uso de la app por usuario (escrituras, IA, exportación), en ventanas fijas
+ */
+export type UsageLimit = Prisma.UsageLimitModel

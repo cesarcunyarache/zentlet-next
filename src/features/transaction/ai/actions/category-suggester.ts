@@ -29,7 +29,7 @@ export async function suggestTransactionCategory({
 
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) return null;
-  if (!allowAiCall(session.user.id, "transaction.suggest_category")) return null;
+  if (!(await allowAiCall(session.user.id, "transaction.suggest_category"))) return null;
 
   try {
     const result = (await generateObject({

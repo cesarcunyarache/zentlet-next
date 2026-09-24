@@ -119,6 +119,12 @@
         "title": "No pudimos escucharte",
         "body": "Algo falló con el micrófono. Inténtalo de nuevo."
       }
+    },
+    "examples": {
+      "lunch": "Gasté 35 soles en almuerzo",
+      "gas": "Ayer pagué 50 en gasolina",
+      "salary": "Me pagaron 2500 de sueldo",
+      "mouse": "Compré un mouse por 120"
     }
   }
 }

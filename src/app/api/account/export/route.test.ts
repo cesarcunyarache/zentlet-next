@@ -8,13 +8,20 @@ vi.mock("@/lib/prisma", () => ({
   default: {
     transaction: { findMany: vi.fn() },
     category: { findMany: vi.fn() },
+    $queryRaw: vi.fn(),
   },
 }));
 
 const db = vi.mocked(prisma, { deep: true });
 const getSession = vi.mocked(auth.api.getSession);
 
-// cada test usa su propio usuario: el límite por minuto vive en memoria
+// el cupo vive en la base de datos: aquí, un contador por clave en memoria
+const usage = new Map<string, number>();
+function countUsage(_sql: TemplateStringsArray, key: string) {
+  usage.set(key, (usage.get(key) ?? 0) + 1);
+  return Promise.resolve([{ count: usage.get(key) }]);
+}
+
 let userId = 0;
 function signIn() {
   userId += 1;
@@ -26,6 +33,7 @@ const exportFile = (query = "") => GET(new Request(`http://localhost/api/account
 
 beforeEach(() => {
   vi.resetAllMocks();
+  db.$queryRaw.mockImplementation(countUsage as never);
   db.transaction.findMany.mockResolvedValue([
     {
       transactionDate: new Date("2026-09-20T00:00:00.000Z"),

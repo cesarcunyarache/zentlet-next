@@ -11,12 +11,14 @@ import {
   AuthNotice,
   AuthSubmitButton,
   FieldMessage,
+  LegalConsent,
   SocialSignInButtons,
-  TermsNotice,
+  legalConsentHeaders,
   showAuthError,
   strong,
 } from "@/core/components/auth-form";
 import { AuthLink } from "@/core/components/auth-transition";
+import { useTurnstile } from "@/core/components/turnstile";
 import { authClient } from "@/lib/auth-client";
 import { authErrorKey } from "@/lib/auth-errors";
 import { siteConfig } from "@/lib/site";
@@ -49,6 +51,8 @@ export default function SignUp() {
   const locale = useLocale();
   // la cuenta queda creada pero sin sesión hasta confirmar el correo
   const [sentTo, setSentTo] = useState<string | null>(null);
+  const [legalAccepted, setLegalAccepted] = useState(false);
+  const captcha = useTurnstile();
   const signUpSchema = useMemo(() => createSignUpSchema(t), [t]);
 
   const {
@@ -72,10 +76,15 @@ export default function SignUp() {
         password: values.password,
         name: values.name,
         callbackURL: getPathname({ href: siteConfig.routes.app, locale }),
+        fetchOptions: { headers: { ...captcha.headers, ...legalConsentHeaders(legalAccepted) } },
       });
-      if (error) return showAuthError(t(`errors.${authErrorKey(error)}`));
+      if (error) {
+        captcha.reset();
+        return showAuthError(t(`errors.${authErrorKey(error)}`));
+      }
       setSentTo(values.email);
     } catch {
+      captcha.reset();
       showAuthError(t(`errors.${authErrorKey(null)}`));
     }
   }
@@ -148,12 +157,17 @@ export default function SignUp() {
             />
             <FieldMessage>{errors.confirmPassword?.message}</FieldMessage>
           </TextField>
-          <AuthSubmitButton isPending={isSubmitting} pendingLabel={t("signUp.pending")}>
+          <LegalConsent checked={legalAccepted} onChange={setLegalAccepted} />
+          {captcha.widget}
+          <AuthSubmitButton
+            isPending={isSubmitting}
+            isDisabled={!legalAccepted || !captcha.ready}
+            pendingLabel={t("signUp.pending")}
+          >
             {t("signUp.submit")}
           </AuthSubmitButton>
-          <SocialSignInButtons />
+          <SocialSignInButtons requestSignUp isDisabled={!legalAccepted} />
         </Form>
-        <TermsNotice />
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { Locale } from "@/i18n/routing";
 
 /*
  * Web Speech API, sin dependencias. En Chrome y Edge el audio se transcribe
@@ -58,12 +59,14 @@ const ERRORS: Record<string, SpeechError> = {
   network: "network",
 };
 
-function recognitionLang() {
+/** Idioma de la app; la variante regional del navegador si coincide ("es-MX", "en-GB"). */
+function recognitionLang(locale: Locale) {
   const preferred = navigator.language;
-  return preferred.toLowerCase().startsWith("es") ? preferred : "es-PE";
+  if (preferred.toLowerCase().startsWith(locale)) return preferred;
+  return locale === "en" ? "en-US" : "es-PE";
 }
 
-export function useSpeechRecognition() {
+export function useSpeechRecognition(locale: Locale) {
   const [status, setStatus] = useState<SpeechStatus>("idle");
   const [error, setError] = useState<SpeechError | null>(null);
   const [transcript, setTranscript] = useState("");
@@ -93,7 +96,7 @@ export function useSpeechRecognition() {
     recognition.current?.abort();
     const instance = new Recognition();
     recognition.current = instance;
-    instance.lang = recognitionLang();
+    instance.lang = recognitionLang(locale);
     instance.continuous = false;
     instance.interimResults = true;
     instance.maxAlternatives = 1;
@@ -135,7 +138,7 @@ export function useSpeechRecognition() {
       setError("unknown");
       setStatus("error");
     }
-  }, []);
+  }, [locale]);
 
   useEffect(() => () => recognition.current?.abort(), []);
 

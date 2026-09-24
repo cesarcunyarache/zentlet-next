@@ -30,6 +30,15 @@ const INCOME_WORDS = [
   "aguinaldo",
   "gratificacion",
   "freelance",
+  // inglés
+  "salary",
+  "paycheck",
+  "payroll",
+  "income",
+  "refund",
+  "reimbursement",
+  "bonus",
+  "got paid",
 ];
 
 export function normalize(text: string) {

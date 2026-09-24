@@ -23,8 +23,13 @@ describe("shouldRetryMutation", () => {
     expect(shouldRetryMutation(3, httpError(500))).toBe(false);
   });
 
+  it("un 429 (cupo de escrituras) se reintenta siempre: la cola se frena, no pierde cambios", () => {
+    expect(shouldRetryMutation(0, httpError(429))).toBe(true);
+    expect(shouldRetryMutation(50, httpError(429))).toBe(true);
+  });
+
   it("un 4xx no se reintenta: el servidor rechazó el dato", () => {
-    for (const status of [400, 401, 404, 409, 422]) {
+    for (const status of [400, 401, 404, 409, 413, 422]) {
       expect(shouldRetryMutation(0, httpError(status))).toBe(false);
     }
   });

@@ -9,6 +9,12 @@ import { authClient } from "@/lib/auth-client";
 import { authErrorKey, oauthErrorKey } from "@/lib/auth-errors";
 import { siteConfig } from "@/lib/site";
 import { Link, getPathname } from "@/i18n/navigation";
+import { LEGAL_CONSENT_HEADER, LEGAL_VERSION } from "@/features/legal/config";
+
+/** Cabecera de consentimiento para las altas; sin la casilla marcada, ninguna. */
+export function legalConsentHeaders(accepted: boolean): Record<string, string> {
+  return accepted ? { [LEGAL_CONSENT_HEADER]: LEGAL_VERSION } : {};
+}
 
 type SocialProvider = "github" | "google";
 
@@ -39,16 +45,19 @@ export function AuthFormHeader({
 export function AuthSubmitButton({
   children,
   isPending = false,
+  isDisabled = false,
   pendingLabel,
 }: {
   children: React.ReactNode;
   isPending?: boolean;
+  isDisabled?: boolean;
   pendingLabel: string;
 }) {
   return (
     <Button
       type="submit"
       isPending={isPending}
+      isDisabled={isDisabled}
       className="bg-app-fg text-app-bg mt-2 h-11 w-full rounded-xl font-semibold shadow-[0_12px_24px_-10px_color-mix(in_oklch,var(--app-fg)_60%,transparent)] transition-transform hover:-translate-y-0.5 data-[pending=true]:opacity-80"
     >
       {isPending ? pendingLabel : children}
@@ -72,9 +81,16 @@ export function showAuthError(message: string) {
 
 /**
  * Google y GitHub salen de la app: si algo falla después, el proveedor
- * vuelve a esta misma página con `?error=`.
+ * vuelve a esta misma página con `?error=`. Sólo el registro crea cuentas
+ * nuevas (`requestSignUp`), después de aceptar los textos legales.
  */
-export function SocialSignInButtons() {
+export function SocialSignInButtons({
+  requestSignUp = false,
+  isDisabled = false,
+}: {
+  requestSignUp?: boolean;
+  isDisabled?: boolean;
+}) {
   const t = useTranslations("auth");
   const locale = useLocale();
   // ruta real con prefijo de idioma: el proveedor vuelve aquí tal cual
@@ -88,6 +104,8 @@ export function SocialSignInButtons() {
         provider,
         callbackURL: getPathname({ href: siteConfig.routes.app, locale }),
         errorCallbackURL: pathname,
+        requestSignUp,
+        fetchOptions: { headers: legalConsentHeaders(requestSignUp) },
       });
       if (error) {
         showAuthError(t(`errors.${authErrorKey(error)}`));
@@ -109,7 +127,7 @@ export function SocialSignInButtons() {
           type="button"
           className="h-11 w-full rounded-xl"
           isPending={pending === "github"}
-          isDisabled={pending !== null}
+          isDisabled={isDisabled || pending !== null}
           onPress={() => signIn("github")}
         >
           <svg viewBox="0 0 1024 1024" fill="none">
@@ -127,7 +145,7 @@ export function SocialSignInButtons() {
           type="button"
           className="h-11 w-full rounded-xl"
           isPending={pending === "google"}
-          isDisabled={pending !== null}
+          isDisabled={isDisabled || pending !== null}
           onPress={() => signIn("google")}
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -170,6 +188,40 @@ export function TermsNotice() {
         privacy: (chunks) => <Link href={siteConfig.routes.privacy} className="underline underline-offset-2">{chunks}</Link>,
       })}
     </Description>
+  );
+}
+
+/**
+ * Consentimiento expreso para registrarse. Los ingresos y gastos son datos
+ * sensibles (Ley 29733): aceptar no puede ser implícito ni venir marcado.
+ */
+export function LegalConsent({ checked, onChange }: { checked: boolean; onChange: (checked: boolean) => void }) {
+  const t = useTranslations("auth");
+
+  return (
+    <label className="text-app-muted flex cursor-pointer items-start gap-2.5 text-xs leading-relaxed">
+      <input
+        type="checkbox"
+        name="legalAccepted"
+        checked={checked}
+        onChange={(event) => onChange(event.target.checked)}
+        className="accent-app-fg mt-0.5 size-4 shrink-0"
+      />
+      <span>
+        {t.rich("signUp.consent", {
+          terms: (chunks) => legalLink(siteConfig.routes.terms, chunks),
+          privacy: (chunks) => legalLink(siteConfig.routes.privacy, chunks),
+        })}
+      </span>
+    </label>
+  );
+}
+
+function legalLink(href: string, chunks: React.ReactNode) {
+  return (
+    <Link href={href} target="_blank" className="text-app-fg underline underline-offset-2">
+      {chunks}
+    </Link>
   );
 }
 

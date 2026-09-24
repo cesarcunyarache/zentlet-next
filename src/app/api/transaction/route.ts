@@ -21,6 +21,7 @@ import {
   parseBody,
   parseQuery,
   unauthorized,
+  writeLimit,
 } from "@/lib/api/route-helpers";
 
 /** Una página del feed, filtrada y ordenada en la base de datos. */
@@ -63,6 +64,9 @@ export async function POST(req: Request) {
   try {
     const userId = await getSessionUserId(req);
     if (!userId) return unauthorized();
+
+    const limited = await writeLimit(userId);
+    if (limited) return limited;
 
     const parsed = await parseBody(req, createTransactionSchema);
     if ("error" in parsed) return parsed.error;

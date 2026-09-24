@@ -26,11 +26,15 @@ const CODE_KEYS: Record<string, AuthErrorKey> = {
   EMAIL_NOT_VERIFIED: "emailNotVerified",
   PROVIDER_NOT_FOUND: "providerNotFound",
   FAILED_TO_CREATE_USER: "failedToCreateUser",
+  LEGAL_CONSENT_REQUIRED: "legalConsentRequired",
+  MISSING_RESPONSE: "captchaFailed",
+  VERIFICATION_FAILED: "captchaFailed",
 };
 
 const OAUTH_KEYS: Record<string, OAuthErrorKey> = {
   access_denied: "accessDenied",
   account_not_linked: "accountNotLinked",
+  signup_disabled: "signupRequired",
 };
 
 export function authErrorKey(error: AuthError | null | undefined): AuthErrorKey {

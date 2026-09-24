@@ -14,6 +14,7 @@ vi.mock("@/lib/prisma", () => ({
   default: {
     transaction: { findUnique: vi.fn(), findFirst: vi.fn(), create: vi.fn() },
     category: { findFirst: vi.fn() },
+    $queryRaw: vi.fn(),
   },
 }));
 
@@ -62,6 +63,7 @@ beforeEach(() => {
   db.transaction.findUnique.mockResolvedValue(null);
   db.category.findFirst.mockResolvedValue({ id: "health" } as never);
   db.transaction.create.mockResolvedValue(row("user-1") as never);
+  db.$queryRaw.mockResolvedValue([{ count: 1 }] as never);
 });
 
 describe("POST /api/transaction", () => {
@@ -130,6 +132,26 @@ describe("POST /api/transaction", () => {
     db.transaction.findFirst.mockResolvedValue(null);
 
     expect((await post()).status).toBe(409);
+  });
+
+  it("superado el cupo de escrituras es 429 con Retry-After y no escribe", async () => {
+    db.$queryRaw.mockResolvedValue([{ count: 121 }] as never);
+
+    const response = await post();
+
+    expect(response.status).toBe(429);
+    expect(response.headers.get("retry-after")).toBe("60");
+    expect(db.transaction.create).not.toHaveBeenCalled();
+  });
+
+  it("un cuerpo de más de 16 KB es 413 y ni se interpreta", async () => {
+    const response = await post({ ...body, description: "x".repeat(20_000) });
+    expect(response.status).toBe(413);
+    expect(db.transaction.create).not.toHaveBeenCalled();
+  });
+
+  it("una fecha inexistente es 422, no 500", async () => {
+    expect((await post({ ...body, transactionDate: "2026-13-45" })).status).toBe(422);
   });
 
   it("un fallo inesperado es 500 con un mensaje genérico", async () => {

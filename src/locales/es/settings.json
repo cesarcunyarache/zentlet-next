@@ -31,6 +31,11 @@
     "exportOffline": "Conéctate a internet para exportar",
     "exportFailed": "No se pudo exportar. Inténtalo de nuevo"
   },
+  "analytics": {
+    "label": "Estadísticas de uso",
+    "on": "Compartes estadísticas anónimas",
+    "off": "No compartes estadísticas"
+  },
   "connection": {
     "label": "Conexión",
     "syncing": "Sincronizando {count, plural, one {# cambio} other {# cambios}}…",

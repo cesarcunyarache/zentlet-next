@@ -119,6 +119,12 @@
         "title": "We couldn't hear you",
         "body": "Something went wrong with the microphone. Please try again."
       }
+    },
+    "examples": {
+      "lunch": "Spent 35 dollars on lunch",
+      "gas": "Yesterday I paid 50 for gas",
+      "salary": "Got paid 2500 salary",
+      "mouse": "Bought a mouse for 120"
     }
   }
 }

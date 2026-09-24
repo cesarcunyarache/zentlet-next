@@ -10,5 +10,22 @@
     "back": "Volver",
     "close": "Cerrar"
   },
-  "language": "Idioma"
+  "language": "Idioma",
+  "analyticsConsent": {
+    "message": "Usamos cookies esenciales para mantener tu sesión. Si aceptas, también estadísticas de uso anónimas (nunca tus montos ni descripciones) para mejorar la app.",
+    "accept": "Aceptar",
+    "reject": "Rechazar",
+    "more": "Más información"
+  },
+  "notFound": {
+    "title": "Esta página no existe",
+    "body": "Puede que el enlace esté mal escrito o que la página ya no exista.",
+    "home": "Ir al inicio"
+  },
+  "error": {
+    "title": "Algo salió mal",
+    "body": "Tuvimos un problema al mostrar esta pantalla. Tus datos están a salvo.",
+    "retry": "Reintentar",
+    "home": "Ir al inicio"
+  }
 }

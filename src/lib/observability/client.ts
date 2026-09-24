@@ -20,6 +20,41 @@ const isBrowser = typeof window !== "undefined";
 let sentry: Promise<Sentry | null> | null = null;
 let posthog: Promise<PostHog | null> | null = null;
 
+/*
+ * Consentimiento de analítica: PostHog guarda un identificador en el
+ * navegador, así que sólo se carga si el usuario lo acepta (aviso de la
+ * primera visita o Ajustes). Se recuerda por dispositivo.
+ */
+const CONSENT_KEY = "zentlet-analytics-consent";
+
+export type AnalyticsConsent = "granted" | "denied";
+
+/** Hay analítica configurada: sólo entonces tiene sentido preguntar. */
+export const analyticsAvailable = Boolean(POSTHOG_KEY);
+
+export function getAnalyticsConsent(): AnalyticsConsent | null {
+  try {
+    const value = localStorage.getItem(CONSENT_KEY);
+    return value === "granted" || value === "denied" ? value : null;
+  } catch {
+    return null;
+  }
+}
+
+export function setAnalyticsConsent(consent: AnalyticsConsent) {
+  try {
+    localStorage.setItem(CONSENT_KEY, consent);
+  } catch {
+    // sin almacenamiento, la decisión vale para esta visita
+  }
+  if (consent === "granted") {
+    posthog?.then((client) => client?.opt_in_capturing()).catch(noop);
+    loadPosthog();
+  } else {
+    posthog?.then((client) => client?.opt_out_capturing()).catch(noop);
+  }
+}
+
 function loadSentry() {
   if (!SENTRY_DSN || !isBrowser) return null;
   sentry ??= Promise.all([import("@sentry/nextjs"), import("./sentry")])
@@ -37,7 +72,7 @@ function loadSentry() {
  * Sólo páginas vistas y los eventos explícitos de `events.ts`.
  */
 function loadPosthog() {
-  if (!POSTHOG_KEY || !isBrowser) return null;
+  if (!POSTHOG_KEY || !isBrowser || getAnalyticsConsent() !== "granted") return null;
   posthog ??= import("posthog-js")
     .then(({ default: client }) => {
       client.init(POSTHOG_KEY, {

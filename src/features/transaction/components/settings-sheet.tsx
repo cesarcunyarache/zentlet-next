@@ -14,7 +14,13 @@ import type { ThemePreference } from "@/core/theme/theme";
 import { DeleteAccountDialog } from "@/features/account/components/delete-account-dialog";
 import { accountService } from "@/features/account/services/account.service";
 import { authClient } from "@/lib/auth-client";
-import { resetUser, track } from "@/lib/observability/client";
+import {
+  analyticsAvailable,
+  getAnalyticsConsent,
+  resetUser,
+  setAnalyticsConsent,
+  track,
+} from "@/lib/observability/client";
 import { SPRING_LAYOUT } from "@/lib/ease";
 import { siteConfig } from "@/lib/site";
 import { getPathname, usePathname, useRouter } from "@/i18n/navigation";
@@ -78,6 +84,8 @@ export function SettingsSheet({
       <AppearanceRow />
 
       <DataRow transactionCount={transactionCount} currency={currency} />
+
+      {analyticsAvailable && <AnalyticsRow />}
 
       <SignOutRow />
 
@@ -221,6 +229,45 @@ function DataRow({ transactionCount, currency }: { transactionCount: number; cur
       >
         <Download className="size-3.5" strokeWidth={2.2} aria-hidden />
         {t(status === "exporting" ? "exporting" : "export")}
+      </button>
+    </div>
+  );
+}
+
+/** Retirar o dar el consentimiento de las estadísticas de uso. */
+function AnalyticsRow() {
+  const t = useTranslations("settings.analytics");
+  const [enabled, setEnabled] = useState(() => getAnalyticsConsent() === "granted");
+
+  function toggle() {
+    const next = !enabled;
+    setAnalyticsConsent(next ? "granted" : "denied");
+    setEnabled(next);
+  }
+
+  return (
+    <div className="border-app-border flex items-center justify-between gap-3.5 border-b py-3.5">
+      <span>
+        <span className="text-app-fg block text-[14.5px] font-semibold">{t("label")}</span>
+        <span className="text-app-muted mt-px block text-xs">{t(enabled ? "on" : "off")}</span>
+      </span>
+      <button
+        type="button"
+        role="switch"
+        aria-checked={enabled}
+        aria-label={t("label")}
+        onClick={toggle}
+        className={cn(
+          "relative h-7 w-12 shrink-0 rounded-full transition-colors",
+          enabled ? "bg-app-income" : "bg-app-fill-strong",
+        )}
+      >
+        <span
+          className={cn(
+            "bg-app-surface absolute top-0.5 left-0.5 size-6 rounded-full shadow transition-transform",
+            enabled && "translate-x-5",
+          )}
+        />
       </button>
     </div>
   );

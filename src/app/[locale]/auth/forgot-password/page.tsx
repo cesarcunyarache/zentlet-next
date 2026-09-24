@@ -11,6 +11,7 @@ import {
   strong,
 } from "@/core/components/auth-form";
 import { AuthLink } from "@/core/components/auth-transition";
+import { useTurnstile } from "@/core/components/turnstile";
 import { authClient } from "@/lib/auth-client";
 import { authErrorKey } from "@/lib/auth-errors";
 import { siteConfig } from "@/lib/site";
@@ -26,6 +27,7 @@ export default function ForgotPassword() {
   const locale = useLocale();
   const [isPending, setIsPending] = useState(false);
   const [sentTo, setSentTo] = useState<string | null>(null);
+  const captcha = useTurnstile();
 
   const backToSignIn = (chunks: React.ReactNode) => (
     <AuthLink href={siteConfig.routes.signIn}>{chunks}</AuthLink>
@@ -40,9 +42,11 @@ export default function ForgotPassword() {
       const { error } = await authClient.requestPasswordReset({
         email,
         redirectTo: getPathname({ href: siteConfig.routes.resetPassword, locale }),
+        fetchOptions: { headers: captcha.headers },
       });
-      // sólo los fallos de red o de límite se muestran; el resto no revela nada
-      if (error && (error.status === 429 || !error.status)) {
+      // sólo los fallos de red, de límite o de CAPTCHA se muestran; el resto no revela nada
+      if (error && (error.status === 429 || !error.status || error.code === "VERIFICATION_FAILED" || error.code === "MISSING_RESPONSE")) {
+        captcha.reset();
         showAuthError(t(`errors.${authErrorKey(error)}`));
         return;
       }
@@ -80,7 +84,8 @@ export default function ForgotPassword() {
             required
           />
         </TextField>
-        <AuthSubmitButton isPending={isPending} pendingLabel={t("forgotPassword.pending")}>
+        {captcha.widget}
+        <AuthSubmitButton isPending={isPending} isDisabled={!captcha.ready} pendingLabel={t("forgotPassword.pending")}>
           {t("forgotPassword.submit")}
         </AuthSubmitButton>
       </Form>

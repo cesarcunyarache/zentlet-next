@@ -8,6 +8,7 @@ import {
   isForeignKeyViolation,
   parseBody,
   unauthorized,
+  writeLimit,
 } from "@/lib/api/route-helpers";
 
 type RouteContext = { params: Promise<{ id: string }> };
@@ -34,6 +35,9 @@ export async function PATCH(req: Request, { params }: RouteContext) {
   try {
     const userId = await getSessionUserId(req);
     if (!userId) return unauthorized();
+
+    const limited = await writeLimit(userId);
+    if (limited) return limited;
 
     const { id } = await params;
     const parsed = await parseBody(req, updateCategorySchema);
@@ -63,6 +67,9 @@ export async function DELETE(req: Request, { params }: RouteContext) {
     const userId = await getSessionUserId(req);
     if (!userId) return unauthorized();
 
+    const limited = await writeLimit(userId);
+    if (limited) return limited;
+
     const { id } = await params;
     const { count } = await prisma.category.deleteMany({
       where: { id, userId },
@@ -73,7 +80,7 @@ export async function DELETE(req: Request, { params }: RouteContext) {
     return new NextResponse(null, { status: 204 });
   } catch (error) {
     if (isForeignKeyViolation(error)) {
-      return errorResponse("Esta categoría tiene movimientos y no se puede eliminar", 409);
+      return errorResponse("Category has transactions", 409);
     }
     return internalError(req, error, "Error deleting category");
   }

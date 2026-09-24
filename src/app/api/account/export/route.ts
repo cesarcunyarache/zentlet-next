@@ -39,7 +39,7 @@ export async function GET(req: Request) {
     const userId = await getSessionUserId(req);
     if (!userId) return unauthorized();
 
-    if (!rateLimit(`export:${userId}`, EXPORTS_PER_MINUTE, 60_000).allowed) {
+    if (!(await rateLimit(`export:${userId}`, EXPORTS_PER_MINUTE, 60_000)).allowed) {
       return errorResponse("Too many exports, try again in a minute", 429);
     }
 

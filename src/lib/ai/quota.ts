@@ -10,8 +10,8 @@ const AI_CALLS_PER_MINUTE = 30;
 const WINDOW_MS = 60_000;
 
 /** `false` si el usuario agotó su cupo: no se llama al modelo. */
-export function allowAiCall(userId: string, operation: string) {
-  const { allowed, count } = rateLimit(`ai:${userId}`, AI_CALLS_PER_MINUTE, WINDOW_MS);
+export async function allowAiCall(userId: string, operation: string) {
+  const { allowed, count } = await rateLimit(`ai:${userId}`, AI_CALLS_PER_MINUTE, WINDOW_MS);
   // un aviso por ventana, no uno por llamada rechazada
   if (count === AI_CALLS_PER_MINUTE + 1) logger.warn({ userId, operation }, "ai.rate_limited");
   return allowed;

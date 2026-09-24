@@ -389,7 +389,9 @@ export const ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   Category: 'Category',
-  Transaction: 'Transaction'
+  Transaction: 'Transaction',
+  RateLimit: 'RateLimit',
+  UsageLimit: 'UsageLimit'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -405,7 +407,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "category" | "transaction"
+    modelProps: "user" | "session" | "account" | "verification" | "category" | "transaction" | "rateLimit" | "usageLimit"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -853,6 +855,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    RateLimit: {
+      payload: Prisma.$RateLimitPayload<ExtArgs>
+      fields: Prisma.RateLimitFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RateLimitFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RateLimitFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitPayload>
+        }
+        findFirst: {
+          args: Prisma.RateLimitFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RateLimitFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitPayload>
+        }
+        findMany: {
+          args: Prisma.RateLimitFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitPayload>[]
+        }
+        create: {
+          args: Prisma.RateLimitCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitPayload>
+        }
+        createMany: {
+          args: Prisma.RateLimitCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.RateLimitCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitPayload>[]
+        }
+        delete: {
+          args: Prisma.RateLimitDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitPayload>
+        }
+        update: {
+          args: Prisma.RateLimitUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitPayload>
+        }
+        deleteMany: {
+          args: Prisma.RateLimitDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RateLimitUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RateLimitUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitPayload>[]
+        }
+        upsert: {
+          args: Prisma.RateLimitUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitPayload>
+        }
+        aggregate: {
+          args: Prisma.RateLimitAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRateLimit>
+        }
+        groupBy: {
+          args: Prisma.RateLimitGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RateLimitGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RateLimitCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RateLimitCountAggregateOutputType> | number
+        }
+      }
+    }
+    UsageLimit: {
+      payload: Prisma.$UsageLimitPayload<ExtArgs>
+      fields: Prisma.UsageLimitFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.UsageLimitFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UsageLimitPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.UsageLimitFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UsageLimitPayload>
+        }
+        findFirst: {
+          args: Prisma.UsageLimitFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UsageLimitPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.UsageLimitFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UsageLimitPayload>
+        }
+        findMany: {
+          args: Prisma.UsageLimitFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UsageLimitPayload>[]
+        }
+        create: {
+          args: Prisma.UsageLimitCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UsageLimitPayload>
+        }
+        createMany: {
+          args: Prisma.UsageLimitCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.UsageLimitCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UsageLimitPayload>[]
+        }
+        delete: {
+          args: Prisma.UsageLimitDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UsageLimitPayload>
+        }
+        update: {
+          args: Prisma.UsageLimitUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UsageLimitPayload>
+        }
+        deleteMany: {
+          args: Prisma.UsageLimitDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.UsageLimitUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.UsageLimitUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UsageLimitPayload>[]
+        }
+        upsert: {
+          args: Prisma.UsageLimitUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UsageLimitPayload>
+        }
+        aggregate: {
+          args: Prisma.UsageLimitAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUsageLimit>
+        }
+        groupBy: {
+          args: Prisma.UsageLimitGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UsageLimitGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.UsageLimitCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UsageLimitCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -898,6 +1048,8 @@ export const UserScalarFieldEnum = {
   email: 'email',
   emailVerified: 'emailVerified',
   image: 'image',
+  legalAcceptedAt: 'legalAcceptedAt',
+  legalVersion: 'legalVersion',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -978,6 +1130,25 @@ export const TransactionScalarFieldEnum = {
 } as const
 
 export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[keyof typeof TransactionScalarFieldEnum]
+
+
+export const RateLimitScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  count: 'count',
+  lastRequest: 'lastRequest'
+} as const
+
+export type RateLimitScalarFieldEnum = (typeof RateLimitScalarFieldEnum)[keyof typeof RateLimitScalarFieldEnum]
+
+
+export const UsageLimitScalarFieldEnum = {
+  key: 'key',
+  count: 'count',
+  windowStart: 'windowStart'
+} as const
+
+export type UsageLimitScalarFieldEnum = (typeof UsageLimitScalarFieldEnum)[keyof typeof UsageLimitScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1070,6 +1241,34 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'BigInt'
+ */
+export type BigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt'>
+    
+
+
+/**
+ * Reference to a field of type 'BigInt[]'
+ */
+export type ListBigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 /**
@@ -1188,6 +1387,8 @@ export type GlobalOmitConfig = {
   verification?: Prisma.VerificationOmit
   category?: Prisma.CategoryOmit
   transaction?: Prisma.TransactionOmit
+  rateLimit?: Prisma.RateLimitOmit
+  usageLimit?: Prisma.UsageLimitOmit
 }
 
 /* Types for Logging */

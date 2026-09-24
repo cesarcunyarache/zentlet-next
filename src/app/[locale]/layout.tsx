@@ -7,6 +7,7 @@ import "../globals.css";
 import { QueryProvider } from "@/providers/query-provider";
 import { siteConfig } from "@/lib/site";
 import { ServiceWorkerRegister } from "@/core/offline/service-worker-register";
+import { AnalyticsConsentBanner } from "@/core/components/analytics-consent-banner";
 import { themeInitScript } from "@/core/theme/theme";
 import { routing } from "@/i18n/routing";
 
@@ -42,6 +43,7 @@ export async function generateMetadata({ params }: LocaleLayoutProps): Promise<M
     // instalada en iOS: pantalla completa y su propio icono
     appleWebApp: { capable: true, title: "Zentlet", statusBarStyle: "default" },
     icons: { apple: "/icons/apple-touch-icon.png" },
+    manifest: locale === routing.defaultLocale ? "/manifest.webmanifest" : `/manifest.webmanifest?lang=${locale}`,
   };
 }
 
@@ -69,6 +71,7 @@ export default async function RootLayout({ children, params }: Readonly<LocaleLa
       <body className="min-h-full flex flex-col">
         <NextIntlClientProvider messages={clientMessages}>
           <QueryProvider>{children}</QueryProvider>
+          <AnalyticsConsentBanner />
         </NextIntlClientProvider>
         <ServiceWorkerRegister />
       </body>

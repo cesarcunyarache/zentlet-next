@@ -2,7 +2,14 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { serializeTransaction } from "@/features/transaction/lib/serialize";
 import { updateTransactionSchema } from "@/features/transaction/schemas/transaction-api.schema";
-import { errorResponse, getSessionUserId, internalError, parseBody, unauthorized } from "@/lib/api/route-helpers";
+import {
+  errorResponse,
+  getSessionUserId,
+  internalError,
+  parseBody,
+  unauthorized,
+  writeLimit,
+} from "@/lib/api/route-helpers";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -30,6 +37,9 @@ export async function PATCH(req: Request, { params }: RouteContext) {
   try {
     const userId = await getSessionUserId(req);
     if (!userId) return unauthorized();
+
+    const limited = await writeLimit(userId);
+    if (limited) return limited;
 
     const { id } = await params;
     const parsed = await parseBody(req, updateTransactionSchema);
@@ -73,6 +83,9 @@ export async function DELETE(req: Request, { params }: RouteContext) {
   try {
     const userId = await getSessionUserId(req);
     if (!userId) return unauthorized();
+
+    const limited = await writeLimit(userId);
+    if (limited) return limited;
 
     const { id } = await params;
     const { count } = await prisma.transaction.deleteMany({

@@ -20,7 +20,7 @@ export async function generateCategory(prompt: string): Promise<CategoryAI | nul
   const text = prompt.trim().slice(0, 60);
   if (!text) throw new Error("Empty prompt");
 
-  if (!allowAiCall(session.user.id, "category.generate")) return null;
+  if (!(await allowAiCall(session.user.id, "category.generate"))) return null;
 
   return generateObject({
     operation: "category.generate",

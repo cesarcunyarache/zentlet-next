@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Button, cn } from "@heroui/react";
 import { Check, Keyboard, Mic, MicOff, Pencil, RotateCcw, Sparkles, WifiOff } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
+import type { Locale } from "@/i18n/routing";
 import { Sheet } from "@/core/components/ui/sheet";
 import { SPRING_LAYOUT, SPRING_PRESS, SPRING_SWAP } from "@/lib/ease";
 import { useSpeechRecognition, type SpeechError } from "../hooks/use-speech-recognition";
@@ -16,16 +17,13 @@ import { CategoryEmoji } from "./category-emoji";
 import type { TransactionFormValues } from "../schemas/transaction.schema";
 import type { CategoryLike } from "../types";
 
-/**
- * Frases de ejemplo para dictar. Van en español en todos los idiomas: el
- * reconocimiento de voz y `parse-voice` sólo entienden español.
- */
-const EXAMPLES = [
-  "Gasté 35 soles en almuerzo",
-  "Ayer pagué 50 en gasolina",
-  "Me pagaron 2500 de sueldo",
-  "Compré un mouse por 120",
-];
+const EXAMPLE_KEYS = ["lunch", "gas", "salary", "mouse"] as const;
+
+/** Frases de ejemplo para dictar, en el idioma de la app (el mismo que se escucha). */
+function useExamples() {
+  const t = useTranslations("transactions.voice");
+  return EXAMPLE_KEYS.map((key) => t(`examples.${key}`));
+}
 
 const BAR_PEAKS = [18, 30, 42, 26, 38, 22, 14];
 
@@ -51,14 +49,15 @@ interface VoiceEntryProps {
 export function VoiceEntry({ categories, currency, onSave, onEdit }: VoiceEntryProps) {
   const t = useTranslations();
   const [isOpen, setIsOpen] = useState(false);
-  const speech = useSpeechRecognition();
+  const locale = useLocale() as Locale;
+  const speech = useSpeechRecognition(locale);
   // categoría elegida a mano o sugerida por la IA, ligada a su dictado
   const [picked, setPicked] = useState<{ transcript: string; categoryId: string } | null>(null);
   const [aiPick, setAiPick] = useState<{ transcript: string; categoryId: string } | null>(null);
 
   const parsed = useMemo(
-    () => (speech.status === "done" ? parseVoiceEntry(speech.transcript, categories) : null),
-    [speech.status, speech.transcript, categories],
+    () => (speech.status === "done" ? parseVoiceEntry(speech.transcript, categories, locale) : null),
+    [speech.status, speech.transcript, categories, locale],
   );
   const pickedId = picked?.transcript === speech.transcript ? picked.categoryId : null;
   const aiCategoryId = !parsed?.categoryId && aiPick?.transcript === speech.transcript ? aiPick.categoryId : null;
@@ -293,14 +292,15 @@ function ListeningView({
   transcript: string;
 }) {
   const t = useTranslations("transactions.voice");
+  const examples = useExamples();
   const reduceMotion = useReducedMotion();
   const [exampleIndex, setExampleIndex] = useState(0);
 
   useEffect(() => {
     if (transcript) return;
-    const timer = setInterval(() => setExampleIndex((i) => (i + 1) % EXAMPLES.length), 2600);
+    const timer = setInterval(() => setExampleIndex((i) => (i + 1) % examples.length), 2600);
     return () => clearInterval(timer);
-  }, [transcript]);
+  }, [transcript, examples.length]);
 
   const label = t(!isReady ? "preparing" : isSpeaking ? "listening" : "ready");
 
@@ -369,14 +369,14 @@ function ListeningView({
             </motion.p>
           ) : (
             <motion.p
-              key={EXAMPLES[exampleIndex]}
+              key={examples[exampleIndex]}
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.25 }}
               className="font-display text-app-muted/60 m-0 text-[22px] leading-tight font-bold tracking-[-0.02em]"
             >
-              «{EXAMPLES[exampleIndex]}»
+              «{examples[exampleIndex]}»
             </motion.p>
           )}
         </AnimatePresence>
@@ -509,6 +509,7 @@ function PreviewView({
 
 function ErrorView({ error }: { error: SpeechError }) {
   const t = useTranslations("transactions.voice.errors");
+  const [example] = useExamples();
   const key = ERROR_KEYS[error];
   const Icon = error === "network" ? WifiOff : MicOff;
 
@@ -524,7 +525,7 @@ function ErrorView({ error }: { error: SpeechError }) {
       </motion.span>
       <h3 className="font-display text-app-fg m-0 text-2xl font-bold tracking-[-0.02em]">{t(`${key}.title`)}</h3>
       <p role="alert" className="text-app-muted m-0 max-w-sm text-sm leading-relaxed">
-        {t(`${key}.body`, { example: EXAMPLES[0].toLowerCase() })}
+        {t(`${key}.body`, { example: example.toLowerCase() })}
       </p>
     </motion.div>
   );

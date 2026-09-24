@@ -13,17 +13,21 @@ datasource db {
 }
 
 model User {
-  id            String        @id
-  name          String
-  email         String
-  emailVerified Boolean       @default(false)
-  image         String?
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  sessions      Session[]
-  accounts      Account[]
-  categories    Category[]
-  transactions  Transaction[]
+  id              String        @id
+  name            String
+  email           String
+  emailVerified   Boolean       @default(false)
+  image           String?
+  /// Consentimiento expreso a los Términos y a la Política de privacidad (Ley 29733: datos sensibles)
+  legalAcceptedAt DateTime?
+  /// Versión de los textos legales aceptada (su fecha de actualización)
+  legalVersion    String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  sessions        Session[]
+  accounts        Account[]
+  categories      Category[]
+  transactions    Transaction[]
 
   @@unique([email])
   @@map("user")
@@ -92,6 +96,7 @@ model Category {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@index([userId])
   @@map("category")
 }
 
@@ -121,4 +126,23 @@ model Transaction {
   // feed paginado por cursor y resúmenes por periodo del usuario
   @@index([userId, transactionDate(sort: Desc), createdAt(sort: Desc), id(sort: Desc)])
   @@map("transaction")
+}
+
+/// Límite de intentos de Better Auth (login, registro…), compartido entre instancias
+model RateLimit {
+  id          String @id
+  key         String @unique
+  count       Int
+  lastRequest BigInt
+
+  @@map("rate_limit")
+}
+
+/// Cupos de uso de la app por usuario (escrituras, IA, exportación), en ventanas fijas
+model UsageLimit {
+  key         String   @id
+  count       Int
+  windowStart DateTime @default(now())
+
+  @@map("usage_limit")
 }

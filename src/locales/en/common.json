@@ -10,5 +10,22 @@
     "back": "Back",
     "close": "Close"
   },
-  "language": "Language"
+  "language": "Language",
+  "analyticsConsent": {
+    "message": "We use essential cookies to keep you signed in. If you accept, also anonymous usage statistics (never your amounts or descriptions) to improve the app.",
+    "accept": "Accept",
+    "reject": "Reject",
+    "more": "Learn more"
+  },
+  "notFound": {
+    "title": "This page doesn't exist",
+    "body": "The link may be mistyped, or the page may no longer exist.",
+    "home": "Go home"
+  },
+  "error": {
+    "title": "Something went wrong",
+    "body": "We had a problem showing this screen. Your data is safe.",
+    "retry": "Try again",
+    "home": "Go home"
+  }
 }
