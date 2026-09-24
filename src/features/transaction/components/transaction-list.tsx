@@ -1,8 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { CloudOff, RefreshCw } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  AnimatePresence,
+  animate,
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useTransform,
+} from "motion/react";
+import { CloudOff, RefreshCw, Trash2 } from "lucide-react";
 import { cn } from "@heroui/react";
 import { SPRING_LAYOUT } from "@/lib/ease";
 import { CategoryEmoji } from "./category-emoji";
@@ -23,7 +30,12 @@ interface TransactionListProps {
   isLoadingMore?: boolean;
   onEndReached?: () => void;
   onSelect: (transaction: TTransaction) => void;
+  /** Deslizar la fila a la izquierda descubre el botón de eliminar. */
+  onRequestDelete?: (transaction: TTransaction) => void;
 }
+
+/** Ancho del botón de eliminar que descubre el deslizamiento. */
+const SWIPE_REVEAL = 84;
 
 /**
  * Por encima de esto no se animan las posiciones: `layout` mide cada fila
@@ -72,7 +84,9 @@ export function TransactionList({
   isLoadingMore = false,
   onEndReached,
   onSelect,
+  onRequestDelete,
 }: TransactionListProps) {
+  const [openId, setOpenId] = useState<string | null>(null);
   const reduceMotion = useReducedMotion();
   const groups = useMemo(() => groupByDay(transactions), [transactions]);
   const isLarge = transactions.length > LAYOUT_ANIMATION_LIMIT;
@@ -111,7 +125,7 @@ export function TransactionList({
               isLarge && "[contain-intrinsic-size:auto_320px] [content-visibility:auto]",
             )}
           >
-            <div className="text-app-muted flex items-baseline justify-between px-1 pb-1.5 text-[13px]">
+            <div className="text-app-muted flex items-baseline justify-between px-3 pb-1.5 text-[13px]">
               <span className="lowercase first-letter:uppercase">{dayLabel(group.date)}</span>
               <span className="num text-xs">{formatSigned(dayTotal(group.items), currency)}</span>
             </div>
@@ -124,11 +138,9 @@ export function TransactionList({
                 const delay = Math.min(row++, 8) * 0.03;
 
                 return (
-                  <motion.button
+                  <motion.div
                     key={tx.id}
                     layout={animateLayout}
-                    type="button"
-                    onClick={() => onSelect(tx)}
                     initial={reduceMotion ? false : { opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0, transition: { ...SPRING_LAYOUT, delay } }}
                     exit={
@@ -136,9 +148,19 @@ export function TransactionList({
                         ? { opacity: 0 }
                         : { opacity: 0, x: -28, transition: { duration: 0.2 } }
                     }
-                    whileTap={{ scale: 0.98 }}
-                    className="group hover:bg-app-fill focus-visible:bg-app-fill flex min-h-[64px] w-full items-center gap-3.5 rounded-2xl px-1 py-2 text-left transition-colors"
+                    className="relative overflow-hidden rounded-2xl"
                   >
+                    <SwipeRow
+                      label={tx.description || category?.name || "movimiento"}
+                      isOpen={openId === tx.id}
+                      canSwipe={Boolean(onRequestDelete)}
+                      onOpenChange={(open) => setOpenId(open ? tx.id : null)}
+                      onPress={() => onSelect(tx)}
+                      onDelete={() => {
+                        setOpenId(null);
+                        onRequestDelete?.(tx);
+                      }}
+                    >
                     <CategoryEmoji
                       category={category}
                       className="size-12 rounded-full text-[22px] transition-transform duration-200 group-hover:scale-105 group-hover:-rotate-6"
@@ -174,7 +196,8 @@ export function TransactionList({
                     <span className="num text-app-fg shrink-0 text-[15px] font-semibold">
                       {formatSigned(amount, currency)}
                     </span>
-                  </motion.button>
+                    </SwipeRow>
+                  </motion.div>
                 );
               })}
             </AnimatePresence>
@@ -184,6 +207,83 @@ export function TransactionList({
 
       {hasMore && <EndSentinel isLoading={isLoadingMore} onReached={onEndReached} />}
     </div>
+  );
+}
+
+/**
+ * Fila deslizable: a la izquierda descubre el botón de eliminar. Un toque
+ * con la fila abierta la cierra en lugar de abrir el detalle.
+ */
+function SwipeRow({
+  label,
+  isOpen,
+  canSwipe,
+  onOpenChange,
+  onPress,
+  onDelete,
+  children,
+}: {
+  label: string;
+  isOpen: boolean;
+  canSwipe: boolean;
+  onOpenChange: (open: boolean) => void;
+  onPress: () => void;
+  onDelete: () => void;
+  children: React.ReactNode;
+}) {
+  const dragged = useRef(false);
+  const x = useMotionValue(0);
+  // quieto, el rojo asomaría por las esquinas redondeadas de la fila
+  const revealOpacity = useTransform(x, [-16, 0], [1, 0]);
+
+  useEffect(() => {
+    const controls = animate(x, isOpen ? -SWIPE_REVEAL : 0, SPRING_LAYOUT);
+    return () => controls.stop();
+  }, [isOpen, x]);
+
+  return (
+    <>
+      {canSwipe && (
+        <motion.button
+          type="button"
+          aria-label={`Eliminar ${label}`}
+          tabIndex={isOpen ? 0 : -1}
+          onClick={onDelete}
+          className="bg-app-expense text-app-surface absolute inset-y-0 right-0 grid place-items-center rounded-2xl"
+          style={{ width: SWIPE_REVEAL, opacity: revealOpacity }}
+        >
+          <Trash2 className="size-5" strokeWidth={2} aria-hidden />
+        </motion.button>
+      )}
+      <motion.button
+        type="button"
+        drag={canSwipe ? "x" : false}
+        dragDirectionLock
+        dragConstraints={{ left: -SWIPE_REVEAL, right: 0 }}
+        dragElastic={{ left: 0.15, right: 0 }}
+        style={{ x }}
+        onDragStart={() => {
+          dragged.current = true;
+        }}
+        onDragEnd={(_, info) => {
+          const open = info.offset.x < -SWIPE_REVEAL / 2 || info.velocity.x < -400;
+          // si el estado no cambia no hay render: se devuelve la fila a mano
+          animate(x, open ? -SWIPE_REVEAL : 0, SPRING_LAYOUT);
+          onOpenChange(open);
+          // el click que sigue al soltar no debe abrir el detalle
+          setTimeout(() => (dragged.current = false), 0);
+        }}
+        onClick={() => {
+          if (dragged.current) return;
+          if (isOpen) onOpenChange(false);
+          else onPress();
+        }}
+        whileTap={{ scale: 0.98 }}
+        className="group bg-app-bg hover:bg-[color-mix(in_oklch,var(--app-fg)_5%,var(--app-bg))] focus-visible:bg-[color-mix(in_oklch,var(--app-fg)_5%,var(--app-bg))] relative flex min-h-[64px] w-full touch-pan-y items-center gap-3.5 rounded-2xl px-3 py-2 text-left transition-colors"
+      >
+        {children}
+      </motion.button>
+    </>
   );
 }
 

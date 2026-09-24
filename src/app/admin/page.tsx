@@ -26,6 +26,7 @@ import { TransactionFormSheet } from "@/features/transaction/components/transact
 import { VoiceEntry } from "@/features/transaction/components/voice-entry";
 import type { TransactionFormValues } from "@/features/transaction/schemas/transaction.schema";
 import { TransactionDetailSheet } from "@/features/transaction/components/transaction-detail-sheet";
+import { DeleteTransactionDialog } from "@/features/transaction/components/delete-transaction-dialog";
 import { CategoriesSheet } from "@/features/transaction/components/categories-sheet";
 import { SettingsSheet } from "@/features/transaction/components/settings-sheet";
 import { ToastBubble } from "@/core/components/ui/toast-bubble";
@@ -81,6 +82,7 @@ export default function HomePage() {
 
   const [sheet, setSheet] = useState<Sheet>(null);
   const [detail, setDetail] = useState<TTransaction | null>(null);
+  const [pendingDelete, setPendingDelete] = useState<TTransaction | null>(null);
   const [formDraft, setFormDraft] = useState<Partial<TransactionFormValues>>();
 
   // aparece al instante; se sincroniza por detrás (o en cola sin red)
@@ -267,6 +269,7 @@ export default function HomePage() {
               }}
               syncStateById={syncStateById}
               onSelect={setDetail}
+              onRequestDelete={setPendingDelete}
             />
           )}
         </div>
@@ -340,6 +343,17 @@ export default function HomePage() {
         currency={currency}
         draft={formDraft}
         onSubmit={saveTransaction}
+      />
+
+      <DeleteTransactionDialog
+        transaction={pendingDelete}
+        currency={currency}
+        onCancel={() => setPendingDelete(null)}
+        onConfirm={(transaction) => {
+          setPendingDelete(null);
+          deleteTransaction(transaction);
+          toast("Movimiento eliminado");
+        }}
       />
 
       <TransactionDetailSheet
