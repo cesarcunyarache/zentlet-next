@@ -23,6 +23,12 @@ const DAY = 60 * 60 * 24;
 const turnstileSecret = process.env.TURNSTILE_SECRET_KEY;
 const captchaEnabled = Boolean(turnstileSecret && process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY);
 
+/*
+ * Verificar el correo exige poder enviarlo: sin Resend configurado, el alta
+ * abre sesión directamente y no se envían enlaces de verificación.
+ */
+const emailEnabled = Boolean(process.env.RESEND_API_KEY && process.env.EMAIL_FROM);
+
 /** Email por su ruta (o el enlace de verificación); OAuth por el proveedor del callback (`/callback/:id`). */
 function authMethod(context: HookContext): AuthMethod {
   if (context?.path?.endsWith("/email") || context?.path === "/verify-email") return "email";
@@ -83,13 +89,13 @@ export const auth = betterAuth({
   },
 
   /*
-   * Sin verificar el correo no se entra: quien registra una dirección debe
-   * poder leerla. Intentar entrar sin verificar reenvía el enlace.
-   * Restablecer la contraseña cierra las demás sesiones.
+   * Con correo configurado, sin verificarlo no se entra: quien registra una
+   * dirección debe poder leerla. Intentar entrar sin verificar reenvía el
+   * enlace. Restablecer la contraseña cierra las demás sesiones.
    */
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: true,
+    requireEmailVerification: emailEnabled,
     revokeSessionsOnPasswordReset: true,
     sendResetPassword: async ({ user, url }, request) => {
       await sendEmail(resetPasswordEmail(emailLocale(request), { to: user.email, name: user.name, url }));
@@ -97,8 +103,8 @@ export const auth = betterAuth({
   },
 
   emailVerification: {
-    sendOnSignIn: true,
-    sendOnSignUp: true,
+    sendOnSignIn: emailEnabled,
+    sendOnSignUp: emailEnabled,
     autoSignInAfterVerification: true,
     sendVerificationEmail: async ({ user, url }, request) => {
       await sendEmail(verificationEmail(emailLocale(request), { to: user.email, name: user.name, url }));
@@ -174,7 +180,7 @@ export const auth = betterAuth({
     session: {
       create: {
         after: async (session, context: HookContext) => {
-          // el alta con email no abre sesión: la abre el enlace de verificación
+          // el alta no cuenta como login (con correo configurado, la sesión la abre el enlace de verificación)
           if (context?.path?.startsWith("/sign-up")) return;
           trackServerEvent(session.userId, "login_completed", { method: authMethod(context) });
         },

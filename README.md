@@ -208,7 +208,7 @@ pnpm prisma migrate dev
 pnpm dev
 ```
 
-Abre **[localhost:3000](http://localhost:3000)**: verás la landing. Crea tu cuenta desde **Crear cuenta**. Sin `RESEND_API_KEY`, el correo de verificación **se escribe en la terminal** (`email.dev_outbox`): abre ese enlace para confirmar la cuenta y entrar.
+Abre **[localhost:3000](http://localhost:3000)**: verás la landing. Crea tu cuenta desde **Crear cuenta**. Sin `RESEND_API_KEY` y `EMAIL_FROM` no se pide verificar el correo: el registro entra directamente a la app.
 
 > **¿Todo da 404 con `pnpm dev`?** La caché de Turbopack (`.next/dev`) puede quedarse con una estructura de rutas antigua tras cambios grandes. Detén el servidor, borra `.next/dev` y vuelve a arrancar.
 
@@ -224,7 +224,7 @@ Sólo las cinco primeras son necesarias para desarrollar. El resto activa funcio
 | `NEXT_PUBLIC_BETTER_AUTH_URL` | La misma URL, para el cliente de auth (se fija en el build) | ✅ |
 | `GOOGLE_GENERATIVE_AI_API_KEY` | Clave de Gemini para las sugerencias de IA | ✅ |
 | `NEXT_PUBLIC_SITE_URL` | URL pública: canonical, sitemap y Open Graph | En producción |
-| `RESEND_API_KEY` / `EMAIL_FROM` | Correos de verificación y de recuperación de contraseña. En desarrollo, sin clave, se escriben en la terminal | En producción |
+| `RESEND_API_KEY` / `EMAIL_FROM` | Correos de verificación y de recuperación de contraseña. Sin ellos no se exige verificar el correo; en desarrollo, los correos se escriben en la terminal | No |
 | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` / `TURNSTILE_SECRET_KEY` | CAPTCHA de Cloudflare Turnstile en registro, login, recuperación y reenvío del correo. Se activa sólo con las dos | Recomendado en producción |
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Acceso con Google | Opcional |
 | `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` | Acceso con GitHub | Opcional |
