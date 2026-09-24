@@ -72,9 +72,19 @@ export function SiteFooter({ footer, nav }: SiteFooterProps) {
         </nav>
       </div>
 
-      <p className="text-app-muted mx-auto m-0 max-w-6xl border-t border-[var(--app-border)] px-4 py-6 text-xs sm:px-6">
-        © {year} {siteConfig.name}. {footer.rights}
-      </p>
+      <div className="text-app-muted mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 border-t border-[var(--app-border)] px-4 py-6 text-xs sm:px-6">
+        <p className="m-0">
+          © {year} {siteConfig.name}. {footer.rights}
+        </p>
+        <nav className="flex gap-4">
+          <Link href={siteConfig.routes.privacy} className="hover:text-app-fg transition-colors">
+            {footer.privacy}
+          </Link>
+          <Link href={siteConfig.routes.terms} className="hover:text-app-fg transition-colors">
+            {footer.terms}
+          </Link>
+        </nav>
+      </div>
     </footer>
   );
 }

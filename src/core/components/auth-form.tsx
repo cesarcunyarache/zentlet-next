@@ -166,9 +166,23 @@ export function TermsNotice() {
   return (
     <Description className="px-6 text-center">
       {t.rich("terms", {
-        terms: (chunks) => <a href="#">{chunks}</a>,
-        privacy: (chunks) => <a href="#">{chunks}</a>,
+        terms: (chunks) => <Link href={siteConfig.routes.terms} className="underline underline-offset-2">{chunks}</Link>,
+        privacy: (chunks) => <Link href={siteConfig.routes.privacy} className="underline underline-offset-2">{chunks}</Link>,
       })}
     </Description>
   );
 }
+
+/** Resultado de un paso del acceso (correo enviado, contraseña cambiada…) en lugar del formulario. */
+export function AuthNotice({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="w-full max-w-sm">
+      <div role="status" className="flex flex-col gap-4">
+        <AuthFormHeader title={title}>{children}</AuthFormHeader>
+      </div>
+    </div>
+  );
+}
+
+/** Para `t.rich`: resalta el correo dentro de un texto. */
+export const strong = (chunks: React.ReactNode) => <strong className="text-app-fg font-semibold">{chunks}</strong>;

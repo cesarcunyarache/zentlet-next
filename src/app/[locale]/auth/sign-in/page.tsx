@@ -74,6 +74,12 @@ export default function SignIn() {
               required
             />
           </TextField>
+          <AuthLink
+            href={siteConfig.routes.forgotPassword}
+            className="text-app-muted hover:text-app-fg -mt-2 self-end text-xs font-medium"
+          >
+            {t("signIn.forgot")}
+          </AuthLink>
           <AuthSubmitButton isPending={isPending} pendingLabel={t("signIn.pending")}>
             {t("signIn.submit")}
           </AuthSubmitButton>

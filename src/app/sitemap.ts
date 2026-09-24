@@ -24,5 +24,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entry(routes.home, "weekly", 1),
     entry(routes.signUp, "yearly", 0.6),
     entry(routes.signIn, "yearly", 0.4),
+    entry(routes.privacy, "yearly", 0.2),
+    entry(routes.terms, "yearly", 0.2),
   ];
 }

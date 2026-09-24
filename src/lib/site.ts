@@ -14,6 +14,10 @@ export const siteConfig = {
     home: "/",
     signIn: "/auth/sign-in",
     signUp: "/auth/sign-up",
+    forgotPassword: "/auth/forgot-password",
+    resetPassword: "/auth/reset-password",
     app: "/admin",
+    privacy: "/legal/privacy",
+    terms: "/legal/terms",
   },
 } as const;

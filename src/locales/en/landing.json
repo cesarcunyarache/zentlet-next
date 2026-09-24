@@ -46,7 +46,11 @@
   "hero": {
     "badge": "AI suggestions for every transaction",
     "titleLead": "Your expenses, clear",
-    "titleWords": ["in seconds.", "without formulas.", "without effort."],
+    "titleWords": [
+      "in seconds.",
+      "without formulas.",
+      "without effort."
+    ],
     "subtitle": "Type “taxi to work” and Zentlet understands whether it's an expense or income and which category it belongs to. Your monthly balance updates instantly.",
     "primaryCta": "Create my account",
     "secondaryCta": "See how it works",
@@ -107,7 +111,12 @@
       }
     },
     "samples": {
-      "phrases": ["lunch with friends", "september salary", "taxi to work", "netflix"],
+      "phrases": [
+        "lunch with friends",
+        "september salary",
+        "taxi to work",
+        "netflix"
+      ],
       "suggestionFrom": "uber home",
       "currencies": {
         "sol": "Sol",
@@ -117,12 +126,30 @@
     }
   },
   "movements": {
-    "payroll": { "description": "September payroll", "when": "Today" },
-    "market": { "description": "Saturday groceries", "when": "Today" },
-    "taxi": { "description": "Taxi to work", "when": "Yesterday" },
-    "rent": { "description": "Rent", "when": "Yesterday" },
-    "ramen": { "description": "Ramen with friends", "when": "Monday" },
-    "cinema": { "description": "Movies", "when": "Sunday" }
+    "payroll": {
+      "description": "September payroll",
+      "when": "Today"
+    },
+    "market": {
+      "description": "Saturday groceries",
+      "when": "Today"
+    },
+    "taxi": {
+      "description": "Taxi to work",
+      "when": "Yesterday"
+    },
+    "rent": {
+      "description": "Rent",
+      "when": "Yesterday"
+    },
+    "ramen": {
+      "description": "Ramen with friends",
+      "when": "Monday"
+    },
+    "cinema": {
+      "description": "Movies",
+      "when": "Sunday"
+    }
   },
   "steps": {
     "eyebrow": "How it works",
@@ -142,7 +169,11 @@
       }
     ],
     "preview": {
-      "signUpProviders": ["Email", "Google", "GitHub"],
+      "signUpProviders": [
+        "Email",
+        "Google",
+        "GitHub"
+      ],
       "signUpLabel": "Sign up with",
       "savedLabel": "Saved"
     }
@@ -204,6 +235,8 @@
     "productTitle": "Product",
     "accountTitle": "Account",
     "languageTitle": "Language",
-    "rights": "All rights reserved."
+    "rights": "All rights reserved.",
+    "privacy": "Privacy",
+    "terms": "Terms"
   }
 }

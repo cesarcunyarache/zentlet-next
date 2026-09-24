@@ -4,13 +4,34 @@ import { withSentryConfig } from "@sentry/nextjs/config";
 
 const withNextIntl = createNextIntlPlugin();
 
+/*
+ * Cabeceras de seguridad para todas las rutas:
+ * - la app no puede incrustarse en otra web (clickjacking);
+ * - el navegador no adivina tipos de archivo;
+ * - otras webs no reciben la URL completa de la app;
+ * - el micrófono (dictado) sólo lo puede pedir la propia app; el resto de
+ *   APIs sensibles quedan desactivadas.
+ * HSTS sólo en producción: en local se sirve por http.
+ */
+const securityHeaders = [
+  { key: "X-Frame-Options", value: "DENY" },
+  { key: "Content-Security-Policy", value: "frame-ancestors 'none'" },
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  { key: "Permissions-Policy", value: "microphone=(self), camera=(), geolocation=(), payment=(), usb=()" },
+  ...(process.env.NODE_ENV === "production"
+    ? [{ key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" }]
+    : []),
+];
+
 const nextConfig: NextConfig = {
-  /*
-   * El service worker nunca se cachea en el navegador: así cada despliegue
-   * se detecta en la siguiente visita. Recomendación de la guía PWA de Next.
-   */
   async headers() {
     return [
+      { source: "/:path*", headers: securityHeaders },
+      /*
+       * El service worker nunca se cachea en el navegador: así cada despliegue
+       * se detecta en la siguiente visita. Recomendación de la guía PWA de Next.
+       */
       {
         source: "/sw.js",
         headers: [

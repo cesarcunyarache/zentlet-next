@@ -71,5 +71,21 @@
     "offline": "Conéctate a internet para cerrar sesión",
     "confirm": "Tienes {count, plural, one {# cambio} other {# cambios}} sin sincronizar. Toca de nuevo para cerrar sesión y descartarlos",
     "hint": "También borra los datos guardados en este dispositivo"
+  },
+  "deleteAccount": {
+    "label": "Eliminar cuenta",
+    "hint": "Borra tu cuenta y todos tus datos",
+    "offline": "Conéctate a internet para eliminar tu cuenta",
+    "title": "¿Eliminar tu cuenta?",
+    "body": "Se borrarán para siempre tu cuenta, {count, plural, =0 {tus categorías} one {# movimiento y tus categorías} other {# movimientos y tus categorías}}. No se puede deshacer.",
+    "exportHint": "Si quieres conservarlos, expórtalos antes desde «Datos».",
+    "password": "Escribe tu contraseña para confirmar",
+    "confirm": "Eliminar cuenta",
+    "pending": "Eliminando…",
+    "errors": {
+      "invalidPassword": "Contraseña incorrecta.",
+      "sessionExpired": "Por seguridad, cierra sesión, vuelve a entrar e inténtalo de nuevo.",
+      "fallback": "No pudimos eliminar tu cuenta. Inténtalo de nuevo."
+    }
   }
 }

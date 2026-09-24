@@ -160,5 +160,7 @@ export interface LandingContent {
     accountTitle: string;
     languageTitle: string;
     rights: string;
+    privacy: string;
+    terms: string;
   };
 }

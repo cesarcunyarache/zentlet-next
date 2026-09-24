@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CloudOff, Download, LogOut } from "lucide-react";
+import { CloudOff, Download, LogOut, UserX } from "lucide-react";
 import { motion } from "motion/react";
 import { cn } from "@heroui/react";
 import { useLocale, useTranslations } from "next-intl";
@@ -11,6 +11,7 @@ import { useOfflineSession } from "@/core/offline/offline-query-provider";
 import { useSyncStatus } from "@/core/offline/sync-status";
 import { useThemePreference } from "@/core/theme/use-theme";
 import type { ThemePreference } from "@/core/theme/theme";
+import { DeleteAccountDialog } from "@/features/account/components/delete-account-dialog";
 import { accountService } from "@/features/account/services/account.service";
 import { authClient } from "@/lib/auth-client";
 import { resetUser, track } from "@/lib/observability/client";
@@ -79,6 +80,8 @@ export function SettingsSheet({
       <DataRow transactionCount={transactionCount} currency={currency} />
 
       <SignOutRow />
+
+      <DeleteAccountRow transactionCount={transactionCount} />
     </Sheet>
   );
 }
@@ -340,5 +343,47 @@ function SignOutRow() {
       </span>
       <LogOut className="text-app-muted size-4 shrink-0" aria-hidden />
     </button>
+  );
+}
+
+/**
+ * Borrado definitivo de la cuenta y de todos sus datos. Después se limpia
+ * el dispositivo como al cerrar sesión y se vuelve a la portada.
+ */
+function DeleteAccountRow({ transactionCount }: { transactionCount: number }) {
+  const t = useTranslations("settings.deleteAccount");
+  const locale = useLocale();
+  const { clearLocalData } = useOfflineSession();
+  const { online } = useSyncStatus();
+  const [confirming, setConfirming] = useState(false);
+
+  async function onDeleted() {
+    resetUser();
+    await clearLocalData();
+    window.location.replace(getPathname({ href: siteConfig.routes.home, locale }));
+  }
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setConfirming(true)}
+        disabled={!online}
+        className="border-app-border flex w-full items-center justify-between gap-3.5 border-t py-3.5 text-left disabled:opacity-50"
+      >
+        <span>
+          <span className="text-app-expense block text-[14.5px] font-semibold">{t("label")}</span>
+          <span className="text-app-muted mt-px block text-xs">{online ? t("hint") : t("offline")}</span>
+        </span>
+        <UserX className="text-app-expense size-4 shrink-0" aria-hidden />
+      </button>
+
+      <DeleteAccountDialog
+        isOpen={confirming}
+        transactionCount={transactionCount}
+        onCancel={() => setConfirming(false)}
+        onDeleted={onDeleted}
+      />
+    </>
   );
 }

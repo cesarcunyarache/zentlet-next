@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Form, Input, Label, TextField } from "@heroui/react";
 import { useLocale, useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
@@ -8,17 +8,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
   AuthFormHeader,
+  AuthNotice,
   AuthSubmitButton,
   FieldMessage,
   SocialSignInButtons,
   TermsNotice,
   showAuthError,
+  strong,
 } from "@/core/components/auth-form";
 import { AuthLink } from "@/core/components/auth-transition";
 import { authClient } from "@/lib/auth-client";
 import { authErrorKey } from "@/lib/auth-errors";
 import { siteConfig } from "@/lib/site";
-import { getPathname, useRouter } from "@/i18n/navigation";
+import { getPathname } from "@/i18n/navigation";
 
 const NAME_MIN = 2;
 const PASSWORD_MIN = 8;
@@ -45,7 +47,8 @@ type SignUpValues = z.infer<ReturnType<typeof createSignUpSchema>>;
 export default function SignUp() {
   const t = useTranslations("auth");
   const locale = useLocale();
-  const router = useRouter();
+  // la cuenta queda creada pero sin sesión hasta confirmar el correo
+  const [sentTo, setSentTo] = useState<string | null>(null);
   const signUpSchema = useMemo(() => createSignUpSchema(t), [t]);
 
   const {
@@ -71,10 +74,21 @@ export default function SignUp() {
         callbackURL: getPathname({ href: siteConfig.routes.app, locale }),
       });
       if (error) return showAuthError(t(`errors.${authErrorKey(error)}`));
-      router.push(siteConfig.routes.app);
+      setSentTo(values.email);
     } catch {
       showAuthError(t(`errors.${authErrorKey(null)}`));
     }
+  }
+
+  if (sentTo) {
+    return (
+      <AuthNotice title={t("checkEmail.title")}>
+        {t.rich("checkEmail.body", { email: sentTo, strong })}{" "}
+        {t.rich("checkEmail.back", {
+          link: (chunks) => <AuthLink href={siteConfig.routes.signIn}>{chunks}</AuthLink>,
+        })}
+      </AuthNotice>
+    );
   }
 
   return (

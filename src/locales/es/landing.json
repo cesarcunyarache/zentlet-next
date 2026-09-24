@@ -46,7 +46,11 @@
   "hero": {
     "badge": "Con sugerencias de IA para cada movimiento",
     "titleLead": "Tus gastos, claros",
-    "titleWords": ["en segundos.", "sin fórmulas.", "sin esfuerzo."],
+    "titleWords": [
+      "en segundos.",
+      "sin fórmulas.",
+      "sin esfuerzo."
+    ],
     "subtitle": "Escribe «taxi al trabajo» y Zentlet entiende si es gasto o ingreso y en qué categoría va. Tu balance del mes se actualiza al momento.",
     "primaryCta": "Crear mi cuenta",
     "secondaryCta": "Ver cómo funciona",
@@ -107,7 +111,12 @@
       }
     },
     "samples": {
-      "phrases": ["almuerzo con amigos", "sueldo de septiembre", "taxi al trabajo", "netflix"],
+      "phrases": [
+        "almuerzo con amigos",
+        "sueldo de septiembre",
+        "taxi al trabajo",
+        "netflix"
+      ],
       "suggestionFrom": "uber a casa",
       "currencies": {
         "sol": "Sol",
@@ -117,12 +126,30 @@
     }
   },
   "movements": {
-    "payroll": { "description": "Nómina de septiembre", "when": "Hoy" },
-    "market": { "description": "Mercado del sábado", "when": "Hoy" },
-    "taxi": { "description": "Taxi al trabajo", "when": "Ayer" },
-    "rent": { "description": "Alquiler", "when": "Ayer" },
-    "ramen": { "description": "Ramen con amigos", "when": "Lunes" },
-    "cinema": { "description": "Cine", "when": "Domingo" }
+    "payroll": {
+      "description": "Nómina de septiembre",
+      "when": "Hoy"
+    },
+    "market": {
+      "description": "Mercado del sábado",
+      "when": "Hoy"
+    },
+    "taxi": {
+      "description": "Taxi al trabajo",
+      "when": "Ayer"
+    },
+    "rent": {
+      "description": "Alquiler",
+      "when": "Ayer"
+    },
+    "ramen": {
+      "description": "Ramen con amigos",
+      "when": "Lunes"
+    },
+    "cinema": {
+      "description": "Cine",
+      "when": "Domingo"
+    }
   },
   "steps": {
     "eyebrow": "Cómo funciona",
@@ -142,7 +169,11 @@
       }
     ],
     "preview": {
-      "signUpProviders": ["Correo", "Google", "GitHub"],
+      "signUpProviders": [
+        "Correo",
+        "Google",
+        "GitHub"
+      ],
       "signUpLabel": "Crear cuenta con",
       "savedLabel": "Guardado"
     }
@@ -204,6 +235,8 @@
     "productTitle": "Producto",
     "accountTitle": "Cuenta",
     "languageTitle": "Idioma",
-    "rights": "Todos los derechos reservados."
+    "rights": "Todos los derechos reservados.",
+    "privacy": "Privacidad",
+    "terms": "Términos"
   }
 }

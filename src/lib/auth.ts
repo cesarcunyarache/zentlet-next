@@ -1,14 +1,17 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import prisma from "./prisma";
+import { sendEmail } from "./email/send-email";
+import { emailLocale, resetPasswordEmail, verificationEmail } from "./email/templates";
 import type { AuthMethod } from "./observability/events";
+import { logger } from "./observability/logger";
 import { trackServerEvent } from "./observability/server";
 
 type HookContext = { path?: string; params?: Record<string, string> } | null;
 
-/** Email por su ruta; OAuth por el proveedor del callback (`/callback/:id`). */
+/** Email por su ruta (o el enlace de verificación); OAuth por el proveedor del callback (`/callback/:id`). */
 function authMethod(context: HookContext): AuthMethod {
-  if (context?.path?.endsWith("/email")) return "email";
+  if (context?.path?.endsWith("/email") || context?.path === "/verify-email") return "email";
   const provider = context?.params?.id;
   return provider === "google" || provider === "github" ? provider : "unknown";
 }
@@ -27,17 +30,27 @@ export const auth = betterAuth({
     cookieCache: { enabled: true, maxAge: 5 * 60 },
   },
 
+  /*
+   * Sin verificar el correo no se entra: quien registra una dirección debe
+   * poder leerla. Intentar entrar sin verificar reenvía el enlace.
+   * Restablecer la contraseña cierra las demás sesiones.
+   */
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: false,
+    requireEmailVerification: true,
+    revokeSessionsOnPasswordReset: true,
+    sendResetPassword: async ({ user, url }, request) => {
+      await sendEmail(resetPasswordEmail(emailLocale(request), { to: user.email, name: user.name, url }));
+    },
   },
 
   emailVerification: {
     sendOnSignIn: true,
     sendOnSignUp: true,
     autoSignInAfterVerification: true,
-    // pendiente de un servicio de correo: por ahora no se envía nada
-    sendVerificationEmail: async () => {},
+    sendVerificationEmail: async ({ user, url }, request) => {
+      await sendEmail(verificationEmail(emailLocale(request), { to: user.email, name: user.name, url }));
+    },
   },
 
   socialProviders: {
@@ -56,6 +69,27 @@ export const auth = betterAuth({
     accountLinking: {
       enabled: true,
       trustedProviders: ["google", "github"],
+      /*
+       * Google o GitHub sólo se unen a una cuenta existente si su correo ya
+       * está verificado. Si no, quien registró antes ese correo (sin
+       * poseerlo) quedaría con acceso a la cuenta del verdadero dueño.
+       * Es el valor por defecto de Better Auth; se deja explícito.
+       */
+      requireLocalEmailVerified: true,
+    },
+  },
+
+  /*
+   * El usuario puede borrar su cuenta desde Ajustes. Con contraseña se pide
+   * de nuevo; sin ella, una sesión reciente. Categorías, movimientos y
+   * sesiones se borran en cascada en la base de datos.
+   */
+  user: {
+    deleteUser: {
+      enabled: true,
+      afterDelete: async (user) => {
+        logger.info({ userId: user.id }, "account.deleted");
+      },
     },
   },
 
@@ -71,7 +105,7 @@ export const auth = betterAuth({
     session: {
       create: {
         after: async (session, context: HookContext) => {
-          // el alta con email ya abre sesión: eso es `user_signed_up`
+          // el alta con email no abre sesión: la abre el enlace de verificación
           if (context?.path?.startsWith("/sign-up")) return;
           trackServerEvent(session.userId, "login_completed", { method: authMethod(context) });
         },
