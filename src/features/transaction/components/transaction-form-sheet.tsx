@@ -7,8 +7,9 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useDebounce } from "use-debounce";
 import { Button, cn } from "@heroui/react";
 import { Check, Plus, Sparkles } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Sheet } from "@/core/components/ui/sheet";
-import { CategoryFormSheet } from "@/app/admin/category/CategoryForm";
+import { CategoryFormSheet } from "@/app/[locale]/admin/category/CategoryForm";
 import { SPRING_LAYOUT, SPRING_PRESS } from "@/lib/ease";
 import { CategoryEmoji } from "./category-emoji";
 import { TransactionDateField } from "./transaction-date-field";
@@ -61,6 +62,7 @@ export function TransactionFormSheet({
   onSubmit,
   draft,
 }: TransactionFormSheetProps) {
+  const t = useTranslations();
   const reduceMotion = useReducedMotion();
 
   // el monto vive aparte porque se sanea mientras se teclea
@@ -190,7 +192,7 @@ export function TransactionFormSheet({
     const category = categories.find((c) => c.id === values.categoryId);
     onSubmit({
       ...values,
-      description: values.description.trim() || category?.name || "Movimiento",
+      description: values.description.trim() || category?.name || t("transactions.defaultDescription"),
     });
     onOpenChange(false);
   }
@@ -207,7 +209,7 @@ export function TransactionFormSheet({
       <Sheet
         isOpen={isOpen && !creatingCategory}
         onOpenChange={onOpenChange}
-        title="Nuevo movimiento"
+        title={t("transactions.form.title")}
         hideTitle
         footer={
           <Button
@@ -217,7 +219,7 @@ export function TransactionFormSheet({
             className="bg-app-fg text-app-surface disabled:bg-app-fill-strong disabled:text-app-muted min-h-[54px] w-full rounded-2xl text-base font-semibold transition-[background-color,transform] active:scale-[0.98]"
           >
             <Check className="size-[17px]" strokeWidth={2.4} />
-            Guardar
+            {t("common.actions.save")}
           </Button>
         }
       >
@@ -231,10 +233,10 @@ export function TransactionFormSheet({
           <input
             value={description}
             onChange={(event) => handleDescription(event.target.value)}
-            placeholder="¿En qué fue?"
+            placeholder={t("transactions.form.descriptionPlaceholder")}
             maxLength={42}
             autoComplete="off"
-            aria-label="Descripción"
+            aria-label={t("transactions.fields.description")}
             autoFocus
             className="font-display text-app-fg placeholder:text-app-muted/50 w-full border-0 bg-transparent text-[30px] leading-tight font-bold tracking-[-0.03em] outline-none"
           />
@@ -242,13 +244,14 @@ export function TransactionFormSheet({
           <div className="flex items-center gap-3">
             <span
               role="group"
-              aria-label="Gasto o ingreso"
+              aria-label={t("transactions.form.typeGroup")}
               className="bg-app-fill inline-flex shrink-0 items-center rounded-full p-[3px]"
             >
               {(["expense", "income"] as const).map((kind) => (
                 <SignButton
                   key={kind}
                   type={kind}
+                  label={t(`transactions.type.${kind}`)}
                   active={type === kind}
                   onClick={() => {
                     picked.current.type = true;
@@ -276,7 +279,7 @@ export function TransactionFormSheet({
                 placeholder="0"
                 maxLength={16}
                 autoComplete="off"
-                aria-label="Monto"
+                aria-label={t("transactions.fields.amount")}
                 className="placeholder:text-app-muted/40 min-w-0 flex-1 border-0 bg-transparent p-0 outline-none"
               />
             </label>
@@ -284,13 +287,13 @@ export function TransactionFormSheet({
 
           <div
             role="group"
-            aria-label="Categoría"
+            aria-label={t("transactions.fields.category")}
             className="scroll-clean -mx-[22px] flex gap-2 overflow-x-auto px-[22px] py-1 sm:-mx-7 sm:px-7"
           >
             {!isAutoCategory && (
             <motion.button
               type="button"
-              aria-label="Nueva categoría"
+              aria-label={t("transactions.form.newCategory")}
               whileTap={{ scale: 0.9 }}
               transition={SPRING_PRESS}
               onClick={() => {
@@ -362,10 +365,10 @@ export function TransactionFormSheet({
           <div className="min-h-5">
             <AnimatePresence mode="wait" initial={false}>
               {isAutoCategory ? (
-                <Hint key="auto">Categoría detectada del texto · tócala para ver todas</Hint>
+                <Hint key="auto">{t("transactions.form.autoCategoryHint")}</Hint>
               ) : needsCategory ? (
                 <Hint key="none" muted>
-                  Ninguna categoría encaja · elige una o crea otra con +
+                  {t("transactions.form.noCategoryHint")}
                 </Hint>
               ) : null}
             </AnimatePresence>
@@ -411,10 +414,12 @@ function Hint({
 
 function SignButton({
   type,
+  label,
   active,
   onClick,
 }: {
   type: TransactionType;
+  label: string;
   active: boolean;
   onClick: () => void;
 }) {
@@ -422,7 +427,7 @@ function SignButton({
     <motion.button
       type="button"
       aria-pressed={active}
-      aria-label={type === "expense" ? "Gasto" : "Ingreso"}
+      aria-label={label}
       whileTap={{ scale: 0.9 }}
       transition={SPRING_PRESS}
       onClick={onClick}

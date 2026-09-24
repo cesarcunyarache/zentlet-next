@@ -7,7 +7,7 @@ import {
   type Mutation,
   type QueryClient,
 } from "@tanstack/react-query";
-import { getApiErrorMessage } from "@/core/services/api-error";
+import { getApiErrorStatus } from "@/core/services/api-error";
 import { emitSyncError } from "@/core/offline/sync-events";
 import {
   SYNC_SCOPE,
@@ -81,8 +81,12 @@ function refreshWhenQueueDrains(queryClient: QueryClient) {
   }
 }
 
-function reportError(error: unknown, fallback: string) {
-  emitSyncError(getApiErrorMessage(error, fallback));
+type CategoryErrorKey = "createCategory" | "updateCategory" | "deleteCategory";
+
+function reportError(error: unknown, key: CategoryErrorKey) {
+  // 409 al eliminar: la categoría tiene movimientos
+  const inUse = key === "deleteCategory" && getApiErrorStatus(error) === 409;
+  emitSyncError(inUse ? "categoryInUse" : key);
 }
 
 /* ── registro (antes de restaurar la cache persistida) ─────────────────── */
@@ -103,7 +107,7 @@ export function registerCategoryMutations(queryClient: QueryClient) {
     },
     onError: (error: unknown, variables: CreateVariables) => {
       setList(queryClient, (rows) => rows.filter((row) => row.id !== variables.id));
-      reportError(error, "No se pudo crear la categoría");
+      reportError(error, "createCategory");
     },
     onSettled: () => refreshWhenQueueDrains(queryClient),
   });
@@ -121,7 +125,7 @@ export function registerCategoryMutations(queryClient: QueryClient) {
     },
     onError: (error: unknown) => {
       void queryClient.invalidateQueries({ queryKey: categoryKeys.all });
-      reportError(error, "No se pudo guardar la categoría");
+      reportError(error, "updateCategory");
     },
     onSettled: () => refreshWhenQueueDrains(queryClient),
   });
@@ -142,7 +146,7 @@ export function registerCategoryMutations(queryClient: QueryClient) {
     onError: (error: unknown) => {
       // p. ej. 409: tiene movimientos. La categoría vuelve a la lista.
       void queryClient.invalidateQueries({ queryKey: categoryKeys.all });
-      reportError(error, "No se pudo eliminar la categoría");
+      reportError(error, "deleteCategory");
     },
     onSettled: (_data: unknown, _error: unknown, categoryId: string) => {
       queryClient.removeQueries({ queryKey: categoryKeys.detail(categoryId) });

@@ -1,23 +1,39 @@
 import type { Metadata } from "next";
 import { siteConfig } from "@/lib/site";
+import { getPathname } from "@/i18n/navigation";
+import { intlLocales, routing, type Locale } from "@/i18n/routing";
 import type { LandingContent } from "../content";
 
-export function buildLandingMetadata(content: LandingContent): Metadata {
+const toOgLocale = (tag: string) => tag.replace("-", "_");
+
+/** URL de la home en cada idioma, para canonical y hreflang. */
+function homeAlternates() {
+  const languages = Object.fromEntries(
+    routing.locales.map((locale) => [locale, getPathname({ href: siteConfig.routes.home, locale })]),
+  );
+  return { ...languages, "x-default": languages[routing.defaultLocale] };
+}
+
+export function buildLandingMetadata(content: LandingContent, lang: Locale): Metadata {
   const { meta, locale } = content;
+  const url = getPathname({ href: siteConfig.routes.home, locale: lang });
 
   return {
     title: { absolute: meta.title },
     description: meta.description,
     keywords: meta.keywords,
     applicationName: siteConfig.name,
-    alternates: { canonical: siteConfig.routes.home },
+    alternates: { canonical: url, languages: homeAlternates() },
     openGraph: {
       type: "website",
-      url: siteConfig.routes.home,
+      url,
       siteName: siteConfig.name,
       title: meta.title,
       description: meta.description,
-      locale: locale.replace("-", "_"),
+      locale: toOgLocale(locale),
+      alternateLocale: routing.locales
+        .filter((other) => other !== lang)
+        .map((other) => toOgLocale(intlLocales[other])),
     },
     twitter: {
       card: "summary_large_image",

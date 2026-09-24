@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Sheet } from "@/core/components/ui/sheet";
-import { CategoryFormSheet, type EditableCategory } from "@/app/admin/category/CategoryForm";
+import { CategoryFormSheet, type EditableCategory } from "@/app/[locale]/admin/category/CategoryForm";
 import { CategoryGrid } from "@/features/category/components/category-grid";
 import type { CategoryLike } from "../types";
 
@@ -20,6 +21,7 @@ export function CategoriesSheet({
   onOpenChange,
   categories,
 }: CategoriesSheetProps) {
+  const t = useTranslations("categories");
   const [isCreating, setIsCreating] = useState(false);
   const [editing, setEditing] = useState<EditableCategory | null>(null);
   const formOpen = isCreating || Boolean(editing);
@@ -34,11 +36,11 @@ export function CategoriesSheet({
       <Sheet
         isOpen={isOpen && !formOpen}
         onOpenChange={onOpenChange}
-        title="Tus categorías"
+        title={t("title")}
         hideTitle
       >
         <h2 className="font-display text-app-fg mt-2 mb-6 text-[28px] font-bold tracking-[-0.03em]">
-          Tus categorías
+          {t("title")}
         </h2>
         <CategoryGrid
           className="pb-2"

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { CloudOff, LogOut } from "lucide-react";
 import { motion } from "motion/react";
 import { cn } from "@heroui/react";
+import { useLocale, useTranslations } from "next-intl";
 import { Sheet } from "@/core/components/ui/sheet";
 import { PillSelect } from "@/core/components/ui/pill-select";
 import { useOfflineSession } from "@/core/offline/offline-query-provider";
@@ -12,19 +13,21 @@ import { useThemePreference } from "@/core/theme/use-theme";
 import type { ThemePreference } from "@/core/theme/theme";
 import { authClient } from "@/lib/auth-client";
 import { SPRING_LAYOUT } from "@/lib/ease";
+import { siteConfig } from "@/lib/site";
+import { getPathname, usePathname, useRouter } from "@/i18n/navigation";
+import { localeNames, routing, type Locale } from "@/i18n/routing";
 
-const THEMES: { value: ThemePreference; label: string }[] = [
-  { value: "system", label: "Auto" },
-  { value: "light", label: "Claro" },
-  { value: "dark", label: "Oscuro" },
-];
+const THEMES: ThemePreference[] = ["system", "light", "dark"];
 
+/** Valor guardado (símbolo) → key de su etiqueta en `settings.currency.options`. */
 const CURRENCIES = [
-  { value: "S/", label: "S/ · sol" },
-  { value: "$", label: "$ · dólar" },
-  { value: "€", label: "€ · euro" },
-  { value: "$COP", label: "$ · peso" },
-];
+  { value: "S/", key: "sol" },
+  { value: "$", key: "dollar" },
+  { value: "€", key: "euro" },
+  { value: "$COP", key: "peso" },
+] as const;
+
+const LANGUAGES = routing.locales.map((locale) => ({ value: locale, label: localeNames[locale] }));
 
 interface SettingsSheetProps {
   isOpen: boolean;
@@ -41,42 +44,42 @@ export function SettingsSheet({
   transactionCount,
   onCurrencyChange,
 }: SettingsSheetProps) {
+  const t = useTranslations("settings");
+
   return (
-    <Sheet isOpen={isOpen} onOpenChange={onOpenChange} title="Ajustes">
+    <Sheet isOpen={isOpen} onOpenChange={onOpenChange} title={t("title")}>
       <ConnectionRow />
 
       <div className="border-app-border flex items-center justify-between gap-3.5 border-b py-3.5">
         <span>
           <span className="text-app-fg block text-[14.5px] font-semibold">
-            Moneda
+            {t("currency.label")}
           </span>
           <span className="text-app-muted mt-px block text-xs">
-            Solo cambia el símbolo mostrado
+            {t("currency.hint")}
           </span>
         </span>
         <PillSelect
-          label="Moneda"
+          label={t("currency.label")}
           value={currency}
-          options={CURRENCIES}
+          options={CURRENCIES.map(({ value, key }) => ({ value, label: t(`currency.options.${key}`) }))}
           onChange={onCurrencyChange}
           display={currency}
           className="bg-app-fill"
         />
       </div>
 
+      <LanguageRow />
+
       <AppearanceRow />
 
       <div className="border-app-border flex items-center justify-between gap-3.5 border-b py-3.5">
         <span>
           <span className="text-app-fg block text-[14.5px] font-semibold">
-            Datos
+            {t("data.label")}
           </span>
           <span className="text-app-muted mt-px block text-xs">
-            {transactionCount}{" "}
-            {transactionCount === 1
-              ? "movimiento guardado"
-              : "movimientos guardados"}{" "}
-            en tu cuenta
+            {t("data.count", { count: transactionCount })}
           </span>
         </span>
       </div>
@@ -86,25 +89,54 @@ export function SettingsSheet({
   );
 }
 
+/** Cambia la URL al mismo sitio en otro idioma (`/admin` ↔ `/en/admin`). */
+function LanguageRow() {
+  const t = useTranslations();
+  const locale = useLocale();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  return (
+    <div className="border-app-border flex items-center justify-between gap-3.5 border-b py-3.5">
+      <span>
+        <span className="text-app-fg block text-[14.5px] font-semibold">
+          {t("common.language")}
+        </span>
+        <span className="text-app-muted mt-px block text-xs">
+          {t("settings.language.hint")}
+        </span>
+      </span>
+      <PillSelect
+        label={t("common.language")}
+        value={locale}
+        options={LANGUAGES}
+        onChange={(next: Locale) => router.replace(pathname, { locale: next })}
+        className="bg-app-fill"
+      />
+    </div>
+  );
+}
+
 function AppearanceRow() {
+  const t = useTranslations("settings.appearance");
   const { preference, setPreference } = useThemePreference();
 
   return (
     <div className="border-app-border flex items-center justify-between gap-3.5 border-b py-3.5">
       <span>
         <span className="text-app-fg block text-[14.5px] font-semibold">
-          Apariencia
+          {t("label")}
         </span>
         <span className="text-app-muted mt-px block text-xs">
-          {preference === "system" ? "Igual que tu dispositivo" : "Solo en este dispositivo"}
+          {t(preference === "system" ? "followsDevice" : "thisDeviceOnly")}
         </span>
       </span>
       <div
         role="group"
-        aria-label="Apariencia"
+        aria-label={t("label")}
         className="bg-app-fill inline-flex shrink-0 items-center gap-0.5 rounded-full p-[3px]"
       >
-        {THEMES.map(({ value, label }) => {
+        {THEMES.map((value) => {
           const active = preference === value;
           return (
             <button
@@ -124,7 +156,7 @@ function AppearanceRow() {
                   className="bg-app-surface absolute inset-0 rounded-full shadow-[0_1px_3px_color-mix(in_oklch,var(--app-ink)_14%,transparent)]"
                 />
               )}
-              <span className="relative">{label}</span>
+              <span className="relative">{t(`themes.${value}`)}</span>
             </button>
           );
         })}
@@ -133,33 +165,31 @@ function AppearanceRow() {
   );
 }
 
-function countChanges(count: number) {
-  return `${count} ${count === 1 ? "cambio" : "cambios"}`;
-}
-
-function connectionHint(online: boolean, pendingCount: number, syncingCount: number) {
-  if (online) {
-    return syncingCount > 0 ? `Sincronizando ${countChanges(syncingCount)}…` : "Tus datos están sincronizados";
-  }
-  return pendingCount > 0 ? `${countChanges(pendingCount)} sin sincronizar` : "Sin cambios pendientes";
-}
-
 /**
  * Estado de la conexión. Sin internet se sigue pudiendo trabajar: los
  * cambios quedan en el dispositivo y se envían al volver la conexión.
  */
 function ConnectionRow() {
+  const t = useTranslations("settings.connection");
   const { online, pendingCount, syncingCount } = useSyncStatus();
+
+  const hint = online
+    ? syncingCount > 0
+      ? t("syncing", { count: syncingCount })
+      : t("synced")
+    : pendingCount > 0
+      ? t("pending", { count: pendingCount })
+      : t("noPending");
 
   return (
     <div role="status" aria-live="polite" className="border-app-border border-b py-3.5">
       <div className="flex items-center justify-between gap-3.5">
         <span>
           <span className="text-app-fg block text-[14.5px] font-semibold">
-            Conexión
+            {t("label")}
           </span>
           <span className="text-app-muted mt-px block text-xs">
-            {connectionHint(online, pendingCount, syncingCount)}
+            {hint}
           </span>
         </span>
         <span
@@ -172,7 +202,7 @@ function ConnectionRow() {
             aria-hidden
             className={cn("size-1.5 rounded-full", online ? "bg-app-income" : "bg-app-expense")}
           />
-          {online ? "En línea" : "Sin conexión"}
+          {t(online ? "online" : "offline")}
         </span>
       </div>
 
@@ -180,11 +210,8 @@ function ConnectionRow() {
         <p className="bg-app-fill text-app-fg mt-3 flex gap-2.5 rounded-2xl p-3 text-xs leading-relaxed">
           <CloudOff className="text-app-expense mt-px size-4 shrink-0" aria-hidden />
           <span>
-            <span className="block font-semibold">Estás trabajando sin internet</span>
-            <span className="text-app-muted">
-              Lo que registres se guarda en este dispositivo y se sincronizará
-              automáticamente cuando vuelvas a conectarte.
-            </span>
+            <span className="block font-semibold">{t("offlineTitle")}</span>
+            <span className="text-app-muted">{t("offlineBody")}</span>
           </span>
         </p>
       )}
@@ -199,6 +226,8 @@ function ConnectionRow() {
  * segundo toque; sin conexión no se puede cerrar la sesión en el servidor.
  */
 function SignOutRow() {
+  const t = useTranslations("settings.signOut");
+  const locale = useLocale();
   const { clearLocalData } = useOfflineSession();
   const { online, pendingCount } = useSyncStatus();
   const [confirming, setConfirming] = useState(false);
@@ -223,14 +252,14 @@ function SignOutRow() {
       return;
     }
     await clearLocalData();
-    window.location.replace("/auth/sign-in");
+    window.location.replace(getPathname({ href: siteConfig.routes.signIn, locale }));
   }
 
   const hint = !online
-    ? "Conéctate a internet para cerrar sesión"
+    ? t("offline")
     : confirming
-      ? `Tienes ${countChanges(pendingCount)} sin sincronizar. Toca de nuevo para cerrar sesión y descartarlos`
-      : "También borra los datos guardados en este dispositivo";
+      ? t("confirm", { count: pendingCount })
+      : t("hint");
 
   return (
     <button
@@ -246,7 +275,7 @@ function SignOutRow() {
             confirming ? "text-app-expense" : "text-app-fg",
           )}
         >
-          {signingOut ? "Cerrando sesión…" : "Cerrar sesión"}
+          {t(signingOut ? "pending" : "label")}
         </span>
         <span className="text-app-muted mt-px block text-xs">{hint}</span>
       </span>

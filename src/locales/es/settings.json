@@ -1,0 +1,48 @@
+{
+  "title": "Ajustes",
+  "currency": {
+    "label": "Moneda",
+    "hint": "Solo cambia el símbolo mostrado",
+    "options": {
+      "sol": "S/ · sol",
+      "dollar": "$ · dólar",
+      "euro": "€ · euro",
+      "peso": "$ · peso"
+    }
+  },
+  "language": {
+    "hint": "Textos y fechas de la app"
+  },
+  "appearance": {
+    "label": "Apariencia",
+    "followsDevice": "Igual que tu dispositivo",
+    "thisDeviceOnly": "Solo en este dispositivo",
+    "themes": {
+      "system": "Auto",
+      "light": "Claro",
+      "dark": "Oscuro"
+    }
+  },
+  "data": {
+    "label": "Datos",
+    "count": "{count, plural, one {# movimiento guardado} other {# movimientos guardados}} en tu cuenta"
+  },
+  "connection": {
+    "label": "Conexión",
+    "syncing": "Sincronizando {count, plural, one {# cambio} other {# cambios}}…",
+    "synced": "Tus datos están sincronizados",
+    "pending": "{count, plural, one {# cambio sin sincronizar} other {# cambios sin sincronizar}}",
+    "noPending": "Sin cambios pendientes",
+    "online": "En línea",
+    "offline": "Sin conexión",
+    "offlineTitle": "Estás trabajando sin internet",
+    "offlineBody": "Lo que registres se guarda en este dispositivo y se sincronizará automáticamente cuando vuelvas a conectarte."
+  },
+  "signOut": {
+    "label": "Cerrar sesión",
+    "pending": "Cerrando sesión…",
+    "offline": "Conéctate a internet para cerrar sesión",
+    "confirm": "Tienes {count, plural, one {# cambio} other {# cambios}} sin sincronizar. Toca de nuevo para cerrar sesión y descartarlos",
+    "hint": "También borra los datos guardados en este dispositivo"
+  }
+}

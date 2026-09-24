@@ -1,0 +1,14 @@
+{
+  "metadata": {
+    "description": "Zentlet is a personal finance platform."
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "close": "Close"
+  },
+  "language": "Language"
+}

@@ -1,12 +1,28 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/lib/site";
+import { getPathname } from "@/i18n/navigation";
+import { routing } from "@/i18n/routing";
+
+/** Cada página en el idioma por defecto, con sus alternativas por idioma (hreflang). */
+function entry(href: string, changeFrequency: "weekly" | "yearly", priority: number) {
+  const url = (locale: (typeof routing.locales)[number]) => `${siteConfig.url}${getPathname({ href, locale })}`;
+
+  return {
+    url: url(routing.defaultLocale),
+    changeFrequency,
+    priority,
+    alternates: {
+      languages: Object.fromEntries(routing.locales.map((locale) => [locale, url(locale)])),
+    },
+  };
+}
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const { url, routes } = siteConfig;
+  const { routes } = siteConfig;
 
   return [
-    { url: `${url}${routes.home}`, changeFrequency: "weekly", priority: 1 },
-    { url: `${url}${routes.signUp}`, changeFrequency: "yearly", priority: 0.6 },
-    { url: `${url}${routes.signIn}`, changeFrequency: "yearly", priority: 0.4 },
+    entry(routes.home, "weekly", 1),
+    entry(routes.signUp, "yearly", 0.6),
+    entry(routes.signIn, "yearly", 0.4),
   ];
 }

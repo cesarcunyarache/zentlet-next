@@ -11,6 +11,7 @@ import {
 } from "motion/react";
 import { CloudOff, RefreshCw, Trash2 } from "lucide-react";
 import { cn } from "@heroui/react";
+import { useLocale, useTranslations } from "next-intl";
 import { SPRING_LAYOUT } from "@/lib/ease";
 import { CategoryEmoji } from "./category-emoji";
 import { dayLabel, formatSigned, signedAmount } from "../lib/format";
@@ -42,11 +43,6 @@ const SWIPE_REVEAL = 84;
  * en cada render y con cientos de filas se nota.
  */
 const LAYOUT_ANIMATION_LIMIT = 120;
-
-const SYNC_LABEL: Record<OfflineSyncState, string> = {
-  paused: "Guardado en este dispositivo, se sincronizará al volver la conexión",
-  syncing: "Sincronizando",
-};
 
 interface DayGroup {
   date: string;
@@ -86,6 +82,8 @@ export function TransactionList({
   onSelect,
   onRequestDelete,
 }: TransactionListProps) {
+  const t = useTranslations("transactions");
+  const locale = useLocale();
   const [openId, setOpenId] = useState<string | null>(null);
   const reduceMotion = useReducedMotion();
   const groups = useMemo(() => groupByDay(transactions), [transactions]);
@@ -100,7 +98,7 @@ export function TransactionList({
         animate={{ opacity: 1, y: 0 }}
         className="text-app-muted m-0 py-10 text-center text-sm"
       >
-        Nada coincide con el filtro.
+        {t("list.noMatches")}
       </motion.p>
     );
   }
@@ -126,7 +124,7 @@ export function TransactionList({
             )}
           >
             <div className="text-app-muted flex items-baseline justify-between px-3 pb-1.5 text-[13px]">
-              <span className="lowercase first-letter:uppercase">{dayLabel(group.date)}</span>
+              <span className="lowercase first-letter:uppercase">{dayLabel(group.date, locale)}</span>
               <span className="num text-xs">{formatSigned(dayTotal(group.items), currency)}</span>
             </div>
 
@@ -135,6 +133,7 @@ export function TransactionList({
                 const category = categoriesById.get(tx.categoryId);
                 const amount = signedAmount(tx);
                 const syncState = syncStateById?.get(tx.id);
+                const syncLabel = syncState && t(`list.sync.${syncState}`);
                 const delay = Math.min(row++, 8) * 0.03;
 
                 return (
@@ -151,7 +150,9 @@ export function TransactionList({
                     className="relative overflow-hidden rounded-2xl"
                   >
                     <SwipeRow
-                      label={tx.description || category?.name || "movimiento"}
+                      deleteLabel={t("list.deleteItem", {
+                        name: tx.description || category?.name || t("list.fallbackName"),
+                      })}
                       isOpen={openId === tx.id}
                       canSwipe={Boolean(onRequestDelete)}
                       onOpenChange={(open) => setOpenId(open ? tx.id : null)}
@@ -167,12 +168,12 @@ export function TransactionList({
                     />
                     <span className="min-w-0 flex-1">
                       <span className="text-app-muted flex items-center gap-1.5 text-xs leading-[1.3]">
-                        {category?.name ?? "Sin categoría"}
+                        {category?.name ?? t("uncategorized")}
                         <AnimatePresence initial={false}>
                           {syncState && (
                             <motion.span
                               key="sync"
-                              title={SYNC_LABEL[syncState]}
+                              title={syncLabel}
                               initial={{ opacity: 0, scale: 0.6 }}
                               animate={{ opacity: 1, scale: 1 }}
                               exit={{ opacity: 0, scale: 0.6 }}
@@ -184,7 +185,7 @@ export function TransactionList({
                               ) : (
                                 <RefreshCw className="size-3 animate-spin" aria-hidden />
                               )}
-                              <span className="sr-only">{SYNC_LABEL[syncState]}</span>
+                              <span className="sr-only">{syncLabel}</span>
                             </motion.span>
                           )}
                         </AnimatePresence>
@@ -205,7 +206,9 @@ export function TransactionList({
         ))}
       </AnimatePresence>
 
-      {hasMore && <EndSentinel isLoading={isLoadingMore} onReached={onEndReached} />}
+      {hasMore && (
+        <EndSentinel isLoading={isLoadingMore} loadingLabel={t("list.loadingMore")} onReached={onEndReached} />
+      )}
     </div>
   );
 }
@@ -215,7 +218,7 @@ export function TransactionList({
  * con la fila abierta la cierra en lugar de abrir el detalle.
  */
 function SwipeRow({
-  label,
+  deleteLabel,
   isOpen,
   canSwipe,
   onOpenChange,
@@ -223,7 +226,7 @@ function SwipeRow({
   onDelete,
   children,
 }: {
-  label: string;
+  deleteLabel: string;
   isOpen: boolean;
   canSwipe: boolean;
   onOpenChange: (open: boolean) => void;
@@ -246,7 +249,7 @@ function SwipeRow({
       {canSwipe && (
         <motion.button
           type="button"
-          aria-label={`Eliminar ${label}`}
+          aria-label={deleteLabel}
           tabIndex={isOpen ? 0 : -1}
           onClick={onDelete}
           className="bg-app-expense text-app-surface absolute inset-y-0 right-0 grid place-items-center rounded-2xl"
@@ -288,7 +291,15 @@ function SwipeRow({
 }
 
 /** Pide la siguiente página un poco antes de llegar al final. */
-function EndSentinel({ isLoading, onReached }: { isLoading: boolean; onReached?: () => void }) {
+function EndSentinel({
+  isLoading,
+  loadingLabel,
+  onReached,
+}: {
+  isLoading: boolean;
+  loadingLabel: string;
+  onReached?: () => void;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const onReachedRef = useRef(onReached);
 
@@ -312,7 +323,7 @@ function EndSentinel({ isLoading, onReached }: { isLoading: boolean; onReached?:
       {isLoading && (
         <>
           <RefreshCw className="size-3.5 animate-spin" aria-hidden />
-          Cargando más movimientos…
+          {loadingLabel}
         </>
       )}
     </div>

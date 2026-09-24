@@ -1,0 +1,48 @@
+{
+  "title": "Settings",
+  "currency": {
+    "label": "Currency",
+    "hint": "Only changes the symbol shown",
+    "options": {
+      "sol": "S/ · sol",
+      "dollar": "$ · dollar",
+      "euro": "€ · euro",
+      "peso": "$ · peso"
+    }
+  },
+  "language": {
+    "hint": "App text and dates"
+  },
+  "appearance": {
+    "label": "Appearance",
+    "followsDevice": "Same as your device",
+    "thisDeviceOnly": "On this device only",
+    "themes": {
+      "system": "Auto",
+      "light": "Light",
+      "dark": "Dark"
+    }
+  },
+  "data": {
+    "label": "Data",
+    "count": "{count, plural, one {# transaction saved} other {# transactions saved}} in your account"
+  },
+  "connection": {
+    "label": "Connection",
+    "syncing": "Syncing {count, plural, one {# change} other {# changes}}…",
+    "synced": "Your data is in sync",
+    "pending": "{count, plural, one {# unsynced change} other {# unsynced changes}}",
+    "noPending": "No pending changes",
+    "online": "Online",
+    "offline": "Offline",
+    "offlineTitle": "You're working offline",
+    "offlineBody": "Anything you record is saved on this device and will sync automatically when you reconnect."
+  },
+  "signOut": {
+    "label": "Sign out",
+    "pending": "Signing out…",
+    "offline": "Connect to the internet to sign out",
+    "confirm": "You have {count, plural, one {# unsynced change} other {# unsynced changes}}. Tap again to sign out and discard them",
+    "hint": "Also deletes the data saved on this device"
+  }
+}

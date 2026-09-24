@@ -3,11 +3,12 @@
 import { useEffect, useState } from "react";
 import { Button, Description, Separator, toast } from "@heroui/react";
 import { ChartBar } from "@gravity-ui/icons";
-import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import { authClient } from "@/lib/auth-client";
-import { authErrorMessage, oauthErrorMessage } from "@/lib/auth-errors";
+import { authErrorKey, oauthErrorKey } from "@/lib/auth-errors";
 import { siteConfig } from "@/lib/site";
+import { Link, getPathname } from "@/i18n/navigation";
 
 type SocialProvider = "github" | "google";
 
@@ -74,6 +75,9 @@ export function showAuthError(message: string) {
  * vuelve a esta misma página con `?error=`.
  */
 export function SocialSignInButtons() {
+  const t = useTranslations("auth");
+  const locale = useLocale();
+  // ruta real con prefijo de idioma: el proveedor vuelve aquí tal cual
   const pathname = usePathname();
   const [pending, setPending] = useState<SocialProvider | null>(null);
 
@@ -82,16 +86,16 @@ export function SocialSignInButtons() {
     try {
       const { error } = await authClient.signIn.social({
         provider,
-        callbackURL: siteConfig.routes.app,
+        callbackURL: getPathname({ href: siteConfig.routes.app, locale }),
         errorCallbackURL: pathname,
       });
       if (error) {
-        showAuthError(authErrorMessage(error));
+        showAuthError(t(`errors.${authErrorKey(error)}`));
         setPending(null);
       }
       // sin error el navegador ya va camino del proveedor
     } catch {
-      showAuthError(authErrorMessage(null));
+      showAuthError(t(`errors.${authErrorKey(null)}`));
       setPending(null);
     }
   }
@@ -116,7 +120,7 @@ export function SocialSignInButtons() {
               clipRule="evenodd"
             />
           </svg>
-          Continuar con GitHub
+          {t("social.github")}
         </Button>
         <Button
           variant="outline"
@@ -132,7 +136,7 @@ export function SocialSignInButtons() {
               fill="currentColor"
             />
           </svg>
-          Continuar con Google
+          {t("social.google")}
         </Button>
       </div>
     </>
@@ -141,6 +145,7 @@ export function SocialSignInButtons() {
 
 /** Muestra el error con el que volvió un login social y limpia la URL. */
 export function OAuthErrorToast() {
+  const t = useTranslations("auth.oauthErrors");
   const params = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -148,19 +153,22 @@ export function OAuthErrorToast() {
 
   useEffect(() => {
     if (!error) return;
-    showAuthError(oauthErrorMessage(error));
+    showAuthError(t(oauthErrorKey(error)));
     router.replace(pathname, { scroll: false });
-  }, [error, pathname, router]);
+  }, [error, pathname, router, t]);
 
   return null;
 }
 
 export function TermsNotice() {
+  const t = useTranslations("auth");
+
   return (
     <Description className="px-6 text-center">
-      Al hacer clic en continuar, aceptas nuestros{" "}
-      <a href="#">Términos de Servicio</a> y{" "}
-      <a href="#">Política de Privacidad</a>.
+      {t.rich("terms", {
+        terms: (chunks) => <a href="#">{chunks}</a>,
+        privacy: (chunks) => <a href="#">{chunks}</a>,
+      })}
     </Description>
   );
 }

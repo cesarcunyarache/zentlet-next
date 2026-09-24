@@ -1,0 +1,11 @@
+{
+  "title": "Your categories",
+  "add": "Add category",
+  "form": {
+    "new": "New category",
+    "edit": "Edit category",
+    "namePlaceholder": "Category",
+    "aiUnavailable": "We couldn't suggest icons right now. Pick a basic one.",
+    "aiOffline": "You're offline: pick a basic icon. It will be saved on this device."
+  }
+}

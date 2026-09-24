@@ -1,0 +1,11 @@
+{
+  "title": "Tus categorías",
+  "add": "Añadir categoría",
+  "form": {
+    "new": "Nueva categoría",
+    "edit": "Editar categoría",
+    "namePlaceholder": "Categoría",
+    "aiUnavailable": "No pudimos sugerir iconos ahora. Elige uno básico.",
+    "aiOffline": "Sin conexión: elige un icono básico. Se guardará en este dispositivo."
+  }
+}

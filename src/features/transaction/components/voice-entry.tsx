@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Button, cn } from "@heroui/react";
 import { Check, Keyboard, Mic, MicOff, Pencil, RotateCcw, Sparkles, WifiOff } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { Sheet } from "@/core/components/ui/sheet";
 import { SPRING_LAYOUT, SPRING_PRESS, SPRING_SWAP } from "@/lib/ease";
 import { useSpeechRecognition, type SpeechError } from "../hooks/use-speech-recognition";
@@ -14,6 +15,10 @@ import { CategoryEmoji } from "./category-emoji";
 import type { TransactionFormValues } from "../schemas/transaction.schema";
 import type { CategoryLike } from "../types";
 
+/**
+ * Frases de ejemplo para dictar. Van en español en todos los idiomas: el
+ * reconocimiento de voz y `parse-voice` sólo entienden español.
+ */
 const EXAMPLES = [
   "Gasté 35 soles en almuerzo",
   "Ayer pagué 50 en gasolina",
@@ -23,32 +28,15 @@ const EXAMPLES = [
 
 const BAR_PEAKS = [18, 30, 42, 26, 38, 22, 14];
 
-const ERROR_COPY: Record<SpeechError, { title: string; body: string }> = {
-  denied: {
-    title: "Sin permiso para el micrófono",
-    body: "Actívalo desde el candado junto a la dirección de la página (Configuración del sitio → Micrófono → Permitir) y vuelve a intentarlo.",
-  },
-  "no-mic": {
-    title: "No encontramos un micrófono",
-    body: "Conecta uno o revisa que ninguna otra app lo esté usando.",
-  },
-  "no-speech": {
-    title: "No te escuché",
-    body: "Habla cerca del micrófono, por ejemplo: «gasté 35 soles en almuerzo».",
-  },
-  network: {
-    title: "El dictado necesita internet",
-    body: "Tu navegador transcribe la voz en línea. Sin conexión puedes registrarlo escribiendo; se sincroniza al volver la red.",
-  },
-  unsupported: {
-    title: "Tu navegador no permite dictar",
-    body: "Prueba con Chrome, Edge o Safari, o regístralo escribiendo.",
-  },
-  unknown: {
-    title: "No pudimos escucharte",
-    body: "Algo falló con el micrófono. Inténtalo de nuevo.",
-  },
-};
+/** Código de error del reconocimiento → key en `transactions.voice.errors`. */
+const ERROR_KEYS = {
+  denied: "denied",
+  "no-mic": "noMic",
+  "no-speech": "noSpeech",
+  network: "network",
+  unsupported: "unsupported",
+  unknown: "unknown",
+} as const satisfies Record<SpeechError, string>;
 
 interface VoiceEntryProps {
   categories: CategoryLike[];
@@ -60,6 +48,7 @@ interface VoiceEntryProps {
 
 /** Botón de micrófono y hoja de dictado: escuchar → interpretar → confirmar. */
 export function VoiceEntry({ categories, currency, onSave, onEdit }: VoiceEntryProps) {
+  const t = useTranslations();
   const [isOpen, setIsOpen] = useState(false);
   const speech = useSpeechRecognition();
   // categoría elegida a mano o sugerida por la IA, ligada a su dictado
@@ -113,7 +102,7 @@ export function VoiceEntry({ categories, currency, onSave, onEdit }: VoiceEntryP
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [needsAi, speech.transcript]);
 
-  const values = draft && toFormValues(draft, categories);
+  const values = draft && toFormValues(draft, categories, t("transactions.defaultDescription"));
   const canSave = Boolean(values && values.amount > 0 && values.categoryId);
 
   function save() {
@@ -139,12 +128,12 @@ export function VoiceEntry({ categories, currency, onSave, onEdit }: VoiceEntryP
 
   return (
     <>
-      <MicButton onPress={open} />
+      <MicButton label={t("transactions.voice.title")} onPress={open} />
 
       <Sheet
         isOpen={isOpen}
         onOpenChange={(next) => !next && close()}
-        title="Dictar movimiento"
+        title={t("transactions.voice.title")}
         hideTitle
         className="min-h-[62dvh]"
         bodyClassName="flex flex-col"
@@ -152,16 +141,16 @@ export function VoiceEntry({ categories, currency, onSave, onEdit }: VoiceEntryP
           isListening ? (
             <div className="flex">
               <FooterButton onPress={speech.stop} icon={<Check className="size-[17px]" strokeWidth={2.4} />}>
-                Listo
+                {t("transactions.voice.done")}
               </FooterButton>
             </div>
           ) : showPreview ? (
             <div className="flex gap-2.5">
               <FooterButton variant="secondary" onPress={edit} icon={<Pencil className="size-4" strokeWidth={2.2} />}>
-                Editar
+                {t("common.actions.edit")}
               </FooterButton>
               <FooterButton onPress={save} isDisabled={!canSave} icon={<Check className="size-[17px]" strokeWidth={2.4} />}>
-                Guardar
+                {t("common.actions.save")}
               </FooterButton>
             </div>
           ) : speech.status === "error" ? (
@@ -174,11 +163,11 @@ export function VoiceEntry({ categories, currency, onSave, onEdit }: VoiceEntryP
                 }}
                 icon={<Keyboard className="size-4" strokeWidth={2.2} />}
               >
-                Escribirlo
+                {t("transactions.voice.typeIt")}
               </FooterButton>
               {speech.error !== "unsupported" && (
                 <FooterButton onPress={retry} icon={<RotateCcw className="size-4" strokeWidth={2.2} />}>
-                  Reintentar
+                  {t("transactions.voice.retry")}
                 </FooterButton>
               )}
             </div>
@@ -214,22 +203,26 @@ export function VoiceEntry({ categories, currency, onSave, onEdit }: VoiceEntryP
   );
 }
 
-function toFormValues(draft: VoiceDraft, categories: CategoryLike[]): TransactionFormValues {
+function toFormValues(
+  draft: VoiceDraft,
+  categories: CategoryLike[],
+  defaultDescription: string,
+): TransactionFormValues {
   const category = categories.find((c) => c.id === draft.categoryId);
   return {
     type: draft.type,
     amount: draft.amount ?? 0,
     categoryId: draft.categoryId ?? "",
     transactionDate: draft.transactionDate,
-    description: draft.description || category?.name || "Movimiento",
+    description: draft.description || category?.name || defaultDescription,
   };
 }
 
-function MicButton({ onPress }: { onPress: () => void }) {
+function MicButton({ label, onPress }: { label: string; onPress: () => void }) {
   return (
     <motion.button
       type="button"
-      aria-label="Dictar movimiento"
+      aria-label={label}
       onClick={onPress}
       initial={{ scale: 0, y: 12 }}
       animate={{ scale: 1, y: 0 }}
@@ -290,6 +283,7 @@ function ListeningView({
   isSpeaking: boolean;
   transcript: string;
 }) {
+  const t = useTranslations("transactions.voice");
   const reduceMotion = useReducedMotion();
   const [exampleIndex, setExampleIndex] = useState(0);
 
@@ -299,7 +293,7 @@ function ListeningView({
     return () => clearInterval(timer);
   }, [transcript]);
 
-  const label = !isReady ? "Preparando el micrófono…" : isSpeaking ? "Escuchando…" : "Te escucho, habla cuando quieras";
+  const label = t(!isReady ? "preparing" : isSpeaking ? "listening" : "ready");
 
   return (
     <motion.div {...VIEW_MOTION} className="flex flex-1 flex-col items-center justify-center gap-7 py-6">
@@ -401,6 +395,8 @@ function PreviewView({
   onPickCategory: (categoryId: string) => void;
   onRetry: () => void;
 }) {
+  const t = useTranslations("transactions");
+  const locale = useLocale();
   const isIncome = values.type === "income";
   const category = categories.find((c) => c.id === draft.categoryId);
 
@@ -415,7 +411,7 @@ function PreviewView({
         <button
           type="button"
           onClick={onRetry}
-          aria-label="Volver a dictar"
+          aria-label={t("voice.redo")}
           className="bg-app-fill hover:bg-app-fill-strong text-app-fg grid size-9 shrink-0 place-items-center rounded-full transition-colors"
         >
           <Mic className="size-4" strokeWidth={2} />
@@ -429,7 +425,7 @@ function PreviewView({
             isIncome ? "bg-app-income-soft text-app-income" : "bg-app-expense-soft text-app-expense",
           )}
         >
-          {isIncome ? "Ingreso" : "Gasto"}
+          {t(`type.${values.type}`)}
         </span>
 
         {draft.amount ? (
@@ -441,33 +437,33 @@ function PreviewView({
           </p>
         ) : (
           <p className="text-app-expense m-0 mt-3 text-sm font-semibold">
-            No escuché el monto · toca Editar para escribirlo
+            {t("voice.noAmount")}
           </p>
         )}
 
         <dl className="m-0 mt-5 grid grid-cols-[auto_1fr] gap-x-4 gap-y-3 text-sm">
-          <dt className="text-app-muted">Categoría</dt>
+          <dt className="text-app-muted">{t("fields.category")}</dt>
           <dd className="text-app-fg m-0 flex items-center gap-1.5 font-semibold">
             {category ? (
               <>
                 <CategoryEmoji category={category} className="size-6 rounded-full text-[13px]" />
                 {category.name}
-                {suggested && <Sparkles aria-label="Sugerida por IA" className="size-3.5" strokeWidth={2.2} />}
+                {suggested && <Sparkles aria-label={t("voice.aiSuggested")} className="size-3.5" strokeWidth={2.2} />}
               </>
             ) : (
-              <span className="text-app-expense">Elige una abajo</span>
+              <span className="text-app-expense">{t("voice.pickBelow")}</span>
             )}
           </dd>
-          <dt className="text-app-muted">Fecha</dt>
-          <dd className="text-app-fg m-0 font-semibold">{dayLabel(draft.transactionDate)}</dd>
-          <dt className="text-app-muted">Descripción</dt>
+          <dt className="text-app-muted">{t("fields.date")}</dt>
+          <dd className="text-app-fg m-0 font-semibold">{dayLabel(draft.transactionDate, locale)}</dd>
+          <dt className="text-app-muted">{t("fields.description")}</dt>
           <dd className="text-app-fg m-0 font-semibold">{values.description}</dd>
         </dl>
       </div>
 
       <div
         role="group"
-        aria-label="Cambiar categoría"
+        aria-label={t("voice.changeCategory")}
         className="scroll-clean -mx-[22px] flex gap-2 overflow-x-auto px-[22px] sm:-mx-7 sm:px-7"
       >
         {categories.map((option) => {
@@ -503,7 +499,8 @@ function PreviewView({
 }
 
 function ErrorView({ error }: { error: SpeechError }) {
-  const copy = ERROR_COPY[error];
+  const t = useTranslations("transactions.voice.errors");
+  const key = ERROR_KEYS[error];
   const Icon = error === "network" ? WifiOff : MicOff;
 
   return (
@@ -516,9 +513,9 @@ function ErrorView({ error }: { error: SpeechError }) {
       >
         <Icon className="size-8" strokeWidth={2} />
       </motion.span>
-      <h3 className="font-display text-app-fg m-0 text-2xl font-bold tracking-[-0.02em]">{copy.title}</h3>
+      <h3 className="font-display text-app-fg m-0 text-2xl font-bold tracking-[-0.02em]">{t(`${key}.title`)}</h3>
       <p role="alert" className="text-app-muted m-0 max-w-sm text-sm leading-relaxed">
-        {copy.body}
+        {t(`${key}.body`, { example: EXAMPLES[0].toLowerCase() })}
       </p>
     </motion.div>
   );

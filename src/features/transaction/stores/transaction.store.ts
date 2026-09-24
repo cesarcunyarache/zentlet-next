@@ -11,7 +11,6 @@ import {
   type Mutation,
   type QueryClient,
 } from "@tanstack/react-query";
-import { getApiErrorMessage } from "@/core/services/api-error";
 import { emitSyncError } from "@/core/offline/sync-events";
 import {
   SYNC_SCOPE,
@@ -192,8 +191,8 @@ function refreshWhenQueueDrains(queryClient: QueryClient) {
   }
 }
 
-function reportError(error: unknown, fallback: string) {
-  emitSyncError(getApiErrorMessage(error, fallback));
+function reportError(key: "createTransaction" | "updateTransaction" | "deleteTransaction") {
+  emitSyncError(key);
 }
 
 /* ── registro (antes de restaurar la cache persistida) ───────────────── */
@@ -215,10 +214,10 @@ export function registerTransactionMutations(queryClient: QueryClient) {
       );
       updateSummaries(queryClient, transaction, 1);
     },
-    onError: (error: unknown, transaction: TTransaction) => {
+    onError: (_error: unknown, transaction: TTransaction) => {
       updateFeeds(queryClient, (data) => removeFromFeed(data, transaction.id));
       updateSummaries(queryClient, transaction, -1);
-      reportError(error, "No se pudo guardar el movimiento");
+      reportError("createTransaction");
     },
     onSettled: () => refreshWhenQueueDrains(queryClient),
   });
@@ -239,10 +238,10 @@ export function registerTransactionMutations(queryClient: QueryClient) {
     onSuccess: (transaction: TTransaction) => {
       queryClient.setQueryData(transactionKeys.detail(transaction.id), transaction);
     },
-    onError: (error: unknown) => {
+    onError: () => {
       // el estado previo exacto lo trae el servidor
       void queryClient.invalidateQueries({ queryKey: transactionKeys.all });
-      reportError(error, "No se pudo actualizar el movimiento");
+      reportError("updateTransaction");
     },
     onSettled: () => refreshWhenQueueDrains(queryClient),
   });
@@ -264,9 +263,9 @@ export function registerTransactionMutations(queryClient: QueryClient) {
       updateFeeds(queryClient, (data) => removeFromFeed(data, id));
       if (deleted) updateSummaries(queryClient, deleted, -1);
     },
-    onError: (error: unknown) => {
+    onError: () => {
       void queryClient.invalidateQueries({ queryKey: transactionKeys.all });
-      reportError(error, "No se pudo eliminar el movimiento");
+      reportError("deleteTransaction");
     },
     onSettled: (_data: unknown, _error: unknown, variables: DeleteVariables) => {
       queryClient.removeQueries({ queryKey: transactionKeys.detail(deletedId(variables)) });

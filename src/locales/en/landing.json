@@ -1,0 +1,209 @@
+{
+  "meta": {
+    "title": "Zentlet · Track your expenses in seconds",
+    "description": "Zentlet is the fastest way to manage your personal finances: type “taxi to work” and the app suggests whether it's an expense or income and which category it belongs to. Your monthly balance, instantly, no spreadsheets.",
+    "keywords": [
+      "expense tracker",
+      "personal finance",
+      "expense app",
+      "personal budget",
+      "income and expense tracking",
+      "AI expense tracking"
+    ],
+    "ogImageAlt": "Zentlet: track your expenses in seconds",
+    "ogSubtitle": "Type “taxi to work” and Zentlet does the rest."
+  },
+  "common": {
+    "expense": "Expense",
+    "income": "Income",
+    "balance": "Balance"
+  },
+  "categories": {
+    "transport": "Transport",
+    "market": "Groceries",
+    "home": "Rent",
+    "salary": "Salary",
+    "food": "Food",
+    "coffee": "Coffee",
+    "health": "Health",
+    "fun": "Leisure"
+  },
+  "nav": {
+    "links": {
+      "product": "Product",
+      "features": "Features",
+      "howItWorks": "How it works",
+      "faq": "FAQ"
+    },
+    "signIn": "Sign in",
+    "cta": "Sign up",
+    "dashboard": "Go to dashboard",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "home": "Zentlet, home",
+    "label": "Main"
+  },
+  "hero": {
+    "badge": "AI suggestions for every transaction",
+    "titleLead": "Your expenses, clear",
+    "titleWords": ["in seconds.", "without formulas.", "without effort."],
+    "subtitle": "Type “taxi to work” and Zentlet understands whether it's an expense or income and which category it belongs to. Your monthly balance updates instantly.",
+    "primaryCta": "Create my account",
+    "secondaryCta": "See how it works",
+    "note": "Sign up in a minute with your email, Google or GitHub",
+    "demo": {
+      "label": "New transaction",
+      "reading": "Reading…",
+      "suggestion": "Suggested",
+      "save": "Save",
+      "entries": {
+        "taxi": "taxi to work",
+        "salary": "september salary",
+        "market": "saturday groceries",
+        "coffee": "coffee with Ana"
+      }
+    }
+  },
+  "showcase": {
+    "eyebrow": "Your month at a glance",
+    "title": "Everything coming in and going out, on a single screen",
+    "subtitle": "Balance, income, expenses and a breakdown by category. No formulas, no tabs, nothing to export.",
+    "dashboard": {
+      "greeting": "Hi, Ana",
+      "period": "September",
+      "byCategory": "By category",
+      "recent": "Recent transactions"
+    }
+  },
+  "manifesto": "Spreadsheets get abandoned by the second week. Zentlet is built so that logging an expense is faster than forgetting it.",
+  "features": {
+    "eyebrow": "Features",
+    "title": "Built for logging, not for managing",
+    "subtitle": "Every detail removes a step between spending and knowing where your money went.",
+    "items": {
+      "naturalInput": {
+        "title": "Type the way you talk",
+        "description": "“lunch”, “september salary”, “taxi to work”. Zentlet recognizes whether it's an expense or income as you type, without waiting on anyone."
+      },
+      "aiCategory": {
+        "title": "AI picks the category",
+        "description": "When the text isn't enough, AI suggests a category from your own. It's just a helper: you decide, and it never blocks saving."
+      },
+      "liveFeed": {
+        "title": "Every transaction in its place",
+        "description": "Your history sorted by day, with the color and emoji of each category."
+      },
+      "balance": {
+        "title": "Balance always up to date",
+        "description": "Income minus expenses for the period, in a single number that moves with you."
+      },
+      "categories": {
+        "title": "Categories with personality",
+        "description": "Create your own with an emoji and a color. Type the name and AI suggests four options."
+      },
+      "currency": {
+        "title": "In your currency",
+        "description": "Soles, dollars or euros: pick the symbol once and the whole app uses it."
+      }
+    },
+    "samples": {
+      "phrases": ["lunch with friends", "september salary", "taxi to work", "netflix"],
+      "suggestionFrom": "uber home",
+      "currencies": {
+        "sol": "Sol",
+        "dollar": "Dollar",
+        "euro": "Euro"
+      }
+    }
+  },
+  "movements": {
+    "payroll": { "description": "September payroll", "when": "Today" },
+    "market": { "description": "Saturday groceries", "when": "Today" },
+    "taxi": { "description": "Taxi to work", "when": "Yesterday" },
+    "rent": { "description": "Rent", "when": "Yesterday" },
+    "ramen": { "description": "Ramen with friends", "when": "Monday" },
+    "cinema": { "description": "Movies", "when": "Sunday" }
+  },
+  "steps": {
+    "eyebrow": "How it works",
+    "title": "Three steps and you know where your money goes",
+    "items": [
+      {
+        "title": "Create your account",
+        "description": "Sign in with your email, Google or GitHub. No endless forms or setup."
+      },
+      {
+        "title": "Log it the way you talk",
+        "description": "Type the transaction just as you'd say it. Type and category fill themselves in; you add the amount and confirm."
+      },
+      {
+        "title": "See your month",
+        "description": "Balance, income, expenses and the category breakdown update as soon as you save. Tap a category to filter instantly."
+      }
+    ],
+    "preview": {
+      "signUpProviders": ["Email", "Google", "GitHub"],
+      "signUpLabel": "Sign up with",
+      "savedLabel": "Saved"
+    }
+  },
+  "stats": {
+    "eyebrow": "By the numbers",
+    "title": "Less friction, more clarity",
+    "items": {
+      "speed": "to log an expense",
+      "iconIdeas": "icon and color suggestions per category",
+      "currencies": "currencies to choose from",
+      "formulas": "formulas to maintain"
+    }
+  },
+  "testimonials": {
+    "eyebrow": "Testimonials",
+    "title": "What people logging with Zentlet say",
+    "subtitle": "Real stories from people who left the spreadsheet behind.",
+    "empty": {
+      "title": "Your story could be the first",
+      "body": "We're gathering the first reviews. Give it a try, log your month and tell us what changed.",
+      "cta": "Get started"
+    }
+  },
+  "faq": {
+    "eyebrow": "Frequently asked questions",
+    "title": "What people usually ask us",
+    "items": [
+      {
+        "question": "What is Zentlet?",
+        "answer": "A personal finance web app to record income and expenses in seconds and see your monthly balance, no spreadsheets."
+      },
+      {
+        "question": "How does it know which category each expense belongs to?",
+        "answer": "As you type, Zentlet recognizes the type and any categories whose name appears in the text. If that's not enough, AI suggests a category from the ones you created. You can always change it."
+      },
+      {
+        "question": "Can I use my currency?",
+        "answer": "Yes. You can choose soles (S/), dollars ($) or euros (€) in the settings, and the whole app will show that symbol."
+      },
+      {
+        "question": "Do I need to install anything?",
+        "answer": "No. Zentlet works in your phone or computer browser; you just need to sign in."
+      },
+      {
+        "question": "Who can see my transactions?",
+        "answer": "Only you. Every request requires your session and returns only the transactions and categories in your account."
+      }
+    ]
+  },
+  "cta": {
+    "title": "Your next expense could be the first one you log right",
+    "subtitle": "Create your account and record your first transaction today. It takes less than a minute.",
+    "primary": "Create my account",
+    "secondary": "I already have an account"
+  },
+  "footer": {
+    "tagline": "Your expenses, clear in seconds.",
+    "productTitle": "Product",
+    "accountTitle": "Account",
+    "languageTitle": "Language",
+    "rights": "All rights reserved."
+  }
+}

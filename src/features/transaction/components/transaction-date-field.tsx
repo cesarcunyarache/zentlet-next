@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Calendar, DateField, DatePicker, I18nProvider } from "@heroui/react";
 import { getLocalTimeZone, parseDate, today } from "@internationalized/date";
 import { X } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
+import { intlLocales } from "@/i18n/routing";
 import { PillSelect } from "@/core/components/ui/pill-select";
 import { dayLabel, dayShift, toISODate } from "../lib/format";
 
@@ -21,6 +23,8 @@ interface TransactionDateFieldProps {
  * calendario para cualquier día anterior.
  */
 export function TransactionDateField({ value, onChange }: TransactionDateFieldProps) {
+  const t = useTranslations("transactions");
+  const locale = useLocale();
   const [isCustom, setIsCustom] = useState(false);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
@@ -43,11 +47,11 @@ export function TransactionDateField({ value, onChange }: TransactionDateFieldPr
   if (!showCalendarField) {
     return (
       <PillSelect
-        label="Fecha"
+        label={t("fields.date")}
         value={value}
         options={[
-          ...recentDays.map((date) => ({ value: date, label: dayLabel(date) })),
-          { value: CUSTOM, label: "Otra fecha…" },
+          ...recentDays.map((date) => ({ value: date, label: dayLabel(date, locale) })),
+          { value: CUSTOM, label: t("date.other") },
         ]}
         onChange={pickRecent}
         className="bg-app-fill min-h-9 px-3"
@@ -57,9 +61,9 @@ export function TransactionDateField({ value, onChange }: TransactionDateFieldPr
 
   return (
     <div className="flex items-center gap-1.5">
-      <I18nProvider locale="es-PE">
+      <I18nProvider locale={intlLocales[locale]}>
         <DatePicker
-          aria-label="Fecha"
+          aria-label={t("fields.date")}
           value={parseDate(value)}
           maxValue={today(getLocalTimeZone())}
           onChange={(date) => date && onChange(date.toString())}
@@ -76,7 +80,7 @@ export function TransactionDateField({ value, onChange }: TransactionDateFieldPr
             </DateField.Suffix>
           </DateField.Group>
           <DatePicker.Popover>
-            <Calendar aria-label="Fecha del movimiento">
+            <Calendar aria-label={t("date.calendar")}>
               <Calendar.Header>
                 <Calendar.YearPickerTrigger>
                   <Calendar.YearPickerTriggerHeading />
@@ -102,7 +106,7 @@ export function TransactionDateField({ value, onChange }: TransactionDateFieldPr
       </I18nProvider>
       <button
         type="button"
-        aria-label="Volver a los últimos días"
+        aria-label={t("date.backToRecent")}
         onClick={backToRecent}
         className="text-app-muted hover:bg-app-fill hover:text-app-fg grid size-8 place-items-center rounded-full transition-colors"
       >

@@ -2,6 +2,7 @@
 
 import { AlertDialog, Button } from "@heroui/react";
 import { Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { formatSigned, signedAmount } from "../lib/format";
 import type { TTransaction } from "../types";
 
@@ -18,6 +19,8 @@ export function DeleteTransactionDialog({
   onCancel,
   onConfirm,
 }: DeleteTransactionDialogProps) {
+  const t = useTranslations();
+
   return (
     <AlertDialog.Backdrop
       isOpen={transaction !== null}
@@ -33,17 +36,17 @@ export function DeleteTransactionDialog({
               <Trash2 className="size-6" strokeWidth={2} aria-hidden />
             </span>
             <AlertDialog.Heading className="font-display m-0 text-xl font-bold tracking-[-0.02em]">
-              ¿Eliminar movimiento?
+              {t("transactions.deleteDialog.title")}
             </AlertDialog.Heading>
           </AlertDialog.Header>
 
           <AlertDialog.Body className="mt-2 text-center">
             {transaction && (
               <p className="text-app-muted m-0 text-sm leading-relaxed">
-                <span className="text-app-fg font-semibold">{transaction.description || "Movimiento"}</span>{" "}
+                <span className="text-app-fg font-semibold">{transaction.description || t("transactions.defaultDescription")}</span>{" "}
                 <span className="num">{formatSigned(signedAmount(transaction), currency)}</span>
                 <br />
-                Esta acción no se puede deshacer.
+                {t("transactions.deleteDialog.irreversible")}
               </p>
             )}
           </AlertDialog.Body>
@@ -54,14 +57,14 @@ export function DeleteTransactionDialog({
               onPress={onCancel}
               className="bg-app-fill text-app-fg hover:bg-app-fill-strong min-h-12 flex-1 rounded-2xl font-semibold"
             >
-              Cancelar
+              {t("common.actions.cancel")}
             </Button>
             <Button
               type="button"
               onPress={() => transaction && onConfirm(transaction)}
               className="bg-app-expense text-app-surface min-h-12 flex-1 rounded-2xl font-semibold"
             >
-              Eliminar
+              {t("common.actions.delete")}
             </Button>
           </AlertDialog.Footer>
         </AlertDialog.Dialog>

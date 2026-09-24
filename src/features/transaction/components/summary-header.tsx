@@ -2,22 +2,14 @@
 
 import { cn } from "@heroui/react";
 import { motion } from "motion/react";
+import { useTranslations } from "next-intl";
 import { AnimatedNumber } from "@/core/components/ui/animated-number";
 import { PillSelect } from "@/core/components/ui/pill-select";
 import { SPRING_LAYOUT, SPRING_PRESS } from "@/lib/ease";
 import { formatNumber } from "../lib/format";
 import type { Period, TransactionType } from "../types";
 
-const PERIOD_LABEL: Record<Period, string> = {
-  month: "Este mes",
-  previous: "Mes pasado",
-  all: "Todo",
-};
-
-const PERIOD_OPTIONS = (Object.keys(PERIOD_LABEL) as Period[]).map((value) => ({
-  value,
-  label: PERIOD_LABEL[value],
-}));
+const PERIODS: Period[] = ["month", "previous", "all"];
 
 interface SummaryHeaderProps {
   currency: string;
@@ -45,6 +37,8 @@ export function SummaryHeader({
   onPeriodChange,
   onKindChange,
 }: SummaryHeaderProps) {
+  const t = useTranslations("transactions.summary");
+
   return (
     <section>
       <p className="text-app-muted m-0 text-sm">{headlineLabel}</p>
@@ -72,7 +66,7 @@ export function SummaryHeader({
 
       <div
         role="group"
-        aria-label="Filtrar por tipo"
+        aria-label={t("filterByType")}
         className="bg-app-fill mt-4 inline-flex items-center gap-0.5 rounded-full p-[3px]"
       >
         <KindChip
@@ -93,9 +87,9 @@ export function SummaryHeader({
 
       <div className="mt-3 flex items-center gap-1.5">
         <PillSelect
-          label="Periodo"
+          label={t("period")}
           value={period}
-          options={PERIOD_OPTIONS}
+          options={PERIODS.map((value) => ({ value, label: t(`periods.${value}`) }))}
           onChange={onPeriodChange}
           className="hover:bg-app-fill"
         />

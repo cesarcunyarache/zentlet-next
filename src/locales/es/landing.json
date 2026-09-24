@@ -1,0 +1,209 @@
+{
+  "meta": {
+    "title": "Zentlet · Registra tus gastos en segundos",
+    "description": "Zentlet es la forma más rápida de llevar tus finanzas personales: escribe «taxi al trabajo» y la app sugiere si es gasto o ingreso y en qué categoría va. Balance del mes al instante, sin hojas de cálculo.",
+    "keywords": [
+      "control de gastos",
+      "finanzas personales",
+      "app de gastos",
+      "presupuesto personal",
+      "registro de ingresos y gastos",
+      "gastos con IA"
+    ],
+    "ogImageAlt": "Zentlet: registra tus gastos en segundos",
+    "ogSubtitle": "Escribe «taxi al trabajo» y Zentlet hace el resto."
+  },
+  "common": {
+    "expense": "Gasto",
+    "income": "Ingreso",
+    "balance": "Balance"
+  },
+  "categories": {
+    "transport": "Transporte",
+    "market": "Mercado",
+    "home": "Alquiler",
+    "salary": "Sueldo",
+    "food": "Comida",
+    "coffee": "Café",
+    "health": "Salud",
+    "fun": "Ocio"
+  },
+  "nav": {
+    "links": {
+      "product": "Producto",
+      "features": "Funciones",
+      "howItWorks": "Cómo funciona",
+      "faq": "Preguntas"
+    },
+    "signIn": "Iniciar sesión",
+    "cta": "Crear cuenta",
+    "dashboard": "Ir al dashboard",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú",
+    "home": "Zentlet, inicio",
+    "label": "Principal"
+  },
+  "hero": {
+    "badge": "Con sugerencias de IA para cada movimiento",
+    "titleLead": "Tus gastos, claros",
+    "titleWords": ["en segundos.", "sin fórmulas.", "sin esfuerzo."],
+    "subtitle": "Escribe «taxi al trabajo» y Zentlet entiende si es gasto o ingreso y en qué categoría va. Tu balance del mes se actualiza al momento.",
+    "primaryCta": "Crear mi cuenta",
+    "secondaryCta": "Ver cómo funciona",
+    "note": "Regístrate en un minuto con tu correo, Google o GitHub",
+    "demo": {
+      "label": "Nuevo movimiento",
+      "reading": "Leyendo…",
+      "suggestion": "Sugerido",
+      "save": "Guardar",
+      "entries": {
+        "taxi": "taxi al trabajo",
+        "salary": "sueldo de septiembre",
+        "market": "mercado del sábado",
+        "coffee": "café con Ana"
+      }
+    }
+  },
+  "showcase": {
+    "eyebrow": "Tu mes, de un vistazo",
+    "title": "Todo lo que entra y sale, en una sola pantalla",
+    "subtitle": "Balance, ingresos, gastos y el reparto por categoría. Sin fórmulas, sin pestañas, sin exportar nada.",
+    "dashboard": {
+      "greeting": "Hola, Ana",
+      "period": "Septiembre",
+      "byCategory": "Por categoría",
+      "recent": "Últimos movimientos"
+    }
+  },
+  "manifesto": "Las hojas de cálculo se abandonan en la segunda semana. Zentlet está hecho para que anotar un gasto sea más rápido que olvidarlo.",
+  "features": {
+    "eyebrow": "Funciones",
+    "title": "Pensado para anotar, no para administrar",
+    "subtitle": "Cada detalle quita un paso entre gastar y saber en qué se te fue el dinero.",
+    "items": {
+      "naturalInput": {
+        "title": "Escribe como hablas",
+        "description": "«almuerzo», «sueldo de septiembre», «taxi al trabajo». Zentlet reconoce si es gasto o ingreso mientras escribes, sin esperar a nadie."
+      },
+      "aiCategory": {
+        "title": "La IA elige la categoría",
+        "description": "Cuando el texto no basta, una IA propone la categoría entre las tuyas. Es una ayuda: tú decides y nunca bloquea el registro."
+      },
+      "liveFeed": {
+        "title": "Cada movimiento, en su sitio",
+        "description": "Tu historial ordenado por día, con el color y el emoji de su categoría."
+      },
+      "balance": {
+        "title": "Balance siempre al día",
+        "description": "Ingresos menos gastos del periodo, en una sola cifra que se mueve contigo."
+      },
+      "categories": {
+        "title": "Categorías con cara propia",
+        "description": "Crea las tuyas con emoji y color. Escribe el nombre y la IA te propone cuatro opciones."
+      },
+      "currency": {
+        "title": "En tu moneda",
+        "description": "Soles, dólares o euros: eliges el símbolo una vez y toda la app lo usa."
+      }
+    },
+    "samples": {
+      "phrases": ["almuerzo con amigos", "sueldo de septiembre", "taxi al trabajo", "netflix"],
+      "suggestionFrom": "uber a casa",
+      "currencies": {
+        "sol": "Sol",
+        "dollar": "Dólar",
+        "euro": "Euro"
+      }
+    }
+  },
+  "movements": {
+    "payroll": { "description": "Nómina de septiembre", "when": "Hoy" },
+    "market": { "description": "Mercado del sábado", "when": "Hoy" },
+    "taxi": { "description": "Taxi al trabajo", "when": "Ayer" },
+    "rent": { "description": "Alquiler", "when": "Ayer" },
+    "ramen": { "description": "Ramen con amigos", "when": "Lunes" },
+    "cinema": { "description": "Cine", "when": "Domingo" }
+  },
+  "steps": {
+    "eyebrow": "Cómo funciona",
+    "title": "Tres pasos y ya sabes en qué se va tu dinero",
+    "items": [
+      {
+        "title": "Crea tu cuenta",
+        "description": "Entra con tu correo, Google o GitHub. Sin formularios eternos ni configuraciones previas."
+      },
+      {
+        "title": "Anota como hablas",
+        "description": "Escribe el movimiento tal como lo dirías. El tipo y la categoría se completan solos; tú pones el monto y confirmas."
+      },
+      {
+        "title": "Mira tu mes",
+        "description": "Balance, ingresos, gastos y reparto por categoría se actualizan en cuanto guardas. Toca una categoría y filtra al instante."
+      }
+    ],
+    "preview": {
+      "signUpProviders": ["Correo", "Google", "GitHub"],
+      "signUpLabel": "Crear cuenta con",
+      "savedLabel": "Guardado"
+    }
+  },
+  "stats": {
+    "eyebrow": "En números",
+    "title": "Menos fricción, más claridad",
+    "items": {
+      "speed": "para anotar un gasto",
+      "iconIdeas": "propuestas de icono y color por categoría",
+      "currencies": "monedas para elegir",
+      "formulas": "fórmulas que mantener"
+    }
+  },
+  "testimonials": {
+    "eyebrow": "Testimonios",
+    "title": "Lo que dicen quienes ya anotan con Zentlet",
+    "subtitle": "Historias reales de personas que dejaron la hoja de cálculo.",
+    "empty": {
+      "title": "Tu historia puede ser la primera",
+      "body": "Estamos reuniendo las primeras opiniones. Pruébalo, anota tu mes y cuéntanos qué cambió.",
+      "cta": "Empezar ahora"
+    }
+  },
+  "faq": {
+    "eyebrow": "Preguntas frecuentes",
+    "title": "Lo que suelen preguntarnos",
+    "items": [
+      {
+        "question": "¿Qué es Zentlet?",
+        "answer": "Una app web de finanzas personales para registrar ingresos y gastos en segundos y ver tu balance del mes, sin hojas de cálculo."
+      },
+      {
+        "question": "¿Cómo sabe en qué categoría va cada gasto?",
+        "answer": "Mientras escribes, Zentlet reconoce el tipo y las categorías cuyo nombre aparece en el texto. Si no alcanza, una IA sugiere la categoría entre las que tú creaste. Siempre puedes cambiarla."
+      },
+      {
+        "question": "¿Puedo usar mi moneda?",
+        "answer": "Sí. Puedes elegir soles (S/), dólares ($) o euros (€) desde los ajustes, y toda la app mostrará ese símbolo."
+      },
+      {
+        "question": "¿Necesito instalar algo?",
+        "answer": "No. Zentlet funciona en el navegador del móvil o del ordenador; sólo necesitas iniciar sesión."
+      },
+      {
+        "question": "¿Quién puede ver mis movimientos?",
+        "answer": "Sólo tú. Cada consulta exige tu sesión y devuelve únicamente los movimientos y categorías de tu cuenta."
+      }
+    ]
+  },
+  "cta": {
+    "title": "Tu próximo gasto puede ser el primero que anotas bien",
+    "subtitle": "Crea tu cuenta y registra tu primer movimiento hoy. Toma menos de un minuto.",
+    "primary": "Crear mi cuenta",
+    "secondary": "Ya tengo cuenta"
+  },
+  "footer": {
+    "tagline": "Tus gastos, claros en segundos.",
+    "productTitle": "Producto",
+    "accountTitle": "Cuenta",
+    "languageTitle": "Idioma",
+    "rights": "Todos los derechos reservados."
+  }
+}

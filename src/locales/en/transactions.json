@@ -1,0 +1,124 @@
+{
+  "type": {
+    "expense": "Expense",
+    "income": "Income"
+  },
+  "fields": {
+    "amount": "Amount",
+    "type": "Type",
+    "date": "Date",
+    "category": "Category",
+    "description": "Description"
+  },
+  "defaultDescription": "Transaction",
+  "uncategorized": "Uncategorized",
+  "home": {
+    "settings": "Settings",
+    "categories": "Categories",
+    "search": "Search",
+    "closeSearch": "Close search",
+    "searchPlaceholder": "Search by name or category",
+    "searchLabel": "Search transactions",
+    "clearCategoryFilter": "Clear category filter",
+    "offlineUnavailable": "Offline · this view will load when you're back online",
+    "create": "Add transaction"
+  },
+  "headline": {
+    "total": "Total",
+    "expenses": "Expenses",
+    "income": "Income",
+    "category": "Category"
+  },
+  "toast": {
+    "expenseSaved": "Expense saved",
+    "incomeSaved": "Income saved",
+    "deleted": "Transaction deleted"
+  },
+  "summary": {
+    "filterByType": "Filter by type",
+    "period": "Period",
+    "periods": {
+      "month": "This month",
+      "previous": "Last month",
+      "all": "All time"
+    }
+  },
+  "strip": {
+    "label": "Transactions by category",
+    "empty": "no transactions",
+    "income": "income {amount}",
+    "expenses": "expenses {amount}"
+  },
+  "list": {
+    "noMatches": "Nothing matches the filter.",
+    "fallbackName": "transaction",
+    "deleteItem": "Delete {name}",
+    "loadingMore": "Loading more transactions…",
+    "sync": {
+      "paused": "Saved on this device, it will sync when you're back online",
+      "syncing": "Syncing"
+    }
+  },
+  "form": {
+    "title": "New transaction",
+    "descriptionPlaceholder": "What was it for?",
+    "typeGroup": "Expense or income",
+    "newCategory": "New category",
+    "autoCategoryHint": "Category detected from the text · tap it to see all",
+    "noCategoryHint": "No category fits · pick one or create one with +"
+  },
+  "date": {
+    "other": "Another date…",
+    "calendar": "Transaction date",
+    "backToRecent": "Back to recent days"
+  },
+  "detail": {
+    "title": "Transaction",
+    "delete": "Delete transaction",
+    "confirmDelete": "Tap again to delete"
+  },
+  "deleteDialog": {
+    "title": "Delete transaction?",
+    "irreversible": "This action can't be undone."
+  },
+  "voice": {
+    "title": "Dictate transaction",
+    "done": "Done",
+    "typeIt": "Type it",
+    "retry": "Try again",
+    "preparing": "Getting the microphone ready…",
+    "listening": "Listening…",
+    "ready": "I'm listening, speak whenever you're ready",
+    "redo": "Dictate again",
+    "noAmount": "I didn't catch the amount · tap Edit to type it",
+    "pickBelow": "Pick one below",
+    "aiSuggested": "Suggested by AI",
+    "changeCategory": "Change category",
+    "errors": {
+      "denied": {
+        "title": "No microphone permission",
+        "body": "Turn it on from the lock next to the page address (Site settings → Microphone → Allow) and try again."
+      },
+      "noMic": {
+        "title": "We couldn't find a microphone",
+        "body": "Connect one or make sure no other app is using it."
+      },
+      "noSpeech": {
+        "title": "I didn't hear you",
+        "body": "Speak close to the microphone, in Spanish, for example: “{example}”."
+      },
+      "network": {
+        "title": "Dictation needs internet",
+        "body": "Your browser transcribes speech online. While offline you can type it instead; it syncs when you're back online."
+      },
+      "unsupported": {
+        "title": "Your browser doesn't support dictation",
+        "body": "Try Chrome, Edge or Safari, or type it instead."
+      },
+      "unknown": {
+        "title": "We couldn't hear you",
+        "body": "Something went wrong with the microphone. Please try again."
+      }
+    }
+  }
+}

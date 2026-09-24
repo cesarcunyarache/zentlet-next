@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import { Drawer, cn } from "@heroui/react";
 import { X } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface SheetProps {
   isOpen: boolean;
@@ -33,6 +34,7 @@ export function Sheet({
   hideTitle = false,
   bodyClassName,
 }: SheetProps) {
+  const t = useTranslations("common.actions");
   /**
    * Sin `<Drawer>` raíz a propósito: esa raíz es el `DialogTrigger` de
    * react-aria y monta un `PressResponder` que espera un hijo pulsable como
@@ -76,7 +78,7 @@ export function Sheet({
             </Drawer.Heading>
             <button
               type="button"
-              aria-label="Cerrar"
+              aria-label={t("close")}
               onClick={() => onOpenChange(false)}
               className="text-app-muted bg-app-fill hover:bg-app-fill-strong hover:text-app-fg ml-auto grid size-10 place-items-center rounded-full transition-colors"
             >

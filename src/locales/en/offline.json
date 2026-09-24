@@ -1,0 +1,17 @@
+{
+  "status": {
+    "offline": "Offline",
+    "offlinePending": "Offline · {count} pending",
+    "syncing": "Syncing {count}…",
+    "synced": "Synced"
+  },
+  "syncErrors": {
+    "createTransaction": "Couldn't save the transaction",
+    "updateTransaction": "Couldn't update the transaction",
+    "deleteTransaction": "Couldn't delete the transaction",
+    "createCategory": "Couldn't create the category",
+    "updateCategory": "Couldn't save the category",
+    "deleteCategory": "Couldn't delete the category",
+    "categoryInUse": "This category has transactions and can't be deleted"
+  }
+}

@@ -205,14 +205,18 @@ Organizado **por funcionalidad**: cada feature trae sus componentes, servicios, 
 ```
 src/
 ├── app/                      # Rutas (App Router)
-│   ├── page.tsx              # Landing: metadata, JSON-LD
-│   ├── admin/                # App privada: categorías y movimientos
-│   ├── auth/                 # Login y registro con transición animada
+│   ├── [locale]/             # Páginas por idioma: /… (es) y /en/…
+│   │   ├── page.tsx          # Landing: metadata, JSON-LD, hreflang
+│   │   ├── admin/            # App privada: categorías y movimientos
+│   │   ├── auth/             # Login y registro con transición animada
+│   │   └── opengraph-image.tsx
 │   ├── api/                  # Endpoints REST (categorías, movimientos, auth)
-│   ├── robots.ts · sitemap.ts · opengraph-image.tsx
+│   ├── robots.ts · sitemap.ts · manifest.ts
+├── i18n/                     # next-intl: idiomas, carga de mensajes, navegación, tipos
+├── locales/                  # Traducciones: <idioma>/<módulo>.json
 ├── features/
-│   ├── landing/              # Landing: secciones y contenido por idioma
-│   │   └── content/          # ← todo el texto de la página, tipado
+│   ├── landing/              # Landing: secciones y contenido
+│   │   └── content/          # ← datos de la demo + ensamblado del copy
 │   ├── transaction/          # Movimientos: parser, IA, store, UI
 │   └── category/             # Categorías: generador de iconos con IA
 ├── core/components/ui/       # Primitivas animadas (Magic UI, Aceternity)
@@ -222,17 +226,61 @@ src/
 
 ### Decisiones que vale la pena conocer
 
-- **🌍 Lista para traducir.** Todo el copy de la landing vive en [`features/landing/content/es.ts`](src/features/landing/content/es.ts), tipado con `LandingContent`. Para un nuevo idioma, crea `en.ts` y regístralo en `content/index.ts`. Si a una traducción le falta un texto, no compila.
+- **🌍 En español e inglés.** Con [next-intl](https://next-intl.dev): el español conserva las URLs de siempre y el inglés vive bajo `/en`. Si a una traducción le falta un texto, no compila. Ver [Idiomas](#-idiomas).
 - **🔎 SEO de serie.** La landing es una página estática con metadata completa, datos estructurados (`SoftwareApplication` + `FAQPage`), `sitemap.xml`, `robots.txt` y una imagen Open Graph generada en el build.
 - **♿ Movimiento responsable.** Todas las animaciones respetan `prefers-reduced-motion`. Las demos decorativas están ocultas para lectores de pantalla y el titular se ve sin JavaScript.
 - **🎨 Un único origen de color.** Los tokens `--app-*` en [`globals.css`](src/app/globals.css) definen toda la paleta; los componentes nunca usan colores literales.
 
 <br/>
 
+## 🌍 Idiomas
+
+Español (`es`, por defecto) e inglés (`en`), con [next-intl](https://next-intl.dev). El español no lleva prefijo (`/`, `/admin`); el resto sí (`/en`, `/en/admin`). El proxy detecta el idioma (cookie `NEXT_LOCALE` o `Accept-Language`) y conserva el prefijo en las redirecciones de auth.
+
+```
+src/locales/
+├── es/  common · auth · landing · transactions · categories · settings · offline
+└── en/  (las mismas keys)
+```
+
+Un archivo por **módulo**, no por componente. `common.json` sólo guarda lo que usan varios módulos (acciones como Guardar o Cancelar).
+
+**Usar traducciones**
+
+```tsx
+// Client Component
+const t = useTranslations("transactions");
+t("form.title");
+t("list.deleteItem", { name });              // interpolación
+t.rich("signIn.noAccount", { link: (c) => <AuthLink href="…">{c}</AuthLink> });
+
+// Server Component (async)
+const t = await getTranslations({ locale, namespace: "common" });
+```
+
+- Pluralización con ICU en el JSON: `"{count, plural, one {# cambio} other {# cambios}}"`.
+- Enlaces y redirecciones con [`@/i18n/navigation`](src/i18n/navigation.ts) (`Link`, `useRouter`, `redirect`, `getPathname`), nunca concatenando el idioma a mano.
+- La landing recibe su copy por props desde el servidor: [`content/index.ts`](src/features/landing/content/index.ts) une `landing.json` con los datos de la demo de [`content/data.ts`](src/features/landing/content/data.ts).
+
+**Convenciones**
+
+- Keys semánticas en camelCase (`emptyState`, `form.title`), nunca el texto (`t("Guardar")`).
+- `es` es la referencia de tipos: `t("key-inexistente")` no compila, y `en` debe tener exactamente las mismas keys ([`i18n/types.ts`](src/i18n/types.ts)).
+- **No se traducen** los valores internos: `expense`/`income`, periodos, ids, anclas de la landing, códigos de error de la API, nombres de categorías del usuario ni el símbolo de moneda guardado. Tampoco el dictado por voz, los prompts de IA ni el parser de texto, que funcionan en español.
+- Fechas con `Intl` según el idioma; los montos mantienen el formato `1,250.50` (`intlLocales` en [`i18n/routing.ts`](src/i18n/routing.ts)).
+
+**Agregar un idioma (p. ej. `pt`)**
+
+1. Copia `src/locales/es/` a `src/locales/pt/` y traduce los valores.
+2. En [`i18n/routing.ts`](src/i18n/routing.ts), añade `"pt"` a `locales`, a `intlLocales` (`"pt-BR"`) y a `localeNames` (`"Português"`).
+3. En [`i18n/types.ts`](src/i18n/types.ts), repite el bloque de comprobación de `en` para `pt`.
+4. `pnpm build`: la landing, el sitemap, hreflang, el selector de idioma y el proxy lo recogen solos.
+
+<br/>
+
 ## 🗺️ Próximos pasos
 
-- [ ] Testimonios de los primeros usuarios (la sección ya está lista en `content/es.ts`)
-- [ ] Traducción al inglés
+- [ ] Testimonios de los primeros usuarios (la sección ya está lista en `content/data.ts`)
 - [ ] Textos de los formularios de acceso en español y errores bajo cada campo
 
 <br/>
