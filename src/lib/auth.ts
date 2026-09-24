@@ -15,8 +15,9 @@ type HookContext = { path?: string; params?: Record<string, string> } | null;
 const DAY = 60 * 60 * 24;
 
 /*
- * CAPTCHA de Cloudflare Turnstile en registro, login con correo y
- * recuperación de contraseña. Sólo con las dos claves: con una sola, o
+ * CAPTCHA de Cloudflare Turnstile en registro, login con correo,
+ * recuperación de contraseña y reenvío del correo de verificación (los dos
+ * últimos envían correos: sin CAPTCHA servirían para inundar un buzón ajeno). Sólo con las dos claves: con una sola, o
  * nadie podría entrar (falta la del navegador) o no se comprobaría nada.
  */
 const turnstileSecret = process.env.TURNSTILE_SECRET_KEY;
@@ -57,7 +58,13 @@ export const auth = betterAuth({
   },
 
   plugins: captchaEnabled
-    ? [captcha({ provider: "cloudflare-turnstile", secretKey: turnstileSecret as string })]
+    ? [
+        captcha({
+          provider: "cloudflare-turnstile",
+          secretKey: turnstileSecret as string,
+          endpoints: ["/sign-up/email", "/sign-in/email", "/request-password-reset", "/send-verification-email"],
+        }),
+      ]
     : [],
 
   /*

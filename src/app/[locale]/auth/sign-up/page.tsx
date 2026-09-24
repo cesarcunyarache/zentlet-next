@@ -12,6 +12,7 @@ import {
   AuthSubmitButton,
   FieldMessage,
   LegalConsent,
+  ResendVerification,
   SocialSignInButtons,
   legalConsentHeaders,
   showAuthError,
@@ -91,7 +92,7 @@ export default function SignUp() {
 
   if (sentTo) {
     return (
-      <AuthNotice title={t("checkEmail.title")}>
+      <AuthNotice title={t("checkEmail.title")} action={<ResendVerification email={sentTo} />}>
         {t.rich("checkEmail.body", { email: sentTo, strong })}{" "}
         {t.rich("checkEmail.back", {
           link: (chunks) => <AuthLink href={siteConfig.routes.signIn}>{chunks}</AuthLink>,

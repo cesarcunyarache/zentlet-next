@@ -10,6 +10,7 @@ import { authErrorKey, oauthErrorKey } from "@/lib/auth-errors";
 import { siteConfig } from "@/lib/site";
 import { Link, getPathname } from "@/i18n/navigation";
 import { LEGAL_CONSENT_HEADER, LEGAL_VERSION } from "@/features/legal/config";
+import { useTurnstile } from "@/core/components/turnstile";
 
 /** Cabecera de consentimiento para las altas; sin la casilla marcada, ninguna. */
 export function legalConsentHeaders(accepted: boolean): Record<string, string> {
@@ -226,12 +227,94 @@ function legalLink(href: string, chunks: React.ReactNode) {
 }
 
 /** Resultado de un paso del acceso (correo enviado, contraseña cambiada…) en lugar del formulario. */
-export function AuthNotice({ title, children }: { title: string; children: React.ReactNode }) {
+export function AuthNotice({
+  title,
+  children,
+  action,
+}: {
+  title: string;
+  children: React.ReactNode;
+  /** Acción bajo el texto (p. ej. reenviar el correo). */
+  action?: React.ReactNode;
+}) {
   return (
     <div className="w-full max-w-sm">
       <div role="status" className="flex flex-col gap-4">
         <AuthFormHeader title={title}>{children}</AuthFormHeader>
       </div>
+      {action}
+    </div>
+  );
+}
+
+/** Espera entre reenvíos: el correo acaba de salir y puede tardar en llegar. */
+const RESEND_COOLDOWN_MS = 60_000;
+
+/**
+ * Reenvía el correo de verificación. Empieza en espera (el correo del alta
+ * acaba de enviarse) y vuelve a esperar tras cada reenvío. El servidor
+ * responde igual exista o no la cuenta y limita los intentos por IP.
+ */
+export function ResendVerification({ email }: { email: string }) {
+  const t = useTranslations("auth");
+  const locale = useLocale();
+  const captcha = useTurnstile();
+  const [readyAt, setReadyAt] = useState(() => Date.now() + RESEND_COOLDOWN_MS);
+  const [now, setNow] = useState(() => Date.now());
+  const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
+
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const seconds = Math.max(0, Math.ceil((readyAt - now) / 1000));
+  const waiting = seconds > 0;
+
+  async function resend() {
+    setStatus("sending");
+    try {
+      const { error } = await authClient.sendVerificationEmail({
+        email,
+        callbackURL: getPathname({ href: siteConfig.routes.app, locale }),
+        fetchOptions: { headers: captcha.headers },
+      });
+      if (error) {
+        showAuthError(t(`errors.${authErrorKey(error)}`));
+        setStatus("idle");
+        return;
+      }
+      setStatus("sent");
+      setReadyAt(Date.now() + RESEND_COOLDOWN_MS);
+      setNow(Date.now());
+    } catch {
+      showAuthError(t(`errors.${authErrorKey(null)}`));
+      setStatus("idle");
+    } finally {
+      captcha.reset();
+    }
+  }
+
+  return (
+    <div className="mt-6 flex flex-col items-center gap-3">
+      {captcha.widget}
+      <Button
+        variant="outline"
+        type="button"
+        onPress={resend}
+        isPending={status === "sending"}
+        isDisabled={waiting || !captcha.ready}
+        className="h-11 w-full rounded-xl font-semibold"
+      >
+        {status === "sending"
+          ? t("checkEmail.resending")
+          : waiting
+            ? t("checkEmail.resendIn", { seconds })
+            : t("checkEmail.resend")}
+      </Button>
+      <p aria-live="polite" className="text-app-income m-0 min-h-4 text-xs font-medium">
+        {status === "sent" ? t("checkEmail.resent") : null}
+      </p>
     </div>
   );
 }
