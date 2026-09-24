@@ -33,6 +33,8 @@ interface TransactionFormSheetProps {
   categories: CategoryLike[];
   currency: string;
   onSubmit: (values: TransactionFormValues) => void;
+  /** Valores con los que abre, p. ej. lo interpretado de un dictado. */
+  draft?: Partial<TransactionFormValues>;
 }
 
 const EMPTY: TransactionFormValues = {
@@ -57,6 +59,7 @@ export function TransactionFormSheet({
   categories,
   currency,
   onSubmit,
+  draft,
 }: TransactionFormSheetProps) {
   const reduceMotion = useReducedMotion();
 
@@ -91,13 +94,14 @@ export function TransactionFormSheet({
   const wasOpen = useRef(false);
   useEffect(() => {
     if (isOpen && !wasOpen.current) {
-      setRawAmount("");
+      setRawAmount(draft?.amount ? String(draft.amount) : "");
       setAutoCategoryId(null);
-      picked.current = { category: false, type: false };
-      form.reset({ ...EMPTY, transactionDate: toISODate(dayShift(0)) });
+      picked.current = { category: Boolean(draft?.categoryId), type: Boolean(draft?.type) };
+      form.reset({ ...EMPTY, transactionDate: toISODate(dayShift(0)), ...draft });
+      if (draft) void form.trigger();
     }
     wasOpen.current = isOpen;
-  }, [isOpen, form]);
+  }, [isOpen, form, draft]);
 
   function setAmount(value: number, raw: string) {
     setRawAmount(raw);

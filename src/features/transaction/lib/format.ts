@@ -1,6 +1,6 @@
 import type { TTransaction } from "../types";
 
-const MONTHS = [
+export const MONTHS = [
   "enero",
   "febrero",
   "marzo",
@@ -15,7 +15,7 @@ const MONTHS = [
   "diciembre",
 ];
 
-const DAYS = [
+export const DAYS = [
   "domingo",
   "lunes",
   "martes",

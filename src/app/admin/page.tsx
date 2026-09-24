@@ -20,6 +20,8 @@ import {
 } from "@/features/transaction/components/category-strip";
 import { TransactionList } from "@/features/transaction/components/transaction-list";
 import { TransactionFormSheet } from "@/features/transaction/components/transaction-form-sheet";
+import { VoiceEntry } from "@/features/transaction/components/voice-entry";
+import type { TransactionFormValues } from "@/features/transaction/schemas/transaction.schema";
 import { TransactionDetailSheet } from "@/features/transaction/components/transaction-detail-sheet";
 import { CategoriesSheet } from "@/features/transaction/components/categories-sheet";
 import { SettingsSheet } from "@/features/transaction/components/settings-sheet";
@@ -110,6 +112,16 @@ export default function HomePage() {
 
   const [sheet, setSheet] = useState<Sheet>(null);
   const [detail, setDetail] = useState<TTransaction | null>(null);
+  const [formDraft, setFormDraft] = useState<Partial<TransactionFormValues>>();
+
+  // aparece al instante; se sincroniza por detrás (o en cola sin red)
+  function saveTransaction(values: TransactionFormValues) {
+    createTransaction({ ...values, reference: null });
+    setCategoryFilter(null);
+    setKind(null);
+    setPeriod("month");
+    toast(values.type === "expense" ? "Gasto registrado" : "Ingreso registrado");
+  }
 
   /** Movimientos del periodo, antes de los filtros de la vista. */
   const periodRows = useMemo(
@@ -321,10 +333,25 @@ export default function HomePage() {
             </IconButton>
           </motion.div>
 
+          <div className="relative">
+          <div className="absolute bottom-full left-1/2 mb-3 -translate-x-1/2">
+            <VoiceEntry
+              categories={categories}
+              currency={currency}
+              onSave={saveTransaction}
+              onEdit={(draft) => {
+                setFormDraft(draft);
+                setSheet("new");
+              }}
+            />
+          </div>
           <motion.button
             type="button"
             aria-label="Registrar movimiento"
-            onClick={() => setSheet("new")}
+            onClick={() => {
+              setFormDraft(undefined);
+              setSheet("new");
+            }}
             initial={{ scale: 0, rotate: -90 }}
             animate={{ scale: 1, rotate: 0 }}
             whileHover={{ scale: 1.05 }}
@@ -334,6 +361,7 @@ export default function HomePage() {
           >
             <Plus className="size-7" strokeWidth={2.4} />
           </motion.button>
+          </div>
         </div>
       </div>
 
@@ -344,16 +372,8 @@ export default function HomePage() {
         onOpenChange={(open) => setSheet(open ? "new" : null)}
         categories={categories}
         currency={currency}
-        onSubmit={(values) => {
-          // aparece al instante; se sincroniza por detrás (o en cola sin red)
-          createTransaction({ ...values, reference: null });
-          setCategoryFilter(null);
-          setKind(null);
-          setPeriod("month");
-          toast(
-            values.type === "expense" ? "Gasto registrado" : "Ingreso registrado",
-          );
-        }}
+        draft={formDraft}
+        onSubmit={saveTransaction}
       />
 
       <TransactionDetailSheet
