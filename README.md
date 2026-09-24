@@ -154,7 +154,7 @@ flowchart LR
 
 ## 🚀 Empezar en local
 
-**Requisitos:** Node.js 20+, [pnpm](https://pnpm.io) y una base de datos PostgreSQL.
+**Requisitos:** Node.js 24 (fijado en `.nvmrc`; con nvm basta `nvm install && nvm use`), [pnpm](https://pnpm.io) y una base de datos PostgreSQL.
 
 ```bash
 # 1. Clona e instala

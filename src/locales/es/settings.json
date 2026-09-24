@@ -25,7 +25,11 @@
   },
   "data": {
     "label": "Datos",
-    "count": "{count, plural, one {# movimiento guardado} other {# movimientos guardados}} en tu cuenta"
+    "count": "{count, plural, one {# movimiento guardado} other {# movimientos guardados}} en tu cuenta",
+    "export": "Exportar",
+    "exporting": "Exportando…",
+    "exportOffline": "Conéctate a internet para exportar",
+    "exportFailed": "No se pudo exportar. Inténtalo de nuevo"
   },
   "connection": {
     "label": "Conexión",
@@ -37,6 +41,29 @@
     "offline": "Sin conexión",
     "offlineTitle": "Estás trabajando sin internet",
     "offlineBody": "Lo que registres se guarda en este dispositivo y se sincronizará automáticamente cuando vuelvas a conectarte."
+  },
+  "export": {
+    "sheets": {
+      "transactions": "Movimientos",
+      "categories": "Categorías"
+    },
+    "columns": {
+      "date": "Fecha",
+      "type": "Tipo",
+      "category": "Categoría",
+      "description": "Descripción",
+      "amount": "Monto",
+      "reference": "Referencia",
+      "name": "Nombre",
+      "icon": "Icono",
+      "color": "Color",
+      "transactions": "Movimientos",
+      "createdAt": "Creada"
+    },
+    "types": {
+      "expense": "Gasto",
+      "income": "Ingreso"
+    }
   },
   "signOut": {
     "label": "Cerrar sesión",

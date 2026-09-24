@@ -25,7 +25,11 @@
   },
   "data": {
     "label": "Data",
-    "count": "{count, plural, one {# transaction saved} other {# transactions saved}} in your account"
+    "count": "{count, plural, one {# transaction saved} other {# transactions saved}} in your account",
+    "export": "Export",
+    "exporting": "Exporting…",
+    "exportOffline": "Connect to the internet to export",
+    "exportFailed": "Couldn't export. Please try again"
   },
   "connection": {
     "label": "Connection",
@@ -37,6 +41,29 @@
     "offline": "Offline",
     "offlineTitle": "You're working offline",
     "offlineBody": "Anything you record is saved on this device and will sync automatically when you reconnect."
+  },
+  "export": {
+    "sheets": {
+      "transactions": "Transactions",
+      "categories": "Categories"
+    },
+    "columns": {
+      "date": "Date",
+      "type": "Type",
+      "category": "Category",
+      "description": "Description",
+      "amount": "Amount",
+      "reference": "Reference",
+      "name": "Name",
+      "icon": "Icon",
+      "color": "Color",
+      "transactions": "Transactions",
+      "createdAt": "Created"
+    },
+    "types": {
+      "expense": "Expense",
+      "income": "Income"
+    }
   },
   "signOut": {
     "label": "Sign out",

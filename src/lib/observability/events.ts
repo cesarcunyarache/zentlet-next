@@ -23,6 +23,7 @@ export interface AnalyticsEvents {
   voice_entry_started: Record<string, never>;
   voice_entry_completed: { outcome: "saved" | "edited" };
   voice_entry_failed: { reason: SpeechError };
+  data_exported: Record<string, never>;
 }
 
 export type AnalyticsEvent = keyof AnalyticsEvents;

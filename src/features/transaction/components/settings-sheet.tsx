@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CloudOff, LogOut } from "lucide-react";
+import { CloudOff, Download, LogOut } from "lucide-react";
 import { motion } from "motion/react";
 import { cn } from "@heroui/react";
 import { useLocale, useTranslations } from "next-intl";
@@ -11,12 +11,14 @@ import { useOfflineSession } from "@/core/offline/offline-query-provider";
 import { useSyncStatus } from "@/core/offline/sync-status";
 import { useThemePreference } from "@/core/theme/use-theme";
 import type { ThemePreference } from "@/core/theme/theme";
+import { accountService } from "@/features/account/services/account.service";
 import { authClient } from "@/lib/auth-client";
-import { resetUser } from "@/lib/observability/client";
+import { resetUser, track } from "@/lib/observability/client";
 import { SPRING_LAYOUT } from "@/lib/ease";
 import { siteConfig } from "@/lib/site";
 import { getPathname, usePathname, useRouter } from "@/i18n/navigation";
 import { localeNames, routing, type Locale } from "@/i18n/routing";
+import { toISODate } from "../lib/format";
 
 const THEMES: ThemePreference[] = ["system", "light", "dark"];
 
@@ -74,16 +76,7 @@ export function SettingsSheet({
 
       <AppearanceRow />
 
-      <div className="border-app-border flex items-center justify-between gap-3.5 border-b py-3.5">
-        <span>
-          <span className="text-app-fg block text-[14.5px] font-semibold">
-            {t("data.label")}
-          </span>
-          <span className="text-app-muted mt-px block text-xs">
-            {t("data.count", { count: transactionCount })}
-          </span>
-        </span>
-      </div>
+      <DataRow transactionCount={transactionCount} currency={currency} />
 
       <SignOutRow />
     </Sheet>
@@ -162,6 +155,70 @@ function AppearanceRow() {
           );
         })}
       </div>
+    </div>
+  );
+}
+
+/** Descarga un archivo generado en memoria con el diálogo nativo del navegador. */
+function saveFile(blob: Blob, fileName: string) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = fileName;
+  link.click();
+  // Safari necesita que la URL siga viva un momento tras el clic
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+/**
+ * Exporta movimientos y categorías a Excel. Se genera en el servidor a
+ * partir de la base de datos, así que requiere conexión y siempre incluye
+ * todo el historial (no sólo lo que está en el dispositivo).
+ */
+function DataRow({ transactionCount, currency }: { transactionCount: number; currency: string }) {
+  const t = useTranslations("settings.data");
+  const locale = useLocale();
+  const { online } = useSyncStatus();
+  const [status, setStatus] = useState<"idle" | "exporting" | "failed">("idle");
+
+  async function exportData() {
+    setStatus("exporting");
+    try {
+      const file = await accountService.exportData({ locale, currency });
+      saveFile(file, `zentlet-${toISODate(new Date())}.xlsx`);
+      track("data_exported", {});
+      setStatus("idle");
+    } catch {
+      setStatus("failed");
+    }
+  }
+
+  const hint = !online
+    ? t("exportOffline")
+    : status === "failed"
+      ? t("exportFailed")
+      : t("count", { count: transactionCount });
+
+  return (
+    <div className="border-app-border flex items-center justify-between gap-3.5 border-b py-3.5">
+      <span>
+        <span className="text-app-fg block text-[14.5px] font-semibold">{t("label")}</span>
+        <span
+          role={status === "failed" ? "alert" : undefined}
+          className={cn("mt-px block text-xs", status === "failed" ? "text-app-expense" : "text-app-muted")}
+        >
+          {hint}
+        </span>
+      </span>
+      <button
+        type="button"
+        onClick={exportData}
+        disabled={!online || status === "exporting"}
+        className="bg-app-fill hover:bg-app-fill-strong text-app-fg inline-flex min-h-[30px] shrink-0 items-center gap-1.5 rounded-full px-3 text-[13px] font-semibold transition-colors disabled:opacity-50"
+      >
+        <Download className="size-3.5" strokeWidth={2.2} aria-hidden />
+        {t(status === "exporting" ? "exporting" : "export")}
+      </button>
     </div>
   );
 }
