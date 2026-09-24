@@ -1,8 +1,13 @@
 "use client";
 
-import { Button, Description, Separator } from "@heroui/react";
+import { useEffect, useState } from "react";
+import { Button, Description, Separator, toast } from "@heroui/react";
 import { ChartBar } from "@gravity-ui/icons";
 import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
+import { authErrorMessage, oauthErrorMessage } from "@/lib/auth-errors";
+import { siteConfig } from "@/lib/site";
 
 type SocialProvider = "github" | "google";
 
@@ -30,22 +35,67 @@ export function AuthFormHeader({
   );
 }
 
-export function AuthSubmitButton({ children }: { children: React.ReactNode }) {
+export function AuthSubmitButton({
+  children,
+  isPending = false,
+  pendingLabel,
+}: {
+  children: React.ReactNode;
+  isPending?: boolean;
+  pendingLabel: string;
+}) {
   return (
     <Button
       type="submit"
-      className="bg-app-fg text-app-bg mt-2 h-11 w-full rounded-xl font-semibold shadow-[0_12px_24px_-10px_color-mix(in_oklch,var(--app-fg)_60%,transparent)] transition-transform hover:-translate-y-0.5"
+      isPending={isPending}
+      className="bg-app-fg text-app-bg mt-2 h-11 w-full rounded-xl font-semibold shadow-[0_12px_24px_-10px_color-mix(in_oklch,var(--app-fg)_60%,transparent)] transition-transform hover:-translate-y-0.5 data-[pending=true]:opacity-80"
     >
-      {children}
+      {isPending ? pendingLabel : children}
     </Button>
   );
 }
 
-export function SocialSignInButtons({
-  onSelect,
-}: {
-  onSelect?: (provider: SocialProvider) => void;
-}) {
+/** Mensaje de validación bajo un campo; `role="alert"` lo anuncia al aparecer. */
+export function FieldMessage({ children }: { children?: string }) {
+  if (!children) return null;
+  return (
+    <p role="alert" className="text-app-expense m-0 text-xs font-medium">
+      {children}
+    </p>
+  );
+}
+
+export function showAuthError(message: string) {
+  toast.danger(message, { timeout: 5000 });
+}
+
+/**
+ * Google y GitHub salen de la app: si algo falla después, el proveedor
+ * vuelve a esta misma página con `?error=`.
+ */
+export function SocialSignInButtons() {
+  const pathname = usePathname();
+  const [pending, setPending] = useState<SocialProvider | null>(null);
+
+  async function signIn(provider: SocialProvider) {
+    setPending(provider);
+    try {
+      const { error } = await authClient.signIn.social({
+        provider,
+        callbackURL: siteConfig.routes.app,
+        errorCallbackURL: pathname,
+      });
+      if (error) {
+        showAuthError(authErrorMessage(error));
+        setPending(null);
+      }
+      // sin error el navegador ya va camino del proveedor
+    } catch {
+      showAuthError(authErrorMessage(null));
+      setPending(null);
+    }
+  }
+
   return (
     <>
       <Separator />
@@ -54,7 +104,9 @@ export function SocialSignInButtons({
           variant="outline"
           type="button"
           className="h-11 w-full rounded-xl"
-          onClick={onSelect && (() => onSelect("github"))}
+          isPending={pending === "github"}
+          isDisabled={pending !== null}
+          onPress={() => signIn("github")}
         >
           <svg viewBox="0 0 1024 1024" fill="none">
             <path
@@ -70,7 +122,9 @@ export function SocialSignInButtons({
           variant="outline"
           type="button"
           className="h-11 w-full rounded-xl"
-          onClick={onSelect && (() => onSelect("google"))}
+          isPending={pending === "google"}
+          isDisabled={pending !== null}
+          onPress={() => signIn("google")}
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <path
@@ -83,6 +137,22 @@ export function SocialSignInButtons({
       </div>
     </>
   );
+}
+
+/** Muestra el error con el que volvió un login social y limpia la URL. */
+export function OAuthErrorToast() {
+  const params = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const error = params.get("error");
+
+  useEffect(() => {
+    if (!error) return;
+    showAuthError(oauthErrorMessage(error));
+    router.replace(pathname, { scroll: false });
+  }, [error, pathname, router]);
+
+  return null;
 }
 
 export function TermsNotice() {
