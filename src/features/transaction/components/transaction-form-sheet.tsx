@@ -6,14 +6,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useDebounce } from "use-debounce";
 import { Button, cn } from "@heroui/react";
-import { Check, ChevronDown, Plus, Sparkles } from "lucide-react";
+import { Check, Plus, Sparkles } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Sheet } from "@/core/components/ui/sheet";
-import { CategoryFormSheet } from "@/app/admin/category/CategoryForm";
+import { CategoryFormSheet } from "@/app/[locale]/admin/category/CategoryForm";
 import { SPRING_LAYOUT, SPRING_PRESS } from "@/lib/ease";
 import { CategoryEmoji } from "./category-emoji";
+import { TransactionDateField } from "./transaction-date-field";
 import {
   cleanAmountInput,
-  dayLabel,
   dayShift,
   parseAmount,
   toISODate,
@@ -24,6 +25,7 @@ import {
   type TransactionFormValues,
 } from "../schemas/transaction.schema";
 import { suggestTransactionCategory } from "../ai/actions/category-suggester";
+import { track } from "@/lib/observability/client";
 import type { TransactionSuggestion } from "../ai/schemas/transaction-ai.schema";
 import type { CategoryLike, TransactionType } from "../types";
 
@@ -33,6 +35,8 @@ interface TransactionFormSheetProps {
   categories: CategoryLike[];
   currency: string;
   onSubmit: (values: TransactionFormValues) => void;
+  /** Valores con los que abre, p. ej. lo interpretado de un dictado. */
+  draft?: Partial<TransactionFormValues>;
 }
 
 const EMPTY: TransactionFormValues = {
@@ -57,7 +61,9 @@ export function TransactionFormSheet({
   categories,
   currency,
   onSubmit,
+  draft,
 }: TransactionFormSheetProps) {
+  const t = useTranslations();
   const reduceMotion = useReducedMotion();
 
   // el monto vive aparte porque se sanea mientras se teclea
@@ -69,19 +75,15 @@ export function TransactionFormSheet({
   const [thinking, setThinking] = useState(false);
 
   // lo que el usuario toca a mano manda sobre cualquier inferencia
-  const picked = useRef({ category: false, type: false, amount: false });
+  const picked = useRef({ category: false, type: false });
   const cache = useRef(new Map<string, TransactionSuggestion | null>());
   const chipRefs = useRef(new Map<string, HTMLButtonElement>());
   const knownCategoryIds = useRef<Set<string> | null>(null);
 
-  // se recalcula en cada render: si la app quedó abierta de un día para
-  // otro, "Hoy" tiene que seguir siendo hoy
-  const dayOptions = [0, 1, 2, 3, 4, 5, 6].map((offset) => toISODate(dayShift(offset)));
-
   const form = useForm<TransactionFormValues>({
     resolver: zodResolver(transactionSchema),
     mode: "onChange",
-    defaultValues: { ...EMPTY, transactionDate: dayOptions[0] },
+    defaultValues: { ...EMPTY, transactionDate: toISODate(dayShift(0)) },
   });
 
   const type = form.watch("type");
@@ -95,13 +97,14 @@ export function TransactionFormSheet({
   const wasOpen = useRef(false);
   useEffect(() => {
     if (isOpen && !wasOpen.current) {
-      setRawAmount("");
+      setRawAmount(draft?.amount ? String(draft.amount) : "");
       setAutoCategoryId(null);
-      picked.current = { category: false, type: false, amount: false };
-      form.reset({ ...EMPTY, transactionDate: toISODate(dayShift(0)) });
+      picked.current = { category: Boolean(draft?.categoryId), type: Boolean(draft?.type) };
+      form.reset({ ...EMPTY, transactionDate: toISODate(dayShift(0)), ...draft });
+      if (draft) void form.trigger();
     }
     wasOpen.current = isOpen;
-  }, [isOpen, form]);
+  }, [isOpen, form, draft]);
 
   function setAmount(value: number, raw: string) {
     setRawAmount(raw);
@@ -119,16 +122,10 @@ export function TransactionFormSheet({
     form.setValue("type", next);
   }
 
-  function applyAmount(value: number | null) {
-    if (!value || picked.current.amount) return;
-    setAmount(value, String(value));
-  }
-
   // 1 · lectura instantánea del texto, a cada tecla
   function handleDescription(value: string) {
     form.setValue("description", value, { shouldValidate: true });
     const hints = readDescription(value, categories);
-    applyAmount(hints.amount);
     applyType(hints.type);
     applyCategory(hints.categoryId);
   }
@@ -143,7 +140,6 @@ export function TransactionFormSheet({
       if (!result) return;
       applyCategory(result.categoryId);
       applyType(result.type);
-      applyAmount(result.amount);
     }
 
     async function run() {
@@ -197,20 +193,30 @@ export function TransactionFormSheet({
     const category = categories.find((c) => c.id === values.categoryId);
     onSubmit({
       ...values,
-      description: values.description.trim() || category?.name || "Movimiento",
+      description: values.description.trim() || category?.name || t("transactions.defaultDescription"),
     });
     onOpenChange(false);
+    track("transaction_created", {
+      // un borrador sólo llega desde el dictado («Editar»)
+      source: draft ? "voice" : "form",
+      type: values.type,
+      category_auto: autoCategoryId !== null && autoCategoryId === values.categoryId,
+    });
   }
 
   const canSave = form.formState.isValid && amount > 0;
   const needsCategory = !categoryId && description.trim().length >= 3 && !thinking;
+  const isAutoCategory = Boolean(autoCategoryId) && autoCategoryId === categoryId;
+  const visibleCategories = isAutoCategory
+    ? categories.filter((category) => category.id === categoryId)
+    : categories;
 
   return (
     <>
       <Sheet
         isOpen={isOpen && !creatingCategory}
         onOpenChange={onOpenChange}
-        title="Nuevo movimiento"
+        title={t("transactions.form.title")}
         hideTitle
         footer={
           <Button
@@ -220,38 +226,24 @@ export function TransactionFormSheet({
             className="bg-app-fg text-app-surface disabled:bg-app-fill-strong disabled:text-app-muted min-h-[54px] w-full rounded-2xl text-base font-semibold transition-[background-color,transform] active:scale-[0.98]"
           >
             <Check className="size-[17px]" strokeWidth={2.4} />
-            Guardar
+            {t("common.actions.save")}
           </Button>
         }
       >
         <div className="flex flex-col gap-4 pt-6 pb-2">
-          {/* fecha: una píldora, el select nativo debajo */}
-          <label className="bg-app-fill hover:bg-app-fill-strong relative inline-flex min-h-9 w-fit items-center gap-1 rounded-full px-3 text-[13px] font-semibold transition-colors">
-            {dayLabel(transactionDate || dayOptions[0])}
-            <ChevronDown className="text-app-muted size-3.5" strokeWidth={2.2} />
-            <select
-              aria-label="Fecha"
-              value={transactionDate}
-              onChange={(event) =>
-                form.setValue("transactionDate", event.target.value, { shouldValidate: true })
-              }
-              className="absolute inset-0 cursor-pointer appearance-none opacity-0"
-            >
-              {dayOptions.map((date) => (
-                <option key={date} value={date}>
-                  {dayLabel(date)}
-                </option>
-              ))}
-            </select>
-          </label>
+          <TransactionDateField
+            key={isOpen ? "open" : "closed"}
+            value={transactionDate}
+            onChange={(date) => form.setValue("transactionDate", date, { shouldValidate: true })}
+          />
 
           <input
             value={description}
             onChange={(event) => handleDescription(event.target.value)}
-            placeholder="¿En qué fue?"
+            placeholder={t("transactions.form.descriptionPlaceholder")}
             maxLength={42}
             autoComplete="off"
-            aria-label="Descripción"
+            aria-label={t("transactions.fields.description")}
             autoFocus
             className="font-display text-app-fg placeholder:text-app-muted/50 w-full border-0 bg-transparent text-[30px] leading-tight font-bold tracking-[-0.03em] outline-none"
           />
@@ -259,13 +251,14 @@ export function TransactionFormSheet({
           <div className="flex items-center gap-3">
             <span
               role="group"
-              aria-label="Gasto o ingreso"
+              aria-label={t("transactions.form.typeGroup")}
               className="bg-app-fill inline-flex shrink-0 items-center rounded-full p-[3px]"
             >
               {(["expense", "income"] as const).map((kind) => (
                 <SignButton
                   key={kind}
                   type={kind}
+                  label={t(`transactions.type.${kind}`)}
                   active={type === kind}
                   onClick={() => {
                     picked.current.type = true;
@@ -285,7 +278,6 @@ export function TransactionFormSheet({
               <input
                 value={displayAmount(rawAmount)}
                 onChange={(event) => {
-                  picked.current.amount = true;
                   const clean = cleanAmountInput(event.target.value.replace(/,/g, ""));
                   setAmount(parseAmount(clean), clean);
                 }}
@@ -294,7 +286,7 @@ export function TransactionFormSheet({
                 placeholder="0"
                 maxLength={16}
                 autoComplete="off"
-                aria-label="Monto"
+                aria-label={t("transactions.fields.amount")}
                 className="placeholder:text-app-muted/40 min-w-0 flex-1 border-0 bg-transparent p-0 outline-none"
               />
             </label>
@@ -302,12 +294,13 @@ export function TransactionFormSheet({
 
           <div
             role="group"
-            aria-label="Categoría"
+            aria-label={t("transactions.fields.category")}
             className="scroll-clean -mx-[22px] flex gap-2 overflow-x-auto px-[22px] py-1 sm:-mx-7 sm:px-7"
           >
+            {!isAutoCategory && (
             <motion.button
               type="button"
-              aria-label="Nueva categoría"
+              aria-label={t("transactions.form.newCategory")}
               whileTap={{ scale: 0.9 }}
               transition={SPRING_PRESS}
               onClick={() => {
@@ -318,8 +311,10 @@ export function TransactionFormSheet({
             >
               <Plus className="size-[18px]" strokeWidth={2} />
             </motion.button>
+            )}
 
-            {categories.map((category) => {
+            <AnimatePresence initial={false} mode="popLayout">
+            {visibleCategories.map((category) => {
               const active = categoryId === category.id;
               const suggested = active && autoCategoryId === category.id;
 
@@ -332,6 +327,10 @@ export function TransactionFormSheet({
                   }}
                   type="button"
                   aria-pressed={active}
+                  layout={!reduceMotion}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
                   whileTap={{ scale: 0.94 }}
                   transition={SPRING_PRESS}
                   onClick={() => {
@@ -367,19 +366,16 @@ export function TransactionFormSheet({
                 </motion.button>
               );
             })}
+            </AnimatePresence>
           </div>
 
           <div className="min-h-5">
             <AnimatePresence mode="wait" initial={false}>
-              {thinking ? (
-                <Hint key="thinking" pulse={!reduceMotion}>
-                  Buscando la categoría…
-                </Hint>
-              ) : autoCategoryId && autoCategoryId === categoryId ? (
-                <Hint key="auto">Categoría detectada del texto</Hint>
+              {isAutoCategory ? (
+                <Hint key="auto">{t("transactions.form.autoCategoryHint")}</Hint>
               ) : needsCategory ? (
                 <Hint key="none" muted>
-                  Ninguna categoría encaja · elige una o crea otra con +
+                  {t("transactions.form.noCategoryHint")}
                 </Hint>
               ) : null}
             </AnimatePresence>
@@ -399,11 +395,9 @@ export function TransactionFormSheet({
 function Hint({
   children,
   muted = false,
-  pulse = false,
 }: {
   children: React.ReactNode;
   muted?: boolean;
-  pulse?: boolean;
 }) {
   return (
     <motion.p
@@ -418,13 +412,7 @@ function Hint({
       )}
     >
       {!muted && (
-        <motion.span
-          animate={pulse ? { rotate: [0, 18, -12, 0], scale: [1, 1.15, 1] } : undefined}
-          transition={{ duration: 1.1, repeat: Infinity }}
-          className="inline-grid"
-        >
-          <Sparkles className="size-3.5" strokeWidth={2} />
-        </motion.span>
+        <Sparkles className="size-3.5" strokeWidth={2} />
       )}
       {children}
     </motion.p>
@@ -433,10 +421,12 @@ function Hint({
 
 function SignButton({
   type,
+  label,
   active,
   onClick,
 }: {
   type: TransactionType;
+  label: string;
   active: boolean;
   onClick: () => void;
 }) {
@@ -444,7 +434,7 @@ function SignButton({
     <motion.button
       type="button"
       aria-pressed={active}
-      aria-label={type === "expense" ? "Gasto" : "Ingreso"}
+      aria-label={label}
       whileTap={{ scale: 0.9 }}
       transition={SPRING_PRESS}
       onClick={onClick}

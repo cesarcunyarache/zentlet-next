@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { cn } from "@heroui/react";
+import { useTranslations } from "next-intl";
 import { SPRING_LAYOUT, SPRING_PRESS } from "@/lib/ease";
 import { formatMoney, formatShort } from "../lib/format";
 import type { CategoryLike } from "../types";
@@ -41,6 +42,7 @@ export function CategoryStrip({
   selectedId,
   onSelect,
 }: CategoryStripProps) {
+  const t = useTranslations("transactions.strip");
   const reduceMotion = useReducedMotion();
   const max = Math.max(0, ...data.map((d) => Math.abs(d.total)));
 
@@ -72,7 +74,7 @@ export function CategoryStrip({
   return (
     <div
       role="group"
-      aria-label="Movimientos por categoría"
+      aria-label={t("label")}
       className="scroll-clean -mx-5 flex items-end gap-2.5 overflow-x-auto px-5 sm:-mx-6 sm:px-6"
       style={{ height: CHART_HEIGHT }}
     >
@@ -85,8 +87,8 @@ export function CategoryStrip({
             : BAR_BASE +
               Math.round((Math.abs(total) / max) * (CHART_HEIGHT - BAR_BASE));
           const amountLabel = idle
-            ? "sin movimientos"
-            : `${total > 0 ? "ingresos" : "gastos"} ${formatMoney(total, currency)}`;
+            ? t("empty")
+            : t(total > 0 ? "income" : "expenses", { amount: formatMoney(total, currency) });
 
           return (
             <motion.button

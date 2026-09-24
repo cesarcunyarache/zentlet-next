@@ -6,7 +6,17 @@ import { z } from "zod";
  * duplicar (el POST es idempotente por id).
  */
 
-const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Formato YYYY-MM-DD");
+/** `YYYY-MM-DD` que exista en el calendario: `2026-02-30` o `2026-13-45` no pasan. */
+const isoDate = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/, "Formato YYYY-MM-DD")
+  .refine((value) => {
+    const date = new Date(`${value}T00:00:00.000Z`);
+    // un mes 13 da Invalid Date; un 30 de febrero, otra fecha (1 de marzo)
+    if (Number.isNaN(date.getTime())) return false;
+    const year = date.getUTCFullYear();
+    return date.toISOString().startsWith(value) && year >= 1900 && year <= 2100;
+  }, "Fecha inexistente");
 
 const fields = {
   description: z.string().trim().max(200),
@@ -20,3 +30,28 @@ const fields = {
 export const createTransactionSchema = z.object({ id: z.uuid(), ...fields });
 
 export const updateTransactionSchema = z.object(fields).partial();
+
+/** Periodo `[from, to)` en fechas locales del cliente; sin ellos, todo el historial. */
+const range = {
+  from: isoDate.optional(),
+  to: isoDate.optional(),
+};
+
+export const transactionSummaryQuerySchema = z.object({
+  ...range,
+  /** Ids con cambios aún en cola: el servidor dice cuáles ya tiene. */
+  ids: z
+    .string()
+    .optional()
+    .transform((value) => (value ? value.split(",") : []))
+    .pipe(z.array(z.uuid()).max(100)),
+});
+
+export const transactionListQuerySchema = z.object({
+  ...range,
+  type: fields.type.optional(),
+  categoryId: fields.categoryId.optional(),
+  q: z.string().trim().max(60).optional(),
+  cursor: z.string().max(200).optional(),
+  limit: z.coerce.number().int().min(1).max(500).default(200),
+});

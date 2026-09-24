@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Button, cn } from "@heroui/react";
+import { useLocale, useTranslations } from "next-intl";
 import { Sheet } from "@/core/components/ui/sheet";
 import { CategoryEmoji } from "./category-emoji";
 import { formatSigned, fullDate, signedAmount } from "../lib/format";
@@ -23,6 +24,8 @@ export function TransactionDetailSheet({
   onOpenChange,
   onDelete,
 }: TransactionDetailSheetProps) {
+  const t = useTranslations("transactions");
+  const locale = useLocale();
   const amount = transaction ? signedAmount(transaction) : 0;
 
   // eliminar pide un segundo toque; la confirmación caduca sola
@@ -43,7 +46,7 @@ export function TransactionDetailSheet({
     <Sheet
       isOpen={Boolean(transaction)}
       onOpenChange={onOpenChange}
-      title="Movimiento"
+      title={t("detail.title")}
       footer={
         <Button
           type="button"
@@ -67,7 +70,7 @@ export function TransactionDetailSheet({
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.16 }}
             >
-              {confirming ? "Toca de nuevo para eliminar" : "Eliminar movimiento"}
+              {t(confirming ? "detail.confirmDelete" : "detail.delete")}
             </motion.span>
           </AnimatePresence>
         </Button>
@@ -89,13 +92,13 @@ export function TransactionDetailSheet({
                 {transaction.description}
               </span>
               <span className="text-app-muted block text-[13px]">
-                {category?.name ?? "Sin categoría"}
+                {category?.name ?? t("uncategorized")}
               </span>
             </span>
           </motion.div>
 
           <dl className="border-app-border border-t">
-            <Row label="Monto">
+            <Row label={t("fields.amount")}>
               <span
                 className={cn(
                   "num font-semibold",
@@ -105,10 +108,8 @@ export function TransactionDetailSheet({
                 {formatSigned(amount, currency)}
               </span>
             </Row>
-            <Row label="Tipo">
-              {transaction.type === "expense" ? "Gasto" : "Ingreso"}
-            </Row>
-            <Row label="Fecha">{fullDate(transaction.transactionDate)}</Row>
+            <Row label={t("fields.type")}>{t(`type.${transaction.type}`)}</Row>
+            <Row label={t("fields.date")}>{fullDate(transaction.transactionDate, locale)}</Row>
           </dl>
         </>
       )}

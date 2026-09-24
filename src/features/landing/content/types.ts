@@ -1,7 +1,7 @@
 /*
- * Forma del contenido de la landing. Cada idioma implementa `LandingContent`
- * completo; así una traducción a medias no compila. Los componentes sólo
- * reciben texto y datos serializables: ni JSX ni iconos viven aquí.
+ * Forma del contenido de la landing que reciben los componentes. Se arma en
+ * ./index.ts con el copy de `src/locales/<locale>/landing.json` y los datos
+ * de ./data.ts. Sólo texto y datos serializables: ni JSX ni iconos.
  */
 
 /** Anclas de las secciones; el menú y los CTA enlazan a ellas. */
@@ -158,6 +158,9 @@ export interface LandingContent {
     tagline: string;
     productTitle: string;
     accountTitle: string;
+    languageTitle: string;
     rights: string;
+    privacy: string;
+    terms: string;
   };
 }

@@ -4,10 +4,15 @@ import { createCategorySchema } from "@/features/category/schemas/category-api.s
 import {
   errorResponse,
   getSessionUserId,
+  internalError,
   isUniqueViolation,
   parseBody,
   unauthorized,
+  writeLimit,
 } from "@/lib/api/route-helpers";
+
+/** Tope por usuario: muy por encima del uso real, evita llenar la base de datos. */
+const MAX_CATEGORIES = 200;
 
 /** Sólo las categorías del usuario de la sesión. */
 export async function GET(req: Request) {
@@ -21,8 +26,8 @@ export async function GET(req: Request) {
     });
 
     return NextResponse.json(categories);
-  } catch {
-    return errorResponse("Error fetching categories", 500);
+  } catch (error) {
+    return internalError(req, error, "Error fetching categories");
   }
 }
 
@@ -31,6 +36,9 @@ export async function POST(req: Request) {
   try {
     const userId = await getSessionUserId(req);
     if (!userId) return unauthorized();
+
+    const limited = await writeLimit(userId);
+    if (limited) return limited;
 
     const parsed = await parseBody(req, createCategorySchema);
     if ("error" in parsed) return parsed.error;
@@ -41,6 +49,10 @@ export async function POST(req: Request) {
       return existing.userId === userId
         ? NextResponse.json(existing, { status: 200 })
         : errorResponse("Category id already in use", 409);
+    }
+
+    if ((await prisma.category.count({ where: { userId } })) >= MAX_CATEGORIES) {
+      return errorResponse("Category limit reached", 422);
     }
 
     try {
@@ -55,7 +67,7 @@ export async function POST(req: Request) {
         ? NextResponse.json(winner, { status: 200 })
         : errorResponse("Category id already in use", 409);
     }
-  } catch {
-    return errorResponse("Error creating category", 500);
+  } catch (error) {
+    return internalError(req, error, "Error creating category");
   }
 }

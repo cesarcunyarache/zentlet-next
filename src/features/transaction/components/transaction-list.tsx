@@ -1,7 +1,17 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { CloudOff, RefreshCw } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  AnimatePresence,
+  animate,
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useTransform,
+} from "motion/react";
+import { CloudOff, RefreshCw, Trash2 } from "lucide-react";
+import { cn } from "@heroui/react";
+import { useLocale, useTranslations } from "next-intl";
 import { SPRING_LAYOUT } from "@/lib/ease";
 import { CategoryEmoji } from "./category-emoji";
 import { dayLabel, formatSigned, signedAmount } from "../lib/format";
@@ -16,13 +26,23 @@ interface TransactionListProps {
   hasAnyTransaction: boolean;
   /** Movimientos con cambios hechos sin conexión. */
   syncStateById?: Map<string, OfflineSyncState>;
+  /** Quedan páginas por pedir al servidor. */
+  hasMore?: boolean;
+  isLoadingMore?: boolean;
+  onEndReached?: () => void;
   onSelect: (transaction: TTransaction) => void;
+  /** Deslizar la fila a la izquierda descubre el botón de eliminar. */
+  onRequestDelete?: (transaction: TTransaction) => void;
 }
 
-const SYNC_LABEL: Record<OfflineSyncState, string> = {
-  paused: "Guardado en este dispositivo, se sincronizará al volver la conexión",
-  syncing: "Sincronizando",
-};
+/** Ancho del botón de eliminar que descubre el deslizamiento. */
+const SWIPE_REVEAL = 84;
+
+/**
+ * Por encima de esto no se animan las posiciones: `layout` mide cada fila
+ * en cada render y con cientos de filas se nota.
+ */
+const LAYOUT_ANIMATION_LIMIT = 120;
 
 interface DayGroup {
   date: string;
@@ -56,9 +76,19 @@ export function TransactionList({
   currency,
   hasAnyTransaction,
   syncStateById,
+  hasMore = false,
+  isLoadingMore = false,
+  onEndReached,
   onSelect,
+  onRequestDelete,
 }: TransactionListProps) {
+  const t = useTranslations("transactions");
+  const locale = useLocale();
+  const [openId, setOpenId] = useState<string | null>(null);
   const reduceMotion = useReducedMotion();
+  const groups = useMemo(() => groupByDay(transactions), [transactions]);
+  const isLarge = transactions.length > LAYOUT_ANIMATION_LIMIT;
+  const animateLayout = !reduceMotion && !isLarge;
 
   if (!transactions.length) {
     if (!hasAnyTransaction) return null;
@@ -68,7 +98,7 @@ export function TransactionList({
         animate={{ opacity: 1, y: 0 }}
         className="text-app-muted m-0 py-10 text-center text-sm"
       >
-        Nada coincide con el filtro.
+        {t("list.noMatches")}
       </motion.p>
     );
   }
@@ -79,18 +109,22 @@ export function TransactionList({
   return (
     <div>
       <AnimatePresence initial={false} mode="popLayout">
-        {groupByDay(transactions).map((group) => (
+        {groups.map((group) => (
           <motion.section
             key={group.date}
-            layout={!reduceMotion}
+            layout={animateLayout}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={SPRING_LAYOUT}
-            className="[&+section]:mt-6"
+            className={cn(
+              "[&+section]:mt-6",
+              // fuera de pantalla el navegador no pinta los días lejanos
+              isLarge && "[contain-intrinsic-size:auto_320px] [content-visibility:auto]",
+            )}
           >
-            <div className="text-app-muted flex items-baseline justify-between px-1 pb-1.5 text-[13px]">
-              <span className="lowercase first-letter:uppercase">{dayLabel(group.date)}</span>
+            <div className="text-app-muted flex items-baseline justify-between px-3 pb-1.5 text-[13px]">
+              <span className="lowercase first-letter:uppercase">{dayLabel(group.date, locale)}</span>
               <span className="num text-xs">{formatSigned(dayTotal(group.items), currency)}</span>
             </div>
 
@@ -99,14 +133,13 @@ export function TransactionList({
                 const category = categoriesById.get(tx.categoryId);
                 const amount = signedAmount(tx);
                 const syncState = syncStateById?.get(tx.id);
+                const syncLabel = syncState && t(`list.sync.${syncState}`);
                 const delay = Math.min(row++, 8) * 0.03;
 
                 return (
-                  <motion.button
+                  <motion.div
                     key={tx.id}
-                    layout={!reduceMotion}
-                    type="button"
-                    onClick={() => onSelect(tx)}
+                    layout={animateLayout}
                     initial={reduceMotion ? false : { opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0, transition: { ...SPRING_LAYOUT, delay } }}
                     exit={
@@ -114,21 +147,33 @@ export function TransactionList({
                         ? { opacity: 0 }
                         : { opacity: 0, x: -28, transition: { duration: 0.2 } }
                     }
-                    whileTap={{ scale: 0.98 }}
-                    className="group hover:bg-app-fill focus-visible:bg-app-fill flex min-h-[64px] w-full items-center gap-3.5 rounded-2xl px-1 py-2 text-left transition-colors"
+                    className="relative overflow-hidden rounded-2xl"
                   >
+                    <SwipeRow
+                      deleteLabel={t("list.deleteItem", {
+                        name: tx.description || category?.name || t("list.fallbackName"),
+                      })}
+                      isOpen={openId === tx.id}
+                      canSwipe={Boolean(onRequestDelete)}
+                      onOpenChange={(open) => setOpenId(open ? tx.id : null)}
+                      onPress={() => onSelect(tx)}
+                      onDelete={() => {
+                        setOpenId(null);
+                        onRequestDelete?.(tx);
+                      }}
+                    >
                     <CategoryEmoji
                       category={category}
                       className="size-12 rounded-full text-[22px] transition-transform duration-200 group-hover:scale-105 group-hover:-rotate-6"
                     />
                     <span className="min-w-0 flex-1">
                       <span className="text-app-muted flex items-center gap-1.5 text-xs leading-[1.3]">
-                        {category?.name ?? "Sin categoría"}
+                        {category?.name ?? t("uncategorized")}
                         <AnimatePresence initial={false}>
                           {syncState && (
                             <motion.span
                               key="sync"
-                              title={SYNC_LABEL[syncState]}
+                              title={syncLabel}
                               initial={{ opacity: 0, scale: 0.6 }}
                               animate={{ opacity: 1, scale: 1 }}
                               exit={{ opacity: 0, scale: 0.6 }}
@@ -140,7 +185,7 @@ export function TransactionList({
                               ) : (
                                 <RefreshCw className="size-3 animate-spin" aria-hidden />
                               )}
-                              <span className="sr-only">{SYNC_LABEL[syncState]}</span>
+                              <span className="sr-only">{syncLabel}</span>
                             </motion.span>
                           )}
                         </AnimatePresence>
@@ -152,13 +197,135 @@ export function TransactionList({
                     <span className="num text-app-fg shrink-0 text-[15px] font-semibold">
                       {formatSigned(amount, currency)}
                     </span>
-                  </motion.button>
+                    </SwipeRow>
+                  </motion.div>
                 );
               })}
             </AnimatePresence>
           </motion.section>
         ))}
       </AnimatePresence>
+
+      {hasMore && (
+        <EndSentinel isLoading={isLoadingMore} loadingLabel={t("list.loadingMore")} onReached={onEndReached} />
+      )}
+    </div>
+  );
+}
+
+/**
+ * Fila deslizable: a la izquierda descubre el botón de eliminar. Un toque
+ * con la fila abierta la cierra en lugar de abrir el detalle.
+ */
+function SwipeRow({
+  deleteLabel,
+  isOpen,
+  canSwipe,
+  onOpenChange,
+  onPress,
+  onDelete,
+  children,
+}: {
+  deleteLabel: string;
+  isOpen: boolean;
+  canSwipe: boolean;
+  onOpenChange: (open: boolean) => void;
+  onPress: () => void;
+  onDelete: () => void;
+  children: React.ReactNode;
+}) {
+  const dragged = useRef(false);
+  const x = useMotionValue(0);
+  // quieto, el rojo asomaría por las esquinas redondeadas de la fila
+  const revealOpacity = useTransform(x, [-16, 0], [1, 0]);
+
+  useEffect(() => {
+    const controls = animate(x, isOpen ? -SWIPE_REVEAL : 0, SPRING_LAYOUT);
+    return () => controls.stop();
+  }, [isOpen, x]);
+
+  return (
+    <>
+      {canSwipe && (
+        <motion.button
+          type="button"
+          aria-label={deleteLabel}
+          tabIndex={isOpen ? 0 : -1}
+          onClick={onDelete}
+          className="bg-app-expense text-app-surface absolute inset-y-0 right-0 grid place-items-center rounded-2xl"
+          style={{ width: SWIPE_REVEAL, opacity: revealOpacity }}
+        >
+          <Trash2 className="size-5" strokeWidth={2} aria-hidden />
+        </motion.button>
+      )}
+      <motion.button
+        type="button"
+        drag={canSwipe ? "x" : false}
+        dragDirectionLock
+        dragConstraints={{ left: -SWIPE_REVEAL, right: 0 }}
+        dragElastic={{ left: 0.15, right: 0 }}
+        style={{ x }}
+        onDragStart={() => {
+          dragged.current = true;
+        }}
+        onDragEnd={(_, info) => {
+          const open = info.offset.x < -SWIPE_REVEAL / 2 || info.velocity.x < -400;
+          // si el estado no cambia no hay render: se devuelve la fila a mano
+          animate(x, open ? -SWIPE_REVEAL : 0, SPRING_LAYOUT);
+          onOpenChange(open);
+          // el click que sigue al soltar no debe abrir el detalle
+          setTimeout(() => (dragged.current = false), 0);
+        }}
+        onClick={() => {
+          if (dragged.current) return;
+          if (isOpen) onOpenChange(false);
+          else onPress();
+        }}
+        whileTap={{ scale: 0.98 }}
+        className="group bg-app-bg hover:bg-[color-mix(in_oklch,var(--app-fg)_5%,var(--app-bg))] focus-visible:bg-[color-mix(in_oklch,var(--app-fg)_5%,var(--app-bg))] relative flex min-h-[64px] w-full touch-pan-y items-center gap-3.5 rounded-2xl px-3 py-2 text-left transition-colors"
+      >
+        {children}
+      </motion.button>
+    </>
+  );
+}
+
+/** Pide la siguiente página un poco antes de llegar al final. */
+function EndSentinel({
+  isLoading,
+  loadingLabel,
+  onReached,
+}: {
+  isLoading: boolean;
+  loadingLabel: string;
+  onReached?: () => void;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const onReachedRef = useRef(onReached);
+
+  useEffect(() => {
+    onReachedRef.current = onReached;
+  });
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => entry.isIntersecting && onReachedRef.current?.(),
+      { rootMargin: "0px 0px 800px 0px" },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={ref} role="status" className="text-app-muted flex h-14 items-center justify-center gap-2 text-xs font-semibold">
+      {isLoading && (
+        <>
+          <RefreshCw className="size-3.5 animate-spin" aria-hidden />
+          {loadingLabel}
+        </>
+      )}
     </div>
   );
 }

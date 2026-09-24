@@ -1,0 +1,96 @@
+{
+  "title": "Settings",
+  "currency": {
+    "label": "Currency",
+    "hint": "Only changes the symbol shown",
+    "options": {
+      "sol": "S/ · sol",
+      "dollar": "$ · dollar",
+      "euro": "€ · euro",
+      "peso": "$ · peso"
+    }
+  },
+  "language": {
+    "hint": "App text and dates"
+  },
+  "appearance": {
+    "label": "Appearance",
+    "followsDevice": "Same as your device",
+    "thisDeviceOnly": "On this device only",
+    "themes": {
+      "system": "Auto",
+      "light": "Light",
+      "dark": "Dark"
+    }
+  },
+  "data": {
+    "label": "Data",
+    "count": "{count, plural, one {# transaction saved} other {# transactions saved}} in your account",
+    "export": "Export",
+    "exporting": "Exporting…",
+    "exportOffline": "Connect to the internet to export",
+    "exportFailed": "Couldn't export. Please try again"
+  },
+  "analytics": {
+    "label": "Usage statistics",
+    "on": "You share anonymous statistics",
+    "off": "You don't share statistics"
+  },
+  "connection": {
+    "label": "Connection",
+    "syncing": "Syncing {count, plural, one {# change} other {# changes}}…",
+    "synced": "Your data is in sync",
+    "pending": "{count, plural, one {# unsynced change} other {# unsynced changes}}",
+    "noPending": "No pending changes",
+    "online": "Online",
+    "offline": "Offline",
+    "offlineTitle": "You're working offline",
+    "offlineBody": "Anything you record is saved on this device and will sync automatically when you reconnect."
+  },
+  "export": {
+    "sheets": {
+      "transactions": "Transactions",
+      "categories": "Categories"
+    },
+    "columns": {
+      "date": "Date",
+      "type": "Type",
+      "category": "Category",
+      "description": "Description",
+      "amount": "Amount",
+      "reference": "Reference",
+      "name": "Name",
+      "icon": "Icon",
+      "color": "Color",
+      "transactions": "Transactions",
+      "createdAt": "Created"
+    },
+    "types": {
+      "expense": "Expense",
+      "income": "Income"
+    }
+  },
+  "signOut": {
+    "label": "Sign out",
+    "pending": "Signing out…",
+    "offline": "Connect to the internet to sign out",
+    "confirm": "You have {count, plural, one {# unsynced change} other {# unsynced changes}}. Tap again to sign out and discard them",
+    "hint": "Also deletes the data saved on this device"
+  },
+  "deleteAccount": {
+    "label": "Delete account",
+    "hint": "Deletes your account and all your data",
+    "offline": "Connect to the internet to delete your account",
+    "title": "Delete your account?",
+    "body": "Your account, {count, plural, =0 {your categories} one {# transaction and your categories} other {# transactions and your categories}} will be deleted forever. This can't be undone.",
+    "exportHint": "To keep them, export them first from “Data”.",
+    "password": "Enter your password to confirm",
+    "confirm": "Delete account",
+    "pending": "Deleting…",
+    "errors": {
+      "invalidPassword": "Incorrect password.",
+      "sessionExpired": "For your security, sign out, sign back in and try again.",
+      "fallback": "We couldn't delete your account. Please try again."
+    }
+  }
+}

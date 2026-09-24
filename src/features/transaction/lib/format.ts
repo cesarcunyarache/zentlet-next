@@ -1,6 +1,7 @@
-import type { TTransaction } from "../types";
+import type { DateRange, Period, TTransaction } from "../types";
 
-const MONTHS = [
+/** Nombres en español que reconoce el dictado (parse-voice); no son texto de UI. */
+export const MONTHS = [
   "enero",
   "febrero",
   "marzo",
@@ -15,7 +16,7 @@ const MONTHS = [
   "diciembre",
 ];
 
-const DAYS = [
+export const DAYS = [
   "domingo",
   "lunes",
   "martes",
@@ -36,6 +37,17 @@ export function dayShift(days: number) {
   const d = today();
   d.setDate(d.getDate() - days);
   return d;
+}
+
+/** Rango `[from, to)` de un periodo en fechas locales; "Todo" no tiene límites. */
+export function periodRange(period: Period): DateRange {
+  if (period === "all") return {};
+  const now = today();
+  const month = now.getMonth() - (period === "previous" ? 1 : 0);
+  return {
+    from: toISODate(new Date(now.getFullYear(), month, 1, 12)),
+    to: toISODate(new Date(now.getFullYear(), month + 1, 1, 12)),
+  };
 }
 
 export function toISODate(d: Date) {
@@ -92,22 +104,31 @@ export function formatShort(value: number) {
   return String(abs);
 }
 
-export function dayLabel(isoDate: string) {
+function capitalize(text: string) {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+/** "Hoy", "Ayer", "Lunes" o "12 de septiembre", en el idioma de la página. */
+export function dayLabel(isoDate: string, locale: string) {
   const d = parseISODate(isoDate);
   const diff = Math.round((today().getTime() - d.getTime()) / 86400000);
 
-  if (diff === 0) return "Hoy";
-  if (diff === 1) return "Ayer";
-  if (diff > 0 && diff < 7) {
-    const name = DAYS[d.getDay()];
-    return name.charAt(0).toUpperCase() + name.slice(1);
+  if (diff === 0 || diff === 1) {
+    return capitalize(new Intl.RelativeTimeFormat(locale, { numeric: "auto" }).format(-diff, "day"));
   }
-  return `${d.getDate()} de ${MONTHS[d.getMonth()]}`;
+  if (diff > 0 && diff < 7) {
+    return capitalize(new Intl.DateTimeFormat(locale, { weekday: "long" }).format(d));
+  }
+  return new Intl.DateTimeFormat(locale, { day: "numeric", month: "long" }).format(d);
 }
 
-export function fullDate(isoDate: string) {
-  const d = parseISODate(isoDate);
-  return `${DAYS[d.getDay()]}, ${d.getDate()} de ${MONTHS[d.getMonth()]} de ${d.getFullYear()}`;
+export function fullDate(isoDate: string, locale: string) {
+  return new Intl.DateTimeFormat(locale, {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(parseISODate(isoDate));
 }
 
 /** Monto con signo aplicado: lo que suma o resta al balance. */

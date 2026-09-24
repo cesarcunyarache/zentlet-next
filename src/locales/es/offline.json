@@ -1,0 +1,17 @@
+{
+  "status": {
+    "offline": "Sin conexión",
+    "offlinePending": "Sin conexión · {count, plural, one {# pendiente} other {# pendientes}}",
+    "syncing": "Sincronizando {count}…",
+    "synced": "Sincronizado"
+  },
+  "syncErrors": {
+    "createTransaction": "No se pudo guardar el movimiento",
+    "updateTransaction": "No se pudo actualizar el movimiento",
+    "deleteTransaction": "No se pudo eliminar el movimiento",
+    "createCategory": "No se pudo crear la categoría",
+    "updateCategory": "No se pudo guardar la categoría",
+    "deleteCategory": "No se pudo eliminar la categoría",
+    "categoryInUse": "Esta categoría tiene movimientos y no se puede eliminar"
+  }
+}

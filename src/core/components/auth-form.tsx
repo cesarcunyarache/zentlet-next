@@ -1,8 +1,21 @@
 "use client";
 
-import { Button, Description, Separator } from "@heroui/react";
+import { useEffect, useState } from "react";
+import { Button, Description, Separator, toast } from "@heroui/react";
 import { ChartBar } from "@gravity-ui/icons";
-import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
+import { authClient } from "@/lib/auth-client";
+import { authErrorKey, oauthErrorKey } from "@/lib/auth-errors";
+import { siteConfig } from "@/lib/site";
+import { Link, getPathname } from "@/i18n/navigation";
+import { LEGAL_CONSENT_HEADER, LEGAL_VERSION } from "@/features/legal/config";
+import { useTurnstile } from "@/core/components/turnstile";
+
+/** Cabecera de consentimiento para las altas; sin la casilla marcada, ninguna. */
+export function legalConsentHeaders(accepted: boolean): Record<string, string> {
+  return accepted ? { [LEGAL_CONSENT_HEADER]: LEGAL_VERSION } : {};
+}
 
 type SocialProvider = "github" | "google";
 
@@ -30,22 +43,82 @@ export function AuthFormHeader({
   );
 }
 
-export function AuthSubmitButton({ children }: { children: React.ReactNode }) {
+export function AuthSubmitButton({
+  children,
+  isPending = false,
+  isDisabled = false,
+  pendingLabel,
+}: {
+  children: React.ReactNode;
+  isPending?: boolean;
+  isDisabled?: boolean;
+  pendingLabel: string;
+}) {
   return (
     <Button
       type="submit"
-      className="bg-app-fg text-app-bg mt-2 h-11 w-full rounded-xl font-semibold shadow-[0_12px_24px_-10px_color-mix(in_oklch,var(--app-fg)_60%,transparent)] transition-transform hover:-translate-y-0.5"
+      isPending={isPending}
+      isDisabled={isDisabled}
+      className="bg-app-fg text-app-bg mt-2 h-11 w-full rounded-xl font-semibold shadow-[0_12px_24px_-10px_color-mix(in_oklch,var(--app-fg)_60%,transparent)] transition-transform hover:-translate-y-0.5 data-[pending=true]:opacity-80"
     >
-      {children}
+      {isPending ? pendingLabel : children}
     </Button>
   );
 }
 
+/** Mensaje de validación bajo un campo; `role="alert"` lo anuncia al aparecer. */
+export function FieldMessage({ children }: { children?: string }) {
+  if (!children) return null;
+  return (
+    <p role="alert" className="text-app-expense m-0 text-xs font-medium">
+      {children}
+    </p>
+  );
+}
+
+export function showAuthError(message: string) {
+  toast.danger(message, { timeout: 5000 });
+}
+
+/**
+ * Google y GitHub salen de la app: si algo falla después, el proveedor
+ * vuelve a esta misma página con `?error=`. Sólo el registro crea cuentas
+ * nuevas (`requestSignUp`), después de aceptar los textos legales.
+ */
 export function SocialSignInButtons({
-  onSelect,
+  requestSignUp = false,
+  isDisabled = false,
 }: {
-  onSelect?: (provider: SocialProvider) => void;
+  requestSignUp?: boolean;
+  isDisabled?: boolean;
 }) {
+  const t = useTranslations("auth");
+  const locale = useLocale();
+  // ruta real con prefijo de idioma: el proveedor vuelve aquí tal cual
+  const pathname = usePathname();
+  const [pending, setPending] = useState<SocialProvider | null>(null);
+
+  async function signIn(provider: SocialProvider) {
+    setPending(provider);
+    try {
+      const { error } = await authClient.signIn.social({
+        provider,
+        callbackURL: getPathname({ href: siteConfig.routes.app, locale }),
+        errorCallbackURL: pathname,
+        requestSignUp,
+        fetchOptions: { headers: legalConsentHeaders(requestSignUp) },
+      });
+      if (error) {
+        showAuthError(t(`errors.${authErrorKey(error)}`));
+        setPending(null);
+      }
+      // sin error el navegador ya va camino del proveedor
+    } catch {
+      showAuthError(t(`errors.${authErrorKey(null)}`));
+      setPending(null);
+    }
+  }
+
   return (
     <>
       <Separator />
@@ -54,7 +127,9 @@ export function SocialSignInButtons({
           variant="outline"
           type="button"
           className="h-11 w-full rounded-xl"
-          onClick={onSelect && (() => onSelect("github"))}
+          isPending={pending === "github"}
+          isDisabled={isDisabled || pending !== null}
+          onPress={() => signIn("github")}
         >
           <svg viewBox="0 0 1024 1024" fill="none">
             <path
@@ -64,13 +139,15 @@ export function SocialSignInButtons({
               clipRule="evenodd"
             />
           </svg>
-          Continuar con GitHub
+          {t("social.github")}
         </Button>
         <Button
           variant="outline"
           type="button"
           className="h-11 w-full rounded-xl"
-          onClick={onSelect && (() => onSelect("google"))}
+          isPending={pending === "google"}
+          isDisabled={isDisabled || pending !== null}
+          onPress={() => signIn("google")}
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <path
@@ -78,19 +155,169 @@ export function SocialSignInButtons({
               fill="currentColor"
             />
           </svg>
-          Continuar con Google
+          {t("social.google")}
         </Button>
       </div>
     </>
   );
 }
 
+/** Muestra el error con el que volvió un login social y limpia la URL. */
+export function OAuthErrorToast() {
+  const t = useTranslations("auth.oauthErrors");
+  const params = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const error = params.get("error");
+
+  useEffect(() => {
+    if (!error) return;
+    showAuthError(t(oauthErrorKey(error)));
+    router.replace(pathname, { scroll: false });
+  }, [error, pathname, router, t]);
+
+  return null;
+}
+
 export function TermsNotice() {
+  const t = useTranslations("auth");
+
   return (
     <Description className="px-6 text-center">
-      Al hacer clic en continuar, aceptas nuestros{" "}
-      <a href="#">Términos de Servicio</a> y{" "}
-      <a href="#">Política de Privacidad</a>.
+      {t.rich("terms", {
+        terms: (chunks) => <Link href={siteConfig.routes.terms} className="underline underline-offset-2">{chunks}</Link>,
+        privacy: (chunks) => <Link href={siteConfig.routes.privacy} className="underline underline-offset-2">{chunks}</Link>,
+      })}
     </Description>
   );
 }
+
+/**
+ * Consentimiento expreso para registrarse. Los ingresos y gastos son datos
+ * sensibles (Ley 29733): aceptar no puede ser implícito ni venir marcado.
+ */
+export function LegalConsent({ checked, onChange }: { checked: boolean; onChange: (checked: boolean) => void }) {
+  const t = useTranslations("auth");
+
+  return (
+    <label className="text-app-muted flex cursor-pointer items-start gap-2.5 text-xs leading-relaxed">
+      <input
+        type="checkbox"
+        name="legalAccepted"
+        checked={checked}
+        onChange={(event) => onChange(event.target.checked)}
+        className="accent-app-fg mt-0.5 size-4 shrink-0"
+      />
+      <span>
+        {t.rich("signUp.consent", {
+          terms: (chunks) => legalLink(siteConfig.routes.terms, chunks),
+          privacy: (chunks) => legalLink(siteConfig.routes.privacy, chunks),
+        })}
+      </span>
+    </label>
+  );
+}
+
+function legalLink(href: string, chunks: React.ReactNode) {
+  return (
+    <Link href={href} target="_blank" className="text-app-fg underline underline-offset-2">
+      {chunks}
+    </Link>
+  );
+}
+
+/** Resultado de un paso del acceso (correo enviado, contraseña cambiada…) en lugar del formulario. */
+export function AuthNotice({
+  title,
+  children,
+  action,
+}: {
+  title: string;
+  children: React.ReactNode;
+  /** Acción bajo el texto (p. ej. reenviar el correo). */
+  action?: React.ReactNode;
+}) {
+  return (
+    <div className="w-full max-w-sm">
+      <div role="status" className="flex flex-col gap-4">
+        <AuthFormHeader title={title}>{children}</AuthFormHeader>
+      </div>
+      {action}
+    </div>
+  );
+}
+
+/** Espera entre reenvíos: el correo acaba de salir y puede tardar en llegar. */
+const RESEND_COOLDOWN_MS = 60_000;
+
+/**
+ * Reenvía el correo de verificación. Empieza en espera (el correo del alta
+ * acaba de enviarse) y vuelve a esperar tras cada reenvío. El servidor
+ * responde igual exista o no la cuenta y limita los intentos por IP.
+ */
+export function ResendVerification({ email }: { email: string }) {
+  const t = useTranslations("auth");
+  const locale = useLocale();
+  const captcha = useTurnstile();
+  const [readyAt, setReadyAt] = useState(() => Date.now() + RESEND_COOLDOWN_MS);
+  const [now, setNow] = useState(() => Date.now());
+  const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
+
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const seconds = Math.max(0, Math.ceil((readyAt - now) / 1000));
+  const waiting = seconds > 0;
+
+  async function resend() {
+    setStatus("sending");
+    try {
+      const { error } = await authClient.sendVerificationEmail({
+        email,
+        callbackURL: getPathname({ href: siteConfig.routes.app, locale }),
+        fetchOptions: { headers: captcha.headers },
+      });
+      if (error) {
+        showAuthError(t(`errors.${authErrorKey(error)}`));
+        setStatus("idle");
+        return;
+      }
+      setStatus("sent");
+      setReadyAt(Date.now() + RESEND_COOLDOWN_MS);
+      setNow(Date.now());
+    } catch {
+      showAuthError(t(`errors.${authErrorKey(null)}`));
+      setStatus("idle");
+    } finally {
+      captcha.reset();
+    }
+  }
+
+  return (
+    <div className="mt-6 flex flex-col items-center gap-3">
+      {captcha.widget}
+      <Button
+        variant="outline"
+        type="button"
+        onPress={resend}
+        isPending={status === "sending"}
+        isDisabled={waiting || !captcha.ready}
+        className="h-11 w-full rounded-xl font-semibold"
+      >
+        {status === "sending"
+          ? t("checkEmail.resending")
+          : waiting
+            ? t("checkEmail.resendIn", { seconds })
+            : t("checkEmail.resend")}
+      </Button>
+      <p aria-live="polite" className="text-app-income m-0 min-h-4 text-xs font-medium">
+        {status === "sent" ? t("checkEmail.resent") : null}
+      </p>
+    </div>
+  );
+}
+
+/** Para `t.rich`: resalta el correo dentro de un texto. */
+export const strong = (chunks: React.ReactNode) => <strong className="text-app-fg font-semibold">{chunks}</strong>;

@@ -244,6 +244,21 @@ body {
   --font-numeric: var(--font-numeric);
 }
 
+/* ondas del micrófono al dictar; ritmo, escala e intensidad por variables */
+.voice-ring {
+  animation: voice-ring var(--ring-duration, 2.4s) ease-out var(--ring-delay, 0s) infinite;
+}
+@keyframes voice-ring {
+  from {
+    transform: scale(0.7);
+    opacity: var(--ring-opacity, 0.2);
+  }
+  to {
+    transform: scale(var(--ring-scale, 1.25));
+    opacity: 0;
+  }
+}
+
 /* cifras tabulares — montos que no bailan al cambiar de dígito */
 .num {
   font-family: var(--font-numeric);

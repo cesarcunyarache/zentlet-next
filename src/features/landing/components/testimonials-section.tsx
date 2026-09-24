@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { ArrowRight, Quote } from "lucide-react";
 import { BlurFade } from "@/core/components/ui/blur-fade";
 import { BorderBeam } from "@/core/components/ui/border-beam";

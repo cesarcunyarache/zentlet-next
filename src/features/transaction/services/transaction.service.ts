@@ -1,13 +1,38 @@
 import { APIService } from "@/core/services/api.service";
-import type { TTransaction, TTransactionPayload } from "../types";
+import type {
+  DateRange,
+  TTransaction,
+  TTransactionPayload,
+  TransactionFilters,
+  TransactionPage,
+  TransactionSummaryResponse,
+} from "../types";
+
+/** Los parámetros vacíos no viajan en la URL. */
+function withoutEmpty(params: object) {
+  return Object.fromEntries(
+    Object.entries(params).filter(([, value]) => value !== undefined && value !== null && value !== ""),
+  );
+}
 
 /**
  * Capa de acceso a la API de movimientos. Sólo HTTP: sin estado de React,
  * sin cache y sin transformar errores (se propaga el `AxiosError`).
  */
 export class TransactionService extends APIService {
-  async getTransactions(): Promise<TTransaction[]> {
-    const response = await this.get<TTransaction[]>("/api/transaction");
+  async getTransactionPage(
+    params: TransactionFilters & { cursor?: string | null; limit: number },
+  ): Promise<TransactionPage> {
+    const response = await this.get<TransactionPage>("/api/transaction", withoutEmpty(params));
+
+    return response.data;
+  }
+
+  async getSummary(range: DateRange, ids: string[] = []): Promise<TransactionSummaryResponse> {
+    const response = await this.get<TransactionSummaryResponse>(
+      "/api/transaction/summary",
+      withoutEmpty({ ...range, ids: ids.join(",") }),
+    );
 
     return response.data;
   }

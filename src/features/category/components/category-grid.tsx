@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from "motion/react";
 import { Plus } from "lucide-react";
 import { cn } from "@heroui/react";
+import { useTranslations } from "next-intl";
 import { SPRING_LAYOUT, SPRING_PRESS } from "@/lib/ease";
 
 export interface GridCategory {
@@ -33,6 +34,7 @@ export function CategoryGrid({
   onAdd,
   className,
 }: CategoryGridProps) {
+  const t = useTranslations("categories");
   const reduceMotion = useReducedMotion();
 
   const enter = (index: number) =>
@@ -90,10 +92,10 @@ export function CategoryGrid({
           className="group border-app-border text-app-muted hover:border-app-muted hover:text-app-fg grid aspect-square w-full place-items-center rounded-[26px] border-2 border-dashed transition-colors"
         >
           <Plus className="size-7 transition-transform duration-300 group-hover:rotate-90" strokeWidth={1.6} />
-          <span className="sr-only">Añadir categoría</span>
+          <span className="sr-only">{t("add")}</span>
         </motion.button>
         <span aria-hidden className="text-app-muted text-sm font-semibold">
-          Añadir categoría
+          {t("add")}
         </span>
       </motion.div>
     </div>

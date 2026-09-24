@@ -1,16 +1,20 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { onlineManager, QueryClient } from "@tanstack/react-query";
+import { defaultShouldDehydrateQuery, onlineManager, QueryClient, type Query } from "@tanstack/react-query";
 import {
   PersistQueryClientProvider,
   type PersistedClient,
 } from "@tanstack/react-query-persist-client";
 import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister";
 import { del, get, set } from "idb-keyval";
+import { useLocale } from "next-intl";
 import { shouldRetry } from "@/providers/query-provider";
 import { registerCategoryMutations } from "@/features/category/stores/category.store";
 import { registerTransactionMutations } from "@/features/transaction/stores/transaction.store";
+import { siteConfig } from "@/lib/site";
+import { getPathname } from "@/i18n/navigation";
+import { clearCachedPages, clearOtherUsersData, elapsedSincePageFirstSeen, storageKey } from "./local-data";
 import { trackOfflineQueue } from "./offline-queue";
 
 /*
@@ -21,7 +25,13 @@ import { trackOfflineQueue } from "./offline-queue";
  *   se envían al volver la red, aunque la app se haya cerrado entretanto.
  *
  * Una cache por usuario (la clave lleva su id): otra cuenta en el mismo
- * dispositivo nunca ve ni reanuda los datos de la anterior.
+ * dispositivo nunca ve ni reanuda los datos de la anterior, y al entrar
+ * borra los que quedaran de otras cuentas.
+ *
+ * Sin conexión, el service worker sirve la página guardada, que lleva
+ * cuánto le quedaba a la sesión al generarse: pasado ese tiempo no se
+ * muestran datos. En un dispositivo compartido, el acceso sin red dura lo
+ * mismo que la sesión, no más.
  */
 
 /** Cuánto vale lo guardado sin volver a abrir la app. */
@@ -30,17 +40,33 @@ const MAX_AGE = 7 * 24 * 60 * 60 * 1000;
 /** Cambiar al modificar la forma de los datos cacheados: invalida lo guardado. */
 const CACHE_VERSION = "2026-09-v1";
 
-const PAGE_CACHE_PREFIX = "zentlet-pages";
-
-function storageKey(userId: string) {
-  return `zentlet-cache:${userId}`;
-}
-
 const idbStorage = {
   getItem: (key: string) => get<string>(key),
   setItem: (key: string, value: string) => set(key, value),
   removeItem: (key: string) => del(key),
 };
+
+/**
+ * Con la sesión vencida ni se lee (no se ven los datos) ni se escribe (una
+ * cache vacía pisaría la cola pendiente, que se reanuda si el mismo
+ * usuario vuelve a entrar).
+ */
+const lockedStorage = {
+  getItem: async () => undefined,
+  setItem: async () => {},
+  removeItem: async () => {},
+};
+
+/** La sesión con la que se generó la página ya habría caducado. */
+const isExpired = ({ renderedAt, sessionRemainingMs }: PageSession) =>
+  elapsedSincePageFirstSeen(renderedAt) >= sessionRemainingMs;
+
+export interface PageSession {
+  /** Momento (reloj del servidor) en que se generó la página: la identifica. */
+  renderedAt: number;
+  /** Lo que le quedaba a la sesión en ese momento. */
+  sessionRemainingMs: number;
+}
 
 /**
  * Por defecto sólo se guardan las mutaciones ya en pausa, y sólo esas se
@@ -55,6 +81,12 @@ function serialize(client: PersistedClient) {
       : mutation,
   );
   return JSON.stringify({ ...client, clientState: { ...client.clientState, mutations } });
+}
+
+/** Cada búsqueda es una consulta distinta: guardarlas todas llenaría el dispositivo. */
+function shouldDehydrateQuery(query: Query) {
+  const filters = query.queryKey[1] === "list" ? (query.queryKey[2] as { q?: string } | undefined) : undefined;
+  return defaultShouldDehydrateQuery(query) && !filters?.q;
 }
 
 function createOfflineQueryClient() {
@@ -90,11 +122,20 @@ export function useOfflineSession() {
   return value;
 }
 
-export function OfflineQueryProvider({ userId, children }: { userId: string; children: React.ReactNode }) {
+interface OfflineQueryProviderProps {
+  userId: string;
+  pageSession: PageSession;
+  children: React.ReactNode;
+}
+
+export function OfflineQueryProvider({ userId, pageSession, children }: OfflineQueryProviderProps) {
+  const locale = useLocale();
   const [queryClient] = useState(createOfflineQueryClient);
+  // se decide antes de restaurar la cache: con la sesión vencida no se lee nada
+  const [expiredOnOpen] = useState(() => typeof window !== "undefined" && isExpired(pageSession));
   const [persister] = useState(() =>
     createAsyncStoragePersister({
-      storage: typeof window === "undefined" ? undefined : idbStorage,
+      storage: typeof window === "undefined" ? undefined : expiredOnOpen ? lockedStorage : idbStorage,
       key: storageKey(userId),
       throttleTime: 500,
       serialize,
@@ -107,12 +148,32 @@ export function OfflineQueryProvider({ userId, children }: { userId: string; chi
       queryClient.clear();
       await persister.removeClient();
       await del(storageKey(userId));
-      if ("caches" in window) {
-        const names = await caches.keys();
-        await Promise.all(names.filter((name) => name.startsWith(PAGE_CACHE_PREFIX)).map((name) => caches.delete(name)));
-      }
+      await clearCachedPages();
     },
   }));
+
+  /*
+   * Sesión vencida (página guardada abierta más tarde, o la app abierta
+   * durante días): fuera las páginas guardadas y al login, que pasa por el
+   * servidor. Con la sesión vigente, se borran los datos de otras cuentas.
+   */
+  useEffect(() => {
+    const signIn = getPathname({ href: siteConfig.routes.signIn, locale });
+    const leaveIfExpired = () => {
+      if (!isExpired(pageSession)) return false;
+      queryClient.clear();
+      void clearCachedPages()
+        .catch(() => {})
+        .finally(() => window.location.replace(signIn));
+      return true;
+    };
+
+    if (!leaveIfExpired()) void clearOtherUsersData(userId).catch(() => {});
+
+    const onVisible = () => document.visibilityState === "visible" && leaveIfExpired();
+    document.addEventListener("visibilitychange", onVisible);
+    return () => document.removeEventListener("visibilitychange", onVisible);
+  }, [locale, queryClient, pageSession, userId]);
 
   /*
    * `onlineManager` arranca asumiendo conexión y sólo escucha los eventos
@@ -132,6 +193,7 @@ export function OfflineQueryProvider({ userId, children }: { userId: string; chi
         maxAge: MAX_AGE,
         buster: CACHE_VERSION,
         dehydrateOptions: {
+          shouldDehydrateQuery,
           shouldDehydrateMutation: (mutation) => mutation.state.status === "pending",
         },
       }}

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { ArrowRight } from "lucide-react";
 import { BlurFade } from "@/core/components/ui/blur-fade";
 import { BorderBeam } from "@/core/components/ui/border-beam";

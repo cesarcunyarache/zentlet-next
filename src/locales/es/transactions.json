@@ -1,0 +1,130 @@
+{
+  "type": {
+    "expense": "Gasto",
+    "income": "Ingreso"
+  },
+  "fields": {
+    "amount": "Monto",
+    "type": "Tipo",
+    "date": "Fecha",
+    "category": "Categoría",
+    "description": "Descripción"
+  },
+  "defaultDescription": "Movimiento",
+  "uncategorized": "Sin categoría",
+  "home": {
+    "settings": "Ajustes",
+    "categories": "Categorías",
+    "search": "Buscar",
+    "closeSearch": "Cerrar búsqueda",
+    "searchPlaceholder": "Buscar por nombre o categoría",
+    "searchLabel": "Buscar movimientos",
+    "clearCategoryFilter": "Quitar filtro de categoría",
+    "offlineUnavailable": "Sin conexión · esta vista se cargará al volver la red",
+    "create": "Registrar movimiento"
+  },
+  "headline": {
+    "total": "Total",
+    "expenses": "Gastos",
+    "income": "Ingresos",
+    "category": "Categoría"
+  },
+  "toast": {
+    "expenseSaved": "Gasto registrado",
+    "incomeSaved": "Ingreso registrado",
+    "deleted": "Movimiento eliminado"
+  },
+  "summary": {
+    "filterByType": "Filtrar por tipo",
+    "period": "Periodo",
+    "periods": {
+      "month": "Este mes",
+      "previous": "Mes pasado",
+      "all": "Todo"
+    }
+  },
+  "strip": {
+    "label": "Movimientos por categoría",
+    "empty": "sin movimientos",
+    "income": "ingresos {amount}",
+    "expenses": "gastos {amount}"
+  },
+  "list": {
+    "noMatches": "Nada coincide con el filtro.",
+    "fallbackName": "movimiento",
+    "deleteItem": "Eliminar {name}",
+    "loadingMore": "Cargando más movimientos…",
+    "sync": {
+      "paused": "Guardado en este dispositivo, se sincronizará al volver la conexión",
+      "syncing": "Sincronizando"
+    }
+  },
+  "form": {
+    "title": "Nuevo movimiento",
+    "descriptionPlaceholder": "¿En qué fue?",
+    "typeGroup": "Gasto o ingreso",
+    "newCategory": "Nueva categoría",
+    "autoCategoryHint": "Categoría detectada del texto · tócala para ver todas",
+    "noCategoryHint": "Ninguna categoría encaja · elige una o crea otra con +"
+  },
+  "date": {
+    "other": "Otra fecha…",
+    "calendar": "Fecha del movimiento",
+    "backToRecent": "Volver a los últimos días"
+  },
+  "detail": {
+    "title": "Movimiento",
+    "delete": "Eliminar movimiento",
+    "confirmDelete": "Toca de nuevo para eliminar"
+  },
+  "deleteDialog": {
+    "title": "¿Eliminar movimiento?",
+    "irreversible": "Esta acción no se puede deshacer."
+  },
+  "voice": {
+    "title": "Dictar movimiento",
+    "done": "Listo",
+    "typeIt": "Escribirlo",
+    "retry": "Reintentar",
+    "preparing": "Preparando el micrófono…",
+    "listening": "Escuchando…",
+    "ready": "Te escucho, habla cuando quieras",
+    "redo": "Volver a dictar",
+    "noAmount": "No escuché el monto · toca Editar para escribirlo",
+    "pickBelow": "Elige una abajo",
+    "aiSuggested": "Sugerida por IA",
+    "changeCategory": "Cambiar categoría",
+    "errors": {
+      "denied": {
+        "title": "Sin permiso para el micrófono",
+        "body": "Actívalo desde el candado junto a la dirección de la página (Configuración del sitio → Micrófono → Permitir) y vuelve a intentarlo."
+      },
+      "noMic": {
+        "title": "No encontramos un micrófono",
+        "body": "Conecta uno o revisa que ninguna otra app lo esté usando."
+      },
+      "noSpeech": {
+        "title": "No te escuché",
+        "body": "Habla cerca del micrófono, por ejemplo: «{example}»."
+      },
+      "network": {
+        "title": "El dictado necesita internet",
+        "body": "Tu navegador transcribe la voz en línea. Sin conexión puedes registrarlo escribiendo; se sincroniza al volver la red."
+      },
+      "unsupported": {
+        "title": "Tu navegador no permite dictar",
+        "body": "Prueba con Chrome, Edge o Safari, o regístralo escribiendo."
+      },
+      "unknown": {
+        "title": "No pudimos escucharte",
+        "body": "Algo falló con el micrófono. Inténtalo de nuevo."
+      }
+    },
+    "examples": {
+      "lunch": "Gasté 35 soles en almuerzo",
+      "gas": "Ayer pagué 50 en gasolina",
+      "salary": "Me pagaron 2500 de sueldo",
+      "mouse": "Compré un mouse por 120"
+    }
+  }
+}

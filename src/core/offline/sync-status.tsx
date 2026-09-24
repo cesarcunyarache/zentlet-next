@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { onlineManager, useMutationState } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "motion/react";
 import { Check, CloudOff, RefreshCw } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { SPRING_SWAP } from "@/lib/ease";
 import { offlineSyncState } from "./offline-queue";
 
@@ -38,13 +39,6 @@ type Tone = "offline" | "syncing" | "synced";
 /** Cuánto se ve "Sincronizado" tras vaciarse la cola. */
 const SYNCED_VISIBLE_MS = 1800;
 
-const LABEL: Record<Tone, (count: number) => string> = {
-  offline: (count) =>
-    count ? `Sin conexión · ${count} pendiente${count === 1 ? "" : "s"}` : "Sin conexión",
-  syncing: (count) => `Sincronizando ${count}…`,
-  synced: () => "Sincronizado",
-};
-
 const TONE_CLASS: Record<Tone, string> = {
   offline: "bg-app-fg text-app-bg",
   syncing: "bg-app-fill text-app-fg",
@@ -57,6 +51,7 @@ const TONE_CLASS: Record<Tone, string> = {
  * con conexión no la muestra.
  */
 export function SyncStatusPill() {
+  const t = useTranslations("offline.status");
   const { online, pendingCount, syncingCount } = useSyncStatus();
   const [justSynced, setJustSynced] = useState(false);
   const previous = useRef(syncingCount);
@@ -73,6 +68,12 @@ export function SyncStatusPill() {
 
   const tone: Tone | null = !online ? "offline" : syncingCount > 0 ? "syncing" : justSynced ? "synced" : null;
 
+  const label: Record<Tone, string> = {
+    offline: pendingCount ? t("offlinePending", { count: pendingCount }) : t("offline"),
+    syncing: t("syncing", { count: syncingCount }),
+    synced: t("synced"),
+  };
+
   return (
     <div role="status" aria-live="polite" className="min-h-8">
       <AnimatePresence mode="wait">
@@ -88,7 +89,7 @@ export function SyncStatusPill() {
             {tone === "offline" && <CloudOff className="size-3.5" aria-hidden />}
             {tone === "syncing" && <RefreshCw className="size-3.5 animate-spin" aria-hidden />}
             {tone === "synced" && <Check className="size-3.5" aria-hidden />}
-            {LABEL[tone](tone === "syncing" ? syncingCount : pendingCount)}
+            {label[tone]}
           </motion.span>
         )}
       </AnimatePresence>

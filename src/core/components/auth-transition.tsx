@@ -1,8 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useLayoutEffect } from "react";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { useAnimate, useReducedMotion } from "framer-motion";
 
 /*
@@ -18,11 +17,11 @@ import { useAnimate, useReducedMotion } from "framer-motion";
 /** Desplazamiento lateral de las transiciones, compartido con el template. */
 export const AUTH_SHIFT = 10;
 
-const SIGN_UP = "/auth/sign-up";
+const FORWARD = ["/auth/sign-up", "/auth/forgot-password"];
 
-/** Registro va "hacia la derecha": sale por la izquierda y entra por la derecha. */
+/** Registro y recuperar contraseña van "hacia la derecha": salen por la izquierda y entran por la derecha. */
 export function directionTo(href: string) {
-  return href.endsWith(SIGN_UP) ? 1 : -1;
+  return FORWARD.some((path) => href.endsWith(path)) ? 1 : -1;
 }
 
 type Leave = (href: string) => Promise<void>;

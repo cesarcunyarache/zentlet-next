@@ -1,9 +1,14 @@
+import { routing } from "@/i18n/routing";
+
 export type ThemePreference = "system" | "light" | "dark";
 
 export const THEME_STORAGE_KEY = "zentlet.theme.v1";
 
-/** Sólo la app privada tiene tema oscuro; la landing y el acceso siguen en claro. */
-export const THEME_SCOPE = "/admin";
+/**
+ * Sólo la app privada tiene tema oscuro; la landing y el acceso siguen en
+ * claro. Con o sin prefijo de idioma: `/admin`, `/en/admin`.
+ */
+export const THEME_SCOPE = `^(/(${routing.locales.join("|")}))?/admin(/|$)`;
 
 export function isThemePreference(value: unknown): value is ThemePreference {
   return value === "system" || value === "light" || value === "dark";
@@ -25,4 +30,4 @@ export function clearTheme() {
  * Se ejecuta en el <head> antes de pintar: sin esto una recarga en modo
  * oscuro mostraría un destello claro hasta hidratar.
  */
-export const themeInitScript = `(function(){try{if(!location.pathname.startsWith(${JSON.stringify(THEME_SCOPE)}))return;var p=localStorage.getItem(${JSON.stringify(THEME_STORAGE_KEY)});var d=p==="dark"||(p!=="light"&&matchMedia("(prefers-color-scheme: dark)").matches);var r=document.documentElement;r.classList.toggle("dark",d);r.dataset.theme=d?"dark":"light";}catch(e){}})();`;
+export const themeInitScript = `(function(){try{if(!new RegExp(${JSON.stringify(THEME_SCOPE)}).test(location.pathname))return;var p=localStorage.getItem(${JSON.stringify(THEME_STORAGE_KEY)});var d=p==="dark"||(p!=="light"&&matchMedia("(prefers-color-scheme: dark)").matches);var r=document.documentElement;r.classList.toggle("dark",d);r.dataset.theme=d?"dark":"light";}catch(e){}})();`;

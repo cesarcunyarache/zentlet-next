@@ -11,7 +11,8 @@ import {
   useTransform,
   type MotionValue,
 } from "framer-motion";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { AuthTransition } from "@/core/components/auth-transition";
 import { cn } from "@heroui/react";
 import { CategoryEmoji } from "@/features/transaction/components/category-emoji";
@@ -28,26 +29,14 @@ import { SPRING_MOUSE } from "@/lib/ease";
  * marca arriba y el formulario debajo (la inclinación no existe en táctil).
  */
 
-const SLIDES = [
-  {
-    title: "Cada gasto, en su lugar",
-    body: "Registra un movimiento en segundos y míralo sumarse al mes.",
-  },
-  {
-    title: "Tu balance, de un vistazo",
-    body: "Ingresos y gastos del periodo en una sola cifra.",
-  },
-  {
-    title: "Categorías que se entienden",
-    body: "Descubre en qué se va tu dinero sin abrir una hoja de cálculo.",
-  },
-];
+/** Mensajes del carrusel, en `auth.scene.slides`. */
+const SLIDES = ["record", "balance", "categories"] as const;
 
 const MOVEMENTS = [
-  { id: "m", name: "Mercado", icon: "🛒", color: "oklch(0.93 0.06 75)", amount: -84.3 },
-  { id: "a", name: "Alquiler", icon: "🏠", color: "oklch(0.92 0.05 300)", amount: -650 },
-  { id: "n", name: "Nómina", icon: "💼", color: "oklch(0.93 0.06 150)", amount: 1920 },
-];
+  { id: "market", icon: "🛒", color: "oklch(0.93 0.06 75)", amount: -84.3 },
+  { id: "rent", icon: "🏠", color: "oklch(0.92 0.05 300)", amount: -650 },
+  { id: "payroll", icon: "💼", color: "oklch(0.93 0.06 150)", amount: 1920 },
+] as const;
 
 const BARS = [
   { icon: "🏠", color: "oklch(0.72 0.12 300)", value: 88 },
@@ -173,6 +162,7 @@ function Showcase({
   y: MotionValue<number>;
   glare: MotionValue<string>;
 }) {
+  const t = useTranslations("auth.scene");
   const [slide, setSlide] = useState(0);
 
   useEffect(() => {
@@ -199,7 +189,7 @@ function Showcase({
           className="absolute top-2 left-0 w-[220px] -rotate-[5deg]"
         >
           <FloatCard delay={0}>
-            <p className="text-app-muted m-0 text-[11px] font-semibold">Balance · este mes</p>
+            <p className="text-app-muted m-0 text-[11px] font-semibold">{t("balanceThisMonth")}</p>
             <p className="font-display text-app-income m-0 mt-0.5 text-[30px] leading-none font-bold tracking-[-0.04em] tabular-nums">
               <span className="text-app-muted mr-1 text-base font-semibold">S/</span>
               {formatNumber(1185.7)}
@@ -223,12 +213,12 @@ function Showcase({
           className="absolute right-0 bottom-4 w-[236px] rotate-[4deg]"
         >
           <FloatCard delay={0.8}>
-            <p className="text-app-muted m-0 mb-2 text-[11px] font-semibold">Movimientos</p>
+            <p className="text-app-muted m-0 mb-2 text-[11px] font-semibold">{t("movements")}</p>
             <ul className="m-0 flex list-none flex-col gap-2 p-0">
               {MOVEMENTS.map((movement) => (
                 <li key={movement.id} className="flex items-center gap-2.5">
                   <CategoryEmoji category={movement} className="size-8 rounded-xl text-base" />
-                  <span className="flex-1 text-[13px] font-semibold">{movement.name}</span>
+                  <span className="flex-1 text-[13px] font-semibold">{t(`samples.${movement.id}`)}</span>
                   <span
                     className={cn(
                       "num text-[12px] font-semibold",
@@ -252,7 +242,7 @@ function Showcase({
           className="absolute top-[118px] right-3 w-[150px] rotate-[7deg]"
         >
           <FloatCard delay={1.6} className="p-3">
-            <p className="text-app-muted m-0 mb-2 text-[10px] font-semibold">Por categoría</p>
+            <p className="text-app-muted m-0 mb-2 text-[10px] font-semibold">{t("byCategory")}</p>
             <div className="flex h-16 items-end gap-2">
               {BARS.map((bar) => (
                 <div key={bar.icon} className="flex flex-1 flex-col items-center gap-1">
@@ -283,10 +273,10 @@ function Showcase({
             className="flex flex-col gap-2"
           >
             <h2 className="font-display m-0 text-[26px] leading-tight font-bold tracking-[-0.02em]">
-              {current.title}
+              {t(`slides.${current}.title`)}
             </h2>
             <p className="m-0 text-sm text-[color-mix(in_oklch,var(--app-bg)_70%,transparent)]">
-              {current.body}
+              {t(`slides.${current}.body`)}
             </p>
           </motion.div>
         </AnimatePresence>
@@ -294,9 +284,9 @@ function Showcase({
         <div className="flex gap-1.5">
           {SLIDES.map((item, index) => (
             <button
-              key={item.title}
+              key={item}
               type="button"
-              aria-label={`Ver mensaje ${index + 1}`}
+              aria-label={t("showSlide", { number: index + 1 })}
               aria-current={index === slide}
               onClick={() => setSlide(index)}
               className="grid h-6 place-items-center"
@@ -319,6 +309,8 @@ function Showcase({
 
 /** Cabecera de marca sólo en móvil: sustituye al panel oscuro de escritorio. */
 function MobileBrand() {
+  const t = useTranslations("auth.scene");
+
   return (
     <div className="bg-app-fg text-app-bg relative overflow-hidden rounded-b-[32px] px-6 pt-7 pb-8 sm:rounded-none lg:hidden">
       <div
@@ -332,14 +324,14 @@ function MobileBrand() {
       <div className="relative mt-6 flex items-end justify-between gap-4">
         <div>
           <p className="font-display m-0 text-[22px] leading-tight font-bold tracking-[-0.02em]">
-            {SLIDES[0].title}
+            {t(`slides.${SLIDES[0]}.title`)}
           </p>
           <p className="m-0 mt-1 text-sm text-[color-mix(in_oklch,var(--app-bg)_70%,transparent)]">
-            {SLIDES[0].body}
+            {t(`slides.${SLIDES[0]}.body`)}
           </p>
         </div>
         <FloatCard delay={0} className="shrink-0 -rotate-[4deg] px-3 py-2.5">
-          <p className="text-app-muted m-0 text-[10px] font-semibold">Balance</p>
+          <p className="text-app-muted m-0 text-[10px] font-semibold">{t("balance")}</p>
           <p className="font-display text-app-income m-0 text-lg leading-none font-bold tracking-[-0.03em] tabular-nums">
             {formatNumber(1185.7)}
           </p>
