@@ -31,6 +31,7 @@ import { DeleteTransactionDialog } from "@/features/transaction/components/delet
 import { CategoriesSheet } from "@/features/transaction/components/categories-sheet";
 import { SettingsSheet } from "@/features/transaction/components/settings-sheet";
 import { ToastBubble } from "@/core/components/ui/toast-bubble";
+import { Onboarding } from "@/features/onboarding/components/onboarding";
 import { periodRange } from "@/features/transaction/lib/format";
 import { track } from "@/lib/observability/client";
 import type {
@@ -345,6 +346,12 @@ export default function HomePage() {
       </div>
 
       <ToastBubble message={message} />
+
+      <Onboarding
+        currency={currency}
+        hasCategories={categories.length > 0}
+        onCreateCategory={() => setSheet("categories")}
+      />
 
       <TransactionFormSheet
         isOpen={sheet === "new"}

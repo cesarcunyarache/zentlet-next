@@ -13,21 +13,23 @@ datasource db {
 }
 
 model User {
-  id              String        @id
-  name            String
-  email           String
-  emailVerified   Boolean       @default(false)
-  image           String?
+  id                    String        @id
+  name                  String
+  email                 String
+  emailVerified         Boolean       @default(false)
+  image                 String?
   /// Consentimiento expreso a los Términos y a la Política de privacidad (Ley 29733: datos sensibles)
-  legalAcceptedAt DateTime?
+  legalAcceptedAt       DateTime?
   /// Versión de los textos legales aceptada (su fecha de actualización)
-  legalVersion    String?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  sessions        Session[]
-  accounts        Account[]
-  categories      Category[]
-  transactions    Transaction[]
+  legalVersion          String?
+  /// Fin del recorrido de bienvenida (hecho u omitido): se muestra una sola vez
+  onboardingCompletedAt DateTime?
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+  sessions              Session[]
+  accounts              Account[]
+  categories            Category[]
+  transactions          Transaction[]
 
   @@unique([email])
   @@map("user")

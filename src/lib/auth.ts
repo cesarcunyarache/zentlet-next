@@ -141,6 +141,8 @@ export const auth = betterAuth({
     additionalFields: {
       legalAcceptedAt: { type: "date", required: false, input: false },
       legalVersion: { type: "string", required: false, input: false },
+      // null = cuenta nueva que aún no vio el recorrido de bienvenida
+      onboardingCompletedAt: { type: "date", required: false, input: false },
     },
     deleteUser: {
       enabled: true,

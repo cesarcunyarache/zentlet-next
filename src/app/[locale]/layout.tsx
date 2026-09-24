@@ -53,8 +53,8 @@ export default async function RootLayout({ children, params }: Readonly<LocaleLa
   setRequestLocale(locale);
 
   // `landing` no viaja al cliente: la landing recibe su copy por props desde el servidor
-  const { common, auth, transactions, categories, settings, offline } = await getMessages();
-  const clientMessages = { common, auth, transactions, categories, settings, offline };
+  const { common, auth, transactions, categories, settings, offline, onboarding } = await getMessages();
+  const clientMessages = { common, auth, transactions, categories, settings, offline, onboarding };
 
   return (
     /* Extensiones de navegador (LanguageTool y similares) añaden atributos

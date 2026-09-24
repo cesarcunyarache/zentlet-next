@@ -1,0 +1,39 @@
+{
+  "label": "Welcome to Zentlet",
+  "skip": "Skip",
+  "back": "Back",
+  "next": "Next",
+  "start": "Get started",
+  "createCategory": "Create my first category",
+  "progress": "Step {current} of {total}",
+  "steps": {
+    "type": {
+      "title": "Type like you talk",
+      "body": "Write “taxi to work” and Zentlet recognizes whether it's an expense or income and which category it belongs to. You just add the amount.",
+      "phrase": "Taxi to work",
+      "detected": "Detected as you type",
+      "expense": "Expense",
+      "category": "Transport"
+    },
+    "voice": {
+      "title": "Or just say it",
+      "body": "Tap the microphone and say “spent 35 on lunch yesterday”. The amount, date and category fill in on their own.",
+      "phrase": "Spent 35 on lunch yesterday",
+      "yesterday": "Yesterday",
+      "category": "Food"
+    },
+    "month": {
+      "title": "Your month, clear at a glance",
+      "body": "Balance, spending by category and your whole history. It works offline and your data is yours alone.",
+      "bodyNoCategories": "Balance, spending by category and your whole history. Start by creating your categories: food, transport, home…",
+      "balance": "Spent this month",
+      "offline": "Works offline",
+      "private": "Only you see your data",
+      "categories": {
+        "food": "Food",
+        "transport": "Transport",
+        "home": "Home"
+      }
+    }
+  }
+}

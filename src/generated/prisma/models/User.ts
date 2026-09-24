@@ -32,6 +32,7 @@ export type UserMinAggregateOutputType = {
   image: string | null
   legalAcceptedAt: Date | null
   legalVersion: string | null
+  onboardingCompletedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -44,6 +45,7 @@ export type UserMaxAggregateOutputType = {
   image: string | null
   legalAcceptedAt: Date | null
   legalVersion: string | null
+  onboardingCompletedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -56,6 +58,7 @@ export type UserCountAggregateOutputType = {
   image: number
   legalAcceptedAt: number
   legalVersion: number
+  onboardingCompletedAt: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -70,6 +73,7 @@ export type UserMinAggregateInputType = {
   image?: true
   legalAcceptedAt?: true
   legalVersion?: true
+  onboardingCompletedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -82,6 +86,7 @@ export type UserMaxAggregateInputType = {
   image?: true
   legalAcceptedAt?: true
   legalVersion?: true
+  onboardingCompletedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -94,6 +99,7 @@ export type UserCountAggregateInputType = {
   image?: true
   legalAcceptedAt?: true
   legalVersion?: true
+  onboardingCompletedAt?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -179,6 +185,7 @@ export type UserGroupByOutputType = {
   image: string | null
   legalAcceptedAt: Date | null
   legalVersion: string | null
+  onboardingCompletedAt: Date | null
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
@@ -212,6 +219,7 @@ export type UserWhereInput = {
   image?: Prisma.StringNullableFilter<"User"> | string | null
   legalAcceptedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   legalVersion?: Prisma.StringNullableFilter<"User"> | string | null
+  onboardingCompletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   sessions?: Prisma.SessionListRelationFilter
@@ -228,6 +236,7 @@ export type UserOrderByWithRelationInput = {
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   legalAcceptedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   legalVersion?: Prisma.SortOrderInput | Prisma.SortOrder
+  onboardingCompletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   sessions?: Prisma.SessionOrderByRelationAggregateInput
@@ -247,6 +256,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   image?: Prisma.StringNullableFilter<"User"> | string | null
   legalAcceptedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   legalVersion?: Prisma.StringNullableFilter<"User"> | string | null
+  onboardingCompletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   sessions?: Prisma.SessionListRelationFilter
@@ -263,6 +273,7 @@ export type UserOrderByWithAggregationInput = {
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   legalAcceptedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   legalVersion?: Prisma.SortOrderInput | Prisma.SortOrder
+  onboardingCompletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -281,6 +292,7 @@ export type UserScalarWhereWithAggregatesInput = {
   image?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   legalAcceptedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   legalVersion?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  onboardingCompletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -293,6 +305,7 @@ export type UserCreateInput = {
   image?: string | null
   legalAcceptedAt?: Date | string | null
   legalVersion?: string | null
+  onboardingCompletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -309,6 +322,7 @@ export type UserUncheckedCreateInput = {
   image?: string | null
   legalAcceptedAt?: Date | string | null
   legalVersion?: string | null
+  onboardingCompletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
@@ -325,6 +339,7 @@ export type UserUpdateInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   legalAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   legalVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -341,6 +356,7 @@ export type UserUncheckedUpdateInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   legalAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   legalVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -357,6 +373,7 @@ export type UserCreateManyInput = {
   image?: string | null
   legalAcceptedAt?: Date | string | null
   legalVersion?: string | null
+  onboardingCompletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -369,6 +386,7 @@ export type UserUpdateManyMutationInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   legalAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   legalVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -381,6 +399,7 @@ export type UserUncheckedUpdateManyInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   legalAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   legalVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -393,6 +412,7 @@ export type UserCountOrderByAggregateInput = {
   image?: Prisma.SortOrder
   legalAcceptedAt?: Prisma.SortOrder
   legalVersion?: Prisma.SortOrder
+  onboardingCompletedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -405,6 +425,7 @@ export type UserMaxOrderByAggregateInput = {
   image?: Prisma.SortOrder
   legalAcceptedAt?: Prisma.SortOrder
   legalVersion?: Prisma.SortOrder
+  onboardingCompletedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -417,6 +438,7 @@ export type UserMinOrderByAggregateInput = {
   image?: Prisma.SortOrder
   legalAcceptedAt?: Prisma.SortOrder
   legalVersion?: Prisma.SortOrder
+  onboardingCompletedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -510,6 +532,7 @@ export type UserCreateWithoutSessionsInput = {
   image?: string | null
   legalAcceptedAt?: Date | string | null
   legalVersion?: string | null
+  onboardingCompletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
@@ -525,6 +548,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   image?: string | null
   legalAcceptedAt?: Date | string | null
   legalVersion?: string | null
+  onboardingCompletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
@@ -556,6 +580,7 @@ export type UserUpdateWithoutSessionsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   legalAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   legalVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
@@ -571,6 +596,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   legalAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   legalVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
@@ -586,6 +612,7 @@ export type UserCreateWithoutAccountsInput = {
   image?: string | null
   legalAcceptedAt?: Date | string | null
   legalVersion?: string | null
+  onboardingCompletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -601,6 +628,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   image?: string | null
   legalAcceptedAt?: Date | string | null
   legalVersion?: string | null
+  onboardingCompletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
@@ -632,6 +660,7 @@ export type UserUpdateWithoutAccountsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   legalAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   legalVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -647,6 +676,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   legalAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   legalVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -662,6 +692,7 @@ export type UserCreateWithoutCategoriesInput = {
   image?: string | null
   legalAcceptedAt?: Date | string | null
   legalVersion?: string | null
+  onboardingCompletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -677,6 +708,7 @@ export type UserUncheckedCreateWithoutCategoriesInput = {
   image?: string | null
   legalAcceptedAt?: Date | string | null
   legalVersion?: string | null
+  onboardingCompletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
@@ -708,6 +740,7 @@ export type UserUpdateWithoutCategoriesInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   legalAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   legalVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -723,6 +756,7 @@ export type UserUncheckedUpdateWithoutCategoriesInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   legalAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   legalVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -738,6 +772,7 @@ export type UserCreateWithoutTransactionsInput = {
   image?: string | null
   legalAcceptedAt?: Date | string | null
   legalVersion?: string | null
+  onboardingCompletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -753,6 +788,7 @@ export type UserUncheckedCreateWithoutTransactionsInput = {
   image?: string | null
   legalAcceptedAt?: Date | string | null
   legalVersion?: string | null
+  onboardingCompletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
@@ -784,6 +820,7 @@ export type UserUpdateWithoutTransactionsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   legalAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   legalVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -799,6 +836,7 @@ export type UserUncheckedUpdateWithoutTransactionsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   legalAcceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   legalVersion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -872,6 +910,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   image?: boolean
   legalAcceptedAt?: boolean
   legalVersion?: boolean
+  onboardingCompletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
@@ -889,6 +928,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   image?: boolean
   legalAcceptedAt?: boolean
   legalVersion?: boolean
+  onboardingCompletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -901,6 +941,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   image?: boolean
   legalAcceptedAt?: boolean
   legalVersion?: boolean
+  onboardingCompletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -913,11 +954,12 @@ export type UserSelectScalar = {
   image?: boolean
   legalAcceptedAt?: boolean
   legalVersion?: boolean
+  onboardingCompletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "legalAcceptedAt" | "legalVersion" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "legalAcceptedAt" | "legalVersion" | "onboardingCompletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
@@ -950,6 +992,10 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
      * Versión de los textos legales aceptada (su fecha de actualización)
      */
     legalVersion: string | null
+    /**
+     * Fin del recorrido de bienvenida (hecho u omitido): se muestra una sola vez
+     */
+    onboardingCompletedAt: Date | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -1386,6 +1432,7 @@ export interface UserFieldRefs {
   readonly image: Prisma.FieldRef<"User", 'String'>
   readonly legalAcceptedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly legalVersion: Prisma.FieldRef<"User", 'String'>
+  readonly onboardingCompletedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }

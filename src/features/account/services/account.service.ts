@@ -11,6 +11,11 @@ export class AccountService extends APIService {
 
     return response.data;
   }
+
+  /** El recorrido de bienvenida ya se vio: no vuelve a aparecer. */
+  async completeOnboarding(): Promise<void> {
+    await this.post("/api/account/onboarding");
+  }
 }
 
 /** Instancia única: el servicio no tiene estado propio. */

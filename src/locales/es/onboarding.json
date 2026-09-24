@@ -1,0 +1,39 @@
+{
+  "label": "Bienvenida a Zentlet",
+  "skip": "Saltar",
+  "back": "Atrás",
+  "next": "Siguiente",
+  "start": "Empezar",
+  "createCategory": "Crear mi primera categoría",
+  "progress": "Paso {current} de {total}",
+  "steps": {
+    "type": {
+      "title": "Escribe como hablas",
+      "body": "Anota «taxi al trabajo» y Zentlet reconoce si es gasto o ingreso y en qué categoría va. Tú solo pones el monto.",
+      "phrase": "Taxi al trabajo",
+      "detected": "Detectado al escribir",
+      "expense": "Gasto",
+      "category": "Transporte"
+    },
+    "voice": {
+      "title": "O simplemente díctalo",
+      "body": "Toca el micrófono y di «ayer gasté 35 en almuerzo». El monto, la fecha y la categoría se completan solos.",
+      "phrase": "Ayer gasté 35 en almuerzo",
+      "yesterday": "Ayer",
+      "category": "Comida"
+    },
+    "month": {
+      "title": "Tu mes, claro de un vistazo",
+      "body": "Balance, gastos por categoría y todo tu historial. Funciona sin conexión y tus datos son solo tuyos.",
+      "bodyNoCategories": "Balance, gastos por categoría y todo tu historial. Empieza creando tus categorías: comida, transporte, casa…",
+      "balance": "Gastos del mes",
+      "offline": "Funciona sin conexión",
+      "private": "Solo tú ves tus datos",
+      "categories": {
+        "food": "Comida",
+        "transport": "Transporte",
+        "home": "Casa"
+      }
+    }
+  }
+}

@@ -24,6 +24,7 @@ export interface AnalyticsEvents {
   voice_entry_completed: { outcome: "saved" | "edited" };
   voice_entry_failed: { reason: SpeechError };
   data_exported: Record<string, never>;
+  onboarding_completed: { skipped: boolean; step: number; next: "categories" | "app" };
 }
 
 export type AnalyticsEvent = keyof AnalyticsEvents;
