@@ -50,7 +50,7 @@ type SignUpValues = z.infer<ReturnType<typeof createSignUpSchema>>;
 export default function SignUp() {
   const t = useTranslations("auth");
   const locale = useLocale();
-  // la cuenta queda creada pero sin sesión hasta confirmar el correo
+  // con verificación, la cuenta queda creada pero sin sesión hasta confirmar el correo
   const [sentTo, setSentTo] = useState<string | null>(null);
   const [legalAccepted, setLegalAccepted] = useState(false);
   const captcha = useTurnstile();
@@ -72,17 +72,20 @@ export default function SignUp() {
 
   async function onSubmit(values: SignUpValues) {
     try {
-      const { error } = await authClient.signUp.email({
+      const appPath = getPathname({ href: siteConfig.routes.app, locale });
+      const { data, error } = await authClient.signUp.email({
         email: values.email,
         password: values.password,
         name: values.name,
-        callbackURL: getPathname({ href: siteConfig.routes.app, locale }),
+        callbackURL: appPath,
         fetchOptions: { headers: { ...captcha.headers, ...legalConsentHeaders(legalAccepted) } },
       });
       if (error) {
         captcha.reset();
         return showAuthError(t(`errors.${authErrorKey(error)}`));
       }
+      // sin verificación de correo (servidor sin Resend) el alta ya abre sesión
+      if (data?.token) return window.location.assign(appPath);
       setSentTo(values.email);
     } catch {
       captcha.reset();
