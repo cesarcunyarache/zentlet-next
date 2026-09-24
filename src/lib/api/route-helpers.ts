@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { z } from "zod";
 import { auth } from "@/lib/auth";
+import { reportError } from "@/lib/observability/server";
 
 /*
  * Piezas comunes de los Route Handlers: sesión, respuestas de error y
@@ -18,6 +19,12 @@ export function errorResponse(message: string, status: number) {
 }
 
 export const unauthorized = () => errorResponse("Unauthorized", 401);
+
+/** 500 para el cliente; el error real queda registrado (log + Sentry si está activo). */
+export function internalError(req: Request, error: unknown, message: string) {
+  reportError(error, message, { method: req.method, path: new URL(req.url).pathname });
+  return errorResponse(message, 500);
+}
 
 /**
  * Lee y valida el JSON del cuerpo. Devuelve los datos o una respuesta 422

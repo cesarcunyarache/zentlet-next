@@ -4,6 +4,7 @@ import { createCategorySchema } from "@/features/category/schemas/category-api.s
 import {
   errorResponse,
   getSessionUserId,
+  internalError,
   isUniqueViolation,
   parseBody,
   unauthorized,
@@ -21,8 +22,8 @@ export async function GET(req: Request) {
     });
 
     return NextResponse.json(categories);
-  } catch {
-    return errorResponse("Error fetching categories", 500);
+  } catch (error) {
+    return internalError(req, error, "Error fetching categories");
   }
 }
 
@@ -55,7 +56,7 @@ export async function POST(req: Request) {
         ? NextResponse.json(winner, { status: 200 })
         : errorResponse("Category id already in use", 409);
     }
-  } catch {
-    return errorResponse("Error creating category", 500);
+  } catch (error) {
+    return internalError(req, error, "Error creating category");
   }
 }

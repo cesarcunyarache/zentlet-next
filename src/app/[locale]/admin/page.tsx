@@ -32,6 +32,7 @@ import { CategoriesSheet } from "@/features/transaction/components/categories-sh
 import { SettingsSheet } from "@/features/transaction/components/settings-sheet";
 import { ToastBubble } from "@/core/components/ui/toast-bubble";
 import { periodRange } from "@/features/transaction/lib/format";
+import { track } from "@/lib/observability/client";
 import type {
   CategoryLike,
   DateRange,
@@ -95,6 +96,11 @@ export default function HomePage() {
     setKind(null);
     setPeriod("month");
     toast(t(values.type === "expense" ? "toast.expenseSaved" : "toast.incomeSaved"));
+  }
+
+  function removeTransaction(transaction: TTransaction) {
+    deleteTransaction(transaction);
+    track("transaction_deleted", {});
   }
 
   const [debouncedQuery] = useDebounce(query.trim(), 300);
@@ -355,7 +361,7 @@ export default function HomePage() {
         onCancel={() => setPendingDelete(null)}
         onConfirm={(transaction) => {
           setPendingDelete(null);
-          deleteTransaction(transaction);
+          removeTransaction(transaction);
           toast(t("toast.deleted"));
         }}
       />
@@ -367,7 +373,7 @@ export default function HomePage() {
         onOpenChange={(open) => !open && setDetail(null)}
         onDelete={(id) => {
           setDetail(null);
-          if (detail?.id === id) deleteTransaction(detail);
+          if (detail?.id === id) removeTransaction(detail);
           toast(t("toast.deleted"));
         }}
       />

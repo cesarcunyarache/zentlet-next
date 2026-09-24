@@ -5,6 +5,7 @@ import { siteConfig } from "@/lib/site";
 import { redirect } from "@/i18n/navigation";
 import { OfflineQueryProvider } from "@/core/offline/offline-query-provider";
 import { ThemeController } from "@/core/theme/theme-controller";
+import { AnalyticsIdentity } from "@/lib/observability/analytics-identity";
 
 /**
  * La sesión se lee aquí (servidor) y el id del usuario viaja en el HTML:
@@ -18,6 +19,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   return (
     <OfflineQueryProvider key={session.user.id} userId={session.user.id}>
       <ThemeController />
+      <AnalyticsIdentity userId={session.user.id} />
       {children}
     </OfflineQueryProvider>
   );

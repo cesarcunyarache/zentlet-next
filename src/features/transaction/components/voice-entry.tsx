@@ -11,6 +11,7 @@ import { useSpeechRecognition, type SpeechError } from "../hooks/use-speech-reco
 import { parseVoiceEntry, type VoiceDraft } from "../lib/parse-voice";
 import { dayLabel, formatNumber } from "../lib/format";
 import { suggestTransactionCategory } from "../ai/actions/category-suggester";
+import { track } from "@/lib/observability/client";
 import { CategoryEmoji } from "./category-emoji";
 import type { TransactionFormValues } from "../schemas/transaction.schema";
 import type { CategoryLike } from "../types";
@@ -70,6 +71,7 @@ export function VoiceEntry({ categories, currency, onSave, onEdit }: VoiceEntryP
     setIsOpen(true);
     // en el mismo toque: Safari sólo pide el micrófono tras un gesto
     speech.start();
+    track("voice_entry_started", {});
   }
 
   function close() {
@@ -80,6 +82,10 @@ export function VoiceEntry({ categories, currency, onSave, onEdit }: VoiceEntryP
   function retry() {
     speech.start();
   }
+
+  useEffect(() => {
+    if (speech.status === "error" && speech.error) track("voice_entry_failed", { reason: speech.error });
+  }, [speech.status, speech.error]);
 
   // el texto no alcanzó: la IA propone entre las categorías del usuario
   const needsAi = Boolean(parsed && !parsed.categoryId && parsed.description);
@@ -109,11 +115,14 @@ export function VoiceEntry({ categories, currency, onSave, onEdit }: VoiceEntryP
     if (!values || !canSave) return;
     onSave(values);
     setIsOpen(false);
+    track("voice_entry_completed", { outcome: "saved" });
+    track("transaction_created", { source: "voice", type: values.type, category_auto: !pickedId });
   }
 
   function edit() {
     if (!draft) return;
     setIsOpen(false);
+    track("voice_entry_completed", { outcome: "edited" });
     onEdit({
       type: draft.type,
       amount: draft.amount ?? undefined,

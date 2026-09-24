@@ -19,6 +19,7 @@ export async function generateCategory(prompt: string): Promise<CategoryAI> {
   if (!text) throw new Error("Empty prompt");
 
   return generateObject({
+    operation: "category.generate",
     prompt: buildCategoryPrompt(text),
     schema: categoryAiSchema,
   }) as Promise<CategoryAI>;

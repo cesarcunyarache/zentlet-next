@@ -4,6 +4,7 @@ import { updateCategorySchema } from "@/features/category/schemas/category-api.s
 import {
   errorResponse,
   getSessionUserId,
+  internalError,
   isForeignKeyViolation,
   parseBody,
   unauthorized,
@@ -24,8 +25,8 @@ export async function GET(req: Request, { params }: RouteContext) {
     if (!category) return notFound();
 
     return NextResponse.json(category);
-  } catch {
-    return errorResponse("Error fetching category", 500);
+  } catch (error) {
+    return internalError(req, error, "Error fetching category");
   }
 }
 
@@ -48,8 +49,8 @@ export async function PATCH(req: Request, { params }: RouteContext) {
     const category = await prisma.category.findUnique({ where: { id } });
 
     return NextResponse.json(category);
-  } catch {
-    return errorResponse("Error updating category", 500);
+  } catch (error) {
+    return internalError(req, error, "Error updating category");
   }
 }
 
@@ -74,6 +75,6 @@ export async function DELETE(req: Request, { params }: RouteContext) {
     if (isForeignKeyViolation(error)) {
       return errorResponse("Esta categoría tiene movimientos y no se puede eliminar", 409);
     }
-    return errorResponse("Error deleting category", 500);
+    return internalError(req, error, "Error deleting category");
   }
 }

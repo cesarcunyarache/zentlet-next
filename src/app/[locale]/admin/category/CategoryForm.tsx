@@ -21,6 +21,7 @@ import { Check } from "@gravity-ui/icons";
 import { EASE_OUT } from "@/lib/ease";
 import { GestureCarousel } from "@/core/components/carrusel";
 import { generateCategory } from "@/features/category/ai/actions/category-generator";
+import { track } from "@/lib/observability/client";
 import { useIsOnline } from "@/core/offline/sync-status";
 import { Sheet } from "@/core/components/ui/sheet";
 
@@ -161,8 +162,11 @@ export default function CategoryForm({
         category.id,
         category.description === undefined ? rest : { ...rest, description },
       );
+      track("category_updated", {});
     } else {
       createCategory(values);
+      // el carrusel sólo ofrece iconos de la IA o, si falló, los de reserva
+      track("category_created", { ai_suggested: !aiUnavailable });
     }
     form.reset();
     onSuccess();

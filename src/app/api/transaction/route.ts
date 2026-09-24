@@ -16,6 +16,7 @@ import type { TransactionPage } from "@/features/transaction/types";
 import {
   errorResponse,
   getSessionUserId,
+  internalError,
   isUniqueViolation,
   parseBody,
   parseQuery,
@@ -48,8 +49,8 @@ export async function GET(req: Request) {
       nextCursor: rows.length > limit ? encodeCursor(items[items.length - 1]) : null,
     };
     return NextResponse.json(page);
-  } catch {
-    return errorResponse("Error fetching transactions", 500);
+  } catch (error) {
+    return internalError(req, error, "Error fetching transactions");
   }
 }
 
@@ -102,7 +103,7 @@ export async function POST(req: Request) {
         ? NextResponse.json(serializeTransaction(winner), { status: 200 })
         : errorResponse("Transaction id already in use", 409);
     }
-  } catch {
-    return errorResponse("Error creating transaction", 500);
+  } catch (error) {
+    return internalError(req, error, "Error creating transaction");
   }
 }

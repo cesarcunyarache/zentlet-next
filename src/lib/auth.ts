@@ -1,6 +1,17 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import prisma from "./prisma";
+import type { AuthMethod } from "./observability/events";
+import { trackServerEvent } from "./observability/server";
+
+type HookContext = { path?: string; params?: Record<string, string> } | null;
+
+/** Email por su ruta; OAuth por el proveedor del callback (`/callback/:id`). */
+function authMethod(context: HookContext): AuthMethod {
+  if (context?.path?.endsWith("/email")) return "email";
+  const provider = context?.params?.id;
+  return provider === "google" || provider === "github" ? provider : "unknown";
+}
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -45,6 +56,26 @@ export const auth = betterAuth({
     accountLinking: {
       enabled: true,
       trustedProviders: ["google", "github"],
+    },
+  },
+
+  // analytics de producto: el alta y cada inicio de sesión, con el id interno
+  databaseHooks: {
+    user: {
+      create: {
+        after: async (user, context: HookContext) => {
+          trackServerEvent(user.id, "user_signed_up", { method: authMethod(context) });
+        },
+      },
+    },
+    session: {
+      create: {
+        after: async (session, context: HookContext) => {
+          // el alta con email ya abre sesión: eso es `user_signed_up`
+          if (context?.path?.startsWith("/sign-up")) return;
+          trackServerEvent(session.userId, "login_completed", { method: authMethod(context) });
+        },
+      },
     },
   },
 });

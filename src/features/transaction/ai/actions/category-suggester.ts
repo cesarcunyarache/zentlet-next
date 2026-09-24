@@ -31,6 +31,7 @@ export async function suggestTransactionCategory({
 
   try {
     const result = (await generateObject({
+      operation: "transaction.suggest_category",
       prompt: buildTransactionCategoryPrompt(
         text,
         categories.slice(0, 60).map(({ id, name }) => ({ id, name: name.slice(0, 40) })),
@@ -41,8 +42,8 @@ export async function suggestTransactionCategory({
     // el modelo puede alucinar un id: sólo vale si es una categoría real
     const exists = categories.some((c) => c.id === result.categoryId);
     return { categoryId: exists ? result.categoryId : null, type: result.type };
-  } catch (error) {
-    console.error("suggestTransactionCategory", error);
+  } catch {
+    // `generateObject` ya lo registró
     return null;
   }
 }

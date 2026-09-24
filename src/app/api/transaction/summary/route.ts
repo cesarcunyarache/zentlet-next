@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { transactionSummaryQuerySchema } from "@/features/transaction/schemas/transaction-api.schema";
 import { summaryWhere, toSummary } from "@/features/transaction/lib/feed-query";
-import { errorResponse, getSessionUserId, parseQuery, unauthorized } from "@/lib/api/route-helpers";
+import { getSessionUserId, internalError, parseQuery, unauthorized } from "@/lib/api/route-helpers";
 import type { TransactionSummaryResponse } from "@/features/transaction/types";
 
 /** Totales del periodo agrupados por categoría y tipo: un resultado pequeño con cualquier volumen. */
@@ -32,7 +32,7 @@ export async function GET(req: Request) {
       presentIds: present.map((row) => row.id),
     };
     return NextResponse.json(body);
-  } catch {
-    return errorResponse("Error summarizing transactions", 500);
+  } catch (error) {
+    return internalError(req, error, "Error summarizing transactions");
   }
 }

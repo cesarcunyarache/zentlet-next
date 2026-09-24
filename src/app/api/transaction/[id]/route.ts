@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { serializeTransaction } from "@/features/transaction/lib/serialize";
 import { updateTransactionSchema } from "@/features/transaction/schemas/transaction-api.schema";
-import { errorResponse, getSessionUserId, parseBody, unauthorized } from "@/lib/api/route-helpers";
+import { errorResponse, getSessionUserId, internalError, parseBody, unauthorized } from "@/lib/api/route-helpers";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -21,8 +21,8 @@ export async function GET(req: Request, { params }: RouteContext) {
     if (!transaction) return notFound();
 
     return NextResponse.json(serializeTransaction(transaction));
-  } catch {
-    return errorResponse("Error fetching transaction", 500);
+  } catch (error) {
+    return internalError(req, error, "Error fetching transaction");
   }
 }
 
@@ -63,8 +63,8 @@ export async function PATCH(req: Request, { params }: RouteContext) {
     });
 
     return NextResponse.json(serializeTransaction(transaction));
-  } catch {
-    return errorResponse("Error updating transaction", 500);
+  } catch (error) {
+    return internalError(req, error, "Error updating transaction");
   }
 }
 
@@ -82,7 +82,7 @@ export async function DELETE(req: Request, { params }: RouteContext) {
     if (count === 0) return notFound();
 
     return new NextResponse(null, { status: 204 });
-  } catch {
-    return errorResponse("Error deleting transaction", 500);
+  } catch (error) {
+    return internalError(req, error, "Error deleting transaction");
   }
 }

@@ -25,6 +25,7 @@ import {
   type TransactionFormValues,
 } from "../schemas/transaction.schema";
 import { suggestTransactionCategory } from "../ai/actions/category-suggester";
+import { track } from "@/lib/observability/client";
 import type { TransactionSuggestion } from "../ai/schemas/transaction-ai.schema";
 import type { CategoryLike, TransactionType } from "../types";
 
@@ -195,6 +196,12 @@ export function TransactionFormSheet({
       description: values.description.trim() || category?.name || t("transactions.defaultDescription"),
     });
     onOpenChange(false);
+    track("transaction_created", {
+      // un borrador sólo llega desde el dictado («Editar»)
+      source: draft ? "voice" : "form",
+      type: values.type,
+      category_auto: autoCategoryId !== null && autoCategoryId === values.categoryId,
+    });
   }
 
   const canSave = form.formState.isValid && amount > 0;

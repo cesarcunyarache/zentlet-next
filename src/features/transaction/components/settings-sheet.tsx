@@ -12,6 +12,7 @@ import { useSyncStatus } from "@/core/offline/sync-status";
 import { useThemePreference } from "@/core/theme/use-theme";
 import type { ThemePreference } from "@/core/theme/theme";
 import { authClient } from "@/lib/auth-client";
+import { resetUser } from "@/lib/observability/client";
 import { SPRING_LAYOUT } from "@/lib/ease";
 import { siteConfig } from "@/lib/site";
 import { getPathname, usePathname, useRouter } from "@/i18n/navigation";
@@ -251,6 +252,7 @@ function SignOutRow() {
       setSigningOut(false);
       return;
     }
+    resetUser();
     await clearLocalData();
     window.location.replace(getPathname({ href: siteConfig.routes.signIn, locale }));
   }

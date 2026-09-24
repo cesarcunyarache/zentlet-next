@@ -148,6 +148,7 @@ flowchart LR
 | **Auth** | Better Auth (correo y contraseña, Google, GitHub) |
 | **IA** | Vercel AI SDK · Google Gemini 2.5 Flash |
 | **Validación** | Zod 4 · React Hook Form |
+| **Observabilidad** | Sentry · PostHog · Pino (todo opcional, ver [docs/observability.md](docs/observability.md)) |
 
 <br/>
 
@@ -186,6 +187,10 @@ Abre **[localhost:3000](http://localhost:3000)**: verás la landing. Crea tu cue
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Acceso con Google | Opcional |
 | `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` | Acceso con GitHub | Opcional |
 | `NEXT_PUBLIC_API_URL` | Backend separado; vacío = mismo origen | Opcional |
+| `SENTRY_DSN` / `NEXT_PUBLIC_SENTRY_DSN` | Errores y trazas en servidor / navegador (Sentry) | Opcional |
+| `NEXT_PUBLIC_POSTHOG_KEY` / `NEXT_PUBLIC_POSTHOG_HOST` | Product analytics (PostHog) | Opcional |
+| `SENTRY_AUTH_TOKEN` / `SENTRY_ORG` / `SENTRY_PROJECT` | Subida de source maps en el build | Opcional |
+| `LOG_LEVEL` | Nivel de los logs del servidor (`debug`, `info`, `warn`…) | Opcional |
 
 ### Scripts
 
