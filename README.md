@@ -200,6 +200,10 @@ Abre **[localhost:3000](http://localhost:3000)**: verás la landing. Crea tu cue
 | `pnpm build` | Build de producción (la landing se genera como página estática) |
 | `pnpm start` | Sirve el build |
 | `pnpm lint` | ESLint |
+| `pnpm typecheck` | Genera los tipos de rutas de Next y ejecuta `tsc` |
+| `pnpm test` | Tests (Vitest); `pnpm test:watch` en modo watch |
+
+Cada push a `master` y cada pull request pasan por el [CI](.github/workflows/ci.yml): lint, typecheck, tests y build.
 
 <br/>
 

@@ -106,7 +106,7 @@ function pendingChanges(queryClient: QueryClient) {
  * Una página recién traída del servidor todavía no incluye lo que sigue en
  * cola: sin esto, esas filas desaparecerían hasta sincronizar.
  */
-function withPendingInPage(
+export function withPendingInPage(
   queryClient: QueryClient,
   page: TransactionPage,
   filters: TransactionFilters,
@@ -131,7 +131,7 @@ function withPendingInPage(
  * haber llegado ya (la respuesta tarda, o se reenvió al reconectar): el
  * servidor dice qué ids tiene para no contarlo dos veces.
  */
-async function fetchSummaryWithPending(queryClient: QueryClient, range: DateRange): Promise<TransactionSummary> {
+export async function fetchSummaryWithPending(queryClient: QueryClient, range: DateRange): Promise<TransactionSummary> {
   const pending = pendingChanges(queryClient).flatMap((change) => {
     const row = change.kind === "update" ? undefined : change.row;
     return row && inRange(row.transactionDate, range) ? [{ kind: change.kind, row }] : [];
