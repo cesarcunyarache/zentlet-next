@@ -193,6 +193,10 @@ export function TransactionFormSheet({
 
   const canSave = form.formState.isValid && amount > 0;
   const needsCategory = !categoryId && description.trim().length >= 3 && !thinking;
+  const isAutoCategory = Boolean(autoCategoryId) && autoCategoryId === categoryId;
+  const visibleCategories = isAutoCategory
+    ? categories.filter((category) => category.id === categoryId)
+    : categories;
 
   return (
     <>
@@ -279,6 +283,7 @@ export function TransactionFormSheet({
             aria-label="Categoría"
             className="scroll-clean -mx-[22px] flex gap-2 overflow-x-auto px-[22px] py-1 sm:-mx-7 sm:px-7"
           >
+            {!isAutoCategory && (
             <motion.button
               type="button"
               aria-label="Nueva categoría"
@@ -292,8 +297,10 @@ export function TransactionFormSheet({
             >
               <Plus className="size-[18px]" strokeWidth={2} />
             </motion.button>
+            )}
 
-            {categories.map((category) => {
+            <AnimatePresence initial={false} mode="popLayout">
+            {visibleCategories.map((category) => {
               const active = categoryId === category.id;
               const suggested = active && autoCategoryId === category.id;
 
@@ -306,6 +313,10 @@ export function TransactionFormSheet({
                   }}
                   type="button"
                   aria-pressed={active}
+                  layout={!reduceMotion}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
                   whileTap={{ scale: 0.94 }}
                   transition={SPRING_PRESS}
                   onClick={() => {
@@ -341,16 +352,13 @@ export function TransactionFormSheet({
                 </motion.button>
               );
             })}
+            </AnimatePresence>
           </div>
 
           <div className="min-h-5">
             <AnimatePresence mode="wait" initial={false}>
-              {thinking ? (
-                <Hint key="thinking" pulse={!reduceMotion}>
-                  Buscando la categoría…
-                </Hint>
-              ) : autoCategoryId && autoCategoryId === categoryId ? (
-                <Hint key="auto">Categoría detectada del texto</Hint>
+              {isAutoCategory ? (
+                <Hint key="auto">Categoría detectada del texto · tócala para ver todas</Hint>
               ) : needsCategory ? (
                 <Hint key="none" muted>
                   Ninguna categoría encaja · elige una o crea otra con +
@@ -373,11 +381,9 @@ export function TransactionFormSheet({
 function Hint({
   children,
   muted = false,
-  pulse = false,
 }: {
   children: React.ReactNode;
   muted?: boolean;
-  pulse?: boolean;
 }) {
   return (
     <motion.p
@@ -392,13 +398,7 @@ function Hint({
       )}
     >
       {!muted && (
-        <motion.span
-          animate={pulse ? { rotate: [0, 18, -12, 0], scale: [1, 1.15, 1] } : undefined}
-          transition={{ duration: 1.1, repeat: Infinity }}
-          className="inline-grid"
-        >
-          <Sparkles className="size-3.5" strokeWidth={2} />
-        </motion.span>
+        <Sparkles className="size-3.5" strokeWidth={2} />
       )}
       {children}
     </motion.p>
