@@ -3,6 +3,7 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { generateObject } from "@/lib/ai/client";
+import { allowAiCall } from "@/lib/ai/quota";
 import { buildTransactionCategoryPrompt } from "../promps/transaction-category.prompt";
 import {
   transactionSuggestionSchema,
@@ -16,8 +17,8 @@ interface SuggestCategoryInput {
 
 /**
  * Infiere categoría y tipo a partir de la descripción. Devuelve null si no
- * hay sesión, si el texto es muy corto o si el modelo falla: la sugerencia
- * es una ayuda, nunca bloquea el alta.
+ * hay sesión, si el texto es muy corto, si se agotó el cupo de IA o si el
+ * modelo falla: la sugerencia es una ayuda, nunca bloquea el alta.
  */
 export async function suggestTransactionCategory({
   description,
@@ -28,6 +29,7 @@ export async function suggestTransactionCategory({
 
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) return null;
+  if (!allowAiCall(session.user.id, "transaction.suggest_category")) return null;
 
   try {
     const result = (await generateObject({

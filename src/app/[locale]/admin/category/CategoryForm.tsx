@@ -52,7 +52,7 @@ async function suggestIcons(name: string): Promise<CategoryIcon[] | null> {
   // sin red la llamada fallaría seguro
   if (!navigator.onLine) return null;
   try {
-    return (await generateCategory(name)).categories;
+    return (await generateCategory(name))?.categories ?? null;
   } catch {
     return null;
   }

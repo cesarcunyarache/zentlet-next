@@ -13,6 +13,7 @@ import {
   SYNC_SCOPE,
   isNotFound,
   mutationRetryDelay,
+  reportSyncFailure,
   shouldRetryMutation,
 } from "@/core/offline/sync-policy";
 import {
@@ -87,6 +88,8 @@ function reportError(error: unknown, key: CategoryErrorKey) {
   // 409 al eliminar: la categoría tiene movimientos
   const inUse = key === "deleteCategory" && getApiErrorStatus(error) === 409;
   emitSyncError(inUse ? "categoryInUse" : key);
+  // tener movimientos es una regla de negocio, no un fallo
+  if (!inUse) reportSyncFailure(key, error);
 }
 
 /* ── registro (antes de restaurar la cache persistida) ─────────────────── */

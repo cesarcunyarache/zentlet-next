@@ -46,6 +46,13 @@ Reglas:
 - **IA**: `generateObject` ([ai/client.ts](../src/lib/ai/client.ts)) registra `ai.generate` (operación, modelo, `durationMs`, tokens) o `ai.generate_failed`. Nunca el prompt.
 - **Base de datos**: queries de más de 500 ms → log `db.slow_query` con el SQL parametrizado (sin valores). Con Sentry, además, cada query es un span.
 - **Navegador**: errores globales y crashes de render (Sentry), navegación y Web Vitals.
+- **Sincronización offline**: cuando el servidor rechaza una escritura de la cola (el cambio local se revierte), `reportSyncFailure()` ([sync-policy.ts](../src/core/offline/sync-policy.ts)) envía un `SyncRejectedError` con tags `operation` y `status`, agrupado por ambos. Los errores de red no llegan (se reintentan siempre) y el 409 de "categoría en uso" no se reporta: es una regla de negocio. No se envía el error de Axios, que lleva en `config.data` el contenido del movimiento.
+
+## Límite de uso de la IA
+
+Cada usuario tiene 30 llamadas al modelo por minuto, compartidas entre las dos Server Actions de IA ([quota.ts](../src/lib/ai/quota.ts)). Al superarlo, la acción devuelve `null` sin llamar al modelo (sin sugerencia; en categorías, iconos de reserva) y se registra **un** `ai.rate_limited` por ventana.
+
+El contador vive en memoria de cada instancia ([rate-limit.ts](../src/lib/rate-limit.ts)): frena el abuso, pero con N instancias el tope real es N × 30. Si se necesita un tope global exacto, se cambia el almacenamiento a Postgres o Redis sin tocar las acciones.
 
 ## Eventos de producto
 

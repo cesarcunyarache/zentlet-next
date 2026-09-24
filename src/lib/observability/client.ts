@@ -93,8 +93,14 @@ export function resetUser() {
   withSentry((sdk) => sdk.setUser(null));
 }
 
-export function reportClientError(error: unknown) {
-  withSentry((sdk) => sdk.captureException(error));
+interface ErrorContext {
+  tags?: Record<string, string>;
+  /** Agrupa en Sentry por estos valores en lugar de por el stack trace. */
+  fingerprint?: string[];
+}
+
+export function reportClientError(error: unknown, context: ErrorContext = {}) {
+  withSentry((sdk) => sdk.captureException(error, context));
 }
 
 export function captureNavigation(href: string, navigationType: "push" | "replace" | "traverse") {

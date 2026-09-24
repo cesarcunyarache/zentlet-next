@@ -1,5 +1,6 @@
 import { isAxiosError } from "axios";
-import { getApiErrorStatus } from "@/core/services/api-error";
+import { getApiErrorMessage, getApiErrorStatus } from "@/core/services/api-error";
+import { reportClientError } from "@/lib/observability/client";
 
 /*
  * Reglas de sincronización compartidas por todas las mutaciones offline.
@@ -39,4 +40,20 @@ export function mutationRetryDelay(failureCount: number) {
 /** 404 al borrar = ya no existe: el objetivo de la operación se cumplió. */
 export function isNotFound(error: unknown) {
   return getApiErrorStatus(error) === 404;
+}
+
+/**
+ * Una escritura que llega aquí se perdió: el cambio local se revierte. Los
+ * fallos de red no llegan (se reintentan siempre), así que es un rechazo
+ * real del servidor o un 5xx persistente. Se reporta un error propio y no
+ * el de Axios, que lleva en `config.data` el contenido del movimiento.
+ */
+export function reportSyncFailure(operation: string, error: unknown) {
+  const status = String(getApiErrorStatus(error) ?? "none");
+  const failure = new Error(`Sync rejected: ${operation} (${status}): ${getApiErrorMessage(error)}`);
+  failure.name = "SyncRejectedError";
+  reportClientError(failure, {
+    tags: { operation, status },
+    fingerprint: ["sync-rejected", operation, status],
+  });
 }

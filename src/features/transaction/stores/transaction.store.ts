@@ -16,6 +16,7 @@ import {
   SYNC_SCOPE,
   isNotFound,
   mutationRetryDelay,
+  reportSyncFailure,
   shouldRetryMutation,
 } from "@/core/offline/sync-policy";
 import { pendingMutations } from "@/core/offline/pending-changes";
@@ -191,8 +192,9 @@ function refreshWhenQueueDrains(queryClient: QueryClient) {
   }
 }
 
-function reportError(key: "createTransaction" | "updateTransaction" | "deleteTransaction") {
+function reportError(error: unknown, key: "createTransaction" | "updateTransaction" | "deleteTransaction") {
   emitSyncError(key);
+  reportSyncFailure(key, error);
 }
 
 /* ── registro (antes de restaurar la cache persistida) ───────────────── */
@@ -214,10 +216,10 @@ export function registerTransactionMutations(queryClient: QueryClient) {
       );
       updateSummaries(queryClient, transaction, 1);
     },
-    onError: (_error: unknown, transaction: TTransaction) => {
+    onError: (error: unknown, transaction: TTransaction) => {
       updateFeeds(queryClient, (data) => removeFromFeed(data, transaction.id));
       updateSummaries(queryClient, transaction, -1);
-      reportError("createTransaction");
+      reportError(error, "createTransaction");
     },
     onSettled: () => refreshWhenQueueDrains(queryClient),
   });
@@ -238,10 +240,10 @@ export function registerTransactionMutations(queryClient: QueryClient) {
     onSuccess: (transaction: TTransaction) => {
       queryClient.setQueryData(transactionKeys.detail(transaction.id), transaction);
     },
-    onError: () => {
+    onError: (error: unknown) => {
       // el estado previo exacto lo trae el servidor
       void queryClient.invalidateQueries({ queryKey: transactionKeys.all });
-      reportError("updateTransaction");
+      reportError(error, "updateTransaction");
     },
     onSettled: () => refreshWhenQueueDrains(queryClient),
   });
@@ -263,9 +265,9 @@ export function registerTransactionMutations(queryClient: QueryClient) {
       updateFeeds(queryClient, (data) => removeFromFeed(data, id));
       if (deleted) updateSummaries(queryClient, deleted, -1);
     },
-    onError: () => {
+    onError: (error: unknown) => {
       void queryClient.invalidateQueries({ queryKey: transactionKeys.all });
-      reportError("deleteTransaction");
+      reportError(error, "deleteTransaction");
     },
     onSettled: (_data: unknown, _error: unknown, variables: DeleteVariables) => {
       queryClient.removeQueries({ queryKey: transactionKeys.detail(deletedId(variables)) });
