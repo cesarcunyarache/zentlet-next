@@ -4,7 +4,7 @@
 
 ### Tus gastos, claros en segundos.
 
-Escribe **«taxi 12.50»** y Zentlet entiende el monto, si es gasto o ingreso y en qué categoría va.<br/>
+Escribe **«taxi al trabajo»** y Zentlet entiende si es gasto o ingreso y en qué categoría va.<br/>
 Tu balance del mes se actualiza al momento. Sin hojas de cálculo. Sin fórmulas.
 
 <br/>
@@ -32,7 +32,7 @@ Tu balance del mes se actualiza al momento. Sin hojas de cálculo. Sin fórmulas
 
 Las hojas de cálculo se abandonan en la segunda semana. Anotar un gasto exige abrir un archivo, buscar la fila, elegir la categoría y escribir la fórmula, así que acaba sin anotarse.
 
-**Zentlet está hecho para que anotar un gasto sea más rápido que olvidarlo.** Escribes el gasto como lo dirías, y la app lee el monto, el tipo y la categoría por ti.
+**Zentlet está hecho para que anotar un gasto sea más rápido que olvidarlo.** Escribes el gasto como lo dirías, y la app sugiere el tipo y la categoría por ti.
 
 <br/>
 
@@ -43,9 +43,9 @@ Las hojas de cálculo se abandonan en la segunda semana. Anotar un gasto exige a
 <td width="50%" valign="top">
 
 ### ⌨️ Escribe como hablas
-`almuerzo 18` · `sueldo 3 lucas` · `taxi 12.50`
+`almuerzo con amigos` · `sueldo de septiembre` · `taxi al trabajo`
 
-Mientras escribes, Zentlet lee **el monto y si es gasto o ingreso**, al instante y sin llamar a ningún servidor. Entiende multiplicadores como `k`, `mil`, `lucas` o `millones`.
+Mientras escribes, Zentlet reconoce **si es gasto o ingreso y la categoría**, al instante y sin llamar a ningún servidor. El monto va en su propio campo.
 
 </td>
 <td width="50%" valign="top">
@@ -123,7 +123,7 @@ Acceso con **correo, Google o GitHub**. Cada consulta exige tu sesión y solo de
 
 ```mermaid
 flowchart LR
-    A["✍️ Escribes<br/>«taxi 12.50»"] --> B["⚡ Lectura instantánea<br/>monto · tipo · categoría<br/>en el navegador"]
+    A["✍️ Escribes<br/>«taxi al trabajo»"] --> B["⚡ Lectura instantánea<br/>tipo · categoría<br/>en el navegador"]
     B --> C{"¿Basta?"}
     C -- Sí --> E["✅ Confirmas y guardas"]
     C -- No --> D["✨ Gemini sugiere<br/>la categoría entre las tuyas"]
@@ -131,7 +131,7 @@ flowchart LR
     E --> F["📊 Balance y reparto<br/>del mes al momento"]
 ```
 
-1. **Lectura local, instantánea.** Un parser en el cliente ([`parse-description.ts`](src/features/transaction/lib/parse-description.ts)) extrae el monto, el tipo y la categoría cuyo nombre aparece en el texto, sin esperar a la red.
+1. **Lectura local, instantánea.** Un parser en el cliente ([`parse-description.ts`](src/features/transaction/lib/parse-description.ts)) extrae el tipo y la categoría cuyo nombre aparece en el texto, sin esperar a la red.
 2. **La IA afina lo que falta.** Una *server action* pide a Gemini la categoría más probable entre las tuyas, con salida validada por Zod. Si el modelo falla, el alta sigue igual.
 3. **Todo se recalcula al guardar.** El balance, los totales y el gráfico por categoría se actualizan al instante con TanStack Query.
 

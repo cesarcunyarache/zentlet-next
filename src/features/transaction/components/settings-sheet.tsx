@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ChevronsUpDown, CloudOff, LogOut } from "lucide-react";
+import { CloudOff, LogOut } from "lucide-react";
 import { motion } from "motion/react";
 import { cn } from "@heroui/react";
 import { Sheet } from "@/core/components/ui/sheet";
+import { PillSelect } from "@/core/components/ui/pill-select";
 import { useOfflineSession } from "@/core/offline/offline-query-provider";
 import { useSyncStatus } from "@/core/offline/sync-status";
 import { useThemePreference } from "@/core/theme/use-theme";
@@ -53,22 +54,14 @@ export function SettingsSheet({
             Solo cambia el símbolo mostrado
           </span>
         </span>
-        <span className="bg-app-fill hover:bg-app-fill-strong text-app-fg relative inline-flex min-h-[34px] items-center gap-[5px] rounded-full px-2.5 text-[13px] font-semibold transition-colors">
-          {currency}
-          <ChevronsUpDown className="text-app-muted size-3 shrink-0" />
-          <select
-            aria-label="Moneda"
-            value={currency}
-            onChange={(event) => onCurrencyChange(event.target.value)}
-            className="absolute -inset-x-1 -inset-y-[5px] cursor-pointer appearance-none border-0 opacity-0"
-          >
-            {CURRENCIES.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </span>
+        <PillSelect
+          label="Moneda"
+          value={currency}
+          options={CURRENCIES}
+          onChange={onCurrencyChange}
+          display={currency}
+          className="bg-app-fill"
+        />
       </div>
 
       <AppearanceRow />

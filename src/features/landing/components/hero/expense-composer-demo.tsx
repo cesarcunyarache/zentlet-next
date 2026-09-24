@@ -25,7 +25,7 @@ interface ExpenseComposerDemoProps {
 
 /**
  * Réplica del alta de un movimiento: se escribe una frase, Zentlet la lee
- * y propone monto, tipo y categoría. Recorre los ejemplos en bucle.
+ * y propone tipo y categoría. Recorre los ejemplos en bucle.
  */
 export function ExpenseComposerDemo({ demo, common, locale }: ExpenseComposerDemoProps) {
   const reduceMotion = useReducedMotion();

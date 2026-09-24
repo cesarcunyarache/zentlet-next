@@ -6,14 +6,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useDebounce } from "use-debounce";
 import { Button, cn } from "@heroui/react";
-import { Check, ChevronDown, Plus, Sparkles } from "lucide-react";
+import { Check, Plus, Sparkles } from "lucide-react";
 import { Sheet } from "@/core/components/ui/sheet";
 import { CategoryFormSheet } from "@/app/admin/category/CategoryForm";
 import { SPRING_LAYOUT, SPRING_PRESS } from "@/lib/ease";
 import { CategoryEmoji } from "./category-emoji";
+import { TransactionDateField } from "./transaction-date-field";
 import {
   cleanAmountInput,
-  dayLabel,
   dayShift,
   parseAmount,
   toISODate,
@@ -69,19 +69,15 @@ export function TransactionFormSheet({
   const [thinking, setThinking] = useState(false);
 
   // lo que el usuario toca a mano manda sobre cualquier inferencia
-  const picked = useRef({ category: false, type: false, amount: false });
+  const picked = useRef({ category: false, type: false });
   const cache = useRef(new Map<string, TransactionSuggestion | null>());
   const chipRefs = useRef(new Map<string, HTMLButtonElement>());
   const knownCategoryIds = useRef<Set<string> | null>(null);
 
-  // se recalcula en cada render: si la app quedó abierta de un día para
-  // otro, "Hoy" tiene que seguir siendo hoy
-  const dayOptions = [0, 1, 2, 3, 4, 5, 6].map((offset) => toISODate(dayShift(offset)));
-
   const form = useForm<TransactionFormValues>({
     resolver: zodResolver(transactionSchema),
     mode: "onChange",
-    defaultValues: { ...EMPTY, transactionDate: dayOptions[0] },
+    defaultValues: { ...EMPTY, transactionDate: toISODate(dayShift(0)) },
   });
 
   const type = form.watch("type");
@@ -97,7 +93,7 @@ export function TransactionFormSheet({
     if (isOpen && !wasOpen.current) {
       setRawAmount("");
       setAutoCategoryId(null);
-      picked.current = { category: false, type: false, amount: false };
+      picked.current = { category: false, type: false };
       form.reset({ ...EMPTY, transactionDate: toISODate(dayShift(0)) });
     }
     wasOpen.current = isOpen;
@@ -119,16 +115,10 @@ export function TransactionFormSheet({
     form.setValue("type", next);
   }
 
-  function applyAmount(value: number | null) {
-    if (!value || picked.current.amount) return;
-    setAmount(value, String(value));
-  }
-
   // 1 · lectura instantánea del texto, a cada tecla
   function handleDescription(value: string) {
     form.setValue("description", value, { shouldValidate: true });
     const hints = readDescription(value, categories);
-    applyAmount(hints.amount);
     applyType(hints.type);
     applyCategory(hints.categoryId);
   }
@@ -143,7 +133,6 @@ export function TransactionFormSheet({
       if (!result) return;
       applyCategory(result.categoryId);
       applyType(result.type);
-      applyAmount(result.amount);
     }
 
     async function run() {
@@ -225,25 +214,11 @@ export function TransactionFormSheet({
         }
       >
         <div className="flex flex-col gap-4 pt-6 pb-2">
-          {/* fecha: una píldora, el select nativo debajo */}
-          <label className="bg-app-fill hover:bg-app-fill-strong relative inline-flex min-h-9 w-fit items-center gap-1 rounded-full px-3 text-[13px] font-semibold transition-colors">
-            {dayLabel(transactionDate || dayOptions[0])}
-            <ChevronDown className="text-app-muted size-3.5" strokeWidth={2.2} />
-            <select
-              aria-label="Fecha"
-              value={transactionDate}
-              onChange={(event) =>
-                form.setValue("transactionDate", event.target.value, { shouldValidate: true })
-              }
-              className="absolute inset-0 cursor-pointer appearance-none opacity-0"
-            >
-              {dayOptions.map((date) => (
-                <option key={date} value={date}>
-                  {dayLabel(date)}
-                </option>
-              ))}
-            </select>
-          </label>
+          <TransactionDateField
+            key={isOpen ? "open" : "closed"}
+            value={transactionDate}
+            onChange={(date) => form.setValue("transactionDate", date, { shouldValidate: true })}
+          />
 
           <input
             value={description}
@@ -285,7 +260,6 @@ export function TransactionFormSheet({
               <input
                 value={displayAmount(rawAmount)}
                 onChange={(event) => {
-                  picked.current.amount = true;
                   const clean = cleanAmountInput(event.target.value.replace(/,/g, ""));
                   setAmount(parseAmount(clean), clean);
                 }}

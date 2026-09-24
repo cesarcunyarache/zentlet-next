@@ -15,7 +15,7 @@ interface SuggestCategoryInput {
 }
 
 /**
- * Infiere categoría, tipo y monto a partir de la descripción. Devuelve null si no
+ * Infiere categoría y tipo a partir de la descripción. Devuelve null si no
  * hay sesión, si el texto es muy corto o si el modelo falla: la sugerencia
  * es una ayuda, nunca bloquea el alta.
  */
@@ -40,11 +40,7 @@ export async function suggestTransactionCategory({
 
     // el modelo puede alucinar un id: sólo vale si es una categoría real
     const exists = categories.some((c) => c.id === result.categoryId);
-    const amount =
-      typeof result.amount === "number" && result.amount > 0 && result.amount < 1e10
-        ? Math.round(result.amount * 100) / 100
-        : null;
-    return { categoryId: exists ? result.categoryId : null, type: result.type, amount };
+    return { categoryId: exists ? result.categoryId : null, type: result.type };
   } catch (error) {
     console.error("suggestTransactionCategory", error);
     return null;

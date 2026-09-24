@@ -22,7 +22,7 @@ export const es: LandingContent = {
   meta: {
     title: "Zentlet · Registra tus gastos en segundos",
     description:
-      "Zentlet es la forma más rápida de llevar tus finanzas personales: escribe «taxi 12.50» y la app entiende el monto, el tipo y la categoría. Balance del mes al instante, sin hojas de cálculo.",
+      "Zentlet es la forma más rápida de llevar tus finanzas personales: escribe «taxi al trabajo» y la app sugiere si es gasto o ingreso y en qué categoría va. Balance del mes al instante, sin hojas de cálculo.",
     keywords: [
       "control de gastos",
       "finanzas personales",
@@ -32,7 +32,7 @@ export const es: LandingContent = {
       "gastos con IA",
     ],
     ogImageAlt: "Zentlet: registra tus gastos en segundos",
-    ogSubtitle: "Escribe «taxi 12.50» y Zentlet hace el resto.",
+    ogSubtitle: "Escribe «taxi al trabajo» y Zentlet hace el resto.",
   },
   common: {
     currency: "S/",
@@ -60,7 +60,7 @@ export const es: LandingContent = {
     titleLead: "Tus gastos, claros",
     titleWords: ["en segundos.", "sin fórmulas.", "sin esfuerzo."],
     subtitle:
-      "Escribe «taxi 12.50» y Zentlet entiende el monto, si es gasto o ingreso y en qué categoría va. Tu balance del mes se actualiza al momento.",
+      "Escribe «taxi al trabajo» y Zentlet entiende si es gasto o ingreso y en qué categoría va. Tu balance del mes se actualiza al momento.",
     primaryCta: "Crear mi cuenta",
     secondaryCta: "Ver cómo funciona",
     note: "Regístrate en un minuto con tu correo, Google o GitHub",
@@ -70,10 +70,10 @@ export const es: LandingContent = {
       suggestion: "Sugerido",
       save: "Guardar",
       entries: [
-        { typed: "taxi al trabajo 12.50", amount: 12.5, type: "expense", category: CATEGORIES.transport },
-        { typed: "sueldo 3 lucas", amount: 3000, type: "income", category: CATEGORIES.salary },
-        { typed: "mercado 84.30", amount: 84.3, type: "expense", category: CATEGORIES.market },
-        { typed: "café con Ana 9", amount: 9, type: "expense", category: CATEGORIES.coffee },
+        { typed: "taxi al trabajo", amount: 12.5, type: "expense", category: CATEGORIES.transport },
+        { typed: "sueldo de septiembre", amount: 3000, type: "income", category: CATEGORIES.salary },
+        { typed: "mercado del sábado", amount: 84.3, type: "expense", category: CATEGORIES.market },
+        { typed: "café con Ana", amount: 9, type: "expense", category: CATEGORIES.coffee },
       ],
     },
   },
@@ -109,7 +109,7 @@ export const es: LandingContent = {
         id: "natural-input",
         title: "Escribe como hablas",
         description:
-          "«almuerzo 18», «sueldo 3 lucas», «taxi 12.50». Zentlet lee el monto y si es gasto o ingreso mientras escribes, sin esperar a nadie.",
+          "«almuerzo», «sueldo de septiembre», «taxi al trabajo». Zentlet reconoce si es gasto o ingreso mientras escribes, sin esperar a nadie.",
       },
       {
         id: "ai-category",
@@ -139,7 +139,7 @@ export const es: LandingContent = {
       },
     ],
     samples: {
-      phrases: ["almuerzo 18", "sueldo 3 lucas", "taxi 12.50", "netflix 44.90"],
+      phrases: ["almuerzo con amigos", "sueldo de septiembre", "taxi al trabajo", "netflix"],
       suggestionFrom: "uber a casa",
       suggestionCategory: CATEGORIES.transport,
       categoryIdeas: [CATEGORIES.food, CATEGORIES.coffee, CATEGORIES.health, CATEGORIES.fun],
@@ -169,7 +169,7 @@ export const es: LandingContent = {
       {
         title: "Anota como hablas",
         description:
-          "Escribe el movimiento tal como lo dirías. El monto, el tipo y la categoría se completan solos; tú sólo confirmas.",
+          "Escribe el movimiento tal como lo dirías. El tipo y la categoría se completan solos; tú pones el monto y confirmas.",
       },
       {
         title: "Mira tu mes",
@@ -218,7 +218,7 @@ export const es: LandingContent = {
       {
         question: "¿Cómo sabe en qué categoría va cada gasto?",
         answer:
-          "Mientras escribes, Zentlet reconoce el monto, el tipo y las categorías cuyo nombre aparece en el texto. Si no alcanza, una IA sugiere la categoría entre las que tú creaste. Siempre puedes cambiarla.",
+          "Mientras escribes, Zentlet reconoce el tipo y las categorías cuyo nombre aparece en el texto. Si no alcanza, una IA sugiere la categoría entre las que tú creaste. Siempre puedes cambiarla.",
       },
       {
         question: "¿Puedo usar mi moneda?",
