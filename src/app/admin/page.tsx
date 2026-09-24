@@ -3,13 +3,16 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { LayoutGrid, Plus, Search, Settings, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
+import { useDebounce } from "use-debounce";
 import { SPRING_LAYOUT, SPRING_PRESS } from "@/lib/ease";
 import { useCategoryStore } from "@/features/category/stores/category.store";
 import { onSyncError } from "@/core/offline/sync-events";
 import { SyncStatusPill } from "@/core/offline/sync-status";
 import {
   usePendingTransactions,
-  useTransactionStore,
+  useTransactionFeed,
+  useTransactionMutations,
+  useTransactionSummary,
 } from "@/features/transaction/stores/transaction.store";
 import { useCurrency } from "@/features/transaction/hooks/useCurrency";
 import { useToast } from "@/features/transaction/hooks/useToast";
@@ -26,52 +29,19 @@ import { TransactionDetailSheet } from "@/features/transaction/components/transa
 import { CategoriesSheet } from "@/features/transaction/components/categories-sheet";
 import { SettingsSheet } from "@/features/transaction/components/settings-sheet";
 import { ToastBubble } from "@/core/components/ui/toast-bubble";
-import { parseISODate, today } from "@/features/transaction/lib/format";
+import { periodRange } from "@/features/transaction/lib/format";
 import type {
   CategoryLike,
+  DateRange,
   Period,
   TTransaction,
+  TransactionFilters,
   TransactionType,
 } from "@/features/transaction/types";
 
 type Sheet = "new" | "categories" | "settings" | null;
 
-function rowsInPeriod(transactions: TTransaction[], period: Period) {
-  if (period === "all") return transactions;
-
-  const now = today();
-  const target =
-    period === "previous"
-      ? new Date(now.getFullYear(), now.getMonth() - 1, 1)
-      : now;
-  const month = target.getMonth();
-  const year = target.getFullYear();
-
-  return transactions.filter((tx) => {
-    const date = parseISODate(tx.transactionDate);
-    return date.getMonth() === month && date.getFullYear() === year;
-  });
-}
-
-function sumTotals(transactions: TTransaction[]) {
-  let expenseTotal = 0;
-  let incomeTotal = 0;
-  const totalsByCategory = new Map<string, { expense: number; income: number }>();
-
-  for (const tx of transactions) {
-    const totals = totalsByCategory.get(tx.categoryId) ?? { expense: 0, income: 0 };
-    if (tx.type === "expense") {
-      expenseTotal += tx.amount;
-      totals.expense += tx.amount;
-    } else {
-      incomeTotal += tx.amount;
-      totals.income += tx.amount;
-    }
-    totalsByCategory.set(tx.categoryId, totals);
-  }
-
-  return { expenseTotal, incomeTotal, totalsByCategory };
-}
+const ALL_TIME: DateRange = {};
 
 export default function HomePage() {
   const { categories: rawCategories } = useCategoryStore();
@@ -94,8 +64,7 @@ export default function HomePage() {
     [categories],
   );
 
-  const { transactions, isLoading, createTransaction, deleteTransaction } =
-    useTransactionStore();
+  const { createTransaction, deleteTransaction } = useTransactionMutations();
   const syncStateById = usePendingTransactions();
   const { currency, setCurrency } = useCurrency();
 
@@ -123,34 +92,22 @@ export default function HomePage() {
     toast(values.type === "expense" ? "Gasto registrado" : "Ingreso registrado");
   }
 
-  /** Movimientos del periodo, antes de los filtros de la vista. */
-  const periodRows = useMemo(
-    () => rowsInPeriod(transactions, period),
-    [transactions, period],
-  );
+  const [debouncedQuery] = useDebounce(query.trim(), 300);
+  const range = periodRange(period);
+  const filters: TransactionFilters = {
+    ...range,
+    type: kind ?? undefined,
+    categoryId: categoryFilter ?? undefined,
+    q: debouncedQuery || undefined,
+  };
 
-  const visibleRows = useMemo(() => {
-    const q = query.trim().toLowerCase();
+  const feed = useTransactionFeed(filters);
+  const { data: summary } = useTransactionSummary(range);
+  const { data: lifetime } = useTransactionSummary(ALL_TIME);
 
-    return periodRows
-      .filter((tx) => {
-        if (kind && tx.type !== kind) return false;
-        if (categoryFilter && tx.categoryId !== categoryFilter) return false;
-        if (q) {
-          const categoryName = categoriesById.get(tx.categoryId)?.name ?? "";
-          if (!`${tx.description} ${categoryName}`.toLowerCase().includes(q)) {
-            return false;
-          }
-        }
-        return true;
-      })
-      .sort((a, b) => b.transactionDate.localeCompare(a.transactionDate));
-  }, [periodRows, kind, categoryFilter, query, categoriesById]);
-
-  const { expenseTotal, incomeTotal, totalsByCategory } = useMemo(
-    () => sumTotals(periodRows),
-    [periodRows],
-  );
+  const expenseTotal = summary?.expenseTotal ?? 0;
+  const incomeTotal = summary?.incomeTotal ?? 0;
+  const totalsByCategory = summary?.byCategory;
 
   /**
    * Lo que suma o resta una categoría según el filtro de tipo: sólo sus
@@ -158,7 +115,7 @@ export default function HomePage() {
    */
   const categoryValue = useCallback(
     (categoryId: string) => {
-      const totals = totalsByCategory.get(categoryId);
+      const totals = totalsByCategory?.[categoryId];
       if (!totals) return 0;
       if (kind === "expense") return -totals.expense;
       if (kind === "income") return totals.income;
@@ -291,14 +248,23 @@ export default function HomePage() {
         </AnimatePresence>
 
         <div className="mt-6">
-          {isLoading ? (
+          {feed.isLoading ? (
             <ListSkeleton />
+          ) : feed.isUnavailableOffline ? (
+            <p className="text-app-muted m-0 py-10 text-center text-sm">
+              Sin conexión · esta vista se cargará al volver la red
+            </p>
           ) : (
             <TransactionList
-              transactions={visibleRows}
+              transactions={feed.transactions}
               categoriesById={categoriesById}
               currency={currency}
-              hasAnyTransaction={transactions.length > 0}
+              hasAnyTransaction={(lifetime?.count ?? 0) > 0 || feed.transactions.length > 0}
+              hasMore={feed.hasNextPage}
+              isLoadingMore={feed.isFetchingNextPage}
+              onEndReached={() => {
+                if (feed.hasNextPage && !feed.isFetchingNextPage) void feed.fetchNextPage();
+              }}
               syncStateById={syncStateById}
               onSelect={setDetail}
             />
@@ -383,7 +349,7 @@ export default function HomePage() {
         onOpenChange={(open) => !open && setDetail(null)}
         onDelete={(id) => {
           setDetail(null);
-          deleteTransaction(id);
+          if (detail?.id === id) deleteTransaction(detail);
           toast("Movimiento eliminado");
         }}
       />
@@ -398,7 +364,7 @@ export default function HomePage() {
         isOpen={sheet === "settings"}
         onOpenChange={(open) => setSheet(open ? "settings" : null)}
         currency={currency}
-        transactionCount={transactions.length}
+        transactionCount={lifetime?.count ?? 0}
         onCurrencyChange={setCurrency}
       />
     </div>

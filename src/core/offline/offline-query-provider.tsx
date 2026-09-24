@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { onlineManager, QueryClient } from "@tanstack/react-query";
+import { defaultShouldDehydrateQuery, onlineManager, QueryClient, type Query } from "@tanstack/react-query";
 import {
   PersistQueryClientProvider,
   type PersistedClient,
@@ -55,6 +55,12 @@ function serialize(client: PersistedClient) {
       : mutation,
   );
   return JSON.stringify({ ...client, clientState: { ...client.clientState, mutations } });
+}
+
+/** Cada búsqueda es una consulta distinta: guardarlas todas llenaría el dispositivo. */
+function shouldDehydrateQuery(query: Query) {
+  const filters = query.queryKey[1] === "list" ? (query.queryKey[2] as { q?: string } | undefined) : undefined;
+  return defaultShouldDehydrateQuery(query) && !filters?.q;
 }
 
 function createOfflineQueryClient() {
@@ -132,6 +138,7 @@ export function OfflineQueryProvider({ userId, children }: { userId: string; chi
         maxAge: MAX_AGE,
         buster: CACHE_VERSION,
         dehydrateOptions: {
+          shouldDehydrateQuery,
           shouldDehydrateMutation: (mutation) => mutation.state.status === "pending",
         },
       }}

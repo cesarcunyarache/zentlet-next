@@ -1,26 +1,53 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { serializeTransaction } from "@/features/transaction/lib/serialize";
-import { createTransactionSchema } from "@/features/transaction/schemas/transaction-api.schema";
+import {
+  createTransactionSchema,
+  transactionListQuerySchema,
+} from "@/features/transaction/schemas/transaction-api.schema";
+import {
+  FEED_ORDER,
+  afterCursor,
+  decodeCursor,
+  encodeCursor,
+  feedWhere,
+} from "@/features/transaction/lib/feed-query";
+import type { TransactionPage } from "@/features/transaction/types";
 import {
   errorResponse,
   getSessionUserId,
   isUniqueViolation,
   parseBody,
+  parseQuery,
   unauthorized,
 } from "@/lib/api/route-helpers";
 
+/** Una página del feed, filtrada y ordenada en la base de datos. */
 export async function GET(req: Request) {
   try {
     const userId = await getSessionUserId(req);
     if (!userId) return unauthorized();
 
-    const transactions = await prisma.transaction.findMany({
-      where: { userId },
-      orderBy: [{ transactionDate: "desc" }, { createdAt: "desc" }],
+    const parsed = parseQuery(req, transactionListQuerySchema);
+    if ("error" in parsed) return parsed.error;
+    const { cursor, limit, ...filters } = parsed.data;
+
+    const after = cursor ? decodeCursor(cursor) : null;
+    if (cursor && !after) return errorResponse("Invalid cursor", 422);
+
+    const where = feedWhere(userId, filters);
+    const rows = await prisma.transaction.findMany({
+      where: after ? { AND: [where, afterCursor(after)] } : where,
+      orderBy: FEED_ORDER,
+      take: limit + 1,
     });
 
-    return NextResponse.json(transactions.map(serializeTransaction));
+    const items = rows.slice(0, limit);
+    const page: TransactionPage = {
+      items: items.map(serializeTransaction),
+      nextCursor: rows.length > limit ? encodeCursor(items[items.length - 1]) : null,
+    };
+    return NextResponse.json(page);
   } catch {
     return errorResponse("Error fetching transactions", 500);
   }

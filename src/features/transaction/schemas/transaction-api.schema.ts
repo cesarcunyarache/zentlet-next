@@ -20,3 +20,28 @@ const fields = {
 export const createTransactionSchema = z.object({ id: z.uuid(), ...fields });
 
 export const updateTransactionSchema = z.object(fields).partial();
+
+/** Periodo `[from, to)` en fechas locales del cliente; sin ellos, todo el historial. */
+const range = {
+  from: isoDate.optional(),
+  to: isoDate.optional(),
+};
+
+export const transactionSummaryQuerySchema = z.object({
+  ...range,
+  /** Ids con cambios aún en cola: el servidor dice cuáles ya tiene. */
+  ids: z
+    .string()
+    .optional()
+    .transform((value) => (value ? value.split(",") : []))
+    .pipe(z.array(z.uuid()).max(100)),
+});
+
+export const transactionListQuerySchema = z.object({
+  ...range,
+  type: fields.type.optional(),
+  categoryId: fields.categoryId.optional(),
+  q: z.string().trim().max(60).optional(),
+  cursor: z.string().max(200).optional(),
+  limit: z.coerce.number().int().min(1).max(500).default(200),
+});

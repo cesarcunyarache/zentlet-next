@@ -1,7 +1,9 @@
 "use client";
 
+import { useEffect, useMemo, useRef } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { CloudOff, RefreshCw } from "lucide-react";
+import { cn } from "@heroui/react";
 import { SPRING_LAYOUT } from "@/lib/ease";
 import { CategoryEmoji } from "./category-emoji";
 import { dayLabel, formatSigned, signedAmount } from "../lib/format";
@@ -16,8 +18,18 @@ interface TransactionListProps {
   hasAnyTransaction: boolean;
   /** Movimientos con cambios hechos sin conexión. */
   syncStateById?: Map<string, OfflineSyncState>;
+  /** Quedan páginas por pedir al servidor. */
+  hasMore?: boolean;
+  isLoadingMore?: boolean;
+  onEndReached?: () => void;
   onSelect: (transaction: TTransaction) => void;
 }
+
+/**
+ * Por encima de esto no se animan las posiciones: `layout` mide cada fila
+ * en cada render y con cientos de filas se nota.
+ */
+const LAYOUT_ANIMATION_LIMIT = 120;
 
 const SYNC_LABEL: Record<OfflineSyncState, string> = {
   paused: "Guardado en este dispositivo, se sincronizará al volver la conexión",
@@ -56,9 +68,15 @@ export function TransactionList({
   currency,
   hasAnyTransaction,
   syncStateById,
+  hasMore = false,
+  isLoadingMore = false,
+  onEndReached,
   onSelect,
 }: TransactionListProps) {
   const reduceMotion = useReducedMotion();
+  const groups = useMemo(() => groupByDay(transactions), [transactions]);
+  const isLarge = transactions.length > LAYOUT_ANIMATION_LIMIT;
+  const animateLayout = !reduceMotion && !isLarge;
 
   if (!transactions.length) {
     if (!hasAnyTransaction) return null;
@@ -79,15 +97,19 @@ export function TransactionList({
   return (
     <div>
       <AnimatePresence initial={false} mode="popLayout">
-        {groupByDay(transactions).map((group) => (
+        {groups.map((group) => (
           <motion.section
             key={group.date}
-            layout={!reduceMotion}
+            layout={animateLayout}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={SPRING_LAYOUT}
-            className="[&+section]:mt-6"
+            className={cn(
+              "[&+section]:mt-6",
+              // fuera de pantalla el navegador no pinta los días lejanos
+              isLarge && "[contain-intrinsic-size:auto_320px] [content-visibility:auto]",
+            )}
           >
             <div className="text-app-muted flex items-baseline justify-between px-1 pb-1.5 text-[13px]">
               <span className="lowercase first-letter:uppercase">{dayLabel(group.date)}</span>
@@ -104,7 +126,7 @@ export function TransactionList({
                 return (
                   <motion.button
                     key={tx.id}
-                    layout={!reduceMotion}
+                    layout={animateLayout}
                     type="button"
                     onClick={() => onSelect(tx)}
                     initial={reduceMotion ? false : { opacity: 0, y: 10 }}
@@ -159,6 +181,40 @@ export function TransactionList({
           </motion.section>
         ))}
       </AnimatePresence>
+
+      {hasMore && <EndSentinel isLoading={isLoadingMore} onReached={onEndReached} />}
+    </div>
+  );
+}
+
+/** Pide la siguiente página un poco antes de llegar al final. */
+function EndSentinel({ isLoading, onReached }: { isLoading: boolean; onReached?: () => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const onReachedRef = useRef(onReached);
+
+  useEffect(() => {
+    onReachedRef.current = onReached;
+  });
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => entry.isIntersecting && onReachedRef.current?.(),
+      { rootMargin: "0px 0px 800px 0px" },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={ref} role="status" className="text-app-muted flex h-14 items-center justify-center gap-2 text-xs font-semibold">
+      {isLoading && (
+        <>
+          <RefreshCw className="size-3.5 animate-spin" aria-hidden />
+          Cargando más movimientos…
+        </>
+      )}
     </div>
   );
 }

@@ -34,13 +34,26 @@ export async function parseBody<T extends z.ZodType>(
     return { error: errorResponse("Invalid JSON body", 422) };
   }
 
-  const result = schema.safeParse(body);
+  return validate(body, schema, "Invalid body");
+}
+
+/** Valida los parámetros de la URL (`?from=…&limit=…`) con el mismo formato de error. */
+export function parseQuery<T extends z.ZodType>(
+  req: Request,
+  schema: T,
+): { data: z.infer<T> } | { error: NextResponse } {
+  const params = Object.fromEntries(new URL(req.url).searchParams);
+  return validate(params, schema, "Invalid query");
+}
+
+function validate<T extends z.ZodType>(input: unknown, schema: T, fallback: string) {
+  const result = schema.safeParse(input);
   if (!result.success) {
     const issue = result.error.issues[0];
     const path = issue?.path.join(".");
-    return { error: errorResponse(path ? `${path}: ${issue.message}` : "Invalid body", 422) };
+    return { error: errorResponse(path ? `${path}: ${issue.message}` : fallback, 422) };
   }
-  return { data: result.data };
+  return { data: result.data as z.infer<T> };
 }
 
 function hasPrismaErrorCode(error: unknown, code: string) {

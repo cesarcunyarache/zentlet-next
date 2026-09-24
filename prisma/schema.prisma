@@ -118,5 +118,7 @@ model Transaction {
   @@index([userId])
   @@index([categoryId])
   @@index([transactionDate])
+  // feed paginado por cursor y resúmenes por periodo del usuario
+  @@index([userId, transactionDate(sort: Desc), createdAt(sort: Desc), id(sort: Desc)])
   @@map("transaction")
 }

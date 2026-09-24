@@ -1,4 +1,4 @@
-import type { TTransaction } from "../types";
+import type { DateRange, Period, TTransaction } from "../types";
 
 export const MONTHS = [
   "enero",
@@ -36,6 +36,17 @@ export function dayShift(days: number) {
   const d = today();
   d.setDate(d.getDate() - days);
   return d;
+}
+
+/** Rango `[from, to)` de un periodo en fechas locales; "Todo" no tiene límites. */
+export function periodRange(period: Period): DateRange {
+  if (period === "all") return {};
+  const now = today();
+  const month = now.getMonth() - (period === "previous" ? 1 : 0);
+  return {
+    from: toISODate(new Date(now.getFullYear(), month, 1, 12)),
+    to: toISODate(new Date(now.getFullYear(), month + 1, 1, 12)),
+  };
 }
 
 export function toISODate(d: Date) {
