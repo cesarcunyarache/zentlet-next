@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button, Description, Separator, toast } from "@heroui/react";
-import { ChartBar } from "@gravity-ui/icons";
+import { Button, Description, InputGroup, Separator, toast } from "@heroui/react";
+import { ChartBar, Eye, EyeSlash, Lock } from "@gravity-ui/icons";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { authClient } from "@/lib/auth-client";
@@ -32,12 +32,12 @@ export function AuthFormHeader({
         href="/"
         className="hidden flex-col items-center gap-2 font-medium lg:flex"
       >
-        <div className="bg-app-fg text-app-bg flex size-12 items-center justify-center rounded-2xl shadow-[0_10px_24px_-8px_color-mix(in_oklch,var(--app-fg)_55%,transparent)]">
-          <ChartBar className="size-6" />
+        <div className="bg-app-fg text-app-bg flex size-10 items-center justify-center rounded-2xl shadow-[0_10px_24px_-8px_color-mix(in_oklch,var(--app-fg)_55%,transparent)]">
+          <ChartBar className="size-5" />
         </div>
         <span className="sr-only">Zentlet</span>
       </Link>
-      <h1 className="font-display m-0 lg:mt-2 text-[28px] leading-tight font-bold tracking-[-0.03em]">{title}</h1>
+      <h1 className="font-display m-0 lg:mt-2 text-2xl leading-tight font-bold tracking-[-0.03em]">{title}</h1>
       <Description className="text-app-muted">{children}</Description>
     </div>
   );
@@ -59,10 +59,54 @@ export function AuthSubmitButton({
       type="submit"
       isPending={isPending}
       isDisabled={isDisabled}
-      className="bg-app-fg text-app-bg mt-2 h-11 w-full rounded-xl font-semibold shadow-[0_12px_24px_-10px_color-mix(in_oklch,var(--app-fg)_60%,transparent)] transition-transform hover:-translate-y-0.5 data-[pending=true]:opacity-80"
+      className="bg-app-fg text-app-bg mt-1 h-10 w-full rounded-xl font-semibold shadow-[0_12px_24px_-10px_color-mix(in_oklch,var(--app-fg)_60%,transparent)] transition-transform hover:-translate-y-0.5 data-[pending=true]:opacity-80"
     >
       {isPending ? pendingLabel : children}
     </Button>
+  );
+}
+
+type AuthInputProps = Omit<InputGroup["InputProps"], "type"> & {
+  type?: "text" | "email";
+  icon: React.ComponentType<{ className?: string }>;
+};
+
+/** Campo del acceso con un icono al inicio. */
+export function AuthInput({ icon: Icon, type = "text", "aria-invalid": invalid, ...props }: AuthInputProps) {
+  return (
+    <InputGroup fullWidth isInvalid={Boolean(invalid)}>
+      <InputGroup.Prefix>
+        <Icon className="text-app-muted size-4" />
+      </InputGroup.Prefix>
+      <InputGroup.Input type={type} aria-invalid={invalid} {...props} />
+    </InputGroup>
+  );
+}
+
+/** Contraseña con candado al inicio y un botón para mostrarla u ocultarla. */
+export function PasswordInput({ "aria-invalid": invalid, ...props }: Omit<InputGroup["InputProps"], "type">) {
+  const t = useTranslations("auth.fields");
+  const [visible, setVisible] = useState(false);
+  const Toggle = visible ? EyeSlash : Eye;
+
+  return (
+    <InputGroup fullWidth isInvalid={Boolean(invalid)}>
+      <InputGroup.Prefix>
+        <Lock className="text-app-muted size-4" />
+      </InputGroup.Prefix>
+      <InputGroup.Input type={visible ? "text" : "password"} aria-invalid={invalid} {...props} />
+      <InputGroup.Suffix>
+        <button
+          type="button"
+          onClick={() => setVisible((value) => !value)}
+          aria-label={t(visible ? "hidePassword" : "showPassword")}
+          aria-pressed={visible}
+          className="text-app-muted hover:text-app-fg focus-visible:ring-app-fg -mr-1 flex size-7 items-center justify-center rounded-md outline-none focus-visible:ring-2"
+        >
+          <Toggle className="size-4" />
+        </button>
+      </InputGroup.Suffix>
+    </InputGroup>
   );
 }
 
@@ -126,7 +170,7 @@ export function SocialSignInButtons({
         <Button
           variant="outline"
           type="button"
-          className="h-11 w-full rounded-xl"
+          className="h-10 w-full rounded-xl"
           isPending={pending === "github"}
           isDisabled={isDisabled || pending !== null}
           onPress={() => signIn("github")}
@@ -144,7 +188,7 @@ export function SocialSignInButtons({
         <Button
           variant="outline"
           type="button"
-          className="h-11 w-full rounded-xl"
+          className="h-10 w-full rounded-xl"
           isPending={pending === "google"}
           isDisabled={isDisabled || pending !== null}
           onPress={() => signIn("google")}

@@ -1,11 +1,14 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { Form, Input, Label, TextField } from "@heroui/react";
+import { Form, Label, TextField } from "@heroui/react";
+import { Envelope } from "@gravity-ui/icons";
 import { useLocale, useTranslations } from "next-intl";
 import {
   AuthFormHeader,
+  AuthInput,
   AuthSubmitButton,
+  PasswordInput,
   SocialSignInButtons,
   TermsNotice,
   showAuthError,
@@ -59,7 +62,8 @@ export default function SignIn() {
           </AuthFormHeader>
           <TextField>
             <Label htmlFor="email">{t("fields.email")}</Label>
-            <Input
+            <AuthInput
+              icon={Envelope}
               id="email"
               name="email"
               type="email"
@@ -70,10 +74,9 @@ export default function SignIn() {
           </TextField>
           <TextField>
             <Label htmlFor="password">{t("fields.password")}</Label>
-            <Input
+            <PasswordInput
               id="password"
               name="password"
-              type="password"
               autoComplete="current-password"
               placeholder="••••••••"
               required
