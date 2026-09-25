@@ -117,7 +117,7 @@ export function AuthScene({ children }: { children: React.ReactNode }) {
             <MobileBrand />
             {/* centrado en escritorio: la tarjeta tiene alto fijo y el cambio es un
                 fundido, así que cada formulario aparece ya en su sitio */}
-            <div className="flex flex-1 items-start justify-center px-6 pt-8 pb-10 sm:px-10 md:py-14 lg:items-center">
+            <div className="flex flex-1 items-start justify-center px-6 pt-8 pb-10 sm:px-10 md:py-14 lg:items-center lg:py-8">
               <AuthTransition>{children}</AuthTransition>
             </div>
           </div>

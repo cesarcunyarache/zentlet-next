@@ -1,17 +1,20 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Form, Input, Label, TextField } from "@heroui/react";
+import { Form, Label, TextField } from "@heroui/react";
+import { Envelope, Person } from "@gravity-ui/icons";
 import { useLocale, useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
   AuthFormHeader,
+  AuthInput,
   AuthNotice,
   AuthSubmitButton,
   FieldMessage,
   LegalConsent,
+  PasswordInput,
   ResendVerification,
   SocialSignInButtons,
   legalConsentHeaders,
@@ -107,7 +110,7 @@ export default function SignUp() {
   return (
     <div className="w-full max-w-sm">
       <div className="flex flex-col gap-6">
-        <Form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)} validationBehavior="aria">
+        <Form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)} validationBehavior="aria">
           <AuthFormHeader title={t("signUp.title")}>
             {t.rich("signUp.hasAccount", {
               link: (chunks) => <AuthLink href={siteConfig.routes.signIn}>{chunks}</AuthLink>,
@@ -115,7 +118,8 @@ export default function SignUp() {
           </AuthFormHeader>
           <TextField>
             <Label htmlFor="name">{t("fields.name")}</Label>
-            <Input
+            <AuthInput
+              icon={Person}
               id="name"
               type="text"
               autoComplete="name"
@@ -127,7 +131,8 @@ export default function SignUp() {
           </TextField>
           <TextField>
             <Label htmlFor="email">{t("fields.email")}</Label>
-            <Input
+            <AuthInput
+              icon={Envelope}
               id="email"
               type="email"
               autoComplete="email"
@@ -139,9 +144,8 @@ export default function SignUp() {
           </TextField>
           <TextField>
             <Label htmlFor="password">{t("fields.password")}</Label>
-            <Input
+            <PasswordInput
               id="password"
-              type="password"
               autoComplete="new-password"
               placeholder="••••••••"
               aria-invalid={Boolean(errors.password)}
@@ -151,9 +155,8 @@ export default function SignUp() {
           </TextField>
           <TextField>
             <Label htmlFor="confirm-password">{t("fields.confirmPassword")}</Label>
-            <Input
+            <PasswordInput
               id="confirm-password"
-              type="password"
               autoComplete="new-password"
               placeholder="••••••••"
               aria-invalid={Boolean(errors.confirmPassword)}
