@@ -13,16 +13,15 @@ datasource db {
 }
 
 model User {
-  id                    String        @id
-  name                  String
-  email                 String
-  emailVerified         Boolean       @default(false)
-  image                 String?
-  /// Consentimiento expreso a los Términos y a la Política de privacidad (Ley 29733: datos sensibles)
-  legalAcceptedAt       DateTime?
-  /// Versión de los textos legales aceptada (su fecha de actualización)
-  legalVersion          String?
-  /// Fin del recorrido de bienvenida (hecho u omitido): se muestra una sola vez
+  id            String  @id
+  name          String
+  email         String
+  emailVerified Boolean @default(false)
+  image         String?
+
+  legalAcceptedAt DateTime?
+  legalVersion    String?
+
   onboardingCompletedAt DateTime?
   createdAt             DateTime      @default(now())
   updatedAt             DateTime      @updatedAt
@@ -85,13 +84,12 @@ model Verification {
 }
 
 model Category {
-  id            String  @id @default(uuid())
-  name          String
-  icon          String
-  color         String
-  description   String?
-  /// Opciones de icono que propuso la IA para este nombre: [{ icon, color }].
-  /// Se reutilizan al editar; si cambia el nombre se regeneran y se reemplazan.
+  id          String  @id @default(uuid())
+  name        String
+  icon        String
+  color       String
+  description String?
+
   aiSuggestions Json?
 
   userId String
@@ -129,24 +127,16 @@ model Transaction {
   @@index([userId])
   @@index([categoryId])
   @@index([transactionDate])
-  // feed paginado por cursor y resúmenes por periodo del usuario
   @@index([userId, transactionDate(sort: Desc), createdAt(sort: Desc), id(sort: Desc)])
   @@map("transaction")
 }
 
-/// Comentarios y reportes que el usuario envía desde Ajustes.
-/// `type` y `status` son texto libre a propósito: los valores válidos viven
-/// en el código (`features/feedback/constants.ts`) y cambian sin migración.
 model Feedback {
   id      String @id @default(uuid())
-  /// comment | bug | idea … (hoy la app sólo envía `comment`)
   type    String @default("comment")
-  /// Seguimiento interno, el usuario no lo ve: open | reviewed | resolved …
   status  String @default("open")
   message String @db.VarChar(2000)
 
-  /// Datos técnicos para reproducir un problema: versión, idioma, pantalla y
-  /// navegador. Nunca montos, movimientos ni categorías.
   context Json?
 
   userId String
@@ -156,12 +146,10 @@ model Feedback {
   updatedAt DateTime @updatedAt
 
   @@index([userId])
-  // bandeja de revisión: lo pendiente, lo más reciente primero
   @@index([status, createdAt(sort: Desc)])
   @@map("feedback")
 }
 
-/// Límite de intentos de Better Auth (login, registro…), compartido entre instancias
 model RateLimit {
   id          String @id
   key         String @unique
@@ -171,7 +159,6 @@ model RateLimit {
   @@map("rate_limit")
 }
 
-/// Cupos de uso de la app por usuario (escrituras, IA, exportación), en ventanas fijas
 model UsageLimit {
   key         String   @id
   count       Int
