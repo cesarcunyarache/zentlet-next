@@ -32,7 +32,8 @@
   "toast": {
     "expenseSaved": "Expense saved",
     "incomeSaved": "Income saved",
-    "deleted": "Transaction deleted"
+    "deleted": "Transaction deleted",
+    "updated": "Transaction updated"
   },
   "summary": {
     "filterByType": "Filter by type",
@@ -53,6 +54,7 @@
     "noMatches": "Nothing matches the filter.",
     "fallbackName": "transaction",
     "deleteItem": "Delete {name}",
+    "editItem": "Edit {name}",
     "loadingMore": "Loading more transactions…",
     "sync": {
       "paused": "Saved on this device, it will sync when you're back online",
@@ -61,6 +63,7 @@
   },
   "form": {
     "title": "New transaction",
+    "editTitle": "Edit transaction",
     "descriptionPlaceholder": "What was it for?",
     "typeGroup": "Expense or income",
     "newCategory": "New category",
@@ -74,6 +77,7 @@
   },
   "detail": {
     "title": "Transaction",
+    "edit": "Edit",
     "delete": "Delete transaction",
     "confirmDelete": "Tap again to delete"
   },

@@ -70,7 +70,7 @@ export default function HomePage() {
     [categories],
   );
 
-  const { createTransaction, deleteTransaction } = useTransactionMutations();
+  const { createTransaction, updateTransaction, deleteTransaction } = useTransactionMutations();
   const syncStateById = usePendingTransactions();
   const { currency, setCurrency } = useCurrency();
 
@@ -89,6 +89,7 @@ export default function HomePage() {
   const [detail, setDetail] = useState<TTransaction | null>(null);
   const [pendingDelete, setPendingDelete] = useState<TTransaction | null>(null);
   const [formDraft, setFormDraft] = useState<Partial<TransactionFormValues>>();
+  const [editing, setEditing] = useState<TTransaction | null>(null);
 
   // aparece al instante; se sincroniza por detrás (o en cola sin red)
   function saveTransaction(values: TransactionFormValues) {
@@ -97,6 +98,23 @@ export default function HomePage() {
     setKind(null);
     setPeriod("month");
     toast(t(values.type === "expense" ? "toast.expenseSaved" : "toast.incomeSaved"));
+  }
+
+  function openForm(draft?: Partial<TransactionFormValues>, transaction: TTransaction | null = null) {
+    setFormDraft(draft);
+    setEditing(transaction);
+    setSheet("new");
+  }
+
+  function editTransaction(transaction: TTransaction) {
+    const { description, amount, type, categoryId, transactionDate } = transaction;
+    openForm({ description, amount, type, categoryId, transactionDate }, transaction);
+  }
+
+  // los filtros se respetan: si deja de cumplirlos, el movimiento sale de la lista
+  function saveEdit(transaction: TTransaction, values: TransactionFormValues) {
+    updateTransaction(transaction, values);
+    toast(t("toast.updated"));
   }
 
   function removeTransaction(transaction: TTransaction) {
@@ -223,11 +241,12 @@ export default function HomePage() {
         <AnimatePresence initial={false}>
           {searching && (
             <motion.label
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
+              // el margen también se anima: si no, al cerrar la lista sube de golpe
+              initial={{ opacity: 0, height: 0, marginTop: 0 }}
+              animate={{ opacity: 1, height: "auto", marginTop: 24 }}
+              exit={{ opacity: 0, height: 0, marginTop: 0 }}
               transition={SPRING_LAYOUT}
-              className="bg-app-fill mt-6 flex items-center gap-2 overflow-hidden rounded-2xl px-3.5"
+              className="bg-app-fill flex items-center gap-2 overflow-hidden rounded-2xl px-3.5"
             >
               <Search className="text-app-muted size-4 shrink-0" />
               <input
@@ -245,18 +264,28 @@ export default function HomePage() {
 
         <AnimatePresence>
           {activeCategory && (
-            <motion.button
-              type="button"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              onClick={() => setCategoryFilter(null)}
-              className="bg-app-fg text-app-surface mt-6 inline-flex min-h-9 w-fit items-center gap-1.5 rounded-full px-3.5 text-[13px] font-semibold"
+            // Alto y margen animados: al quitar el filtro la lista sube suave, sin salto
+            <motion.div
+              initial={{ opacity: 0, height: 0, marginTop: 0 }}
+              animate={{ opacity: 1, height: "auto", marginTop: 24 }}
+              exit={{ opacity: 0, height: 0, marginTop: 0 }}
+              transition={SPRING_LAYOUT}
+              className="overflow-hidden"
             >
-              {activeCategory.icon} {activeCategory.name}
-              <X aria-hidden className="size-3.5" strokeWidth={2.4} />
-              <span className="sr-only">{t("home.clearCategoryFilter")}</span>
-            </motion.button>
+              <motion.button
+                type="button"
+                initial={{ scale: 0.9 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0.9 }}
+                transition={SPRING_LAYOUT}
+                onClick={() => setCategoryFilter(null)}
+                className="bg-app-fg text-app-surface inline-flex min-h-9 w-fit items-center gap-1.5 rounded-full px-3.5 text-[13px] font-semibold"
+              >
+                {activeCategory.icon} {activeCategory.name}
+                <X aria-hidden className="size-3.5" strokeWidth={2.4} />
+                <span className="sr-only">{t("home.clearCategoryFilter")}</span>
+              </motion.button>
+            </motion.div>
           )}
         </AnimatePresence>
 
@@ -280,6 +309,7 @@ export default function HomePage() {
               }}
               syncStateById={syncStateById}
               onSelect={setDetail}
+              onRequestEdit={editTransaction}
               onRequestDelete={setPendingDelete}
             />
           )}
@@ -319,19 +349,13 @@ export default function HomePage() {
               categories={categories}
               currency={currency}
               onSave={saveTransaction}
-              onEdit={(draft) => {
-                setFormDraft(draft);
-                setSheet("new");
-              }}
+              onEdit={(draft) => openForm(draft)}
             />
           </div>
           <motion.button
             type="button"
             aria-label={t("home.create")}
-            onClick={() => {
-              setFormDraft(undefined);
-              setSheet("new");
-            }}
+            onClick={() => openForm()}
             initial={{ scale: 0, rotate: -90 }}
             animate={{ scale: 1, rotate: 0 }}
             whileHover={{ scale: 1.05 }}
@@ -359,7 +383,8 @@ export default function HomePage() {
         categories={categories}
         currency={currency}
         draft={formDraft}
-        onSubmit={saveTransaction}
+        isEditing={Boolean(editing)}
+        onSubmit={(values) => (editing ? saveEdit(editing, values) : saveTransaction(values))}
       />
 
       <DeleteTransactionDialog
@@ -378,6 +403,10 @@ export default function HomePage() {
         category={detail ? categoriesById.get(detail.categoryId) : undefined}
         currency={currency}
         onOpenChange={(open) => !open && setDetail(null)}
+        onEdit={(transaction) => {
+          setDetail(null);
+          editTransaction(transaction);
+        }}
         onDelete={(id) => {
           setDetail(null);
           if (detail?.id === id) removeTransaction(detail);

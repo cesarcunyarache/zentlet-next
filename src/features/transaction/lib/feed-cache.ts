@@ -55,8 +55,15 @@ export function removeFromFeed(data: FeedData, id: string): FeedData {
   };
 }
 
+/**
+ * Aplica una edición: sale de la lista si deja de cumplir el filtro, entra
+ * si ahora lo cumple (p. ej. cambió a la categoría filtrada) y se recoloca
+ * si cambió de fecha.
+ */
 export function patchInFeed(data: FeedData, updated: TTransaction, filters: TransactionFilters): FeedData {
   if (!matchesFilters(updated, filters)) return removeFromFeed(data, updated.id);
+  const current = findInFeed(data, updated.id);
+  if (current?.transactionDate !== updated.transactionDate) return insertIntoFeed(data, updated);
   return {
     ...data,
     pages: data.pages.map((page) => ({

@@ -110,6 +110,17 @@ describe("removeFromFeed / patchInFeed / findInFeed", () => {
     expect(ids(patched)).toEqual([[], ["b"]]);
   });
 
+  it("lo añade si ahora cumple el filtro", () => {
+    const patched = patchInFeed(data, tx({ id: "c", categoryId: "food" }), { categoryId: "food" });
+    expect(ids(patched)[0]).toContain("c");
+  });
+
+  it("lo recoloca si cambia de fecha", () => {
+    const sorted = feed({ items: [tx({ id: "new", transactionDate: "2026-09-20" }), tx({ id: "old", transactionDate: "2026-09-01" })] });
+    const patched = patchInFeed(sorted, tx({ id: "old", transactionDate: "2026-09-25" }), {});
+    expect(ids(patched)).toEqual([["old", "new"]]);
+  });
+
   it("findInFeed tolera cache vacía", () => {
     expect(findInFeed(undefined, "a")).toBeUndefined();
   });

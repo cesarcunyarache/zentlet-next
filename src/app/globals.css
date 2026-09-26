@@ -295,3 +295,49 @@ body {
     animation: none !important;
   }
 }
+
+/* Modal de comentarios: entra con un leve rebote y sale con una curva más
+   calmada (las curvas del widget original). Sin capa y con doble clase para
+   ganarle a la animación por defecto de HeroUI. La salida del fondo dura lo
+   mismo que la del modal: react-aria espera a ambas antes de desmontar. */
+@keyframes feedback-modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.94);
+    filter: blur(4px);
+  }
+}
+
+@keyframes feedback-modal-out {
+  to {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+    filter: blur(2px);
+  }
+}
+
+@keyframes feedback-backdrop-out {
+  to {
+    opacity: 0;
+  }
+}
+
+.alert-dialog__container.feedback-modal[data-entering="true"] {
+  animation: feedback-modal-in 400ms cubic-bezier(0.34, 1.25, 0.64, 1) both;
+}
+
+.alert-dialog__container.feedback-modal[data-exiting="true"] {
+  animation: feedback-modal-out 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.alert-dialog__backdrop.feedback-modal-backdrop[data-exiting="true"] {
+  animation: feedback-backdrop-out 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .alert-dialog__container.feedback-modal[data-entering="true"],
+  .alert-dialog__container.feedback-modal[data-exiting="true"],
+  .alert-dialog__backdrop.feedback-modal-backdrop[data-exiting="true"] {
+    animation: none;
+  }
+}

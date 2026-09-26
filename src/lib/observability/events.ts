@@ -1,5 +1,6 @@
 import type { SpeechError } from "@/features/transaction/hooks/use-speech-recognition";
 import type { TransactionType } from "@/features/transaction/types";
+import type { FeedbackType } from "@/features/feedback/constants";
 
 /*
  * Taxonomía de product analytics: `objeto_acción` en pasado.
@@ -17,6 +18,7 @@ export interface AnalyticsEvents {
     /** La categoría la eligió la app (texto o IA) y el usuario la mantuvo. */
     category_auto: boolean;
   };
+  transaction_updated: { category_changed: boolean; type_changed: boolean };
   transaction_deleted: Record<string, never>;
   category_created: { ai_suggested: boolean };
   category_updated: Record<string, never>;
@@ -24,6 +26,7 @@ export interface AnalyticsEvents {
   voice_entry_completed: { outcome: "saved" | "edited" };
   voice_entry_failed: { reason: SpeechError };
   data_exported: Record<string, never>;
+  feedback_sent: { type: FeedbackType };
   onboarding_completed: { skipped: boolean; step: number; next: "categories" | "app" };
 }
 

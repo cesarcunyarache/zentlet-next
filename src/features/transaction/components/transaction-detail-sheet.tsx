@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Button, cn } from "@heroui/react";
+import { Pencil } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Sheet } from "@/core/components/ui/sheet";
 import { CategoryEmoji } from "./category-emoji";
@@ -14,6 +15,7 @@ interface TransactionDetailSheetProps {
   category?: CategoryLike;
   currency: string;
   onOpenChange: (open: boolean) => void;
+  onEdit: (transaction: TTransaction) => void;
   onDelete: (id: string) => void;
 }
 
@@ -22,6 +24,7 @@ export function TransactionDetailSheet({
   category,
   currency,
   onOpenChange,
+  onEdit,
   onDelete,
 }: TransactionDetailSheetProps) {
   const t = useTranslations("transactions");
@@ -48,6 +51,15 @@ export function TransactionDetailSheet({
       onOpenChange={onOpenChange}
       title={t("detail.title")}
       footer={
+        <div className="flex gap-2">
+        <Button
+          type="button"
+          onPress={() => transaction && onEdit(transaction)}
+          className="bg-app-fill text-app-fg hover:bg-app-fill-strong min-h-[50px] shrink-0 rounded-2xl px-5 text-base font-semibold transition-[background-color,transform] duration-200 active:scale-[0.98]"
+        >
+          <Pencil className="size-[17px]" strokeWidth={2.2} aria-hidden />
+          {t("detail.edit")}
+        </Button>
         <Button
           type="button"
           onPress={() => {
@@ -56,7 +68,7 @@ export function TransactionDetailSheet({
             else setConfirming(true);
           }}
           className={cn(
-            "min-h-[50px] w-full overflow-hidden rounded-2xl text-base font-semibold transition-[background-color,color,transform] duration-200 active:scale-[0.98]",
+            "min-h-[50px] flex-1 overflow-hidden rounded-2xl text-base font-semibold transition-[background-color,color,transform] duration-200 active:scale-[0.98]",
             confirming
               ? "bg-app-expense text-app-surface"
               : "bg-app-expense-soft text-[color-mix(in_oklch,var(--app-expense)_78%,black)]",
@@ -74,6 +86,7 @@ export function TransactionDetailSheet({
             </motion.span>
           </AnimatePresence>
         </Button>
+        </div>
       }
     >
       {transaction && (

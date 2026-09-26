@@ -17,6 +17,7 @@ import {
   type CategoryFormValues,
 } from "@/features/category/schemas/category.schema";
 import { useCategoryStore } from "@/features/category/stores/category.store";
+import type { TCategory } from "@/features/category/types";
 import { Check } from "@gravity-ui/icons";
 import { EASE_OUT } from "@/lib/ease";
 import { GestureCarousel } from "@/core/components/carrusel";
@@ -25,10 +26,7 @@ import { track } from "@/lib/observability/client";
 import { useIsOnline } from "@/core/offline/sync-status";
 import { Sheet } from "@/core/components/ui/sheet";
 
-interface CategoryIcon {
-  icon: string;
-  color: string;
-}
+type CategoryIcon = Pick<TCategory, "icon" | "color">;
 
 /**
  * Iconos de reserva cuando la IA no está disponible (sin conexión, cuota
@@ -78,14 +76,22 @@ export default function CategoryForm({
   category?: EditableCategory;
 }) {
   const t = useTranslations();
-  const { createCategory, updateCategory } = useCategoryStore();
-  // al editar, el carrusel ya arranca con el icono actual
+  const { categories: stored, createCategory, updateCategory } = useCategoryStore();
+  // al editar, el carrusel arranca con el icono actual y lo que la IA ya
+  // propuso para este nombre (guardado con la categoría): sin llamar a la IA
   const current = category?.icon
     ? { icon: category.icon, color: category.color || "" }
     : null;
-  const [categoriesIcons, setCategoriesIcons] = useState<CategoryIcon[]>(
-    current ? [current] : [],
-  );
+  const saved = category ? (stored.find((c) => c.id === category.id)?.aiSuggestions ?? []) : [];
+  const withCurrent = (icons: CategoryIcon[]) =>
+    current ? [current, ...icons.filter((s) => s.icon !== current.icon)] : icons;
+  const [categoriesIcons, setCategoriesIcons] = useState<CategoryIcon[]>(() => withCurrent(saved));
+  /**
+   * Lo que la IA propuso en esta sesión del formulario, para guardarlo con
+   * la categoría. `undefined`: no hay nada nuevo que guardar (se conserva lo
+   * que ya tenía); los iconos de reserva nunca se guardan.
+   */
+  const [aiSuggestions, setAiSuggestions] = useState<CategoryIcon[] | undefined>();
   const [loadingAI, setLoadingAI] = useState(false);
   const [aiUnavailable, setAiUnavailable] = useState(false);
   const online = useIsOnline();
@@ -109,10 +115,25 @@ export default function CategoryForm({
     form.setValue("color", color, TOUCH_FIELD);
   }
 
+  /** Muestra estos iconos y, si el elegido ya no está, selecciona el primero. */
+  function showIcons(icons: CategoryIcon[]) {
+    setCategoriesIcons(icons);
+    // sin esto el form queda vacío y Guardar no se habilita hasta deslizar
+    const selected = form.getValues("icon");
+    const first = icons[0];
+    if (first && !icons.some((item) => item.icon === selected)) {
+      selectIcon(first);
+    }
+  }
+
   useEffect(() => {
     if (!debouncedName.trim()) return;
-    // editando sin cambiar el nombre no hace falta pedir iconos nuevos
-    if (category && debouncedName === category.name) return;
+    // editando con el nombre de siempre: vuelven las sugerencias guardadas
+    if (category && debouncedName === category.name) {
+      setAiSuggestions(undefined);
+      showIcons(withCurrent(saved));
+      return;
+    }
     let cancelled = false;
 
     async function generate() {
@@ -121,21 +142,9 @@ export default function CategoryForm({
         const fromAI = await suggestIcons(debouncedName);
         if (cancelled) return;
         setAiUnavailable(!fromAI);
-        const suggested = fromAI ?? FALLBACK_ICONS;
+        setAiSuggestions(fromAI ?? undefined);
         // al editar, el icono actual sigue siendo una opción del carrusel
-        const icons = current
-          ? [current, ...suggested.filter((s) => s.icon !== current.icon)]
-          : suggested;
-        setCategoriesIcons(icons);
-
-        // el carrusel muestra el primero si el icono actual no está en la
-        // lista; sin esto el form queda vacío y Guardar no se habilita
-        // hasta deslizar
-        const selected = form.getValues("icon");
-        const first = icons[0];
-        if (first && !icons.some((item) => item.icon === selected)) {
-          selectIcon(first);
-        }
+        showIcons(withCurrent(fromAI ?? FALLBACK_ICONS));
       } finally {
         if (!cancelled) {
           setLoadingAI(false);
@@ -146,7 +155,7 @@ export default function CategoryForm({
     return () => {
       cancelled = true;
     };
-    // category/current sólo cambian al abrir otra categoría (se remonta)
+    // category/current/saved sólo cambian al abrir otra categoría (se remonta)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedName]);
 
@@ -158,13 +167,15 @@ export default function CategoryForm({
   function onSubmit(values: CategoryFormValues) {
     if (category) {
       const { description, ...rest } = values;
-      updateCategory(
-        category.id,
-        category.description === undefined ? rest : { ...rest, description },
-      );
+      updateCategory(category.id, {
+        ...rest,
+        ...(category.description !== undefined && { description }),
+        // sólo si cambió el nombre y la IA propuso algo nuevo
+        ...(aiSuggestions && { aiSuggestions }),
+      });
       track("category_updated", {});
     } else {
-      createCategory(values);
+      createCategory({ ...values, aiSuggestions: aiSuggestions ?? null });
       // el carrusel sólo ofrece iconos de la IA o, si falló, los de reserva
       track("category_created", { ai_suggested: !aiUnavailable });
     }

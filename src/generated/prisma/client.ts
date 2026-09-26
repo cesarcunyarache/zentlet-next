@@ -72,6 +72,13 @@ export type Category = Prisma.CategoryModel
  */
 export type Transaction = Prisma.TransactionModel
 /**
+ * Model Feedback
+ * Comentarios y reportes que el usuario envía desde Ajustes.
+ * `type` y `status` son texto libre a propósito: los valores válidos viven
+ * en el código (`features/feedback/constants.ts`) y cambian sin migración.
+ */
+export type Feedback = Prisma.FeedbackModel
+/**
  * Model RateLimit
  * Límite de intentos de Better Auth (login, registro…), compartido entre instancias
  */

@@ -70,6 +70,23 @@
       "income": "Ingreso"
     }
   },
+  "feedback": {
+    "label": "Enviar comentario",
+    "hint": "Cuéntanos una idea o un error que encontraste",
+    "title": "Ayúdanos a mejorar",
+    "placeholder": "Comparte una idea o reporta un error",
+    "close": "Cerrar",
+    "cancel": "Cancelar",
+    "send": "Enviar",
+    "sending": "Enviando",
+    "remaining": "{count, plural, one {Queda # carácter} other {Quedan # caracteres}}",
+    "offline": "Conéctate a internet para enviarlo",
+    "thanksTitle": "¡Gracias!",
+    "thanksBody": "Tu comentario nos ayuda a hacer una app mejor.",
+    "errorTitle": "No se pudo enviar",
+    "errorBody": "Tu mensaje sigue aquí. Inténtalo de nuevo.",
+    "retry": "Reintentar"
+  },
   "signOut": {
     "label": "Cerrar sesión",
     "pending": "Cerrando sesión…",

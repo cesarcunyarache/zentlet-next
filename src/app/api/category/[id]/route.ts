@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { Prisma } from "@/generated/prisma/client";
+import { sanitizeSuggestions } from "@/features/category/ai/lib/normalize-suggestions";
 import { updateCategorySchema } from "@/features/category/schemas/category-api.schema";
 import {
   errorResponse,
@@ -43,9 +45,16 @@ export async function PATCH(req: Request, { params }: RouteContext) {
     const parsed = await parseBody(req, updateCategorySchema);
     if ("error" in parsed) return parsed.error;
 
+    const { aiSuggestions, ...fields } = parsed.data;
     const { count } = await prisma.category.updateMany({
       where: { id, userId },
-      data: parsed.data,
+      data: {
+        ...fields,
+        // ausente: no se toca; si llega, se sanea como en el alta
+        ...(aiSuggestions !== undefined && {
+          aiSuggestions: sanitizeSuggestions(aiSuggestions) ?? Prisma.DbNull,
+        }),
+      },
     });
 
     if (count === 0) return notFound();

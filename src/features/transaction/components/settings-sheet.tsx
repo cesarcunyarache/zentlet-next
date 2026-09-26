@@ -13,6 +13,7 @@ import { useThemePreference } from "@/core/theme/use-theme";
 import type { ThemePreference } from "@/core/theme/theme";
 import { DeleteAccountDialog } from "@/features/account/components/delete-account-dialog";
 import { accountService } from "@/features/account/services/account.service";
+import { FeedbackRow } from "@/features/feedback/components/feedback-row";
 import { authClient } from "@/lib/auth-client";
 import {
   analyticsAvailable,
@@ -86,6 +87,8 @@ export function SettingsSheet({
       <DataRow transactionCount={transactionCount} currency={currency} />
 
       {analyticsAvailable && <AnalyticsRow />}
+
+      <FeedbackRow />
 
       <SignOutRow />
 

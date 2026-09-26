@@ -32,7 +32,8 @@
   "toast": {
     "expenseSaved": "Gasto registrado",
     "incomeSaved": "Ingreso registrado",
-    "deleted": "Movimiento eliminado"
+    "deleted": "Movimiento eliminado",
+    "updated": "Movimiento actualizado"
   },
   "summary": {
     "filterByType": "Filtrar por tipo",
@@ -53,6 +54,7 @@
     "noMatches": "Nada coincide con el filtro.",
     "fallbackName": "movimiento",
     "deleteItem": "Eliminar {name}",
+    "editItem": "Editar {name}",
     "loadingMore": "Cargando más movimientos…",
     "sync": {
       "paused": "Guardado en este dispositivo, se sincronizará al volver la conexión",
@@ -61,6 +63,7 @@
   },
   "form": {
     "title": "Nuevo movimiento",
+    "editTitle": "Editar movimiento",
     "descriptionPlaceholder": "¿En qué fue?",
     "typeGroup": "Gasto o ingreso",
     "newCategory": "Nueva categoría",
@@ -74,6 +77,7 @@
   },
   "detail": {
     "title": "Movimiento",
+    "edit": "Editar",
     "delete": "Eliminar movimiento",
     "confirmDelete": "Toca de nuevo para eliminar"
   },

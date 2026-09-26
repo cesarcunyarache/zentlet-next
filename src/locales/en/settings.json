@@ -70,6 +70,23 @@
       "income": "Income"
     }
   },
+  "feedback": {
+    "label": "Send feedback",
+    "hint": "Tell us an idea or a bug you found",
+    "title": "Help us improve",
+    "placeholder": "Share an idea or report a bug",
+    "close": "Close",
+    "cancel": "Cancel",
+    "send": "Send",
+    "sending": "Sending",
+    "remaining": "{count, plural, one {# character left} other {# characters left}}",
+    "offline": "Connect to the internet to send it",
+    "thanksTitle": "Thanks!",
+    "thanksBody": "Your feedback helps us build something better.",
+    "errorTitle": "Something went wrong",
+    "errorBody": "Your message is still here. Please try again.",
+    "retry": "Try again"
+  },
   "signOut": {
     "label": "Sign out",
     "pending": "Signing out…",

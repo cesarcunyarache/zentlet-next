@@ -30,6 +30,7 @@ model User {
   accounts              Account[]
   categories            Category[]
   transactions          Transaction[]
+  feedback              Feedback[]
 
   @@unique([email])
   @@map("user")
@@ -84,11 +85,14 @@ model Verification {
 }
 
 model Category {
-  id          String  @id @default(uuid())
-  name        String
-  icon        String
-  color       String
-  description String?
+  id            String  @id @default(uuid())
+  name          String
+  icon          String
+  color         String
+  description   String?
+  /// Opciones de icono que propuso la IA para este nombre: [{ icon, color }].
+  /// Se reutilizan al editar; si cambia el nombre se regeneran y se reemplazan.
+  aiSuggestions Json?
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -128,6 +132,33 @@ model Transaction {
   // feed paginado por cursor y resúmenes por periodo del usuario
   @@index([userId, transactionDate(sort: Desc), createdAt(sort: Desc), id(sort: Desc)])
   @@map("transaction")
+}
+
+/// Comentarios y reportes que el usuario envía desde Ajustes.
+/// `type` y `status` son texto libre a propósito: los valores válidos viven
+/// en el código (`features/feedback/constants.ts`) y cambian sin migración.
+model Feedback {
+  id      String @id @default(uuid())
+  /// comment | bug | idea … (hoy la app sólo envía `comment`)
+  type    String @default("comment")
+  /// Seguimiento interno, el usuario no lo ve: open | reviewed | resolved …
+  status  String @default("open")
+  message String @db.VarChar(2000)
+
+  /// Datos técnicos para reproducir un problema: versión, idioma, pantalla y
+  /// navegador. Nunca montos, movimientos ni categorías.
+  context Json?
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  // bandeja de revisión: lo pendiente, lo más reciente primero
+  @@index([status, createdAt(sort: Desc)])
+  @@map("feedback")
 }
 
 /// Límite de intentos de Better Auth (login, registro…), compartido entre instancias

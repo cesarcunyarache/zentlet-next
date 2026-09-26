@@ -37,6 +37,8 @@ interface TransactionFormSheetProps {
   onSubmit: (values: TransactionFormValues) => void;
   /** Valores con los que abre, p. ej. lo interpretado de un dictado. */
   draft?: Partial<TransactionFormValues>;
+  /** Editar un movimiento existente: abre con sus valores en `draft`. */
+  isEditing?: boolean;
 }
 
 const EMPTY: TransactionFormValues = {
@@ -62,6 +64,7 @@ export function TransactionFormSheet({
   currency,
   onSubmit,
   draft,
+  isEditing = false,
 }: TransactionFormSheetProps) {
   const t = useTranslations();
   const reduceMotion = useReducedMotion();
@@ -196,6 +199,13 @@ export function TransactionFormSheet({
       description: values.description.trim() || category?.name || t("transactions.defaultDescription"),
     });
     onOpenChange(false);
+    if (isEditing) {
+      track("transaction_updated", {
+        category_changed: values.categoryId !== draft?.categoryId,
+        type_changed: values.type !== draft?.type,
+      });
+      return;
+    }
     track("transaction_created", {
       // un borrador sólo llega desde el dictado («Editar»)
       source: draft ? "voice" : "form",
@@ -216,7 +226,7 @@ export function TransactionFormSheet({
       <Sheet
         isOpen={isOpen && !creatingCategory}
         onOpenChange={onOpenChange}
-        title={t("transactions.form.title")}
+        title={t(isEditing ? "transactions.form.editTitle" : "transactions.form.title")}
         hideTitle
         footer={
           <Button

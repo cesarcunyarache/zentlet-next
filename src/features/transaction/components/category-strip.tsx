@@ -3,16 +3,14 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { cn } from "@heroui/react";
 import { useTranslations } from "next-intl";
-import { SPRING_LAYOUT, SPRING_PRESS } from "@/lib/ease";
+import { EASE_OUT_CSS, SPRING_LAYOUT, SPRING_PRESS } from "@/lib/ease";
 import { formatMoney, formatShort } from "../lib/format";
 import type { CategoryLike } from "../types";
-/** Alto total del gráfico y zócalo mínimo de una barra con movimientos. */
+/** Alto total del gráfico y alto mínimo legible de una barra con movimientos. */
 const CHART_HEIGHT = 232;
-const BAR_BASE = 76;
+const BAR_MIN = 76;
 /** Categoría sin movimientos: una píldora baja con "emoji 0". */
 const IDLE_HEIGHT = 44;
-/** Con pocas categorías el resto de columnas queda reservado. */
-const MIN_COLUMNS = 4;
 /** Barras fantasma cuando aún no hay movimientos, descendentes como un gráfico real. */
 const GHOST_RATIO = [1, 0.78, 0.6, 0.34];
 
@@ -69,8 +67,6 @@ export function CategoryStrip({
     );
   }
 
-  const reserved = Math.max(0, MIN_COLUMNS - data.length);
-
   return (
     <div
       role="group"
@@ -81,11 +77,12 @@ export function CategoryStrip({
       <AnimatePresence initial={false} mode="popLayout">
         {data.map(({ category, total }, index) => {
           const isSelected = selectedId === category.id;
-          const idle = total === 0;
+          // Restos de sumas en coma flotante (0.0000001) cuentan como 0
+          const idle = Math.abs(total) < 0.005;
+          // Proporcional al importe; el mínimo sólo garantiza que quepa el texto
           const height = idle
             ? IDLE_HEIGHT
-            : BAR_BASE +
-              Math.round((Math.abs(total) / max) * (CHART_HEIGHT - BAR_BASE));
+            : Math.max(BAR_MIN, Math.round((Math.abs(total) / max) * CHART_HEIGHT));
           const amountLabel = idle
             ? t("empty")
             : t(total > 0 ? "income" : "expenses", { amount: formatMoney(total, currency) });
@@ -106,23 +103,22 @@ export function CategoryStrip({
               transition={SPRING_LAYOUT}
               className={cn("group", COLUMN)}
             >
-              <motion.span
-                initial={reduceMotion ? false : { height: IDLE_HEIGHT }}
-                animate={{ height }}
-                style={
-                  isSelected
-                    ? {
-                        backgroundColor:
-                          category.color || "var(--app-fill-strong)",
-                      }
-                    : undefined
-                }
-                transition={{
-                  ...SPRING_LAYOUT,
-                  delay: reduceMotion ? 0 : index * 0.05,
-                }}
+              {/*
+                La altura va por CSS y no por `animate`: al reordenarse las
+                columnas (`layout`), Motion podía dejar la barra en su altura
+                anterior. Una transición CSS siempre termina en el valor final.
+              */}
+              <span
+                style={{
+                  "--bar-height": `${height}px`,
+                  transitionDelay: `0ms, ${reduceMotion ? 0 : index * 50}ms`,
+                  transitionTimingFunction: `ease, ${EASE_OUT_CSS}`,
+                  ...(isSelected && {
+                    backgroundColor: category.color || "var(--app-fill-strong)",
+                  }),
+                } as React.CSSProperties}
                 className={cn(
-                  "flex w-full items-center justify-end rounded-3xl transition-colors duration-300",
+                  "flex h-(--bar-height) w-full items-center justify-end rounded-3xl transition-[background-color,height] duration-[300ms,600ms] motion-reduce:transition-none starting:h-11",
                   idle
                     ? "flex-row justify-center gap-1"
                     : "flex-col gap-1.5 pb-3.5",
@@ -147,27 +143,10 @@ export function CategoryStrip({
                 <span className="num text-[13px] leading-none font-semibold">
                   {formatShort(total)}
                 </span>
-              </motion.span>
+              </span>
             </motion.button>
           );
         })}
-
-        {Array.from({ length: reserved }, (_, slot) => (
-          <motion.span
-            key={`reserved-${slot}`}
-            layout={!reduceMotion}
-            aria-hidden
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className={COLUMN}
-          >
-            <span
-              style={{ height: `${GHOST_RATIO[data.length + slot] * 60}%` }}
-              className="bg-app-fill block w-full rounded-3xl"
-            />
-          </motion.span>
-        ))}
       </AnimatePresence>
     </div>
   );
