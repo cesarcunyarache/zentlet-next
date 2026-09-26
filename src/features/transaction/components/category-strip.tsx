@@ -5,12 +5,8 @@ import { cn } from "@heroui/react";
 import { useTranslations } from "next-intl";
 import { EASE_OUT_CSS, SPRING_LAYOUT, SPRING_PRESS } from "@/lib/ease";
 import { formatMoney, formatShort } from "../lib/format";
+import { CHART_HEIGHT, barHeight } from "../lib/chart";
 import type { CategoryLike } from "../types";
-/** Alto total del gráfico y alto mínimo legible de una barra con movimientos. */
-const CHART_HEIGHT = 232;
-const BAR_MIN = 76;
-/** Categoría sin movimientos: una píldora baja con "emoji 0". */
-const IDLE_HEIGHT = 44;
 /** Barras fantasma cuando aún no hay movimientos, descendentes como un gráfico real. */
 const GHOST_RATIO = [1, 0.78, 0.6, 0.34];
 
@@ -77,12 +73,7 @@ export function CategoryStrip({
       <AnimatePresence initial={false} mode="popLayout">
         {data.map(({ category, total }, index) => {
           const isSelected = selectedId === category.id;
-          // Restos de sumas en coma flotante (0.0000001) cuentan como 0
-          const idle = Math.abs(total) < 0.005;
-          // Proporcional al importe; el mínimo sólo garantiza que quepa el texto
-          const height = idle
-            ? IDLE_HEIGHT
-            : Math.max(BAR_MIN, Math.round((Math.abs(total) / max) * CHART_HEIGHT));
+          const { idle, height } = barHeight(total, max);
           const amountLabel = idle
             ? t("empty")
             : t(total > 0 ? "income" : "expenses", { amount: formatMoney(total, currency) });

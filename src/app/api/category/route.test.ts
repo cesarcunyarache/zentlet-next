@@ -1,7 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { DELETE } from "./[id]/route";
+import { Prisma } from "@/generated/prisma/client";
+import { DELETE, PATCH } from "./[id]/route";
 import { POST } from "./route";
 
 /*
@@ -12,7 +13,14 @@ import { POST } from "./route";
 vi.mock("@/lib/auth", () => ({ auth: { api: { getSession: vi.fn() } } }));
 vi.mock("@/lib/prisma", () => ({
   default: {
-    category: { findUnique: vi.fn(), findFirst: vi.fn(), create: vi.fn(), count: vi.fn(), deleteMany: vi.fn() },
+    category: {
+      findUnique: vi.fn(),
+      findFirst: vi.fn(),
+      create: vi.fn(),
+      count: vi.fn(),
+      updateMany: vi.fn(),
+      deleteMany: vi.fn(),
+    },
     $queryRaw: vi.fn(),
   },
 }));
@@ -26,6 +34,10 @@ const row = (userId: string) => ({ ...body, description: null, userId, createdAt
 
 const post = (payload: unknown = body) =>
   POST(new Request("http://localhost/api/category", { method: "POST", body: JSON.stringify(payload) }));
+const patch = (payload: unknown, id = ID) =>
+  PATCH(new Request(`http://localhost/api/category/${id}`, { method: "PATCH", body: JSON.stringify(payload) }), {
+    params: Promise.resolve({ id }),
+  });
 const remove = (id = ID) =>
   DELETE(new Request(`http://localhost/api/category/${id}`, { method: "DELETE" }), { params: Promise.resolve({ id }) });
 
@@ -102,5 +114,84 @@ describe("DELETE /api/category/[id]", () => {
     const response = await remove();
     expect(response.status).toBe(409);
     expect(await response.json()).toEqual({ message: "Category has transactions" });
+  });
+});
+
+describe("sugerencias de la IA guardadas con la categoría", () => {
+  const stored = () => db.category.create.mock.calls[0][0].data.aiSuggestions;
+
+  it("se guardan saneadas: sin emojis compuestos ni repetidos y con colores pastel", async () => {
+    await post({
+      ...body,
+      aiSuggestions: [
+        { icon: "💊", color: "#FF0000" },
+        { icon: "💊", color: "#D5F0DD" },
+        { icon: "👨‍⚕️", color: "#D5F0DD" },
+        { icon: "🏥", color: "#CFE3F7" },
+      ],
+    });
+
+    expect(stored()).toEqual([
+      { icon: "💊", color: expect.stringMatching(/^#[0-9A-F]{6}$/) },
+      { icon: "🏥", color: "#CFE3F7" },
+    ]);
+    expect((stored() as { color: string }[])[0].color).not.toBe("#FF0000");
+  });
+
+  it("sin sugerencias (o ninguna válida) la columna queda en NULL", async () => {
+    await post(body);
+    expect(stored()).toBe(Prisma.DbNull);
+
+    vi.mocked(db.category.create).mockClear();
+    await post({ ...body, aiSuggestions: [{ icon: "texto", color: "#000000" }] });
+    expect(stored()).toBe(Prisma.DbNull);
+  });
+
+  it("más de 4 opciones es 422", async () => {
+    const five = Array.from({ length: 5 }, () => ({ icon: "💊", color: "#D5F0DD" }));
+    expect((await post({ ...body, aiSuggestions: five })).status).toBe(422);
+    expect(db.category.create).not.toHaveBeenCalled();
+  });
+});
+
+describe("PATCH /api/category/[id]", () => {
+  const data = () => db.category.updateMany.mock.calls[0][0].data;
+
+  beforeEach(() => {
+    db.category.updateMany.mockResolvedValue({ count: 1 });
+    db.category.findUnique.mockResolvedValue(row("user-1") as never);
+  });
+
+  it("sólo actualiza categorías del usuario de la sesión", async () => {
+    expect((await patch({ name: "Farmacia" })).status).toBe(200);
+    expect(db.category.updateMany).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { id: ID, userId: "user-1" } }),
+    );
+  });
+
+  it("sin `aiSuggestions` no toca las guardadas", async () => {
+    await patch({ name: "Farmacia" });
+    expect(data()).not.toHaveProperty("aiSuggestions");
+  });
+
+  it("con `aiSuggestions` las reemplaza, saneadas", async () => {
+    await patch({ name: "Mascota", aiSuggestions: [{ icon: "🐶", color: "#CFE3F7" }, { icon: "🐶", color: "#FDDCC4" }] });
+    expect(data().aiSuggestions).toEqual([{ icon: "🐶", color: "#CFE3F7" }]);
+  });
+
+  it("con `aiSuggestions: null` las borra", async () => {
+    await patch({ aiSuggestions: null });
+    expect(data().aiSuggestions).toBe(Prisma.DbNull);
+  });
+
+  it("si no existe o es de otro usuario es 404", async () => {
+    db.category.updateMany.mockResolvedValue({ count: 0 });
+    expect((await patch({ name: "Farmacia" })).status).toBe(404);
+  });
+
+  it("sin sesión es 401 y no escribe", async () => {
+    getSession.mockResolvedValue(null);
+    expect((await patch({ name: "Farmacia" })).status).toBe(401);
+    expect(db.category.updateMany).not.toHaveBeenCalled();
   });
 });

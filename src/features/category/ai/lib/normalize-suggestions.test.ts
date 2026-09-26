@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isSimpleEmoji, normalizeCategorySuggestions, toPastel } from "./normalize-suggestions";
+import { isSimpleEmoji, normalizeCategorySuggestions, sanitizeSuggestions, toPastel } from "./normalize-suggestions";
 
 function hsl(hex: string) {
   const [r, g, b] = [1, 3, 5].map((at) => parseInt(hex.slice(at, at + 2), 16) / 255);
@@ -73,5 +73,16 @@ describe("normalizeCategorySuggestions", () => {
   it("devuelve null si no queda ninguna opción", () => {
     expect(normalizeCategorySuggestions({ categories: [{ icon: "x", color: "#000000" }] })).toBeNull();
     expect(normalizeCategorySuggestions(null)).toBeNull();
+  });
+});
+
+describe("sanitizeSuggestions", () => {
+  it("sanea una lista suelta y devuelve null si queda vacía o no llega", () => {
+    expect(sanitizeSuggestions([{ icon: "🐶", color: "#CFE3F7" }, { icon: "🐶", color: "#FDDCC4" }])).toEqual([
+      { icon: "🐶", color: "#CFE3F7" },
+    ]);
+    expect(sanitizeSuggestions([{ icon: "perro", color: "#CFE3F7" }])).toBeNull();
+    expect(sanitizeSuggestions(undefined)).toBeNull();
+    expect(sanitizeSuggestions(null)).toBeNull();
   });
 });

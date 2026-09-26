@@ -222,3 +222,130 @@ describe("totales y páginas con cambios en cola", () => {
     expect(withPendingInPage(queryClient, fromServer, {}, false).items.map((item) => item.id)).toEqual(["other"]);
   });
 });
+
+describe("edición", () => {
+  const edit = (data: Partial<TTransaction>, previous: TTransaction | undefined = existing) =>
+    run(transactionMutationKeys.update, { transactionId: existing.id, data, previous });
+  const listOf = (filters: object) =>
+    queryClient.getQueryData<FeedData>(transactionKeys.list(filters))?.pages[0].items.map((item) => item.id);
+
+  it("cambiar de categoría mueve el importe de una barra a otra, sin tocar el total", async () => {
+    onlineManager.setOnline(false);
+    edit({ categoryId: "health" });
+
+    await vi.waitFor(() =>
+      expect(summary()?.byCategory).toEqual({ food: { expense: 0, income: 0 }, health: { expense: 10, income: 0 } }),
+    );
+    expect(summary()).toMatchObject({ count: 1, expenseTotal: 10, incomeTotal: 0 });
+  });
+
+  it("pasar de gasto a ingreso resta de gastos y suma a ingresos", async () => {
+    onlineManager.setOnline(false);
+    edit({ type: "income" });
+
+    await vi.waitFor(() => expect(summary()).toMatchObject({ count: 1, expenseTotal: 0, incomeTotal: 10 }));
+    expect(summary()?.byCategory.food).toEqual({ expense: 0, income: 10 });
+  });
+
+  it("sale de la lista filtrada que deja de cumplir y entra en la que ahora cumple", async () => {
+    const empty: FeedData = { pages: [{ items: [], nextCursor: null }], pageParams: [null] };
+    const withExisting: FeedData = { pages: [{ items: [existing], nextCursor: null }], pageParams: [null] };
+    queryClient.setQueryData(transactionKeys.list({ categoryId: "food" }), withExisting);
+    queryClient.setQueryData(transactionKeys.list({ categoryId: "health" }), empty);
+    onlineManager.setOnline(false);
+    edit({ categoryId: "health" });
+
+    await vi.waitFor(() => expect(listOf({ categoryId: "health" })).toEqual(["existing"]));
+    expect(listOf({ categoryId: "food" })).toEqual([]);
+  });
+
+  it("sin el movimiento en cache usa el que envía la vista para corregir los totales", async () => {
+    queryClient.removeQueries({ queryKey: transactionKeys.lists });
+    onlineManager.setOnline(false);
+    edit({ amount: 40 });
+
+    await vi.waitFor(() => expect(summary()).toMatchObject({ count: 1, expenseTotal: 40 }));
+  });
+
+  it("envía al servidor sólo lo que cambió", async () => {
+    service.updateTransaction.mockResolvedValue({ ...existing, amount: 40 });
+    edit({ amount: 40 });
+    await settle();
+
+    expect(service.updateTransaction).toHaveBeenCalledWith("existing", { amount: 40 });
+  });
+
+  it("un rechazo vuelve a pedir los datos al servidor, avisa y lo reporta", async () => {
+    const rejection = httpError(422);
+    service.updateTransaction.mockRejectedValue(rejection);
+    const invalidate = vi.spyOn(queryClient, "invalidateQueries");
+    edit({ amount: 40 });
+    await settle();
+
+    expect(invalidate).toHaveBeenCalledWith({ queryKey: transactionKeys.all });
+    expect(emitSyncError).toHaveBeenCalledWith("updateTransaction");
+    expect(reportSyncFailure).toHaveBeenCalledWith("updateTransaction", rejection);
+  });
+});
+
+describe("totales con ediciones en cola", () => {
+  it("una edición en espera de red se descuenta como estaba y se suma como quedó", async () => {
+    onlineManager.setOnline(false);
+    run(transactionMutationKeys.update, {
+      transactionId: "existing",
+      data: { type: "income", categoryId: "salary" },
+      previous: existing,
+    });
+    await vi.waitFor(() => expect(pending()[0]?.state.isPaused).toBe(true));
+    service.getSummary.mockResolvedValue({ ...SUMMARY, presentIds: [] });
+
+    const result = await fetchSummaryWithPending(queryClient, SEPTEMBER);
+
+    // las ediciones no se preguntan al servidor: sólo altas y borrados
+    expect(service.getSummary).toHaveBeenCalledWith(SEPTEMBER, []);
+    expect(result).toMatchObject({ count: 1, expenseTotal: 0, incomeTotal: 10 });
+    expect(result.byCategory.salary).toEqual({ expense: 0, income: 10 });
+  });
+
+  it("un alta en cola se cuenta ya con sus ediciones posteriores", async () => {
+    onlineManager.setOnline(false);
+    run(transactionMutationKeys.create, tx());
+    run(transactionMutationKeys.update, { transactionId: "new", data: { amount: 100 }, previous: tx() });
+    await vi.waitFor(() => expect(pending()).toHaveLength(2));
+    service.getSummary.mockResolvedValue({ ...SUMMARY, presentIds: [] });
+
+    // 10 del existente + 100 del alta editada; la edición no se cuenta aparte
+    expect(await fetchSummaryWithPending(queryClient, SEPTEMBER)).toMatchObject({ count: 2, expenseTotal: 110 });
+  });
+
+  it("una edición que cambia la fecha a otro mes sale del periodo", async () => {
+    onlineManager.setOnline(false);
+    run(transactionMutationKeys.update, {
+      transactionId: "existing",
+      data: { transactionDate: "2026-08-30" },
+      previous: existing,
+    });
+    await vi.waitFor(() => expect(pending()).toHaveLength(1));
+    service.getSummary.mockResolvedValue({ ...SUMMARY, presentIds: [] });
+
+    expect(await fetchSummaryWithPending(queryClient, SEPTEMBER)).toMatchObject({ count: 0, expenseTotal: 0 });
+  });
+
+  it("una edición guardada antes de este cambio (sin `previous`) no altera los totales", async () => {
+    onlineManager.setOnline(false);
+    run(transactionMutationKeys.update, { transactionId: "existing", data: { amount: 99 } });
+    await vi.waitFor(() => expect(pending()).toHaveLength(1));
+    service.getSummary.mockResolvedValue({ ...SUMMARY, presentIds: [] });
+
+    expect(await fetchSummaryWithPending(queryClient, SEPTEMBER)).toMatchObject({ count: 1, expenseTotal: 10 });
+  });
+
+  it("una página recién traída aplica las ediciones en cola", async () => {
+    onlineManager.setOnline(false);
+    run(transactionMutationKeys.update, { transactionId: "existing", data: { amount: 77 }, previous: existing });
+    await vi.waitFor(() => expect(pending()).toHaveLength(1));
+
+    const page = withPendingInPage(queryClient, { items: [existing], nextCursor: null }, {}, true);
+    expect(page.items[0].amount).toBe(77);
+  });
+});
