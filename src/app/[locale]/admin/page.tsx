@@ -245,18 +245,28 @@ export default function HomePage() {
 
         <AnimatePresence>
           {activeCategory && (
-            <motion.button
-              type="button"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              onClick={() => setCategoryFilter(null)}
-              className="bg-app-fg text-app-surface mt-6 inline-flex min-h-9 w-fit items-center gap-1.5 rounded-full px-3.5 text-[13px] font-semibold"
+            // Alto y margen animados: al quitar el filtro la lista sube suave, sin salto
+            <motion.div
+              initial={{ opacity: 0, height: 0, marginTop: 0 }}
+              animate={{ opacity: 1, height: "auto", marginTop: 24 }}
+              exit={{ opacity: 0, height: 0, marginTop: 0 }}
+              transition={SPRING_LAYOUT}
+              className="overflow-hidden"
             >
-              {activeCategory.icon} {activeCategory.name}
-              <X aria-hidden className="size-3.5" strokeWidth={2.4} />
-              <span className="sr-only">{t("home.clearCategoryFilter")}</span>
-            </motion.button>
+              <motion.button
+                type="button"
+                initial={{ scale: 0.9 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0.9 }}
+                transition={SPRING_LAYOUT}
+                onClick={() => setCategoryFilter(null)}
+                className="bg-app-fg text-app-surface inline-flex min-h-9 w-fit items-center gap-1.5 rounded-full px-3.5 text-[13px] font-semibold"
+              >
+                {activeCategory.icon} {activeCategory.name}
+                <X aria-hidden className="size-3.5" strokeWidth={2.4} />
+                <span className="sr-only">{t("home.clearCategoryFilter")}</span>
+              </motion.button>
+            </motion.div>
           )}
         </AnimatePresence>
 
