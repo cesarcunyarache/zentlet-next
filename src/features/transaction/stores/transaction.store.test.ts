@@ -152,6 +152,20 @@ describe("rechazos del servidor", () => {
     expect(emitSyncError).not.toHaveBeenCalled();
   });
 
+  it("un 401 (sesión caducada) no revierte: el alta queda en cola hasta volver a entrar", async () => {
+    vi.useFakeTimers();
+    service.createTransaction.mockRejectedValue(httpError(401));
+    run(transactionMutationKeys.create, tx());
+
+    await vi.advanceTimersByTimeAsync(5_000);
+    expect(service.createTransaction.mock.calls.length).toBeGreaterThan(1);
+    expect(feedIds()).toEqual(["new", "existing"]);
+    expect(summary()).toMatchObject({ count: 2, expenseTotal: 35 });
+    expect(pending()).toHaveLength(1);
+    expect(emitSyncError).not.toHaveBeenCalled();
+    expect(reportSyncFailure).not.toHaveBeenCalled();
+  });
+
   it("borrar algo que ya no existe (404) cuenta como éxito", async () => {
     service.deleteTransaction.mockRejectedValue(httpError(404));
     run(transactionMutationKeys.remove, existing);

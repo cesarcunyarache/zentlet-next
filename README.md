@@ -295,7 +295,7 @@ src/
 
 ### Decisiones que vale la pena conocer
 
-- **📴 Offline-first.** La cache de TanStack Query se persiste en IndexedDB, una por usuario. Las escrituras hechas sin red quedan en cola y se reanudan al volver, incluso tras cerrar la app. Un 429 del servidor frena la cola, nunca descarta cambios.
+- **📴 Offline-first.** La cache de TanStack Query se persiste en IndexedDB, una por usuario. Las escrituras hechas sin red quedan en cola y se reanudan al volver, incluso tras cerrar la app. Un 429 del servidor frena la cola y un 401 (sesión caducada) la deja en espera hasta volver a entrar: ninguno descarta cambios.
 - **🔁 Idempotencia por id.** El cliente genera el id de cada movimiento y categoría (`crypto.randomUUID`): reenviar un alta devuelve la existente en lugar de duplicarla, también en carreras entre dos peticiones.
 - **🌍 En español e inglés.** Con [next-intl](https://next-intl.dev): el español conserva las URLs de siempre y el inglés vive bajo `/en`. Si a una traducción le falta un texto, no compila. Ver [Idiomas](#-idiomas).
 - **🔭 Observabilidad desacoplada.** El código sólo conoce `@/lib/observability/*`; Sentry y PostHog se cargan únicamente si están configurados y nunca bloquean ni rompen una petición. Ver [docs/observability.md](docs/observability.md).
@@ -396,7 +396,6 @@ const t = await getTranslations({ locale, namespace: "common" });
 
 - [ ] Rendimiento de la app privada en móviles de gama media: animaciones de `layout` por fila, lista por tramos y carga diferida de las hojas
 - [ ] Actualizar Next.js a 16.3.x y retirar `next-auth` / `@auth/prisma-adapter`, que no se usan
-- [ ] Conservar en cola los cambios que reciben un 401 (sesión caducada) en lugar de revertirlos
 - [ ] Ejecutar `prisma migrate deploy` automáticamente en el despliegue
 - [ ] Pedir el consentimiento legal a las cuentas creadas antes de la casilla
 - [ ] Testimonios de los primeros usuarios (la sección ya está lista en `content/data.ts`)

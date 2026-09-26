@@ -23,6 +23,9 @@ export function isNetworkError(error: unknown) {
  *   continúa solo al volver la red; no se pierde nada.
  * - 429 (cupo de escrituras): se reintenta siempre, con espera creciente.
  *   Vaciar una cola larga sólo va más lento; nunca se descarta un cambio.
+ * - 401 (sesión caducada): se reintenta siempre. El dato es válido, falta
+ *   la sesión: el cambio sigue en cola (y guardado en el dispositivo) y se
+ *   envía cuando el mismo usuario vuelve a entrar.
  * - 5xx: hasta 3 intentos.
  * - 4xx: el servidor rechazó el dato; repetir no lo arregla.
  * La idempotencia por id del servidor hace seguro repetir un alta.
@@ -30,7 +33,7 @@ export function isNetworkError(error: unknown) {
 export function shouldRetryMutation(failureCount: number, error: unknown) {
   if (isNetworkError(error)) return true;
   const status = getApiErrorStatus(error);
-  if (status === 429) return true;
+  if (status === 429 || status === 401) return true;
   if (status && status >= 500) return failureCount < 3;
   return false;
 }

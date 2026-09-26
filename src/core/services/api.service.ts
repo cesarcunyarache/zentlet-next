@@ -15,6 +15,22 @@ import { siteConfig } from "@/lib/site";
  */
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
+/** Sesión caducada: al login (no a `/`, que es la landing). */
+let onUnauthorized = () => window.location.replace(siteConfig.routes.signIn);
+
+/**
+ * Reemplaza lo que se hace ante un 401 en el navegador. La app privada lo
+ * usa para guardar la cola pendiente en el dispositivo antes de salir.
+ * Devuelve la función que restaura el anterior.
+ */
+export function setUnauthorizedHandler(handler: () => void) {
+  const previous = onUnauthorized;
+  onUnauthorized = handler;
+  return () => {
+    onUnauthorized = previous;
+  };
+}
+
 /**
  * Infraestructura HTTP. No sabe nada de dominios, de React ni de TanStack
  * Query: sólo configura Axios y expone los verbos.
@@ -37,10 +53,9 @@ export abstract class APIService {
     this.axiosInstance.interceptors.response.use(
       (response) => response,
       (error) => {
-        // Sesión caducada: al login (no a `/`, que es la landing). Las
-        // operaciones pendientes siguen guardadas y se reanudan al volver.
+        // Las operaciones pendientes siguen en cola y se reanudan al volver.
         if (typeof window !== "undefined" && error?.response?.status === 401) {
-          window.location.replace(siteConfig.routes.signIn);
+          onUnauthorized();
         }
         return Promise.reject(error);
       },

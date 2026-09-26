@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { defaultShouldDehydrateQuery, onlineManager, QueryClient, type Query } from "@tanstack/react-query";
+import { defaultShouldDehydrateQuery, dehydrate, onlineManager, QueryClient, type Query } from "@tanstack/react-query";
 import {
   PersistQueryClientProvider,
   type PersistedClient,
@@ -10,6 +10,7 @@ import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persi
 import { del, get, set } from "idb-keyval";
 import { useLocale } from "next-intl";
 import { shouldRetry } from "@/providers/query-provider";
+import { setUnauthorizedHandler } from "@/core/services/api.service";
 import { registerCategoryMutations } from "@/features/category/stores/category.store";
 import { registerTransactionMutations } from "@/features/transaction/stores/transaction.store";
 import { siteConfig } from "@/lib/site";
@@ -88,6 +89,11 @@ function shouldDehydrateQuery(query: Query) {
   const filters = query.queryKey[1] === "list" ? (query.queryKey[2] as { q?: string } | undefined) : undefined;
   return defaultShouldDehydrateQuery(query) && !filters?.q;
 }
+
+const dehydrateOptions = {
+  shouldDehydrateQuery,
+  shouldDehydrateMutation: (mutation: { state: { status: string } }) => mutation.state.status === "pending",
+};
 
 function createOfflineQueryClient() {
   const client = new QueryClient({
@@ -176,6 +182,29 @@ export function OfflineQueryProvider({ userId, pageSession, children }: OfflineQ
   }, [locale, queryClient, pageSession, userId]);
 
   /*
+   * 401 (sesión revocada o caducada en el servidor): la cola no se descarta,
+   * queda pendiente hasta que el mismo usuario vuelva a entrar. El persister
+   * guarda con retraso (`throttleTime`), así que un cambio hecho justo antes
+   * aún podría no estar en el dispositivo: se guarda ya y después al login.
+   */
+  useEffect(() => {
+    const signIn = getPathname({ href: siteConfig.routes.signIn, locale });
+    let leaving = false;
+    return setUnauthorizedHandler(() => {
+      if (leaving) return;
+      leaving = true;
+      const snapshot: PersistedClient = {
+        timestamp: Date.now(),
+        buster: CACHE_VERSION,
+        clientState: dehydrate(queryClient, dehydrateOptions),
+      };
+      // con la sesión vencida al abrir no se escribe nada (ver `lockedStorage`)
+      const save = expiredOnOpen ? Promise.resolve() : set(storageKey(userId), serialize(snapshot));
+      void save.catch(() => {}).finally(() => window.location.replace(signIn));
+    });
+  }, [expiredOnOpen, locale, queryClient, userId]);
+
+  /*
    * `onlineManager` arranca asumiendo conexión y sólo escucha los eventos
    * online/offline. Si la app se abre ya sin red (página servida por el
    * service worker) nunca llega un "offline" y las escrituras se
@@ -192,10 +221,7 @@ export function OfflineQueryProvider({ userId, pageSession, children }: OfflineQ
         persister,
         maxAge: MAX_AGE,
         buster: CACHE_VERSION,
-        dehydrateOptions: {
-          shouldDehydrateQuery,
-          shouldDehydrateMutation: (mutation) => mutation.state.status === "pending",
-        },
+        dehydrateOptions,
       }}
       // restaurado: se envía la cola y después se revalida contra el servidor
       onSuccess={() => queryClient.resumePausedMutations().then(() => queryClient.invalidateQueries())}
