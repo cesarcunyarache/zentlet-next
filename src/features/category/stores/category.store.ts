@@ -47,9 +47,19 @@ type UpdateVariables = { categoryId: string; data: Partial<TCategoryPayload> };
 /* ── cambios pendientes ────────────────────────────────────────────────── */
 
 /** Forma completa de una categoría que aún no ha llegado al servidor. */
-function localCategory({ id, name, icon, color, description }: CreateVariables): TCategory {
+function localCategory({ id, name, icon, color, description, aiSuggestions }: CreateVariables): TCategory {
   const now = new Date().toISOString();
-  return { id, name, icon, color, description: description ?? null, userId: "", createdAt: now, updatedAt: now };
+  return {
+    id,
+    name,
+    icon,
+    color,
+    description: description ?? null,
+    aiSuggestions: aiSuggestions ?? null,
+    userId: "",
+    createdAt: now,
+    updatedAt: now,
+  };
 }
 
 function toPendingChange(mutation: Mutation<unknown, unknown, unknown>): PendingChange<TCategory> | null {

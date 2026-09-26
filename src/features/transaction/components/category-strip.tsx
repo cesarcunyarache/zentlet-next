@@ -3,7 +3,7 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { cn } from "@heroui/react";
 import { useTranslations } from "next-intl";
-import { SPRING_LAYOUT, SPRING_PRESS } from "@/lib/ease";
+import { EASE_OUT_CSS, SPRING_LAYOUT, SPRING_PRESS } from "@/lib/ease";
 import { formatMoney, formatShort } from "../lib/format";
 import type { CategoryLike } from "../types";
 /** Alto total del gráfico y alto mínimo legible de una barra con movimientos. */
@@ -103,23 +103,22 @@ export function CategoryStrip({
               transition={SPRING_LAYOUT}
               className={cn("group", COLUMN)}
             >
-              <motion.span
-                initial={reduceMotion ? false : { height: IDLE_HEIGHT }}
-                animate={{ height }}
-                style={
-                  isSelected
-                    ? {
-                        backgroundColor:
-                          category.color || "var(--app-fill-strong)",
-                      }
-                    : undefined
-                }
-                transition={{
-                  ...SPRING_LAYOUT,
-                  delay: reduceMotion ? 0 : index * 0.05,
-                }}
+              {/*
+                La altura va por CSS y no por `animate`: al reordenarse las
+                columnas (`layout`), Motion podía dejar la barra en su altura
+                anterior. Una transición CSS siempre termina en el valor final.
+              */}
+              <span
+                style={{
+                  "--bar-height": `${height}px`,
+                  transitionDelay: `0ms, ${reduceMotion ? 0 : index * 50}ms`,
+                  transitionTimingFunction: `ease, ${EASE_OUT_CSS}`,
+                  ...(isSelected && {
+                    backgroundColor: category.color || "var(--app-fill-strong)",
+                  }),
+                } as React.CSSProperties}
                 className={cn(
-                  "flex w-full items-center justify-end rounded-3xl transition-colors duration-300",
+                  "flex h-(--bar-height) w-full items-center justify-end rounded-3xl transition-[background-color,height] duration-[300ms,600ms] motion-reduce:transition-none starting:h-11",
                   idle
                     ? "flex-row justify-center gap-1"
                     : "flex-col gap-1.5 pb-3.5",
@@ -144,7 +143,7 @@ export function CategoryStrip({
                 <span className="num text-[13px] leading-none font-semibold">
                   {formatShort(total)}
                 </span>
-              </motion.span>
+              </span>
             </motion.button>
           );
         })}

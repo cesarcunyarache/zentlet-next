@@ -67,7 +67,11 @@ export const transactionMutationKeys = {
   remove: ["transactions", "mutation", "delete"] as const,
 };
 
-type UpdateVariables = { transactionId: string; data: Partial<TTransactionPayload> };
+/**
+ * `previous` es el movimiento tal como estaba al editarlo: sin conexión hace
+ * falta para descontarlo de los totales. Las colas antiguas no lo traen.
+ */
+type UpdateVariables = { transactionId: string; data: Partial<TTransactionPayload>; previous?: TTransaction };
 /** Las colas guardadas antes del feed paginado llevan sólo el id. */
 type DeleteVariables = TTransaction | string;
 
@@ -78,7 +82,7 @@ const deletedId = (variables: DeleteVariables) =>
 
 type PendingChange =
   | { kind: "create"; row: TTransaction }
-  | { kind: "update"; id: string; data: Partial<TTransactionPayload> }
+  | { kind: "update"; id: string; data: Partial<TTransactionPayload>; previous?: TTransaction; paused: boolean }
   | { kind: "delete"; id: string; row?: TTransaction };
 
 function toPendingChange(mutation: Mutation<unknown, unknown, unknown>): PendingChange | null {
@@ -86,8 +90,8 @@ function toPendingChange(mutation: Mutation<unknown, unknown, unknown>): Pending
   const variables = mutation.state.variables;
   if (kind === "create") return { kind: "create", row: variables as TTransaction };
   if (kind === "update") {
-    const { transactionId, data } = variables as UpdateVariables;
-    return { kind: "update", id: transactionId, data };
+    const { transactionId, data, previous } = variables as UpdateVariables;
+    return { kind: "update", id: transactionId, data, previous, paused: mutation.state.isPaused };
   }
   if (kind === "delete") {
     const deleted = variables as DeleteVariables;
@@ -132,20 +136,43 @@ export function withPendingInPage(
  * servidor dice qué ids tiene para no contarlo dos veces.
  */
 export async function fetchSummaryWithPending(queryClient: QueryClient, range: DateRange): Promise<TransactionSummary> {
-  const pending = pendingChanges(queryClient).flatMap((change) => {
-    const row = change.kind === "update" ? undefined : change.row;
-    return row && inRange(row.transactionDate, range) ? [{ kind: change.kind, row }] : [];
-  });
+  const changes = pendingChanges(queryClient);
+  const createdIds = new Set(changes.flatMap((change) => (change.kind === "create" ? [change.row.id] : [])));
+
+  // un alta aún en cola se cuenta ya con las ediciones que se le hicieron después
+  const withEdits = (row: TTransaction) =>
+    changes.reduce(
+      (current, change) => (change.kind === "update" && change.id === row.id ? { ...current, ...change.data } : current),
+      row,
+    );
+
+  const pending = changes
+    .flatMap((change): { kind: "create" | "delete" | "undo" | "redo"; row: TTransaction }[] => {
+      if (change.kind === "create") return [{ kind: "create", row: withEdits(change.row) }];
+      if (change.kind === "delete") return change.row ? [{ kind: "delete", row: change.row }] : [];
+      // edición en espera de red de un movimiento que ya está en el servidor:
+      // se descuenta como estaba y se suma como quedó
+      if (change.paused && change.previous && !createdIds.has(change.id)) {
+        return [
+          { kind: "undo", row: change.previous },
+          { kind: "redo", row: { ...change.previous, ...change.data } },
+        ];
+      }
+      return [];
+    })
+    .filter(({ row }) => inRange(row.transactionDate, range));
 
   const { presentIds, ...summary } = await transactionService.getSummary(
     range,
-    pending.map(({ row }) => row.id),
+    pending.flatMap(({ kind, row }) => (kind === "create" || kind === "delete" ? [row.id] : [])),
   );
   const present = new Set(presentIds);
 
   return pending.reduce((current, { kind, row }) => {
     if (kind === "create" && !present.has(row.id)) return applyToSummary(current, row, 1);
     if (kind === "delete" && present.has(row.id)) return applyToSummary(current, row, -1);
+    if (kind === "undo") return applyToSummary(current, row, -1);
+    if (kind === "redo") return applyToSummary(current, row, 1);
     return current;
   }, summary);
 }
@@ -228,9 +255,9 @@ export function registerTransactionMutations(queryClient: QueryClient) {
     ...shared,
     mutationFn: ({ transactionId, data }: UpdateVariables) =>
       transactionService.updateTransaction(transactionId, data),
-    onMutate: async ({ transactionId, data }: UpdateVariables) => {
+    onMutate: async ({ transactionId, data, previous: given }: UpdateVariables) => {
       await queryClient.cancelQueries({ queryKey: transactionKeys.all });
-      const previous = findCached(queryClient, transactionId);
+      const previous = findCached(queryClient, transactionId) ?? given;
       if (!previous) return;
       const updated = { ...previous, ...data };
       updateFeeds(queryClient, (feed, filters) => patchInFeed(feed, updated, filters));
@@ -380,8 +407,9 @@ export function useTransactionMutations() {
       create.mutate(transaction);
       return transaction;
     },
-    updateTransaction: (transactionId: string, data: Partial<TTransactionPayload>) =>
-      update.mutate({ transactionId, data }),
+    /** Recibe el movimiento completo: sin conexión hace falta para corregir los totales. */
+    updateTransaction: (transaction: TTransaction, data: Partial<TTransactionPayload>) =>
+      update.mutate({ transactionId: transaction.id, data, previous: transaction }),
     /** Recibe el movimiento completo: sin conexión hace falta para descontarlo de los totales. */
     deleteTransaction: (transaction: TTransaction) => remove.mutate(transaction),
   };

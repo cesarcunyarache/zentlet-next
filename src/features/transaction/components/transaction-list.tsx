@@ -9,7 +9,7 @@ import {
   useReducedMotion,
   useTransform,
 } from "motion/react";
-import { CloudOff, RefreshCw, Trash2 } from "lucide-react";
+import { CloudOff, Pencil, RefreshCw, Trash2 } from "lucide-react";
 import { cn } from "@heroui/react";
 import { useLocale, useTranslations } from "next-intl";
 import { SPRING_LAYOUT } from "@/lib/ease";
@@ -31,12 +31,16 @@ interface TransactionListProps {
   isLoadingMore?: boolean;
   onEndReached?: () => void;
   onSelect: (transaction: TTransaction) => void;
+  /** Deslizar la fila a la derecha descubre el botón de editar. */
+  onRequestEdit?: (transaction: TTransaction) => void;
   /** Deslizar la fila a la izquierda descubre el botón de eliminar. */
   onRequestDelete?: (transaction: TTransaction) => void;
 }
 
-/** Ancho del botón de eliminar que descubre el deslizamiento. */
-const SWIPE_REVEAL = 84;
+/** Ancho de los botones que descubre el deslizamiento y aire entre botón y fila. */
+const SWIPE_ACTION = 72;
+const SWIPE_GAP = 10;
+const SWIPE_REVEAL = SWIPE_ACTION + SWIPE_GAP;
 
 /**
  * Por encima de esto no se animan las posiciones: `layout` mide cada fila
@@ -80,11 +84,12 @@ export function TransactionList({
   isLoadingMore = false,
   onEndReached,
   onSelect,
+  onRequestEdit,
   onRequestDelete,
 }: TransactionListProps) {
   const t = useTranslations("transactions");
   const locale = useLocale();
-  const [openId, setOpenId] = useState<string | null>(null);
+  const [open, setOpen] = useState<{ id: string; side: SwipeSide } | null>(null);
   const reduceMotion = useReducedMotion();
   const groups = useMemo(() => groupByDay(transactions), [transactions]);
   const isLarge = transactions.length > LAYOUT_ANIMATION_LIMIT;
@@ -135,6 +140,7 @@ export function TransactionList({
                 const syncState = syncStateById?.get(tx.id);
                 const syncLabel = syncState && t(`list.sync.${syncState}`);
                 const delay = Math.min(row++, 8) * 0.03;
+                const name = tx.description || category?.name || t("list.fallbackName");
 
                 return (
                   <motion.div
@@ -150,15 +156,19 @@ export function TransactionList({
                     className="relative overflow-hidden rounded-2xl"
                   >
                     <SwipeRow
-                      deleteLabel={t("list.deleteItem", {
-                        name: tx.description || category?.name || t("list.fallbackName"),
-                      })}
-                      isOpen={openId === tx.id}
-                      canSwipe={Boolean(onRequestDelete)}
-                      onOpenChange={(open) => setOpenId(open ? tx.id : null)}
+                      editLabel={t("list.editItem", { name })}
+                      deleteLabel={t("list.deleteItem", { name })}
+                      openSide={open?.id === tx.id ? open.side : null}
+                      canEdit={Boolean(onRequestEdit)}
+                      canDelete={Boolean(onRequestDelete)}
+                      onOpenChange={(side) => setOpen(side ? { id: tx.id, side } : null)}
                       onPress={() => onSelect(tx)}
+                      onEdit={() => {
+                        setOpen(null);
+                        onRequestEdit?.(tx);
+                      }}
                       onDelete={() => {
-                        setOpenId(null);
+                        setOpen(null);
                         onRequestDelete?.(tx);
                       }}
                     >
@@ -213,72 +223,105 @@ export function TransactionList({
   );
 }
 
+type SwipeSide = "edit" | "delete";
+
+const offsetFor = (side: SwipeSide | null) =>
+  side === "edit" ? SWIPE_REVEAL : side === "delete" ? -SWIPE_REVEAL : 0;
+
 /**
- * Fila deslizable: a la izquierda descubre el botón de eliminar. Un toque
- * con la fila abierta la cierra en lugar de abrir el detalle.
+ * Fila deslizable: a la derecha descubre editar (a la izquierda de la fila)
+ * y a la izquierda, eliminar (a la derecha). Un toque con la fila abierta la
+ * cierra en lugar de abrir el detalle.
  */
 function SwipeRow({
+  editLabel,
   deleteLabel,
-  isOpen,
-  canSwipe,
+  openSide,
+  canEdit,
+  canDelete,
   onOpenChange,
   onPress,
+  onEdit,
   onDelete,
   children,
 }: {
+  editLabel: string;
   deleteLabel: string;
-  isOpen: boolean;
-  canSwipe: boolean;
-  onOpenChange: (open: boolean) => void;
+  openSide: SwipeSide | null;
+  canEdit: boolean;
+  canDelete: boolean;
+  onOpenChange: (side: SwipeSide | null) => void;
   onPress: () => void;
+  onEdit: () => void;
   onDelete: () => void;
   children: React.ReactNode;
 }) {
   const dragged = useRef(false);
   const x = useMotionValue(0);
-  // quieto, el rojo asomaría por las esquinas redondeadas de la fila
-  const revealOpacity = useTransform(x, [-16, 0], [1, 0]);
+  // quietos, los botones asomarían por las esquinas redondeadas de la fila
+  const editOpacity = useTransform(x, [0, 16], [0, 1]);
+  const deleteOpacity = useTransform(x, [-16, 0], [1, 0]);
 
   useEffect(() => {
-    const controls = animate(x, isOpen ? -SWIPE_REVEAL : 0, SPRING_LAYOUT);
+    const controls = animate(x, offsetFor(openSide), SPRING_LAYOUT);
     return () => controls.stop();
-  }, [isOpen, x]);
+  }, [openSide, x]);
 
   return (
     <>
-      {canSwipe && (
+      {canEdit && (
+        <motion.button
+          type="button"
+          aria-label={editLabel}
+          tabIndex={openSide === "edit" ? 0 : -1}
+          onClick={onEdit}
+          className="bg-app-fg text-app-surface absolute inset-y-0 left-0 grid place-items-center rounded-2xl"
+          style={{ width: SWIPE_ACTION, opacity: editOpacity }}
+        >
+          <Pencil className="size-5" strokeWidth={2} aria-hidden />
+        </motion.button>
+      )}
+      {canDelete && (
         <motion.button
           type="button"
           aria-label={deleteLabel}
-          tabIndex={isOpen ? 0 : -1}
+          tabIndex={openSide === "delete" ? 0 : -1}
           onClick={onDelete}
           className="bg-app-expense text-app-surface absolute inset-y-0 right-0 grid place-items-center rounded-2xl"
-          style={{ width: SWIPE_REVEAL, opacity: revealOpacity }}
+          style={{ width: SWIPE_ACTION, opacity: deleteOpacity }}
         >
           <Trash2 className="size-5" strokeWidth={2} aria-hidden />
         </motion.button>
       )}
       <motion.button
         type="button"
-        drag={canSwipe ? "x" : false}
+        drag={canEdit || canDelete ? "x" : false}
         dragDirectionLock
-        dragConstraints={{ left: -SWIPE_REVEAL, right: 0 }}
-        dragElastic={{ left: 0.15, right: 0 }}
+        dragConstraints={{ left: canDelete ? -SWIPE_REVEAL : 0, right: canEdit ? SWIPE_REVEAL : 0 }}
+        dragElastic={{ left: canDelete ? 0.15 : 0, right: canEdit ? 0.15 : 0 }}
         style={{ x }}
         onDragStart={() => {
           dragged.current = true;
         }}
         onDragEnd={(_, info) => {
-          const open = info.offset.x < -SWIPE_REVEAL / 2 || info.velocity.x < -400;
+          // se decide por dónde quedó la fila: pasada la mitad o con un gesto rápido
+          const at = x.get();
+          const flick = Math.abs(info.velocity.x) > 400 && Math.sign(info.velocity.x) === Math.sign(at);
+          const side: SwipeSide | null =
+            canDelete && (at < -SWIPE_REVEAL / 2 || (flick && at < 0))
+              ? "delete"
+              : canEdit && (at > SWIPE_REVEAL / 2 || (flick && at > 0))
+                ? "edit"
+                : null;
           // si el estado no cambia no hay render: se devuelve la fila a mano
-          animate(x, open ? -SWIPE_REVEAL : 0, SPRING_LAYOUT);
-          onOpenChange(open);
+          animate(x, offsetFor(side), SPRING_LAYOUT);
+          onOpenChange(side);
           // el click que sigue al soltar no debe abrir el detalle
           setTimeout(() => (dragged.current = false), 0);
         }}
         onClick={() => {
           if (dragged.current) return;
-          if (isOpen) onOpenChange(false);
+          if (openSide) onOpenChange(null);
           else onPress();
         }}
         whileTap={{ scale: 0.98 }}

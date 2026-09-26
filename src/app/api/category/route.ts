@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { Prisma } from "@/generated/prisma/client";
+import { sanitizeSuggestions } from "@/features/category/ai/lib/normalize-suggestions";
 import { createCategorySchema } from "@/features/category/schemas/category-api.schema";
 import {
   errorResponse,
@@ -42,7 +44,8 @@ export async function POST(req: Request) {
 
     const parsed = await parseBody(req, createCategorySchema);
     if ("error" in parsed) return parsed.error;
-    const { id, name, icon, color, description } = parsed.data;
+    const { id, name, icon, color, description, aiSuggestions } = parsed.data;
+    const suggestions = sanitizeSuggestions(aiSuggestions);
 
     const existing = await prisma.category.findUnique({ where: { id } });
     if (existing) {
@@ -57,7 +60,15 @@ export async function POST(req: Request) {
 
     try {
       const category = await prisma.category.create({
-        data: { id, name, icon, color, description: description ?? null, userId },
+        data: {
+          id,
+          name,
+          icon,
+          color,
+          description: description ?? null,
+          aiSuggestions: suggestions ?? Prisma.DbNull,
+          userId,
+        },
       });
       return NextResponse.json(category, { status: 201 });
     } catch (error) {

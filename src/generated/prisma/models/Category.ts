@@ -52,6 +52,7 @@ export type CategoryCountAggregateOutputType = {
   icon: number
   color: number
   description: number
+  aiSuggestions: number
   userId: number
   createdAt: number
   updatedAt: number
@@ -87,6 +88,7 @@ export type CategoryCountAggregateInputType = {
   icon?: true
   color?: true
   description?: true
+  aiSuggestions?: true
   userId?: true
   createdAt?: true
   updatedAt?: true
@@ -171,6 +173,7 @@ export type CategoryGroupByOutputType = {
   icon: string
   color: string
   description: string | null
+  aiSuggestions: runtime.JsonValue | null
   userId: string
   createdAt: Date
   updatedAt: Date
@@ -203,6 +206,7 @@ export type CategoryWhereInput = {
   icon?: Prisma.StringFilter<"Category"> | string
   color?: Prisma.StringFilter<"Category"> | string
   description?: Prisma.StringNullableFilter<"Category"> | string | null
+  aiSuggestions?: Prisma.JsonNullableFilter<"Category">
   userId?: Prisma.StringFilter<"Category"> | string
   createdAt?: Prisma.DateTimeFilter<"Category"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Category"> | Date | string
@@ -216,6 +220,7 @@ export type CategoryOrderByWithRelationInput = {
   icon?: Prisma.SortOrder
   color?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiSuggestions?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -232,6 +237,7 @@ export type CategoryWhereUniqueInput = Prisma.AtLeast<{
   icon?: Prisma.StringFilter<"Category"> | string
   color?: Prisma.StringFilter<"Category"> | string
   description?: Prisma.StringNullableFilter<"Category"> | string | null
+  aiSuggestions?: Prisma.JsonNullableFilter<"Category">
   userId?: Prisma.StringFilter<"Category"> | string
   createdAt?: Prisma.DateTimeFilter<"Category"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Category"> | Date | string
@@ -245,6 +251,7 @@ export type CategoryOrderByWithAggregationInput = {
   icon?: Prisma.SortOrder
   color?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiSuggestions?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -262,6 +269,7 @@ export type CategoryScalarWhereWithAggregatesInput = {
   icon?: Prisma.StringWithAggregatesFilter<"Category"> | string
   color?: Prisma.StringWithAggregatesFilter<"Category"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Category"> | string | null
+  aiSuggestions?: Prisma.JsonNullableWithAggregatesFilter<"Category">
   userId?: Prisma.StringWithAggregatesFilter<"Category"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Category"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Category"> | Date | string
@@ -273,6 +281,7 @@ export type CategoryCreateInput = {
   icon: string
   color: string
   description?: string | null
+  aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutCategoriesInput
@@ -285,6 +294,7 @@ export type CategoryUncheckedCreateInput = {
   icon: string
   color: string
   description?: string | null
+  aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -297,6 +307,7 @@ export type CategoryUpdateInput = {
   icon?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutCategoriesNestedInput
@@ -309,6 +320,7 @@ export type CategoryUncheckedUpdateInput = {
   icon?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -321,6 +333,7 @@ export type CategoryCreateManyInput = {
   icon: string
   color: string
   description?: string | null
+  aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -332,6 +345,7 @@ export type CategoryUpdateManyMutationInput = {
   icon?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -342,6 +356,7 @@ export type CategoryUncheckedUpdateManyInput = {
   icon?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -363,6 +378,7 @@ export type CategoryCountOrderByAggregateInput = {
   icon?: Prisma.SortOrder
   color?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  aiSuggestions?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -457,6 +473,7 @@ export type CategoryCreateWithoutUserInput = {
   icon: string
   color: string
   description?: string | null
+  aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   transactions?: Prisma.TransactionCreateNestedManyWithoutCategoryInput
@@ -468,6 +485,7 @@ export type CategoryUncheckedCreateWithoutUserInput = {
   icon: string
   color: string
   description?: string | null
+  aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutCategoryInput
@@ -508,6 +526,7 @@ export type CategoryScalarWhereInput = {
   icon?: Prisma.StringFilter<"Category"> | string
   color?: Prisma.StringFilter<"Category"> | string
   description?: Prisma.StringNullableFilter<"Category"> | string | null
+  aiSuggestions?: Prisma.JsonNullableFilter<"Category">
   userId?: Prisma.StringFilter<"Category"> | string
   createdAt?: Prisma.DateTimeFilter<"Category"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Category"> | Date | string
@@ -519,6 +538,7 @@ export type CategoryCreateWithoutTransactionsInput = {
   icon: string
   color: string
   description?: string | null
+  aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutCategoriesInput
@@ -530,6 +550,7 @@ export type CategoryUncheckedCreateWithoutTransactionsInput = {
   icon: string
   color: string
   description?: string | null
+  aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -557,6 +578,7 @@ export type CategoryUpdateWithoutTransactionsInput = {
   icon?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutCategoriesNestedInput
@@ -568,6 +590,7 @@ export type CategoryUncheckedUpdateWithoutTransactionsInput = {
   icon?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -579,6 +602,7 @@ export type CategoryCreateManyUserInput = {
   icon: string
   color: string
   description?: string | null
+  aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -589,6 +613,7 @@ export type CategoryUpdateWithoutUserInput = {
   icon?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transactions?: Prisma.TransactionUpdateManyWithoutCategoryNestedInput
@@ -600,6 +625,7 @@ export type CategoryUncheckedUpdateWithoutUserInput = {
   icon?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutCategoryNestedInput
@@ -611,6 +637,7 @@ export type CategoryUncheckedUpdateManyWithoutUserInput = {
   icon?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -652,6 +679,7 @@ export type CategorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   icon?: boolean
   color?: boolean
   description?: boolean
+  aiSuggestions?: boolean
   userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -666,6 +694,7 @@ export type CategorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   icon?: boolean
   color?: boolean
   description?: boolean
+  aiSuggestions?: boolean
   userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -678,6 +707,7 @@ export type CategorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   icon?: boolean
   color?: boolean
   description?: boolean
+  aiSuggestions?: boolean
   userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -690,12 +720,13 @@ export type CategorySelectScalar = {
   icon?: boolean
   color?: boolean
   description?: boolean
+  aiSuggestions?: boolean
   userId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "icon" | "color" | "description" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["category"]>
+export type CategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "icon" | "color" | "description" | "aiSuggestions" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["category"]>
 export type CategoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   transactions?: boolean | Prisma.Category$transactionsArgs<ExtArgs>
@@ -720,6 +751,11 @@ export type $CategoryPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     icon: string
     color: string
     description: string | null
+    /**
+     * Opciones de icono que propuso la IA para este nombre: [{ icon, color }].
+     * Se reutilizan al editar; si cambia el nombre se regeneran y se reemplazan.
+     */
+    aiSuggestions: runtime.JsonValue | null
     userId: string
     createdAt: Date
     updatedAt: Date
@@ -1153,6 +1189,7 @@ export interface CategoryFieldRefs {
   readonly icon: Prisma.FieldRef<"Category", 'String'>
   readonly color: Prisma.FieldRef<"Category", 'String'>
   readonly description: Prisma.FieldRef<"Category", 'String'>
+  readonly aiSuggestions: Prisma.FieldRef<"Category", 'Json'>
   readonly userId: Prisma.FieldRef<"Category", 'String'>
   readonly createdAt: Prisma.FieldRef<"Category", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Category", 'DateTime'>
