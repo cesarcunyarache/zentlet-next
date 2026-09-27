@@ -30,6 +30,16 @@ const categories: ExportCategory[] = [
     description: null,
     createdAt: new Date("2026-07-01T10:00:00.000Z"),
     _count: { transactions: 1 },
+    budget: { kind: "recurring", periodUnit: "week", periodCount: 1, limits: [{ amount: { toString: () => "450" } }] },
+  },
+  {
+    name: "Ocio",
+    icon: "🎉",
+    color: "#F8D9EA",
+    description: null,
+    createdAt: new Date("2026-07-02T10:00:00.000Z"),
+    _count: { transactions: 0 },
+    budget: null,
   },
 ];
 
@@ -77,7 +87,11 @@ describe("buildWorkbook", () => {
     expect(description?.type).toBeUndefined(); // sin `type: "Formula"` la librería escribe una cadena
   });
 
-  it("las categorías incluyen su número de movimientos", () => {
+  it("las categorías incluyen su número de movimientos y su presupuesto vigente con su periodo", () => {
+    expect(categorySheet.data[0].slice(6).map((header) => (header as CellLike)?.value)).toEqual([
+      "Presupuesto",
+      "Periodo del presupuesto",
+    ]);
     expect(categorySheet.data[1].map((c) => (c as CellLike)?.value)).toEqual([
       "Salud",
       "💊",
@@ -85,7 +99,15 @@ describe("buildWorkbook", () => {
       "",
       1,
       new Date("2026-07-01T10:00:00.000Z"),
+      450,
+      "Semanal · se repite",
     ]);
+    expect(cell(categorySheet.data[1], 6)).toMatchObject({ type: Number, format: "#,##0.00" });
+  });
+
+  it("una categoría sin presupuesto deja sus celdas vacías", () => {
+    expect(cell(categorySheet.data[2], 6)).toBeNull();
+    expect(cell(categorySheet.data[2], 7)).toBeNull();
   });
 
   it("genera un .xlsx válido (zip) aunque no haya datos", async () => {

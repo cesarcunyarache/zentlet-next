@@ -16,3 +16,14 @@ export function barHeight(total: number, max: number) {
   if (idle) return { idle: true, height: IDLE_HEIGHT };
   return { idle: false, height: Math.max(BAR_MIN, Math.round((Math.abs(total) / max) * CHART_HEIGHT)) };
 }
+
+/**
+ * Barra de una categoría con presupuesto: el contorno marca el tope en la
+ * escala del gráfico y el relleno, lo gastado. Dentro del tope el relleno
+ * es la fracción gastada del contorno; al superarlo sobresale.
+ */
+export function budgetBarHeights(spent: number, budget: number, max: number) {
+  const track = Math.max(BAR_MIN, Math.round((budget / max) * CHART_HEIGHT));
+  if (spent <= budget) return { track, fill: Math.round(track * (spent / budget)) };
+  return { track, fill: Math.max(track, Math.round((spent / max) * CHART_HEIGHT)) };
+}

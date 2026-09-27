@@ -63,11 +63,24 @@
       "icon": "Icon",
       "color": "Color",
       "transactions": "Transactions",
-      "createdAt": "Created"
+      "createdAt": "Created",
+      "budget": "Budget",
+      "budgetPeriod": "Budget period"
     },
     "types": {
       "expense": "Expense",
       "income": "Income"
+    },
+    "budgetPeriods": {
+      "weekly": "Weekly",
+      "biweekly": "Twice a month",
+      "monthly": "Monthly",
+      "quarterly": "Quarterly",
+      "yearly": "Yearly"
+    },
+    "budgetKinds": {
+      "recurring": "repeats",
+      "once": "just once"
     }
   },
   "feedback": {

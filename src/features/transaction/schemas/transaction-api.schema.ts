@@ -7,7 +7,7 @@ import { z } from "zod";
  */
 
 /** `YYYY-MM-DD` que exista en el calendario: `2026-02-30` o `2026-13-45` no pasan. */
-const isoDate = z
+export const isoDate = z
   .string()
   .regex(/^\d{4}-\d{2}-\d{2}$/, "Formato YYYY-MM-DD")
   .refine((value) => {

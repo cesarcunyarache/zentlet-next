@@ -1,5 +1,7 @@
 import { getSheetData, type Sheet } from "write-excel-file/node";
 import type { TransactionType } from "@/features/transaction/types";
+import { budgetPeriodOf } from "@/features/budget/lib/period";
+import type { BudgetKind, BudgetPeriod, BudgetPeriodUnit } from "@/features/budget/types";
 
 /*
  * Exportación de los datos del usuario: una hoja de movimientos y otra de
@@ -24,6 +26,13 @@ export interface ExportCategory {
   description: string | null;
   createdAt: Date;
   _count: { transactions: number };
+  /** Sólo el tope vigente: el último. */
+  budget: {
+    kind: string;
+    periodUnit: string;
+    periodCount: number;
+    limits: { amount: { toString(): string } }[];
+  } | null;
 }
 
 export interface WorkbookLabels {
@@ -40,13 +49,29 @@ export interface WorkbookLabels {
     color: string;
     transactions: string;
     createdAt: string;
+    budget: string;
+    budgetPeriod: string;
   };
   types: Record<TransactionType, string>;
+  budgetPeriods: Record<BudgetPeriod, string>;
+  budgetKinds: Record<BudgetKind, string>;
 }
 
 const AMOUNT_FORMAT = "#,##0.00";
 
 const header = (value: string) => ({ value, fontWeight: "bold" as const });
+
+function budgetCell(budget: ExportCategory["budget"]) {
+  const amount = budget?.limits[0]?.amount;
+  return amount ? { value: Number(amount.toString()), type: Number, format: AMOUNT_FORMAT } : null;
+}
+
+function budgetPeriodCell(budget: ExportCategory["budget"], labels: WorkbookLabels) {
+  if (!budget) return null;
+  const period = budgetPeriodOf({ periodUnit: budget.periodUnit as BudgetPeriodUnit, periodCount: budget.periodCount });
+  const kind = labels.budgetKinds[budget.kind as BudgetKind] ?? budget.kind;
+  return { value: `${period ? labels.budgetPeriods[period] : budget.periodUnit} · ${kind}` };
+}
 
 export function buildWorkbook(
   data: { transactions: ExportTransaction[]; categories: ExportCategory[] },
@@ -71,6 +96,8 @@ export function buildWorkbook(
     { header: header(columns.description), cell: (category) => ({ value: category.description ?? "" }) },
     { header: header(columns.transactions), cell: (category) => ({ value: category._count.transactions, type: Number }) },
     { header: header(columns.createdAt), cell: (category) => ({ value: category.createdAt, type: Date, format: dateFormat }) },
+    { header: header(columns.budget), cell: (category) => budgetCell(category.budget) },
+    { header: header(columns.budgetPeriod), cell: (category) => budgetPeriodCell(category.budget, labels) },
   ]);
 
   return [
@@ -83,7 +110,7 @@ export function buildWorkbook(
     {
       sheet: labels.sheets.categories,
       data: categories,
-      columns: [{ width: 24 }, { width: 8 }, { width: 10 }, { width: 40 }, { width: 14 }, { width: 12 }],
+      columns: [{ width: 24 }, { width: 8 }, { width: 10 }, { width: 40 }, { width: 14 }, { width: 12 }, { width: 14 }, { width: 24 }],
       stickyRowsCount: 1,
     },
   ];

@@ -58,6 +58,8 @@ export const ModelName = {
   Category: 'Category',
   Transaction: 'Transaction',
   Feedback: 'Feedback',
+  Budget: 'Budget',
+  BudgetLimit: 'BudgetLimit',
   RateLimit: 'RateLimit',
   UsageLimit: 'UsageLimit'
 } as const
@@ -182,6 +184,32 @@ export const FeedbackScalarFieldEnum = {
 } as const
 
 export type FeedbackScalarFieldEnum = (typeof FeedbackScalarFieldEnum)[keyof typeof FeedbackScalarFieldEnum]
+
+
+export const BudgetScalarFieldEnum = {
+  id: 'id',
+  categoryId: 'categoryId',
+  kind: 'kind',
+  periodUnit: 'periodUnit',
+  periodCount: 'periodCount',
+  startDate: 'startDate',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BudgetScalarFieldEnum = (typeof BudgetScalarFieldEnum)[keyof typeof BudgetScalarFieldEnum]
+
+
+export const BudgetLimitScalarFieldEnum = {
+  budgetId: 'budgetId',
+  effectiveFrom: 'effectiveFrom',
+  amount: 'amount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BudgetLimitScalarFieldEnum = (typeof BudgetLimitScalarFieldEnum)[keyof typeof BudgetLimitScalarFieldEnum]
 
 
 export const RateLimitScalarFieldEnum = {

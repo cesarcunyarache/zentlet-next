@@ -11,6 +11,7 @@ import { del, get, set } from "idb-keyval";
 import { useLocale } from "next-intl";
 import { shouldRetry } from "@/providers/query-provider";
 import { setUnauthorizedHandler } from "@/core/services/api.service";
+import { registerBudgetMutations } from "@/features/budget/stores/budget.store";
 import { registerCategoryMutations } from "@/features/category/stores/category.store";
 import { registerTransactionMutations } from "@/features/transaction/stores/transaction.store";
 import { siteConfig } from "@/lib/site";
@@ -110,6 +111,7 @@ function createOfflineQueryClient() {
   // antes de restaurar: las mutaciones guardadas necesitan su mutationFn
   registerTransactionMutations(client);
   registerCategoryMutations(client);
+  registerBudgetMutations(client);
   trackOfflineQueue(client);
   return client;
 }

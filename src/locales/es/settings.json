@@ -63,11 +63,24 @@
       "icon": "Icono",
       "color": "Color",
       "transactions": "Movimientos",
-      "createdAt": "Creada"
+      "createdAt": "Creada",
+      "budget": "Presupuesto",
+      "budgetPeriod": "Periodo del presupuesto"
     },
     "types": {
       "expense": "Gasto",
       "income": "Ingreso"
+    },
+    "budgetPeriods": {
+      "weekly": "Semanal",
+      "biweekly": "Quincenal",
+      "monthly": "Mensual",
+      "quarterly": "Trimestral",
+      "yearly": "Anual"
+    },
+    "budgetKinds": {
+      "recurring": "se repite",
+      "once": "una vez"
     }
   },
   "feedback": {

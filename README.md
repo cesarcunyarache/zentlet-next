@@ -68,7 +68,7 @@ Cuando el texto no basta, **Gemini propone la categoría** entre las que tú cre
 <td valign="top">
 
 ### 📊 Tu mes, de un vistazo
-Balance, ingresos, gastos y **reparto por categoría** en una sola pantalla. Toca una categoría y filtra al instante.
+Balance, ingresos, gastos y **reparto por categoría** en una sola pantalla. Toca una categoría y filtra al instante; mantenla pulsada para fijarle un **presupuesto mensual** y su barra mostrará cuánto llevas del tope.
 
 </td>
 </tr>
@@ -264,7 +264,7 @@ src/
 │   │   ├── not-found.tsx · error.tsx · [...rest]/   # 404 y errores propios, traducidos
 │   │   └── opengraph-image.tsx
 │   ├── api/
-│   │   ├── transaction/ · category/   # REST idempotente por id
+│   │   ├── transaction/ · category/ · budget/   # REST idempotente por id
 │   │   ├── account/export/       # Descarga en Excel
 │   │   ├── account/onboarding/   # Marca la bienvenida como vista
 │   │   └── auth/[...all]/        # Better Auth
@@ -277,6 +277,7 @@ src/
 │   ├── landing/                  # Landing: secciones y contenido
 │   ├── transaction/              # Movimientos: parsers de texto y voz, IA, store, UI
 │   ├── category/                 # Categorías: generador de iconos con IA
+│   ├── budget/                   # Presupuestos mensuales por categoría, con historial de topes
 │   ├── account/                  # Exportar datos y eliminar cuenta
 │   ├── onboarding/               # Bienvenida en 3 pasos
 │   └── legal/                    # Textos legales y datos del responsable

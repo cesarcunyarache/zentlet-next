@@ -1,0 +1,37 @@
+{
+  "sheet": {
+    "title": "Presupuesto de {name}",
+    "heading": "Presupuesto",
+    "period": "Periodo",
+    "periods": {
+      "weekly": "Semanal",
+      "biweekly": "Quincenal",
+      "monthly": "Mensual",
+      "quarterly": "Trimestral",
+      "yearly": "Anual"
+    },
+    "kinds": {
+      "recurring": "Se repite",
+      "once": "Una vez"
+    },
+    "kindHint": {
+      "recurring": "Se renueva solo al empezar cada periodo. Toca para que valga una sola vez",
+      "once": "Vale solo para el periodo actual. Toca para que se renueve"
+    },
+    "progress": "Llevas el {percent}% del presupuesto",
+    "daysLeft": "{count, plural, one {queda # día} other {quedan # días}}",
+    "spentLabel": "Llevas",
+    "remainingLabel": "Quedan",
+    "excessLabel": "Te pasaste",
+    "remove": "Eliminar",
+    "confirmRemove": "¿Eliminar?"
+  },
+  "toast": {
+    "saved": "Presupuesto guardado",
+    "removed": "Presupuesto eliminado"
+  },
+  "strip": {
+    "spentOf": "gastos {spent} de {budget}",
+    "hint": "Mantén pulsado para fijar un presupuesto"
+  }
+}
