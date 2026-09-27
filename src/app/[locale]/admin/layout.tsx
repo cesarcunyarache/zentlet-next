@@ -7,6 +7,7 @@ import { OfflineQueryProvider } from "@/core/offline/offline-query-provider";
 import { ThemeController } from "@/core/theme/theme-controller";
 import { AnalyticsIdentity } from "@/lib/observability/analytics-identity";
 import { OnboardingProvider } from "@/features/onboarding/onboarding-context";
+import { PreferenceSync } from "@/features/preference/components/preference-sync";
 
 /**
  * La sesión se lee aquí (servidor) y el id del usuario viaja en el HTML:
@@ -32,6 +33,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     >
       <ThemeController />
       <AnalyticsIdentity userId={session.user.id} />
+      <PreferenceSync />
       <OnboardingProvider userId={session.user.id} pending={!session.user.onboardingCompletedAt}>
         {children}
       </OnboardingProvider>

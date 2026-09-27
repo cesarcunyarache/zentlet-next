@@ -30,7 +30,7 @@ export const legalConfig = {
   /** Cuánto conserva el proveedor las copias de seguridad de la base de datos. */
   backupRetention: "[N] días",
   /** Fecha de la última actualización de los textos (AAAA-MM-DD). */
-  updatedAt: "2026-09-24",
+  updatedAt: "2026-09-26",
 };
 
 /** Versión de los textos que acepta quien se registra (se guarda con su cuenta). */

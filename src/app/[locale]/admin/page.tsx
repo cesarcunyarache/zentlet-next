@@ -18,7 +18,7 @@ import {
   useTransactionMutations,
   useTransactionSummary,
 } from "@/features/transaction/stores/transaction.store";
-import { useCurrency } from "@/features/transaction/hooks/useCurrency";
+import { useCurrency } from "@/features/preference/hooks/useCurrency";
 import { useToast } from "@/features/transaction/hooks/useToast";
 import { SummaryHeader } from "@/features/transaction/components/summary-header";
 import {
@@ -79,7 +79,7 @@ export default function HomePage() {
 
   const { createTransaction, updateTransaction, deleteTransaction } = useTransactionMutations();
   const syncStateById = usePendingTransactions();
-  const { currency, setCurrency } = useCurrency();
+  const { currency, currencyCode, setCurrency } = useCurrency();
 
   const { message, show: toast } = useToast();
 
@@ -440,7 +440,7 @@ export default function HomePage() {
       <SettingsSheet
         isOpen={sheet === "settings"}
         onOpenChange={(open) => setSheet(open ? "settings" : null)}
-        currency={currency}
+        currency={currencyCode}
         transactionCount={lifetime?.count ?? 0}
         onCurrencyChange={setCurrency}
       />
