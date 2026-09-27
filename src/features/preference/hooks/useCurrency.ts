@@ -6,6 +6,14 @@ import { DEFAULT_CURRENCY, currencySymbol, parseStoredCurrency, type CurrencyCod
 import { savePreferences } from "../lib/save";
 
 const STORAGE_KEY = "zentlet.currency.v1";
+/** Cuenta a la que pertenece la moneda guardada: el dispositivo puede compartirse. */
+const OWNER_KEY = "zentlet.currency.owner.v1";
+
+interface DeviceCurrency {
+  code: CurrencyCode;
+  /** `null` en valores de versiones anteriores, que no guardaban el dueño. */
+  owner: string | null;
+}
 
 /**
  * La moneda es de la cuenta (se guarda en el servidor) y el dispositivo
@@ -13,7 +21,8 @@ const STORAGE_KEY = "zentlet.currency.v1";
  * de React para que el snapshot del servidor sea estable y no provoque un
  * salto de hidratación.
  */
-let snapshot: CurrencyCode = DEFAULT_CURRENCY;
+const SERVER_SNAPSHOT: DeviceCurrency = { code: DEFAULT_CURRENCY, owner: null };
+let snapshot = SERVER_SNAPSHOT;
 let loaded = false;
 const listeners = new Set<() => void>();
 
@@ -28,7 +37,7 @@ function getSnapshot() {
   if (!loaded) {
     loaded = true;
     try {
-      snapshot = parseStoredCurrency(localStorage.getItem(STORAGE_KEY));
+      snapshot = { code: parseStoredCurrency(localStorage.getItem(STORAGE_KEY)), owner: localStorage.getItem(OWNER_KEY) };
     } catch {
       /* almacenamiento no disponible (modo privado) */
     }
@@ -37,18 +46,26 @@ function getSnapshot() {
 }
 
 function getServerSnapshot() {
-  return DEFAULT_CURRENCY;
+  return SERVER_SNAPSHOT;
 }
 
-/** Moneda que ya usa este dispositivo. */
-export const getDeviceCurrency = getSnapshot;
+/** La copia sólo vale para su cuenta; la de otra persona no se muestra ni se hereda. */
+function currencyFor({ code, owner }: DeviceCurrency, userId: string) {
+  return owner === null || owner === userId ? code : DEFAULT_CURRENCY;
+}
+
+/** Moneda que ya usa este dispositivo para esta cuenta. */
+export function getDeviceCurrency(userId: string) {
+  return currencyFor(getSnapshot(), userId);
+}
 
 /** Guarda la moneda en el dispositivo sin avisar al servidor. */
-export function setDeviceCurrency(next: CurrencyCode) {
+export function setDeviceCurrency(userId: string, next: CurrencyCode) {
   loaded = true;
-  snapshot = next;
+  snapshot = { code: next, owner: userId };
   try {
     localStorage.setItem(STORAGE_KEY, next);
+    localStorage.setItem(OWNER_KEY, userId);
   } catch {
     /* sin persistencia: la sesión sigue en memoria */
   }
@@ -57,11 +74,11 @@ export function setDeviceCurrency(next: CurrencyCode) {
 
 export function useCurrency() {
   const { userId } = useOfflineSession();
-  const currencyCode = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const currencyCode = currencyFor(useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot), userId);
 
   const setCurrency = useCallback(
     (next: CurrencyCode) => {
-      setDeviceCurrency(next);
+      setDeviceCurrency(userId, next);
       savePreferences(userId, { currency: next }).catch(() => {});
     },
     [userId],
