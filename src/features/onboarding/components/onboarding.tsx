@@ -7,9 +7,9 @@ import { useTranslations } from "next-intl";
 import { track } from "@/lib/observability/client";
 import { EASE_OUT, SPRING_LAYOUT, SPRING_PRESS } from "@/lib/ease";
 import { useOnboarding } from "../onboarding-context";
-import { MonthScene, TypeScene, VoiceScene } from "./onboarding-scenes";
+import { BudgetScene, MonthScene, TypeScene, VoiceScene } from "./onboarding-scenes";
 
-const STEPS = ["type", "voice", "month"] as const;
+const STEPS = ["type", "voice", "budget", "month"] as const;
 const LAST = STEPS.length - 1;
 
 /** Distancia o velocidad de arrastre a partir de la cual se cambia de paso. */
@@ -24,7 +24,7 @@ interface OnboardingProps {
 }
 
 /**
- * Recorrido de bienvenida en 3 pasos para cuentas nuevas. Se avanza con los
+ * Recorrido de bienvenida en 4 pasos para cuentas nuevas. Se avanza con los
  * botones, deslizando o con las flechas del teclado; Escape lo omite.
  */
 export function Onboarding(props: OnboardingProps) {
@@ -152,6 +152,7 @@ function OnboardingDialog({ currency, hasCategories, onCreateCategory }: Onboard
             >
               {key === "type" && <TypeScene />}
               {key === "voice" && <VoiceScene currency={currency} />}
+              {key === "budget" && <BudgetScene currency={currency} />}
               {key === "month" && <MonthScene currency={currency} />}
 
               <div className="mt-8 px-1">

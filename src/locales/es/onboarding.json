@@ -22,6 +22,17 @@
       "yesterday": "Ayer",
       "category": "Comida"
     },
+    "budget": {
+      "title": "Ponle tope a tus gastos",
+      "body": "Fija un presupuesto por categoría, semanal, mensual o del periodo que quieras, y ve de un vistazo cuánto te queda. Mantén pulsada una categoría para crearlo.",
+      "over": "Te pasaste en Casa",
+      "hold": "Mantén pulsada la categoría",
+      "categories": {
+        "food": "Comida",
+        "transport": "Transporte",
+        "home": "Casa"
+      }
+    },
     "month": {
       "title": "Tu mes, claro de un vistazo",
       "body": "Balance, gastos por categoría y todo tu historial. Funciona sin conexión y tus datos son solo tuyos.",
