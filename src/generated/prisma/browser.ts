@@ -23,6 +23,16 @@ export * from './enums';
  */
 export type User = Prisma.UserModel
 /**
+ * Model UserConsent
+ * 
+ */
+export type UserConsent = Prisma.UserConsentModel
+/**
+ * Model UserPreference
+ * 
+ */
+export type UserPreference = Prisma.UserPreferenceModel
+/**
  * Model Session
  * 
  */
@@ -49,18 +59,26 @@ export type Category = Prisma.CategoryModel
 export type Transaction = Prisma.TransactionModel
 /**
  * Model Feedback
- * Comentarios y reportes que el usuario envía desde Ajustes.
- * `type` y `status` son texto libre a propósito: los valores válidos viven
- * en el código (`features/feedback/constants.ts`) y cambian sin migración.
+ * 
  */
 export type Feedback = Prisma.FeedbackModel
 /**
+ * Model Budget
+ * 
+ */
+export type Budget = Prisma.BudgetModel
+/**
+ * Model BudgetLimit
+ * 
+ */
+export type BudgetLimit = Prisma.BudgetLimitModel
+/**
  * Model RateLimit
- * Límite de intentos de Better Auth (login, registro…), compartido entre instancias
+ * 
  */
 export type RateLimit = Prisma.RateLimitModel
 /**
  * Model UsageLimit
- * Cupos de uso de la app por usuario (escrituras, IA, exportación), en ventanas fijas
+ * 
  */
 export type UsageLimit = Prisma.UsageLimitModel

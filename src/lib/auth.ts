@@ -3,6 +3,7 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { APIError, createAuthMiddleware } from "better-auth/api";
 import { captcha } from "better-auth/plugins";
 import { LEGAL_CONSENT_HEADER, LEGAL_VERSION } from "@/features/legal/config";
+import { recordSignUpConsent } from "@/features/legal/consent";
 import prisma from "./prisma";
 import { sendEmail } from "./email/send-email";
 import { emailLocale, resetPasswordEmail, verificationEmail } from "./email/templates";
@@ -150,10 +151,7 @@ export const auth = betterAuth({
    * sesiones se borran en cascada en la base de datos.
    */
   user: {
-    // prueba del consentimiento: cuándo y qué versión de los textos
     additionalFields: {
-      legalAcceptedAt: { type: "date", required: false, input: false },
-      legalVersion: { type: "string", required: false, input: false },
       // null = cuenta nueva que aún no vio el recorrido de bienvenida
       onboardingCompletedAt: { type: "date", required: false, input: false },
     },
@@ -169,10 +167,8 @@ export const auth = betterAuth({
   databaseHooks: {
     user: {
       create: {
-        before: async (user) => ({
-          data: { ...user, legalAcceptedAt: new Date(), legalVersion: LEGAL_VERSION },
-        }),
         after: async (user, context: HookContext) => {
+          await recordSignUpConsent(user.id);
           trackServerEvent(user.id, "user_signed_up", { method: authMethod(context) });
         },
       },

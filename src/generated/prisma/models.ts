@@ -9,12 +9,16 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User'
+export type * from './models/UserConsent'
+export type * from './models/UserPreference'
 export type * from './models/Session'
 export type * from './models/Account'
 export type * from './models/Verification'
 export type * from './models/Category'
 export type * from './models/Transaction'
 export type * from './models/Feedback'
+export type * from './models/Budget'
+export type * from './models/BudgetLimit'
 export type * from './models/RateLimit'
 export type * from './models/UsageLimit'
 export type * from './commonInputTypes'

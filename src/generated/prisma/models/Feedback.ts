@@ -14,9 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model Feedback
- * Comentarios y reportes que el usuario envía desde Ajustes.
- * `type` y `status` son texto libre a propósito: los valores válidos viven
- * en el código (`features/feedback/constants.ts`) y cambian sin migración.
+ * 
  */
 export type FeedbackModel = runtime.Types.Result.DefaultSelection<Prisma.$FeedbackPayload>
 
@@ -588,19 +586,9 @@ export type $FeedbackPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    /**
-     * comment | bug | idea … (hoy la app sólo envía `comment`)
-     */
     type: string
-    /**
-     * Seguimiento interno, el usuario no lo ve: open | reviewed | resolved …
-     */
     status: string
     message: string
-    /**
-     * Datos técnicos para reproducir un problema: versión, idioma, pantalla y
-     * navegador. Nunca montos, movimientos ni categorías.
-     */
     context: runtime.JsonValue | null
     userId: string
     createdAt: Date

@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { DELETE, GET, PATCH } from "./[id]/route";
 import { POST } from "./route";
 
 /*
@@ -12,7 +13,14 @@ import { POST } from "./route";
 vi.mock("@/lib/auth", () => ({ auth: { api: { getSession: vi.fn() } } }));
 vi.mock("@/lib/prisma", () => ({
   default: {
-    transaction: { findUnique: vi.fn(), findFirst: vi.fn(), create: vi.fn() },
+    transaction: {
+      findUnique: vi.fn(),
+      findFirst: vi.fn(),
+      findUniqueOrThrow: vi.fn(),
+      create: vi.fn(),
+      updateMany: vi.fn(),
+      deleteMany: vi.fn(),
+    },
     category: { findFirst: vi.fn() },
     $queryRaw: vi.fn(),
   },
@@ -52,6 +60,13 @@ function post(payload: unknown = body) {
     }),
   );
 }
+
+const params = { params: Promise.resolve({ id: ID }) };
+const url = `http://localhost/api/transaction/${ID}`;
+const get = () => GET(new Request(url), params);
+const patch = (payload: unknown) =>
+  PATCH(new Request(url, { method: "PATCH", body: JSON.stringify(payload) }), params);
+const remove = () => DELETE(new Request(url, { method: "DELETE" }), params);
 
 function signIn(userId: string | null) {
   getSession.mockResolvedValue((userId ? { user: { id: userId } } : null) as never);
@@ -161,5 +176,97 @@ describe("POST /api/transaction", () => {
 
     expect(response.status).toBe(500);
     expect(await response.json()).toEqual({ message: "Error creating transaction" });
+  });
+});
+
+describe("GET /api/transaction/[id]", () => {
+  it("busca sólo entre los movimientos del usuario de la sesión", async () => {
+    db.transaction.findFirst.mockResolvedValue(row("user-1") as never);
+
+    const response = await get();
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toMatchObject({ id: ID, amount: 25.5, transactionDate: "2026-09-20" });
+    expect(db.transaction.findFirst).toHaveBeenCalledWith({ where: { id: ID, userId: "user-1" } });
+  });
+
+  it("uno de otro usuario o inexistente es 404", async () => {
+    db.transaction.findFirst.mockResolvedValue(null);
+    expect((await get()).status).toBe(404);
+  });
+
+  it("sin sesión responde 401 y no consulta", async () => {
+    signIn(null);
+    expect((await get()).status).toBe(401);
+    expect(db.transaction.findFirst).not.toHaveBeenCalled();
+  });
+});
+
+describe("PATCH /api/transaction/[id]", () => {
+  beforeEach(() => {
+    db.transaction.updateMany.mockResolvedValue({ count: 1 });
+    db.transaction.findUniqueOrThrow.mockResolvedValue(row("user-1") as never);
+  });
+
+  it("actualiza sólo movimientos del usuario y devuelve el resultado", async () => {
+    const response = await patch({ amount: 30, transactionDate: "2026-09-21" });
+
+    expect(response.status).toBe(200);
+    expect(db.transaction.updateMany).toHaveBeenCalledWith({
+      where: { id: ID, userId: "user-1" },
+      data: expect.objectContaining({ amount: 30, transactionDate: new Date("2026-09-21") }),
+    });
+  });
+
+  it("uno de otro usuario o inexistente es 404 y no se lee de vuelta", async () => {
+    db.transaction.updateMany.mockResolvedValue({ count: 0 });
+
+    expect((await patch({ amount: 30 })).status).toBe(404);
+    expect(db.transaction.findUniqueOrThrow).not.toHaveBeenCalled();
+  });
+
+  it("mover a una categoría que no es del usuario es 422 y no escribe", async () => {
+    db.category.findFirst.mockResolvedValue(null);
+
+    expect((await patch({ categoryId: "ajena" })).status).toBe(422);
+    expect(db.category.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "ajena", userId: "user-1" } }));
+    expect(db.transaction.updateMany).not.toHaveBeenCalled();
+  });
+
+  it("un cuerpo inválido es 422", async () => {
+    expect((await patch({ amount: -1 })).status).toBe(422);
+    expect(db.transaction.updateMany).not.toHaveBeenCalled();
+  });
+
+  it("sin sesión responde 401 y no escribe", async () => {
+    signIn(null);
+    expect((await patch({ amount: 30 })).status).toBe(401);
+    expect(db.transaction.updateMany).not.toHaveBeenCalled();
+  });
+
+  it("superado el cupo de escrituras es 429 y no escribe", async () => {
+    db.$queryRaw.mockResolvedValue([{ count: 121 }] as never);
+    expect((await patch({ amount: 30 })).status).toBe(429);
+    expect(db.transaction.updateMany).not.toHaveBeenCalled();
+  });
+});
+
+describe("DELETE /api/transaction/[id]", () => {
+  it("borra sólo movimientos del usuario con 204", async () => {
+    db.transaction.deleteMany.mockResolvedValue({ count: 1 });
+
+    expect((await remove()).status).toBe(204);
+    expect(db.transaction.deleteMany).toHaveBeenCalledWith({ where: { id: ID, userId: "user-1" } });
+  });
+
+  it("si no existe o es de otro usuario es 404 (el cliente lo trata como éxito)", async () => {
+    db.transaction.deleteMany.mockResolvedValue({ count: 0 });
+    expect((await remove()).status).toBe(404);
+  });
+
+  it("sin sesión responde 401 y no borra", async () => {
+    signIn(null);
+    expect((await remove()).status).toBe(401);
+    expect(db.transaction.deleteMany).not.toHaveBeenCalled();
   });
 });

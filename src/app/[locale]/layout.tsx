@@ -5,6 +5,7 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import "../globals.css";
 import { QueryProvider } from "@/providers/query-provider";
+import { clientMessages } from "@/i18n/client-messages";
 import { siteConfig } from "@/lib/site";
 import { ServiceWorkerRegister } from "@/core/offline/service-worker-register";
 import { AnalyticsConsentBanner } from "@/core/components/analytics-consent-banner";
@@ -52,9 +53,7 @@ export default async function RootLayout({ children, params }: Readonly<LocaleLa
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
 
-  // `landing` no viaja al cliente: la landing recibe su copy por props desde el servidor
-  const { common, auth, transactions, categories, settings, offline, onboarding } = await getMessages();
-  const clientMessages = { common, auth, transactions, categories, settings, offline, onboarding };
+  const messages = clientMessages(await getMessages());
 
   return (
     /* Extensiones de navegador (LanguageTool y similares) añaden atributos
@@ -69,7 +68,7 @@ export default async function RootLayout({ children, params }: Readonly<LocaleLa
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body className="min-h-full flex flex-col">
-        <NextIntlClientProvider messages={clientMessages}>
+        <NextIntlClientProvider messages={messages}>
           <QueryProvider>{children}</QueryProvider>
           <AnalyticsConsentBanner />
         </NextIntlClientProvider>

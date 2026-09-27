@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model RateLimit
- * Límite de intentos de Better Auth (login, registro…), compartido entre instancias
+ * 
  */
 export type RateLimitModel = runtime.Types.Result.DefaultSelection<Prisma.$RateLimitPayload>
 
@@ -331,14 +331,6 @@ export type RateLimitMinOrderByAggregateInput = {
 export type RateLimitSumOrderByAggregateInput = {
   count?: Prisma.SortOrder
   lastRequest?: Prisma.SortOrder
-}
-
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
 }
 
 export type BigIntFieldUpdateOperationsInput = {

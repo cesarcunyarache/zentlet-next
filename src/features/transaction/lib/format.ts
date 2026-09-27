@@ -158,6 +158,14 @@ export function cleanAmountInput(raw: string) {
   return value;
 }
 
+/** Muestra el monto con separador de miles mientras se escribe. */
+export function displayAmount(raw: string) {
+  if (!raw) return "";
+  const [int, dec] = raw.split(".");
+  const grouped = Number(int || 0).toLocaleString("es-PE");
+  return dec !== undefined ? `${grouped}.${dec}` : grouped;
+}
+
 export function parseAmount(value: string) {
   return Math.round((Number.parseFloat(value || "0") || 0) * 100) / 100;
 }

@@ -69,6 +69,14 @@ export async function GET(req: Request) {
           description: true,
           createdAt: true,
           _count: { select: { transactions: true } },
+          budget: {
+            select: {
+              kind: true,
+              periodUnit: true,
+              periodCount: true,
+              limits: { orderBy: { effectiveFrom: "desc" }, take: 1, select: { amount: true } },
+            },
+          },
         },
       }),
     ]);

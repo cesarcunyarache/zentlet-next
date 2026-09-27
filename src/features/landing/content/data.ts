@@ -59,6 +59,7 @@ export const DASHBOARD = {
 export const FEATURES: { id: FeatureId; key: keyof Copy["features"]["items"] }[] = [
   { id: "natural-input", key: "naturalInput" },
   { id: "ai-category", key: "aiCategory" },
+  { id: "budgets", key: "budgets" },
   { id: "live-feed", key: "liveFeed" },
   { id: "balance", key: "balance" },
   { id: "categories", key: "categories" },
@@ -68,6 +69,12 @@ export const FEATURES: { id: FeatureId; key: keyof Copy["features"]["items"] }[]
 export const FEATURE_SAMPLES = {
   suggestionCategory: "transport",
   categoryIdeas: ["food", "coffee", "health", "fun"],
+  /** Mismos gastos que el dashboard de la demo, frente a un tope mensual. */
+  budgets: [
+    { category: "market", spent: 412.8, budget: 380 },
+    { category: "food", spent: 298.5, budget: 400 },
+    { category: "transport", spent: 186, budget: 250 },
+  ],
   currencies: [
     { symbol: "S/", key: "sol" },
     { symbol: "$", key: "dollar" },
@@ -76,6 +83,7 @@ export const FEATURE_SAMPLES = {
 } satisfies {
   suggestionCategory: CategoryKey;
   categoryIdeas: CategoryKey[];
+  budgets: { category: CategoryKey; spent: number; budget: number }[];
   currencies: { symbol: string; key: keyof Copy["features"]["samples"]["currencies"] }[];
 };
 

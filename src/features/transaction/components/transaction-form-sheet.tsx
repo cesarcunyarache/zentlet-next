@@ -16,6 +16,7 @@ import { TransactionDateField } from "./transaction-date-field";
 import {
   cleanAmountInput,
   dayShift,
+  displayAmount,
   parseAmount,
   toISODate,
 } from "../lib/format";
@@ -48,14 +49,6 @@ const EMPTY: TransactionFormValues = {
   categoryId: "",
   transactionDate: "",
 };
-
-/** Muestra el monto con separador de miles mientras se escribe. */
-function displayAmount(raw: string) {
-  if (!raw) return "";
-  const [int, dec] = raw.split(".");
-  const grouped = Number(int || 0).toLocaleString("es-PE");
-  return dec !== undefined ? `${grouped}.${dec}` : grouped;
-}
 
 export function TransactionFormSheet({
   isOpen,

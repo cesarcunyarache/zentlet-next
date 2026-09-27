@@ -28,8 +28,13 @@ describe("shouldRetryMutation", () => {
     expect(shouldRetryMutation(50, httpError(429))).toBe(true);
   });
 
+  it("un 401 (sesión caducada) se reintenta siempre: el cambio espera a que el usuario vuelva a entrar", () => {
+    expect(shouldRetryMutation(0, httpError(401))).toBe(true);
+    expect(shouldRetryMutation(50, httpError(401))).toBe(true);
+  });
+
   it("un 4xx no se reintenta: el servidor rechazó el dato", () => {
-    for (const status of [400, 401, 404, 409, 413, 422]) {
+    for (const status of [400, 403, 404, 409, 413, 422]) {
       expect(shouldRetryMutation(0, httpError(status))).toBe(false);
     }
   });

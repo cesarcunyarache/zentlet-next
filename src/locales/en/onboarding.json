@@ -22,6 +22,17 @@
       "yesterday": "Yesterday",
       "category": "Food"
     },
+    "budget": {
+      "title": "Put a cap on your spending",
+      "body": "Set a budget per category, weekly, monthly or for any period you like, and see at a glance how much you have left. Press and hold a category to create one.",
+      "over": "Over budget on Home",
+      "hold": "Press and hold the category",
+      "categories": {
+        "food": "Food",
+        "transport": "Transport",
+        "home": "Home"
+      }
+    },
     "month": {
       "title": "Your month, clear at a glance",
       "body": "Balance, spending by category and your whole history. It works offline and your data is yours alone.",

@@ -15,6 +15,13 @@ import { useLocale, useTranslations } from "next-intl";
 import { SPRING_LAYOUT } from "@/lib/ease";
 import { CategoryEmoji } from "./category-emoji";
 import { dayLabel, formatSigned, signedAmount } from "../lib/format";
+import {
+  SWIPE_ACTION,
+  SWIPE_REVEAL,
+  swipeOffset as offsetFor,
+  swipeSideOnRelease,
+  type SwipeSide,
+} from "../lib/swipe";
 import type { CategoryLike, TTransaction } from "../types";
 import type { OfflineSyncState } from "@/core/offline/offline-queue";
 
@@ -37,10 +44,6 @@ interface TransactionListProps {
   onRequestDelete?: (transaction: TTransaction) => void;
 }
 
-/** Ancho de los botones que descubre el deslizamiento y aire entre botón y fila. */
-const SWIPE_ACTION = 72;
-const SWIPE_GAP = 10;
-const SWIPE_REVEAL = SWIPE_ACTION + SWIPE_GAP;
 
 /**
  * Por encima de esto no se animan las posiciones: `layout` mide cada fila
@@ -223,10 +226,6 @@ export function TransactionList({
   );
 }
 
-type SwipeSide = "edit" | "delete";
-
-const offsetFor = (side: SwipeSide | null) =>
-  side === "edit" ? SWIPE_REVEAL : side === "delete" ? -SWIPE_REVEAL : 0;
 
 /**
  * Fila deslizable: a la derecha descubre editar (a la izquierda de la fila)
@@ -304,15 +303,7 @@ function SwipeRow({
           dragged.current = true;
         }}
         onDragEnd={(_, info) => {
-          // se decide por dónde quedó la fila: pasada la mitad o con un gesto rápido
-          const at = x.get();
-          const flick = Math.abs(info.velocity.x) > 400 && Math.sign(info.velocity.x) === Math.sign(at);
-          const side: SwipeSide | null =
-            canDelete && (at < -SWIPE_REVEAL / 2 || (flick && at < 0))
-              ? "delete"
-              : canEdit && (at > SWIPE_REVEAL / 2 || (flick && at > 0))
-                ? "edit"
-                : null;
+          const side = swipeSideOnRelease({ offset: x.get(), velocity: info.velocity.x, canEdit, canDelete });
           // si el estado no cambia no hay render: se devuelve la fila a mano
           animate(x, offsetFor(side), SPRING_LAYOUT);
           onOpenChange(side);

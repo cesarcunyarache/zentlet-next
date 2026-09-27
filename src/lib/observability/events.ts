@@ -1,6 +1,7 @@
 import type { SpeechError } from "@/features/transaction/hooks/use-speech-recognition";
 import type { TransactionType } from "@/features/transaction/types";
 import type { FeedbackType } from "@/features/feedback/constants";
+import type { BudgetKind, BudgetPeriod } from "@/features/budget/types";
 
 /*
  * Taxonomía de product analytics: `objeto_acción` en pasado.
@@ -22,6 +23,8 @@ export interface AnalyticsEvents {
   transaction_deleted: Record<string, never>;
   category_created: { ai_suggested: boolean };
   category_updated: Record<string, never>;
+  budget_saved: { created: boolean; period: BudgetPeriod; kind: BudgetKind };
+  budget_deleted: Record<string, never>;
   voice_entry_started: Record<string, never>;
   voice_entry_completed: { outcome: "saved" | "edited" };
   voice_entry_failed: { reason: SpeechError };

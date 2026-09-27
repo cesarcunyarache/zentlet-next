@@ -12,6 +12,10 @@
     "createCategory": "Couldn't create the category",
     "updateCategory": "Couldn't save the category",
     "deleteCategory": "Couldn't delete the category",
-    "categoryInUse": "This category has transactions and can't be deleted"
+    "categoryInUse": "This category has transactions and can't be deleted",
+    "createBudget": "Couldn't create the budget",
+    "updateBudget": "Couldn't save the budget",
+    "deleteBudget": "Couldn't delete the budget",
+    "budgetExists": "This category already has a budget"
   }
 }

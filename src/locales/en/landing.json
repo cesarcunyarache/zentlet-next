@@ -93,6 +93,11 @@
         "title": "AI picks the category",
         "description": "When the text isn't enough, AI suggests a category from your own. It's just a helper: you decide, and it never blocks saving."
       },
+      "budgets": {
+        "title": "Budgets per category",
+        "description": "Put a cap on food, transport or anything you like, per week, month or whatever period you choose. See what's left and know the moment you go over.",
+        "badge": "New"
+      },
       "liveFeed": {
         "title": "Every transaction in its place",
         "description": "Your history sorted by day, with the color and emoji of each category."
@@ -122,6 +127,10 @@
         "sol": "Sol",
         "dollar": "Dollar",
         "euro": "Euro"
+      },
+      "budgetLabels": {
+        "left": "Left",
+        "over": "Over by"
       }
     }
   },
@@ -213,6 +222,10 @@
       {
         "question": "Can I use my currency?",
         "answer": "Yes. You can choose soles (S/), dollars ($) or euros (€) in the settings, and the whole app will show that symbol."
+      },
+      {
+        "question": "Can I set a budget?",
+        "answer": "Yes. Press and hold a category and set its cap: weekly, biweekly, monthly, quarterly or yearly, renewing on its own or for a single period. The category's bar shows how much you've spent and how much is left."
       },
       {
         "question": "Do I need to install anything?",

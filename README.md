@@ -68,7 +68,7 @@ Cuando el texto no basta, **Gemini propone la categoría** entre las que tú cre
 <td valign="top">
 
 ### 📊 Tu mes, de un vistazo
-Balance, ingresos, gastos y **reparto por categoría** en una sola pantalla. Toca una categoría y filtra al instante.
+Balance, ingresos, gastos y **reparto por categoría** en una sola pantalla. Toca una categoría y filtra al instante; mantenla pulsada para fijarle un **presupuesto mensual** y su barra mostrará cuánto llevas del tope.
 
 </td>
 </tr>
@@ -264,7 +264,7 @@ src/
 │   │   ├── not-found.tsx · error.tsx · [...rest]/   # 404 y errores propios, traducidos
 │   │   └── opengraph-image.tsx
 │   ├── api/
-│   │   ├── transaction/ · category/   # REST idempotente por id
+│   │   ├── transaction/ · category/ · budget/   # REST idempotente por id
 │   │   ├── account/export/       # Descarga en Excel
 │   │   ├── account/onboarding/   # Marca la bienvenida como vista
 │   │   └── auth/[...all]/        # Better Auth
@@ -277,6 +277,7 @@ src/
 │   ├── landing/                  # Landing: secciones y contenido
 │   ├── transaction/              # Movimientos: parsers de texto y voz, IA, store, UI
 │   ├── category/                 # Categorías: generador de iconos con IA
+│   ├── budget/                   # Presupuestos mensuales por categoría, con historial de topes
 │   ├── account/                  # Exportar datos y eliminar cuenta
 │   ├── onboarding/               # Bienvenida en 3 pasos
 │   └── legal/                    # Textos legales y datos del responsable
@@ -295,7 +296,7 @@ src/
 
 ### Decisiones que vale la pena conocer
 
-- **📴 Offline-first.** La cache de TanStack Query se persiste en IndexedDB, una por usuario. Las escrituras hechas sin red quedan en cola y se reanudan al volver, incluso tras cerrar la app. Un 429 del servidor frena la cola, nunca descarta cambios.
+- **📴 Offline-first.** La cache de TanStack Query se persiste en IndexedDB, una por usuario. Las escrituras hechas sin red quedan en cola y se reanudan al volver, incluso tras cerrar la app. Un 429 del servidor frena la cola y un 401 (sesión caducada) la deja en espera hasta volver a entrar: ninguno descarta cambios.
 - **🔁 Idempotencia por id.** El cliente genera el id de cada movimiento y categoría (`crypto.randomUUID`): reenviar un alta devuelve la existente en lugar de duplicarla, también en carreras entre dos peticiones.
 - **🌍 En español e inglés.** Con [next-intl](https://next-intl.dev): el español conserva las URLs de siempre y el inglés vive bajo `/en`. Si a una traducción le falta un texto, no compila. Ver [Idiomas](#-idiomas).
 - **🔭 Observabilidad desacoplada.** El código sólo conoce `@/lib/observability/*`; Sentry y PostHog se cargan únicamente si están configurados y nunca bloquean ni rompen una petición. Ver [docs/observability.md](docs/observability.md).
@@ -396,7 +397,6 @@ const t = await getTranslations({ locale, namespace: "common" });
 
 - [ ] Rendimiento de la app privada en móviles de gama media: animaciones de `layout` por fila, lista por tramos y carga diferida de las hojas
 - [ ] Actualizar Next.js a 16.3.x y retirar `next-auth` / `@auth/prisma-adapter`, que no se usan
-- [ ] Conservar en cola los cambios que reciben un 401 (sesión caducada) en lugar de revertirlos
 - [ ] Ejecutar `prisma migrate deploy` automáticamente en el despliegue
 - [ ] Pedir el consentimiento legal a las cuentas creadas antes de la casilla
 - [ ] Testimonios de los primeros usuarios (la sección ya está lista en `content/data.ts`)

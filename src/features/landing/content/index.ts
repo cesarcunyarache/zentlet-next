@@ -66,6 +66,8 @@ export async function getLandingContent(locale: Locale): Promise<LandingContent>
         suggestionFrom: copy.features.samples.suggestionFrom,
         suggestionCategory: category(FEATURE_SAMPLES.suggestionCategory),
         categoryIdeas: FEATURE_SAMPLES.categoryIdeas.map(category),
+        budgets: FEATURE_SAMPLES.budgets.map((item) => ({ ...category(item.category), spent: item.spent, budget: item.budget })),
+        budgetLabels: copy.features.samples.budgetLabels,
         currencies: FEATURE_SAMPLES.currencies.map(({ symbol, key }) => ({
           symbol,
           label: copy.features.samples.currencies[key],

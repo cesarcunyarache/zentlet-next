@@ -8,6 +8,7 @@ import type esCategories from "@/locales/es/categories.json";
 import type esSettings from "@/locales/es/settings.json";
 import type esOffline from "@/locales/es/offline.json";
 import type esOnboarding from "@/locales/es/onboarding.json";
+import type esBudgets from "@/locales/es/budgets.json";
 
 import type enCommon from "@/locales/en/common.json";
 import type enAuth from "@/locales/en/auth.json";
@@ -17,6 +18,7 @@ import type enCategories from "@/locales/en/categories.json";
 import type enSettings from "@/locales/en/settings.json";
 import type enOffline from "@/locales/en/offline.json";
 import type enOnboarding from "@/locales/en/onboarding.json";
+import type enBudgets from "@/locales/en/budgets.json";
 
 /** El español es la referencia: sus keys son las únicas válidas en `t()`. */
 type AppMessages = {
@@ -28,6 +30,7 @@ type AppMessages = {
   settings: typeof esSettings;
   offline: typeof esOffline;
   onboarding: typeof esOnboarding;
+  budgets: typeof esBudgets;
 };
 
 type EnMessages = {
@@ -39,6 +42,7 @@ type EnMessages = {
   settings: typeof enSettings;
   offline: typeof enOffline;
   onboarding: typeof enOnboarding;
+  budgets: typeof enBudgets;
 };
 
 /*

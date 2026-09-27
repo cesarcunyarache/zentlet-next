@@ -93,6 +93,11 @@
         "title": "La IA elige la categoría",
         "description": "Cuando el texto no basta, una IA propone la categoría entre las tuyas. Es una ayuda: tú decides y nunca bloquea el registro."
       },
+      "budgets": {
+        "title": "Presupuestos por categoría",
+        "description": "Ponle un tope a comida, transporte o lo que quieras, por semana, mes o el periodo que elijas. Ves cuánto te queda y te avisa en cuanto te pasas.",
+        "badge": "Nuevo"
+      },
       "liveFeed": {
         "title": "Cada movimiento, en su sitio",
         "description": "Tu historial ordenado por día, con el color y el emoji de su categoría."
@@ -122,6 +127,10 @@
         "sol": "Sol",
         "dollar": "Dólar",
         "euro": "Euro"
+      },
+      "budgetLabels": {
+        "left": "Quedan",
+        "over": "Te pasaste"
       }
     }
   },
@@ -213,6 +222,10 @@
       {
         "question": "¿Puedo usar mi moneda?",
         "answer": "Sí. Puedes elegir soles (S/), dólares ($) o euros (€) desde los ajustes, y toda la app mostrará ese símbolo."
+      },
+      {
+        "question": "¿Puedo ponerme un presupuesto?",
+        "answer": "Sí. Mantén pulsada una categoría y fija su tope: semanal, quincenal, mensual, trimestral o anual, que se renueva solo o vale una sola vez. La barra de la categoría muestra cuánto llevas y cuánto te queda."
       },
       {
         "question": "¿Necesito instalar algo?",

@@ -9,6 +9,7 @@ import { CategoryEmoji } from "@/features/transaction/components/category-emoji"
 import { EASE_OUT, SPRING_LAYOUT } from "@/lib/ease";
 import { cn } from "@/lib/utils";
 import type { DemoMovement, LandingContent } from "../../content";
+import { formatAmount, vivid } from "../../lib/format";
 import { MovementRow } from "../shared/movement-row";
 
 /*
@@ -156,6 +157,54 @@ export function CategoriesVisual({ ideas }: { ideas: Samples["categoryIdeas"] })
         </motion.div>
       ))}
     </div>
+  );
+}
+
+/** Barras de lo gastado frente al tope que se llenan al entrar en vista; la que se pasa, en rojo. */
+export function BudgetsVisual({
+  budgets,
+  labels,
+  currency,
+  locale,
+}: {
+  budgets: Samples["budgets"];
+  labels: Samples["budgetLabels"];
+  currency: string;
+  locale: string;
+}) {
+  const reduceMotion = useReducedMotion();
+
+  return (
+    <ul aria-hidden className="m-0 grid h-full list-none content-center gap-4 p-0 md:grid-cols-3 md:gap-6">
+      {budgets.map((item, index) => {
+        const isOver = item.spent > item.budget;
+        const rest = Math.abs(item.budget - item.spent);
+        return (
+          <li key={item.name} className="bg-app-bg rounded-2xl p-4 ring-1 ring-[var(--app-border)]">
+            <div className="flex items-center gap-2.5">
+              <CategoryEmoji category={item} className="size-8 rounded-xl text-sm" />
+              <span className="text-app-fg text-sm font-semibold">{item.name}</span>
+              <span className="text-app-muted num ml-auto text-xs font-medium">
+                {formatAmount(item.spent, locale)} / {formatAmount(item.budget, locale)}
+              </span>
+            </div>
+            <div className="bg-app-fill mt-3 h-2.5 overflow-hidden rounded-full">
+              <motion.div
+                className="h-full origin-left rounded-full"
+                style={{ background: isOver ? "var(--app-expense)" : vivid(item.color) }}
+                initial={reduceMotion ? false : { scaleX: 0 }}
+                whileInView={{ scaleX: Math.min(item.spent / item.budget, 1) }}
+                viewport={{ once: true, amount: 0.8 }}
+                transition={{ duration: 1.1, delay: 0.15 * index, ease: EASE_OUT }}
+              />
+            </div>
+            <p className={cn("num m-0 mt-2 text-xs font-semibold", isOver ? "text-app-expense" : "text-app-muted")}>
+              {isOver ? labels.over : labels.left} {currency} {formatAmount(rest, locale)}
+            </p>
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 

@@ -7,6 +7,9 @@ import { useDebounce } from "use-debounce";
 import { useTranslations } from "next-intl";
 import { SPRING_LAYOUT, SPRING_PRESS } from "@/lib/ease";
 import { useCategoryStore } from "@/features/category/stores/category.store";
+import { useBudgetStore } from "@/features/budget/stores/budget.store";
+import { BudgetSheet } from "@/features/budget/components/budget-sheet";
+import { useBudgetBars } from "@/features/budget/hooks/useBudgetBars";
 import { onSyncError } from "@/core/offline/sync-events";
 import { SyncStatusPill } from "@/core/offline/sync-status";
 import {
@@ -15,7 +18,7 @@ import {
   useTransactionMutations,
   useTransactionSummary,
 } from "@/features/transaction/stores/transaction.store";
-import { useCurrency } from "@/features/transaction/hooks/useCurrency";
+import { useCurrency } from "@/features/preference/hooks/useCurrency";
 import { useToast } from "@/features/transaction/hooks/useToast";
 import { SummaryHeader } from "@/features/transaction/components/summary-header";
 import {
@@ -33,6 +36,7 @@ import { SettingsSheet } from "@/features/transaction/components/settings-sheet"
 import { ToastBubble } from "@/core/components/ui/toast-bubble";
 import { Onboarding } from "@/features/onboarding/components/onboarding";
 import { periodRange } from "@/features/transaction/lib/format";
+import { buildStripData, categoryValue } from "@/features/transaction/lib/strip-data";
 import { track } from "@/lib/observability/client";
 import type {
   CategoryLike,
@@ -50,6 +54,7 @@ const ALL_TIME: DateRange = {};
 export default function HomePage() {
   const t = useTranslations("transactions");
   const tSync = useTranslations("offline.syncErrors");
+  const tBudget = useTranslations("budgets.toast");
   const { categories: rawCategories } = useCategoryStore();
 
   const categories = useMemo<CategoryLike[]>(
@@ -70,9 +75,11 @@ export default function HomePage() {
     [categories],
   );
 
+  const { budgets } = useBudgetStore();
+
   const { createTransaction, updateTransaction, deleteTransaction } = useTransactionMutations();
   const syncStateById = usePendingTransactions();
-  const { currency, setCurrency } = useCurrency();
+  const { currency, currencyCode, setCurrency } = useCurrency();
 
   const { message, show: toast } = useToast();
 
@@ -90,6 +97,7 @@ export default function HomePage() {
   const [pendingDelete, setPendingDelete] = useState<TTransaction | null>(null);
   const [formDraft, setFormDraft] = useState<Partial<TransactionFormValues>>();
   const [editing, setEditing] = useState<TTransaction | null>(null);
+  const [budgetCategory, setBudgetCategory] = useState<CategoryLike | null>(null);
 
   // aparece al instante; se sincroniza por detrás (o en cola sin red)
   function saveTransaction(values: TransactionFormValues) {
@@ -139,27 +147,21 @@ export default function HomePage() {
   const incomeTotal = summary?.incomeTotal ?? 0;
   const totalsByCategory = summary?.byCategory;
 
-  /**
-   * Lo que suma o resta una categoría según el filtro de tipo: sólo sus
-   * gastos (negativo), sólo sus ingresos (positivo) o, sin filtro, el neto.
-   */
-  const categoryValue = useCallback(
-    (categoryId: string) => {
-      const totals = totalsByCategory?.[categoryId];
-      if (!totals) return 0;
-      if (kind === "expense") return -totals.expense;
-      if (kind === "income") return totals.income;
-      return totals.income - totals.expense;
-    },
+  const valueOfCategory = useCallback(
+    (categoryId: string) => categoryValue(totalsByCategory?.[categoryId], kind),
     [totalsByCategory, kind],
   );
 
+  const budgetBars = useBudgetBars(budgets, range);
   const stripData = useMemo<CategoryTotal[]>(
     () =>
-      categories
-        .map((category) => ({ category, total: categoryValue(category.id) }))
-        .sort((a, b) => Math.abs(b.total) - Math.abs(a.total)),
-    [categories, categoryValue],
+      buildStripData({
+        categories,
+        byCategory: totalsByCategory,
+        kind,
+        budgetFor: (categoryId) => budgetBars.get(categoryId) ?? null,
+      }),
+    [categories, totalsByCategory, kind, budgetBars],
   );
 
   /**
@@ -169,7 +171,7 @@ export default function HomePage() {
    */
   const headline = useMemo(() => {
     if (categoryFilter) {
-      const value = categoryValue(categoryFilter);
+      const value = valueOfCategory(categoryFilter);
       return {
         value,
         label: categoriesById.get(categoryFilter)?.name ?? t("headline.category"),
@@ -194,7 +196,7 @@ export default function HomePage() {
     kind,
     expenseTotal,
     incomeTotal,
-    categoryValue,
+    valueOfCategory,
     categoriesById,
     t,
   ]);
@@ -235,6 +237,7 @@ export default function HomePage() {
             currency={currency}
             selectedId={categoryFilter}
             onSelect={setCategoryFilter}
+            onLongPress={setBudgetCategory}
           />
         </div>
 
@@ -414,6 +417,20 @@ export default function HomePage() {
         }}
       />
 
+      <BudgetSheet
+        category={budgetCategory}
+        currency={currency}
+        onClose={() => setBudgetCategory(null)}
+        onSaved={() => {
+          setBudgetCategory(null);
+          toast(tBudget("saved"));
+        }}
+        onRemoved={() => {
+          setBudgetCategory(null);
+          toast(tBudget("removed"));
+        }}
+      />
+
       <CategoriesSheet
         isOpen={sheet === "categories"}
         onOpenChange={(open) => setSheet(open ? "categories" : null)}
@@ -423,7 +440,7 @@ export default function HomePage() {
       <SettingsSheet
         isOpen={sheet === "settings"}
         onOpenChange={(open) => setSheet(open ? "settings" : null)}
-        currency={currency}
+        currency={currencyCode}
         transactionCount={lifetime?.count ?? 0}
         onCurrencyChange={setCurrency}
       />

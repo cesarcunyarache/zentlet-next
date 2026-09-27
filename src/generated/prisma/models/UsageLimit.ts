@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model UsageLimit
- * Cupos de uso de la app por usuario (escrituras, IA, exportación), en ventanas fijas
+ * 
  */
 export type UsageLimitModel = runtime.Types.Result.DefaultSelection<Prisma.$UsageLimitPayload>
 

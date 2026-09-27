@@ -1,0 +1,37 @@
+{
+  "sheet": {
+    "title": "{name} budget",
+    "heading": "Budget",
+    "period": "Period",
+    "periods": {
+      "weekly": "Weekly",
+      "biweekly": "Twice a month",
+      "monthly": "Monthly",
+      "quarterly": "Quarterly",
+      "yearly": "Yearly"
+    },
+    "kinds": {
+      "recurring": "Repeats",
+      "once": "Once"
+    },
+    "kindHint": {
+      "recurring": "Renews at the start of every period. Tap to make it one-time",
+      "once": "Only covers the current period. Tap to make it renew"
+    },
+    "progress": "{percent}% of the budget spent",
+    "daysLeft": "{count, plural, one {# day left} other {# days left}}",
+    "spentLabel": "Spent",
+    "remainingLabel": "Left",
+    "excessLabel": "Over by",
+    "remove": "Delete",
+    "confirmRemove": "Delete?"
+  },
+  "toast": {
+    "saved": "Budget saved",
+    "removed": "Budget deleted"
+  },
+  "strip": {
+    "spentOf": "spent {spent} of {budget}",
+    "hint": "Press and hold to set a budget"
+  }
+}

@@ -13,6 +13,8 @@ import { useThemePreference } from "@/core/theme/use-theme";
 import type { ThemePreference } from "@/core/theme/theme";
 import { DeleteAccountDialog } from "@/features/account/components/delete-account-dialog";
 import { accountService } from "@/features/account/services/account.service";
+import { CURRENCIES, currencySymbol, type CurrencyCode } from "@/features/preference/lib/currency";
+import { savePreferences } from "@/features/preference/lib/save";
 import { FeedbackRow } from "@/features/feedback/components/feedback-row";
 import { authClient } from "@/lib/auth-client";
 import {
@@ -30,22 +32,14 @@ import { toISODate } from "../lib/format";
 
 const THEMES: ThemePreference[] = ["system", "light", "dark"];
 
-/** Valor guardado (símbolo) → key de su etiqueta en `settings.currency.options`. */
-const CURRENCIES = [
-  { value: "S/", key: "sol" },
-  { value: "$", key: "dollar" },
-  { value: "€", key: "euro" },
-  { value: "$COP", key: "peso" },
-] as const;
-
 const LANGUAGES = routing.locales.map((locale) => ({ value: locale, label: localeNames[locale] }));
 
 interface SettingsSheetProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  currency: string;
+  currency: CurrencyCode;
   transactionCount: number;
-  onCurrencyChange: (currency: string) => void;
+  onCurrencyChange: (currency: CurrencyCode) => void;
 }
 
 export function SettingsSheet({
@@ -56,6 +50,7 @@ export function SettingsSheet({
   onCurrencyChange,
 }: SettingsSheetProps) {
   const t = useTranslations("settings");
+  const symbol = currencySymbol(currency);
 
   return (
     <Sheet isOpen={isOpen} onOpenChange={onOpenChange} title={t("title")}>
@@ -73,9 +68,9 @@ export function SettingsSheet({
         <PillSelect
           label={t("currency.label")}
           value={currency}
-          options={CURRENCIES.map(({ value, key }) => ({ value, label: t(`currency.options.${key}`) }))}
+          options={CURRENCIES.map(({ code, key }) => ({ value: code, label: t(`currency.options.${key}`) }))}
           onChange={onCurrencyChange}
-          display={currency}
+          display={symbol}
           className="bg-app-fill"
         />
       </div>
@@ -84,7 +79,7 @@ export function SettingsSheet({
 
       <AppearanceRow />
 
-      <DataRow transactionCount={transactionCount} currency={currency} />
+      <DataRow transactionCount={transactionCount} currency={symbol} />
 
       {analyticsAvailable && <AnalyticsRow />}
 
@@ -100,6 +95,7 @@ export function SettingsSheet({
 /** Cambia la URL al mismo sitio en otro idioma (`/admin` ↔ `/en/admin`). */
 function LanguageRow() {
   const t = useTranslations();
+  const { userId } = useOfflineSession();
   const locale = useLocale();
   const pathname = usePathname();
   const router = useRouter();
@@ -118,7 +114,10 @@ function LanguageRow() {
         label={t("common.language")}
         value={locale}
         options={LANGUAGES}
-        onChange={(next: Locale) => router.replace(pathname, { locale: next })}
+        onChange={(next: Locale) => {
+          savePreferences(userId, { language: next }).catch(() => {});
+          router.replace(pathname, { locale: next });
+        }}
         className="bg-app-fill"
       />
     </div>
