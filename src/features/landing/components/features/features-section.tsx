@@ -6,6 +6,7 @@ import { SectionHeading } from "../shared/section-heading";
 import {
   AiCategoryVisual,
   BalanceVisual,
+  BudgetsVisual,
   CategoriesVisual,
   CurrencyVisual,
   LiveFeedVisual,
@@ -16,6 +17,7 @@ import {
 const LAYOUT: Record<FeatureId, string> = {
   "natural-input": "md:col-span-2",
   "ai-category": "",
+  budgets: "md:col-span-3",
   "live-feed": "md:row-span-2",
   balance: "",
   categories: "",
@@ -36,6 +38,9 @@ export function FeaturesSection({ features, movements, common, balance, locale }
   const visuals: Record<FeatureId, React.ReactNode> = {
     "natural-input": <NaturalInputVisual phrases={samples.phrases} />,
     "ai-category": <AiCategoryVisual from={samples.suggestionFrom} category={samples.suggestionCategory} />,
+    budgets: (
+      <BudgetsVisual budgets={samples.budgets} labels={samples.budgetLabels} currency={common.currency} locale={locale} />
+    ),
     "live-feed": <LiveFeedVisual movements={movements} currency={common.currency} locale={locale} />,
     balance: <BalanceVisual value={balance} currency={common.currency} locale={locale} />,
     categories: <CategoriesVisual ideas={samples.categoryIdeas} />,
@@ -66,8 +71,13 @@ export function FeaturesSection({ features, movements, common, balance, locale }
                   <div className={cn("grid min-h-44 flex-1", item.id === "live-feed" && "min-h-80")}>
                     {visuals[item.id]}
                   </div>
-                  <h3 className="font-display text-app-fg m-0 mt-6 text-xl font-bold tracking-[-0.02em]">
+                  <h3 className="font-display text-app-fg m-0 mt-6 flex items-center gap-2 text-xl font-bold tracking-[-0.02em]">
                     {item.title}
+                    {item.badge && (
+                      <span className="bg-app-expense-soft text-app-expense rounded-full px-2.5 py-0.5 font-sans text-xs font-semibold tracking-normal">
+                        {item.badge}
+                      </span>
+                    )}
                   </h3>
                   <p className="text-app-muted m-0 mt-2 text-[15px] leading-relaxed">{item.description}</p>
                 </article>

@@ -7,7 +7,14 @@
 /** Anclas de las secciones; el menú y los CTA enlazan a ellas. */
 export type SectionId = "producto" | "funciones" | "como-funciona" | "testimonios" | "preguntas";
 
-export type FeatureId = "natural-input" | "ai-category" | "live-feed" | "balance" | "categories" | "currency";
+export type FeatureId =
+  | "natural-input"
+  | "ai-category"
+  | "budgets"
+  | "live-feed"
+  | "balance"
+  | "categories"
+  | "currency";
 
 export interface DemoCategory {
   name: string;
@@ -102,12 +109,14 @@ export interface LandingContent {
     eyebrow: string;
     title: string;
     subtitle: string;
-    items: { id: FeatureId; title: string; description: string }[];
+    items: { id: FeatureId; title: string; description: string; badge?: string }[];
     samples: {
       phrases: string[];
       suggestionFrom: string;
       suggestionCategory: DemoCategory;
       categoryIdeas: DemoCategory[];
+      budgets: (DemoCategory & { spent: number; budget: number })[];
+      budgetLabels: { left: string; over: string };
       currencies: { symbol: string; label: string }[];
     };
   };
