@@ -46,8 +46,9 @@ describe("moneda del dispositivo", () => {
     expect(getDeviceCurrency("user-2")).toBe("PEN");
   });
 
-  it("un valor de versiones anteriores, sin dueño, se conserva", async () => {
-    const { getDeviceCurrency } = await load({ "zentlet.currency.v1": "€" });
-    expect(getDeviceCurrency("user-1")).toBe("EUR");
+  it("un valor de versiones anteriores, sin dueño, no lo hereda ninguna cuenta", async () => {
+    const { getDeviceCurrency } = await load({ "zentlet.currency.v1": "EUR" });
+    expect(getDeviceCurrency("user-1")).toBe("PEN");
+    expect(getDeviceCurrency("user-2")).toBe("PEN");
   });
 });

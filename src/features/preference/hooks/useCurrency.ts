@@ -11,7 +11,11 @@ const OWNER_KEY = "zentlet.currency.owner.v1";
 
 interface DeviceCurrency {
   code: CurrencyCode;
-  /** `null` en valores de versiones anteriores, que no guardaban el dueño. */
+  /**
+   * `null` en valores de versiones anteriores, que no guardaban el dueño: no
+   * se sabe de quién son y esas versiones ya guardaban cada cambio en la
+   * cuenta, así que se ignoran y la moneda llega del servidor.
+   */
   owner: string | null;
 }
 
@@ -51,7 +55,7 @@ function getServerSnapshot() {
 
 /** La copia sólo vale para su cuenta; la de otra persona no se muestra ni se hereda. */
 function currencyFor({ code, owner }: DeviceCurrency, userId: string) {
-  return owner === null || owner === userId ? code : DEFAULT_CURRENCY;
+  return owner === userId ? code : DEFAULT_CURRENCY;
 }
 
 /** Moneda que ya usa este dispositivo para esta cuenta. */
