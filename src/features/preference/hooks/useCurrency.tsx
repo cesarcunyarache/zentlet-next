@@ -1,92 +1,39 @@
 "use client";
 
-import { useCallback, useSyncExternalStore } from "react";
+import { createContext, useCallback, useContext, useSyncExternalStore } from "react";
 import { useOfflineSession } from "@/core/offline/offline-query-provider";
-import { DEFAULT_CURRENCY, currencySymbol, parseStoredCurrency, type CurrencyCode } from "../lib/currency";
-import { savePreferences } from "../lib/save";
+import { DEFAULT_CURRENCY, currencySymbol, type CurrencyCode } from "../lib/currency";
+import { changeCurrency, getDeviceCurrency, subscribeDeviceCurrency } from "../lib/device-currency";
 
-const STORAGE_KEY = "zentlet.currency.v1";
-/** Cuenta a la que pertenece la moneda guardada: el dispositivo puede compartirse. */
-const OWNER_KEY = "zentlet.currency.owner.v1";
-
-interface DeviceCurrency {
-  code: CurrencyCode;
-  /**
-   * `null` en valores de versiones anteriores, que no guardaban el dueño: no
-   * se sabe de quién son y esas versiones ya guardaban cada cambio en la
-   * cuenta, así que se ignoran y la moneda llega del servidor.
-   */
-  owner: string | null;
+function getServerSnapshot() {
+  return null;
 }
 
 /**
- * La moneda es de la cuenta (se guarda en el servidor) y el dispositivo
- * conserva una copia para pintarla al instante y sin conexión. Vive fuera
- * de React para que el snapshot del servidor sea estable y no provoque un
- * salto de hidratación.
+ * Moneda de la cuenta leída al pintar en el servidor. La hidratación la usa
+ * mientras no puede leer el dispositivo, así la primera pintura ya es la
+ * correcta en vez de pasar por la de por defecto.
  */
-const SERVER_SNAPSHOT: DeviceCurrency = { code: DEFAULT_CURRENCY, owner: null };
-let snapshot = SERVER_SNAPSHOT;
-let loaded = false;
-const listeners = new Set<() => void>();
+const AccountCurrencyContext = createContext<CurrencyCode | null>(null);
 
-function subscribe(listener: () => void) {
-  listeners.add(listener);
-  return () => {
-    listeners.delete(listener);
-  };
-}
-
-function getSnapshot() {
-  if (!loaded) {
-    loaded = true;
-    try {
-      snapshot = { code: parseStoredCurrency(localStorage.getItem(STORAGE_KEY)), owner: localStorage.getItem(OWNER_KEY) };
-    } catch {
-      /* almacenamiento no disponible (modo privado) */
-    }
-  }
-  return snapshot;
-}
-
-function getServerSnapshot() {
-  return SERVER_SNAPSHOT;
-}
-
-/** La copia sólo vale para su cuenta; la de otra persona no se muestra ni se hereda. */
-function currencyFor({ code, owner }: DeviceCurrency, userId: string) {
-  return owner === userId ? code : DEFAULT_CURRENCY;
-}
-
-/** Moneda que ya usa este dispositivo para esta cuenta. */
-export function getDeviceCurrency(userId: string) {
-  return currencyFor(getSnapshot(), userId);
-}
-
-/** Guarda la moneda en el dispositivo sin avisar al servidor. */
-export function setDeviceCurrency(userId: string, next: CurrencyCode) {
-  loaded = true;
-  snapshot = { code: next, owner: userId };
-  try {
-    localStorage.setItem(STORAGE_KEY, next);
-    localStorage.setItem(OWNER_KEY, userId);
-  } catch {
-    /* sin persistencia: la sesión sigue en memoria */
-  }
-  for (const listener of listeners) listener();
+export function AccountCurrencyProvider({
+  currency,
+  children,
+}: {
+  currency: CurrencyCode | null;
+  children: React.ReactNode;
+}) {
+  return <AccountCurrencyContext value={currency}>{children}</AccountCurrencyContext>;
 }
 
 export function useCurrency() {
   const { userId } = useOfflineSession();
-  const currencyCode = currencyFor(useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot), userId);
+  const accountCurrency = useContext(AccountCurrencyContext);
+  const getSnapshot = useCallback(() => getDeviceCurrency(userId), [userId]);
+  const deviceCurrency = useSyncExternalStore(subscribeDeviceCurrency, getSnapshot, getServerSnapshot);
+  const currencyCode = deviceCurrency ?? accountCurrency ?? DEFAULT_CURRENCY;
 
-  const setCurrency = useCallback(
-    (next: CurrencyCode) => {
-      setDeviceCurrency(userId, next);
-      savePreferences(userId, { currency: next }).catch(() => {});
-    },
-    [userId],
-  );
+  const setCurrency = useCallback((next: CurrencyCode) => changeCurrency(userId, next), [userId]);
 
   return { currency: currencySymbol(currencyCode), currencyCode, setCurrency };
 }
