@@ -9,11 +9,7 @@ function getServerSnapshot() {
   return null;
 }
 
-/**
- * Moneda de la cuenta leída al pintar en el servidor. La hidratación la usa
- * mientras no puede leer el dispositivo, así la primera pintura ya es la
- * correcta en vez de pasar por la de por defecto.
- */
+// leída en el servidor: la hidratación la usa mientras no puede leer el dispositivo
 const AccountCurrencyContext = createContext<CurrencyCode | null>(null);
 
 export function AccountCurrencyProvider({

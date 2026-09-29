@@ -8,10 +8,8 @@ import type { Locale } from "@/i18n/routing";
 import { runPreferenceSync } from "../lib/account-sync";
 
 /**
- * Alinea las preferencias de la cuenta con el dispositivo al abrir la app:
- * si la URL llegó en otro idioma (p. ej. el del navegador tras iniciar
- * sesión), la cambia al de la cuenta. Al volver la conexión o la pestaña,
- * reenvía lo que quedó pendiente. No pinta nada.
+ * Alinea las preferencias de la cuenta con el dispositivo al abrir la app
+ * y reenvía lo pendiente al volver la conexión o la pestaña.
  */
 export function PreferenceSync() {
   const { userId } = useOfflineSession();

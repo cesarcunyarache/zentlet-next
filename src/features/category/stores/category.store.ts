@@ -24,11 +24,6 @@ import {
 import { categoryService } from "../services/category.service";
 import type { TCategory, TCategoryPayload } from "../types";
 
-/* ── claves ────────────────────────────────────────────────────────────
-   `detail(id)` cuelga de `all`, así que invalidar `all` alcanza también a
-   los detalles (match por prefijo). Las mutaciones tienen clave para poder
-   restaurarse tras recargar (ver `registerCategoryMutations`). */
-
 export const categoryKeys = {
   all: ["categories"] as const,
   detail: (categoryId: string) => ["categories", categoryId] as const,
@@ -44,10 +39,14 @@ export const categoryMutationKeys = {
 type CreateVariables = TCategoryPayload & { id: string };
 type UpdateVariables = { categoryId: string; data: Partial<TCategoryPayload> };
 
-/* ── cambios pendientes ────────────────────────────────────────────────── */
-
-/** Forma completa de una categoría que aún no ha llegado al servidor. */
-function localCategory({ id, name, icon, color, description, aiSuggestions }: CreateVariables): TCategory {
+function localCategory({
+  id,
+  name,
+  icon,
+  color,
+  description,
+  aiSuggestions,
+}: CreateVariables): TCategory {
   const now = new Date().toISOString();
   return {
     id,
@@ -62,10 +61,13 @@ function localCategory({ id, name, icon, color, description, aiSuggestions }: Cr
   };
 }
 
-function toPendingChange(mutation: Mutation<unknown, unknown, unknown>): PendingChange<TCategory> | null {
+function toPendingChange(
+  mutation: Mutation<unknown, unknown, unknown>,
+): PendingChange<TCategory> | null {
   const kind = mutation.options.mutationKey?.[2];
   const variables = mutation.state.variables;
-  if (kind === "create") return { kind: "create", row: localCategory(variables as CreateVariables) };
+  if (kind === "create")
+    return { kind: "create", row: localCategory(variables as CreateVariables) };
   if (kind === "update") {
     const { categoryId, data } = variables as UpdateVariables;
     return { kind: "update", id: categoryId, data };
@@ -81,11 +83,15 @@ function withPendingChanges(queryClient: QueryClient, rows: TCategory[]) {
   return applyPendingChanges(rows, changes);
 }
 
-function setList(queryClient: QueryClient, update: (rows: TCategory[]) => TCategory[]) {
-  queryClient.setQueryData<TCategory[]>(categoryKeys.all, (current) => update(current ?? []));
+function setList(
+  queryClient: QueryClient,
+  update: (rows: TCategory[]) => TCategory[],
+) {
+  queryClient.setQueryData<TCategory[]>(categoryKeys.all, (current) =>
+    update(current ?? []),
+  );
 }
 
-/** Recarga cuando la cola queda vacía, no tras cada envío. */
 function refreshWhenQueueDrains(queryClient: QueryClient) {
   if (queryClient.isMutating() <= 1) {
     return queryClient.invalidateQueries({ queryKey: categoryKeys.all });
@@ -113,13 +119,19 @@ export function registerCategoryMutations(queryClient: QueryClient) {
 
   queryClient.setMutationDefaults(categoryMutationKeys.create, {
     ...shared,
-    mutationFn: (variables: CreateVariables) => categoryService.createCategory(variables),
+    mutationFn: (variables: CreateVariables) =>
+      categoryService.createCategory(variables),
     onMutate: async (variables: CreateVariables) => {
       await queryClient.cancelQueries({ queryKey: categoryKeys.all });
-      setList(queryClient, (rows) => [localCategory(variables), ...rows.filter((row) => row.id !== variables.id)]);
+      setList(queryClient, (rows) => [
+        localCategory(variables),
+        ...rows.filter((row) => row.id !== variables.id),
+      ]);
     },
     onError: (error: unknown, variables: CreateVariables) => {
-      setList(queryClient, (rows) => rows.filter((row) => row.id !== variables.id));
+      setList(queryClient, (rows) =>
+        rows.filter((row) => row.id !== variables.id),
+      );
       reportError(error, "createCategory");
     },
     onSettled: () => refreshWhenQueueDrains(queryClient),
@@ -127,10 +139,13 @@ export function registerCategoryMutations(queryClient: QueryClient) {
 
   queryClient.setMutationDefaults(categoryMutationKeys.update, {
     ...shared,
-    mutationFn: ({ categoryId, data }: UpdateVariables) => categoryService.updateCategory(categoryId, data),
+    mutationFn: ({ categoryId, data }: UpdateVariables) =>
+      categoryService.updateCategory(categoryId, data),
     onMutate: async ({ categoryId, data }: UpdateVariables) => {
       await queryClient.cancelQueries({ queryKey: categoryKeys.all });
-      setList(queryClient, (rows) => rows.map((row) => (row.id === categoryId ? { ...row, ...data } : row)));
+      setList(queryClient, (rows) =>
+        rows.map((row) => (row.id === categoryId ? { ...row, ...data } : row)),
+      );
     },
     onSuccess: (category: TCategory) => {
       // la respuesta ya trae la entidad: el detalle no necesita refetch
@@ -154,7 +169,9 @@ export function registerCategoryMutations(queryClient: QueryClient) {
     },
     onMutate: async (categoryId: string) => {
       await queryClient.cancelQueries({ queryKey: categoryKeys.all });
-      setList(queryClient, (rows) => rows.filter((row) => row.id !== categoryId));
+      setList(queryClient, (rows) =>
+        rows.filter((row) => row.id !== categoryId),
+      );
     },
     onError: (error: unknown) => {
       // p. ej. 409: tiene movimientos. La categoría vuelve a la lista.
@@ -176,7 +193,8 @@ export function useCategories() {
 
   return useQuery({
     queryKey: categoryKeys.all,
-    queryFn: async () => withPendingChanges(queryClient, await categoryService.getCategories()),
+    queryFn: async () =>
+      withPendingChanges(queryClient, await categoryService.getCategories()),
   });
 }
 

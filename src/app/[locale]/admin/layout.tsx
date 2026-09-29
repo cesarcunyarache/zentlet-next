@@ -25,11 +25,6 @@ function pageSession(expiresAt: Date) {
   return { renderedAt, sessionRemainingMs: expiresAt.getTime() - renderedAt };
 }
 
-/**
- * La moneda de la cuenta viaja en el HTML para que la primera pintura ya
- * la muestre. Si la lectura falla, la página abre igual: el dispositivo o
- * la sincronización la ponen después.
- */
 async function accountCurrency(userId: string) {
   try {
     const row = await prisma.userPreference.findUnique({ where: { userId }, select: { currency: true } });

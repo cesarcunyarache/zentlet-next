@@ -15,7 +15,6 @@ export interface GridCategory {
 
 interface CategoryGridProps {
   categories: GridCategory[];
-  /** Línea opcional bajo el nombre, p. ej. lo gastado en el periodo. */
   caption?: (category: GridCategory) => string | null;
   selectedId?: string | null;
   onSelect?: (category: GridCategory) => void;
@@ -25,7 +24,6 @@ interface CategoryGridProps {
 
 const FALLBACK_TINT = "var(--app-fill-strong)";
 
-/** Recuadros pastel con el emoji y el nombre debajo; el último añade. */
 export function CategoryGrid({
   categories,
   caption,
@@ -47,24 +45,35 @@ export function CategoryGrid({
         };
 
   return (
-    <div className={cn("grid grid-cols-3 gap-x-4 gap-y-5 sm:gap-x-5", className)}>
+    <div
+      className={cn("grid grid-cols-3 gap-x-4 gap-y-5 sm:gap-x-5", className)}
+    >
       {categories.map((category, index) => {
         const selected = selectedId === category.id;
         const detail = caption?.(category);
         const Tile = onSelect ? motion.button : motion.div;
 
         return (
-          <motion.div key={category.id} {...enter(index)} className="flex flex-col items-center gap-2">
+          <motion.div
+            key={category.id}
+            {...enter(index)}
+            className="flex flex-col items-center gap-2"
+          >
             <Tile
-              {...(onSelect ? { type: "button" as const, onClick: () => onSelect(category) } : {})}
+              {...(onSelect
+                ? { type: "button" as const, onClick: () => onSelect(category) }
+                : {})}
               aria-label={onSelect ? category.name : undefined}
               aria-pressed={onSelect ? selected : undefined}
               whileHover={reduceMotion || !onSelect ? undefined : { y: -3 }}
-              whileTap={onSelect ? { scale: 0.93, transition: SPRING_PRESS } : undefined}
+              whileTap={
+                onSelect ? { scale: 0.93, transition: SPRING_PRESS } : undefined
+              }
               style={{ backgroundColor: category.color || FALLBACK_TINT }}
               className={cn(
                 "group grid aspect-square w-full place-items-center rounded-[26px] transition-shadow",
-                selected && "ring-app-fg ring-offset-app-bg ring-2 ring-offset-2",
+                selected &&
+                  "ring-app-fg ring-offset-app-bg ring-2 ring-offset-2",
               )}
             >
               <span
@@ -78,20 +87,28 @@ export function CategoryGrid({
               <span className="text-app-fg max-w-full truncate text-sm font-semibold">
                 {category.name}
               </span>
-              {detail && <span className="num text-app-muted text-[11px]">{detail}</span>}
+              {detail && (
+                <span className="num text-app-muted text-[11px]">{detail}</span>
+              )}
             </span>
           </motion.div>
         );
       })}
 
-      <motion.div {...enter(categories.length)} className="flex flex-col items-center gap-2">
+      <motion.div
+        {...enter(categories.length)}
+        className="flex flex-col items-center gap-2"
+      >
         <motion.button
           type="button"
           onClick={onAdd}
           whileTap={{ scale: 0.93, transition: SPRING_PRESS }}
           className="group border-app-border text-app-muted hover:border-app-muted hover:text-app-fg grid aspect-square w-full place-items-center rounded-[26px] border-2 border-dashed transition-colors"
         >
-          <Plus className="size-7 transition-transform duration-300 group-hover:rotate-90" strokeWidth={1.6} />
+          <Plus
+            className="size-7 transition-transform duration-300 group-hover:rotate-90"
+            strokeWidth={1.6}
+          />
           <span className="sr-only">{t("add")}</span>
         </motion.button>
         <span aria-hidden className="text-app-muted text-sm font-semibold">
