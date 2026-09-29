@@ -13,7 +13,7 @@ import { CloudOff, Pencil, RefreshCw, Trash2 } from "lucide-react";
 import { cn } from "@heroui/react";
 import { useLocale, useTranslations } from "next-intl";
 import { SPRING_LAYOUT } from "@/lib/ease";
-import { CategoryEmoji } from "./category-emoji";
+import { CategoryEmoji } from "@/features/category/components/category-emoji";
 import { dayLabel, formatSigned, signedAmount } from "../lib/format";
 import {
   SWIPE_ACTION,

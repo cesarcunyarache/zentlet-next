@@ -11,7 +11,7 @@ import { useOfflineSession } from "@/core/offline/offline-query-provider";
 import { useSyncStatus } from "@/core/offline/sync-status";
 import { useThemePreference } from "@/core/theme/use-theme";
 import type { ThemePreference } from "@/core/theme/theme";
-import { DeleteAccountDialog } from "@/features/account/components/delete-account-dialog";
+import { DeleteAccountDialog } from "./delete-account-dialog";
 import { accountService } from "@/features/account/services/account.service";
 import { CURRENCIES, currencySymbol, type CurrencyCode } from "@/features/preference/lib/currency";
 import { savePreferences } from "@/features/preference/lib/save";
@@ -28,7 +28,7 @@ import { SPRING_LAYOUT } from "@/lib/ease";
 import { siteConfig } from "@/lib/site";
 import { getPathname, usePathname, useRouter } from "@/i18n/navigation";
 import { localeNames, routing, type Locale } from "@/i18n/routing";
-import { toISODate } from "../lib/format";
+import { toISODate } from "@/features/transaction/lib/format";
 
 const THEMES: ThemePreference[] = ["system", "light", "dark"];
 

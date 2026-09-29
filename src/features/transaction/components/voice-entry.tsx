@@ -13,7 +13,7 @@ import { parseVoiceEntry, type VoiceDraft } from "../lib/parse-voice";
 import { dayLabel, formatNumber } from "../lib/format";
 import { suggestTransactionCategory } from "../ai/actions/category-suggester";
 import { track } from "@/lib/observability/client";
-import { CategoryEmoji } from "./category-emoji";
+import { CategoryEmoji } from "@/features/category/components/category-emoji";
 import type { TransactionFormValues } from "../schemas/transaction.schema";
 import type { CategoryLike } from "../types";
 

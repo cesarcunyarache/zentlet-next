@@ -3,7 +3,7 @@
 import { motion, useReducedMotion } from "motion/react";
 import { Check } from "lucide-react";
 import { TypingAnimation } from "@/core/components/ui/typing-animation";
-import { CategoryEmoji } from "@/features/transaction/components/category-emoji";
+import { CategoryEmoji } from "@/features/category/components/category-emoji";
 import { EASE_OUT } from "@/lib/ease";
 import type { LandingContent } from "../../content";
 import { formatAmount, vivid } from "../../lib/format";

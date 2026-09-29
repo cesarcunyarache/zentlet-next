@@ -6,7 +6,7 @@ import { Button, cn } from "@heroui/react";
 import { Pencil } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Sheet } from "@/core/components/ui/sheet";
-import { CategoryEmoji } from "./category-emoji";
+import { CategoryEmoji } from "@/features/category/components/category-emoji";
 import { formatSigned, fullDate, signedAmount } from "../lib/format";
 import type { CategoryLike, TTransaction } from "../types";
 

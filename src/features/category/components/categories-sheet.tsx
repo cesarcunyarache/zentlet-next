@@ -3,9 +3,10 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Sheet } from "@/core/components/ui/sheet";
-import { CategoryFormSheet, type EditableCategory } from "@/app/[locale]/admin/category/CategoryForm";
-import { CategoryGrid } from "@/features/category/components/category-grid";
-import type { CategoryLike } from "../types";
+import type { EditableCategory } from "./category-form";
+import { CategoryFormSheet } from "./category-form-sheet";
+import { CategoryGrid } from "./category-grid";
+import type { CategoryLike } from "@/features/transaction/types";
 
 interface CategoriesSheetProps {
   isOpen: boolean;
@@ -13,9 +14,6 @@ interface CategoriesSheetProps {
   categories: CategoryLike[];
 }
 
-/**
- * Rejilla de categorías del usuario; tocar una abre su edición.
- */
 export function CategoriesSheet({
   isOpen,
   onOpenChange,
@@ -50,7 +48,11 @@ export function CategoriesSheet({
         />
       </Sheet>
 
-      <CategoryFormSheet isOpen={formOpen} category={editing} onClose={closeForm} />
+      <CategoryFormSheet
+        isOpen={formOpen}
+        category={editing}
+        onClose={closeForm}
+      />
     </>
   );
 }

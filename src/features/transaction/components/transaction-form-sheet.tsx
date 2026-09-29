@@ -9,9 +9,9 @@ import { Button, cn } from "@heroui/react";
 import { Check, Plus, Sparkles } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Sheet } from "@/core/components/ui/sheet";
-import { CategoryFormSheet } from "@/app/[locale]/admin/category/CategoryForm";
+import { CategoryFormSheet } from "@/features/category/components/category-form-sheet";
 import { SPRING_LAYOUT, SPRING_PRESS } from "@/lib/ease";
-import { CategoryEmoji } from "./category-emoji";
+import { CategoryEmoji } from "@/features/category/components/category-emoji";
 import { TransactionDateField } from "./transaction-date-field";
 import {
   cleanAmountInput,

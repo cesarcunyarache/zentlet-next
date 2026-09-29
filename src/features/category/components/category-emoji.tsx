@@ -1,5 +1,5 @@
 import { cn } from "@heroui/react";
-import type { CategoryLike } from "../types";
+import type { CategoryLike } from "@/features/transaction/types";
 
 const FALLBACK_TINT = "oklch(0.90 0.01 290)";
 
@@ -8,7 +8,6 @@ interface CategoryEmojiProps {
   className?: string;
 }
 
-/** Cuadro con el emoji de la categoría sobre su color pastel. */
 export function CategoryEmoji({ category, className }: CategoryEmojiProps) {
   return (
     <span

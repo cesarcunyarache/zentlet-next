@@ -5,7 +5,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Marquee } from "@/core/components/ui/marquee";
 import { NumberTicker } from "@/core/components/ui/number-ticker";
-import { CategoryEmoji } from "@/features/transaction/components/category-emoji";
+import { CategoryEmoji } from "@/features/category/components/category-emoji";
 import { EASE_OUT, SPRING_LAYOUT } from "@/lib/ease";
 import { cn } from "@/lib/utils";
 import type { DemoMovement, LandingContent } from "../../content";

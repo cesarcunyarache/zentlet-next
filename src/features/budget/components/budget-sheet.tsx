@@ -7,7 +7,7 @@ import { Check, Repeat, Repeat1 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Sheet } from "@/core/components/ui/sheet";
 import { PillSelect } from "@/core/components/ui/pill-select";
-import { CategoryEmoji } from "@/features/transaction/components/category-emoji";
+import { CategoryEmoji } from "@/features/category/components/category-emoji";
 import { cleanAmountInput, displayAmount, parseAmount } from "@/features/transaction/lib/format";
 import { useTransactionSummary } from "@/features/transaction/stores/transaction.store";
 import type { CategoryLike } from "@/features/transaction/types";

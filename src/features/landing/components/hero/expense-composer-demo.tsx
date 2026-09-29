@@ -5,7 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Sparkles } from "lucide-react";
 import { TypingAnimation } from "@/core/components/ui/typing-animation";
 import { BorderBeam } from "@/core/components/ui/border-beam";
-import { CategoryEmoji } from "@/features/transaction/components/category-emoji";
+import { CategoryEmoji } from "@/features/category/components/category-emoji";
 import { SPRING_SWAP } from "@/lib/ease";
 import { cn } from "@/lib/utils";
 import type { LandingContent } from "../../content";

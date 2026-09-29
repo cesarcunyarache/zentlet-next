@@ -5,7 +5,7 @@ import { CloudOff, Hand, Lock, Mic, Sparkles } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { NumberTicker } from "@/core/components/ui/number-ticker";
 import { TypingAnimation } from "@/core/components/ui/typing-animation";
-import { CategoryEmoji } from "@/features/transaction/components/category-emoji";
+import { CategoryEmoji } from "@/features/category/components/category-emoji";
 import { EASE_OUT, SPRING_PRESS } from "@/lib/ease";
 
 /*
