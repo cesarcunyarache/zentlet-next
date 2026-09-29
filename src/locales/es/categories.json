@@ -4,6 +4,7 @@
   "form": {
     "new": "Nueva categoría",
     "edit": "Editar categoría",
+    "nameLabel": "Nombre de la categoría",
     "namePlaceholder": "Categoría",
     "aiUnavailable": "No pudimos sugerir iconos ahora. Elige uno básico.",
     "aiOffline": "Sin conexión: elige un icono básico. Se guardará en este dispositivo."

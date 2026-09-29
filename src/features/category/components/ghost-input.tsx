@@ -16,21 +16,21 @@ function keyedChars(value: string) {
 }
 
 interface GhostInputProps {
-  id: string;
+  label: string;
   value: string;
   placeholder?: string;
   inputSize: string;
   onChange: (value: string) => void;
 }
 
-export function GhostInput({ id, value, placeholder, inputSize, onChange }: GhostInputProps) {
+export function GhostInput({ label, value, placeholder, inputSize, onChange }: GhostInputProps) {
   const chars = keyedChars(value || placeholder || "");
 
   return (
     <div className="flex min-w-0 items-center overflow-hidden">
       <div className="relative min-w-0 shrink">
         <input
-          id={id}
+          aria-label={label}
           value={value}
           onChange={(event) => onChange(event.target.value)}
           placeholder={placeholder}
@@ -51,9 +51,9 @@ export function GhostInput({ id, value, placeholder, inputSize, onChange }: Ghos
           )}
         >
           <AnimatePresence initial={false} mode="popLayout">
-            {chars.map(({ id: charId, char }) => (
+            {chars.map(({ id, char }) => (
               <motion.span
-                key={charId}
+                key={id}
                 layout="position"
                 initial={{ opacity: 0, y: 18, filter: "blur(10px)" }}
                 animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}

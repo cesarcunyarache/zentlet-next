@@ -79,7 +79,7 @@ export function CategoryForm({ onSuccess, initialName = "", category }: Category
       <div className="flex flex-1 flex-col justify-center gap-5">
         <CategoryIconPicker icons={icons} value={{ icon, color }} isLoading={isLoading} onChange={selectIcon} />
         <GhostInput
-          id=""
+          label={t("categories.form.nameLabel")}
           value={name}
           inputSize="text-4xl sm:text-3xl"
           placeholder={t("categories.form.namePlaceholder")}

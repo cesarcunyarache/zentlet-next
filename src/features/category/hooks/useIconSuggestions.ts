@@ -37,51 +37,51 @@ interface IconSuggestionsOptions {
   onIconsChange: (icons: CategoryIcon[]) => void;
 }
 
+interface AiResult {
+  name: string;
+  icons: CategoryIcon[] | null;
+}
+
 export function useIconSuggestions({ name, category, onIconsChange }: IconSuggestionsOptions) {
   const { categories } = useCategoryStore();
   const [debouncedName] = useDebounce(name, SUGGESTION_DELAY_MS);
+  const [lastResult, setLastResult] = useState<AiResult | null>(null);
 
   const current = category?.icon ? { icon: category.icon, color: category.color || "" } : null;
   const saved = category ? (categories.find((item) => item.id === category.id)?.aiSuggestions ?? []) : [];
 
-  const [icons, setIcons] = useState(() => withCurrentFirst(saved, current));
-  const [aiSuggestions, setAiSuggestions] = useState<CategoryIcon[] | undefined>();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isAiUnavailable, setIsAiUnavailable] = useState(false);
+  const isOriginalName = category !== undefined && debouncedName === category.name;
+  const needsAi = debouncedName.trim() !== "" && !isOriginalName;
+  const result = needsAi && lastResult?.name === debouncedName ? lastResult : null;
 
-  function showIcons(next: CategoryIcon[]) {
-    setIcons(next);
-    onIconsChange(next);
-  }
+  const icons = withCurrentFirst(
+    isOriginalName || !lastResult ? saved : (lastResult.icons ?? FALLBACK_ICONS),
+    current,
+  );
 
   useEffect(() => {
-    if (!debouncedName.trim()) return;
-    if (category && debouncedName === category.name) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setAiSuggestions(undefined);
-      showIcons(withCurrentFirst(saved, current));
+    if (isOriginalName) {
+      onIconsChange(withCurrentFirst(saved, current));
       return;
     }
+    if (!needsAi) return;
     let cancelled = false;
 
-    async function suggest() {
-      try {
-        setIsLoading(true);
-        const fromAi = await fetchAiIcons(debouncedName);
-        if (cancelled) return;
-        setIsAiUnavailable(!fromAi);
-        setAiSuggestions(fromAi ?? undefined);
-        showIcons(withCurrentFirst(fromAi ?? FALLBACK_ICONS, current));
-      } finally {
-        if (!cancelled) setIsLoading(false);
-      }
-    }
-    suggest();
+    fetchAiIcons(debouncedName).then((fromAi) => {
+      if (cancelled) return;
+      setLastResult({ name: debouncedName, icons: fromAi });
+      onIconsChange(withCurrentFirst(fromAi ?? FALLBACK_ICONS, current));
+    });
     return () => {
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedName]);
 
-  return { icons, aiSuggestions, isLoading, isAiUnavailable };
+  return {
+    icons,
+    aiSuggestions: result?.icons ?? undefined,
+    isLoading: needsAi && !result,
+    isAiUnavailable: result !== null && result.icons === null,
+  };
 }

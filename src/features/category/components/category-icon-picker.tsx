@@ -29,10 +29,10 @@ export function CategoryIconPicker({ icons, value, isLoading, onChange }: Catego
             key="skeleton"
             {...POP_IN}
             exit={POP_IN.initial}
-            className="relative h-full w-full overflow-hidden rounded-2xl bg-gray-100"
+            className="bg-app-fill relative h-full w-full overflow-hidden rounded-2xl"
           >
             <motion.div
-              className="absolute inset-0 -translate-x-full from-transparent via-white/40 to-transparent"
+              className="via-app-fill-strong absolute inset-0 -translate-x-full bg-linear-to-r from-transparent to-transparent"
               animate={SHIMMER_ANIMATE}
               transition={SHIMMER_TRANSITION}
             />
