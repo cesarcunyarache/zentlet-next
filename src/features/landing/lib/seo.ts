@@ -6,7 +6,6 @@ import type { LandingContent } from "../content";
 
 const toOgLocale = (tag: string) => tag.replace("-", "_");
 
-/** URL de la home en cada idioma, para canonical y hreflang. */
 function homeAlternates() {
   const languages = Object.fromEntries(
     routing.locales.map((locale) => [locale, getPathname({ href: siteConfig.routes.home, locale })]),
@@ -44,7 +43,6 @@ export function buildLandingMetadata(content: LandingContent, lang: Locale): Met
   };
 }
 
-/** Datos estructurados: la app y las preguntas frecuentes (rich results). */
 export function buildLandingJsonLd(content: LandingContent) {
   return {
     "@context": "https://schema.org",

@@ -3,13 +3,6 @@ import type { TransactionType } from "@/features/transaction/types";
 import { budgetPeriodOf } from "@/features/budget/lib/period";
 import type { BudgetKind, BudgetPeriod, BudgetPeriodUnit } from "@/features/budget/types";
 
-/*
- * Exportación de los datos del usuario: una hoja de movimientos y otra de
- * categorías. Todo lo que el usuario escribió viaja tal cual, como texto
- * (nunca como fórmula), con fechas y montos como valores nativos de Excel
- * para poder ordenar, filtrar y sumar.
- */
-
 export interface ExportTransaction {
   transactionDate: Date;
   type: string;
@@ -26,7 +19,6 @@ export interface ExportCategory {
   description: string | null;
   createdAt: Date;
   _count: { transactions: number };
-  /** Sólo el tope vigente: el último. */
   budget: {
     kind: string;
     periodUnit: string;
@@ -58,6 +50,11 @@ export interface WorkbookLabels {
 }
 
 const AMOUNT_FORMAT = "#,##0.00";
+const STICKY_HEADER_ROWS = 1;
+const TRANSACTION_COLUMN_WIDTHS = [12, 10, 20, 40, 14, 20];
+const CATEGORY_COLUMN_WIDTHS = [24, 8, 10, 40, 14, 12, 14, 24];
+
+const toColumns = (widths: number[]) => widths.map((width) => ({ width }));
 
 const header = (value: string) => ({ value, fontWeight: "bold" as const });
 
@@ -104,14 +101,14 @@ export function buildWorkbook(
     {
       sheet: labels.sheets.transactions,
       data: transactions,
-      columns: [{ width: 12 }, { width: 10 }, { width: 20 }, { width: 40 }, { width: 14 }, { width: 20 }],
-      stickyRowsCount: 1,
+      columns: toColumns(TRANSACTION_COLUMN_WIDTHS),
+      stickyRowsCount: STICKY_HEADER_ROWS,
     },
     {
       sheet: labels.sheets.categories,
       data: categories,
-      columns: [{ width: 24 }, { width: 8 }, { width: 10 }, { width: 40 }, { width: 14 }, { width: 12 }, { width: 14 }, { width: 24 }],
-      stickyRowsCount: 1,
+      columns: toColumns(CATEGORY_COLUMN_WIDTHS),
+      stickyRowsCount: STICKY_HEADER_ROWS,
     },
   ];
 }

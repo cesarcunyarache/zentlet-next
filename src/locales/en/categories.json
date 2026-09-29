@@ -4,6 +4,7 @@
   "form": {
     "new": "New category",
     "edit": "Edit category",
+    "nameLabel": "Category name",
     "namePlaceholder": "Category",
     "aiUnavailable": "We couldn't suggest icons right now. Pick a basic one.",
     "aiOffline": "You're offline: pick a basic icon. It will be saved on this device."

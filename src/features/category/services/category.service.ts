@@ -1,11 +1,6 @@
 import { APIService } from "@/core/services/api.service";
 import type { TCategory, TCategoryPayload } from "../types";
 
-/**
- * Capa de acceso a la API de categorías. Sólo HTTP: sin estado de React,
- * sin cache y sin transformar errores (se propaga el `AxiosError`).
- * Las rutas son relativas; la URL base la aporta `APIService`.
- */
 export class CategoryService extends APIService {
   async getCategories(): Promise<TCategory[]> {
     const response = await this.get<TCategory[]>("/api/category");
@@ -19,8 +14,9 @@ export class CategoryService extends APIService {
     return response.data;
   }
 
-  /** Idempotente: el id viaja en el cuerpo y repetirlo no duplica. */
-  async createCategory(data: TCategoryPayload & { id: string }): Promise<TCategory> {
+  async createCategory(
+    data: TCategoryPayload & { id: string },
+  ): Promise<TCategory> {
     const response = await this.post<TCategory>("/api/category", data);
 
     return response.data;
@@ -43,5 +39,4 @@ export class CategoryService extends APIService {
   }
 }
 
-/** Instancia única: el servicio no tiene estado propio. */
 export const categoryService = new CategoryService();

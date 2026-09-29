@@ -24,11 +24,6 @@ import {
 import { categoryService } from "../services/category.service";
 import type { TCategory, TCategoryPayload } from "../types";
 
-/* ── claves ────────────────────────────────────────────────────────────
-   `detail(id)` cuelga de `all`, así que invalidar `all` alcanza también a
-   los detalles (match por prefijo). Las mutaciones tienen clave para poder
-   restaurarse tras recargar (ver `registerCategoryMutations`). */
-
 export const categoryKeys = {
   all: ["categories"] as const,
   detail: (categoryId: string) => ["categories", categoryId] as const,
@@ -44,10 +39,14 @@ export const categoryMutationKeys = {
 type CreateVariables = TCategoryPayload & { id: string };
 type UpdateVariables = { categoryId: string; data: Partial<TCategoryPayload> };
 
-/* ── cambios pendientes ────────────────────────────────────────────────── */
-
-/** Forma completa de una categoría que aún no ha llegado al servidor. */
-function localCategory({ id, name, icon, color, description, aiSuggestions }: CreateVariables): TCategory {
+function localCategory({
+  id,
+  name,
+  icon,
+  color,
+  description,
+  aiSuggestions,
+}: CreateVariables): TCategory {
   const now = new Date().toISOString();
   return {
     id,
@@ -62,16 +61,24 @@ function localCategory({ id, name, icon, color, description, aiSuggestions }: Cr
   };
 }
 
-function toPendingChange(mutation: Mutation<unknown, unknown, unknown>): PendingChange<TCategory> | null {
+function toPendingChange(
+  mutation: Mutation<unknown, unknown, unknown>,
+): PendingChange<TCategory> | null {
   const kind = mutation.options.mutationKey?.[2];
   const variables = mutation.state.variables;
-  if (kind === "create") return { kind: "create", row: localCategory(variables as CreateVariables) };
-  if (kind === "update") {
-    const { categoryId, data } = variables as UpdateVariables;
-    return { kind: "update", id: categoryId, data };
+
+  switch (kind) {
+    case "create":
+      return { kind: "create", row: localCategory(variables as CreateVariables) };
+    case "update": {
+      const { categoryId, data } = variables as UpdateVariables;
+      return { kind: "update", id: categoryId, data };
+    }
+    case "delete":
+      return { kind: "delete", id: variables as string };
+    default:
+      return null;
   }
-  if (kind === "delete") return { kind: "delete", id: variables as string };
-  return null;
 }
 
 function withPendingChanges(queryClient: QueryClient, rows: TCategory[]) {
@@ -81,28 +88,30 @@ function withPendingChanges(queryClient: QueryClient, rows: TCategory[]) {
   return applyPendingChanges(rows, changes);
 }
 
-function setList(queryClient: QueryClient, update: (rows: TCategory[]) => TCategory[]) {
-  queryClient.setQueryData<TCategory[]>(categoryKeys.all, (current) => update(current ?? []));
+function setList(
+  queryClient: QueryClient,
+  update: (rows: TCategory[]) => TCategory[],
+) {
+  queryClient.setQueryData<TCategory[]>(categoryKeys.all, (current) =>
+    update(current ?? []),
+  );
 }
 
-/** Recarga cuando la cola queda vacía, no tras cada envío. */
 function refreshWhenQueueDrains(queryClient: QueryClient) {
   if (queryClient.isMutating() <= 1) {
     return queryClient.invalidateQueries({ queryKey: categoryKeys.all });
   }
 }
 
+const HTTP_CONFLICT = 409;
+
 type CategoryErrorKey = "createCategory" | "updateCategory" | "deleteCategory";
 
 function reportError(error: unknown, key: CategoryErrorKey) {
-  // 409 al eliminar: la categoría tiene movimientos
-  const inUse = key === "deleteCategory" && getApiErrorStatus(error) === 409;
-  emitSyncError(inUse ? "categoryInUse" : key);
-  // tener movimientos es una regla de negocio, no un fallo
-  if (!inUse) reportSyncFailure(key, error);
+  const isInUse = key === "deleteCategory" && getApiErrorStatus(error) === HTTP_CONFLICT;
+  emitSyncError(isInUse ? "categoryInUse" : key);
+  if (!isInUse) reportSyncFailure(key, error);
 }
-
-/* ── registro (antes de restaurar la cache persistida) ─────────────────── */
 
 export function registerCategoryMutations(queryClient: QueryClient) {
   const shared = {
@@ -110,16 +119,24 @@ export function registerCategoryMutations(queryClient: QueryClient) {
     retry: shouldRetryMutation,
     retryDelay: mutationRetryDelay,
   };
+  const cancelList = () => queryClient.cancelQueries({ queryKey: categoryKeys.all });
+  const refetchList = () => void queryClient.invalidateQueries({ queryKey: categoryKeys.all });
 
   queryClient.setMutationDefaults(categoryMutationKeys.create, {
     ...shared,
-    mutationFn: (variables: CreateVariables) => categoryService.createCategory(variables),
+    mutationFn: (variables: CreateVariables) =>
+      categoryService.createCategory(variables),
     onMutate: async (variables: CreateVariables) => {
-      await queryClient.cancelQueries({ queryKey: categoryKeys.all });
-      setList(queryClient, (rows) => [localCategory(variables), ...rows.filter((row) => row.id !== variables.id)]);
+      await cancelList();
+      setList(queryClient, (rows) => [
+        localCategory(variables),
+        ...rows.filter((row) => row.id !== variables.id),
+      ]);
     },
     onError: (error: unknown, variables: CreateVariables) => {
-      setList(queryClient, (rows) => rows.filter((row) => row.id !== variables.id));
+      setList(queryClient, (rows) =>
+        rows.filter((row) => row.id !== variables.id),
+      );
       reportError(error, "createCategory");
     },
     onSettled: () => refreshWhenQueueDrains(queryClient),
@@ -127,17 +144,19 @@ export function registerCategoryMutations(queryClient: QueryClient) {
 
   queryClient.setMutationDefaults(categoryMutationKeys.update, {
     ...shared,
-    mutationFn: ({ categoryId, data }: UpdateVariables) => categoryService.updateCategory(categoryId, data),
+    mutationFn: ({ categoryId, data }: UpdateVariables) =>
+      categoryService.updateCategory(categoryId, data),
     onMutate: async ({ categoryId, data }: UpdateVariables) => {
-      await queryClient.cancelQueries({ queryKey: categoryKeys.all });
-      setList(queryClient, (rows) => rows.map((row) => (row.id === categoryId ? { ...row, ...data } : row)));
+      await cancelList();
+      setList(queryClient, (rows) =>
+        rows.map((row) => (row.id === categoryId ? { ...row, ...data } : row)),
+      );
     },
     onSuccess: (category: TCategory) => {
-      // la respuesta ya trae la entidad: el detalle no necesita refetch
       queryClient.setQueryData(categoryKeys.detail(category.id), category);
     },
     onError: (error: unknown) => {
-      void queryClient.invalidateQueries({ queryKey: categoryKeys.all });
+      refetchList();
       reportError(error, "updateCategory");
     },
     onSettled: () => refreshWhenQueueDrains(queryClient),
@@ -153,12 +172,13 @@ export function registerCategoryMutations(queryClient: QueryClient) {
       }
     },
     onMutate: async (categoryId: string) => {
-      await queryClient.cancelQueries({ queryKey: categoryKeys.all });
-      setList(queryClient, (rows) => rows.filter((row) => row.id !== categoryId));
+      await cancelList();
+      setList(queryClient, (rows) =>
+        rows.filter((row) => row.id !== categoryId),
+      );
     },
     onError: (error: unknown) => {
-      // p. ej. 409: tiene movimientos. La categoría vuelve a la lista.
-      void queryClient.invalidateQueries({ queryKey: categoryKeys.all });
+      refetchList();
       reportError(error, "deleteCategory");
     },
     onSettled: (_data: unknown, _error: unknown, categoryId: string) => {
@@ -168,19 +188,16 @@ export function registerCategoryMutations(queryClient: QueryClient) {
   });
 }
 
-/* ── hooks de acceso ──────────────────────────────────────────────────── */
-
-/** Lista de categorías del usuario, con las altas aún no sincronizadas. */
 export function useCategories() {
   const queryClient = useQueryClient();
 
   return useQuery({
     queryKey: categoryKeys.all,
-    queryFn: async () => withPendingChanges(queryClient, await categoryService.getCategories()),
+    queryFn: async () =>
+      withPendingChanges(queryClient, await categoryService.getCategories()),
   });
 }
 
-/** Detalle de una categoría. Se desactiva si aún no hay id. */
 export function useCategory(categoryId: string | null | undefined) {
   return useQuery({
     queryKey: categoryKeys.detail(categoryId ?? ""),
@@ -189,18 +206,6 @@ export function useCategory(categoryId: string | null | undefined) {
   });
 }
 
-/* ── fachada ──────────────────────────────────────────────────────────── */
-
-/**
- * Punto de entrada para los componentes: expone el server state de
- * categorías sin que la vista sepa nada de Axios ni de TanStack Query.
- * Las escrituras no se esperan: el cambio es local al instante y se
- * sincroniza por detrás; un rechazo posterior llega por `onSyncError`.
- *
- * Se llama `useCategoryStore` (y no `CategoryStore`) porque es un hook:
- * mantener el prefijo `use` es lo que permite a las reglas de hooks de
- * React y ESLint validar dónde se invoca.
- */
 export function useCategoryStore() {
   const query = useCategories();
   const create = useMutation<TCategory, unknown, CreateVariables>({
@@ -214,18 +219,13 @@ export function useCategoryStore() {
   });
 
   return {
-    /** Nunca `undefined`: la vista puede iterar sin comprobar. */
     categories: query.data ?? [],
-
-    /** Primera carga sin nada en cache (ni en memoria ni en el dispositivo). */
     isLoading: query.isLoading,
-    /** Hay datos en pantalla y se está recargando de fondo. */
     isFetching: query.isFetching,
     isError: query.isError,
     error: query.error,
     refetch: query.refetch,
 
-    /** Devuelve el id asignado, sin esperar al servidor. */
     createCategory: (payload: TCategoryPayload): string => {
       const id = crypto.randomUUID();
       create.mutate({ ...payload, id });

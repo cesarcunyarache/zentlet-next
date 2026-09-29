@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { TBudget } from "../types";
 import { BUDGET_PERIODS } from "./period";
-import { budgetMeasurements, budgetPreview, daysLeft, periodRangeLabel } from "./progress";
+import { budgetMeasurements, budgetPreview, daysLeft, periodRangeLabel, spentPercent } from "./progress";
 
 const today = "2026-09-26";
 const thisMonth = { from: "2026-09-01", to: "2026-10-01" };
@@ -57,6 +57,17 @@ describe("budgetPreview", () => {
 
   it("sin tope todavía no hay vista previa", () => {
     expect(budgetPreview(30, 0)).toBeNull();
+  });
+});
+
+describe("spentPercent", () => {
+  it("redondea el porcentaje gastado del tope, también por encima de 100", () => {
+    expect(spentPercent(333, 1000)).toBe(33);
+    expect(spentPercent(150, 100)).toBe(150);
+  });
+
+  it("sin tope es 0", () => {
+    expect(spentPercent(50, 0)).toBe(0);
   });
 });
 

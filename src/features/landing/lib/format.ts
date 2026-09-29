@@ -1,23 +1,30 @@
-import type { SectionId } from "../content";
+import type { MovementType, SectionId } from "../content";
 
-/** Monto con dos decimales según el idioma de la página. */
+const AMOUNT_FORMAT: Intl.NumberFormatOptions = {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+};
+
 export function formatAmount(value: number, locale: string) {
-  return Math.abs(value).toLocaleString(locale, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
+  return Math.abs(value).toLocaleString(locale, AMOUNT_FORMAT);
 }
 
-/** `− S/ 12.50` / `+ S/ 3,000.00`: el signo separado se lee mejor. */
-export function formatSigned(value: number, type: "expense" | "income", currency: string, locale: string) {
-  return `${type === "expense" ? "−" : "+"} ${currency} ${formatAmount(value, locale)}`;
+export function amountSign(type: MovementType) {
+  return type === "expense" ? "−" : "+";
 }
 
-/** Versión intensa de un color pastel de categoría, para barras y gráficos. */
+export function formatSigned(value: number, type: MovementType, currency: string, locale: string) {
+  return `${amountSign(type)} ${currency} ${formatAmount(value, locale)}`;
+}
+
 export function vivid(color: string) {
   return `oklch(from ${color} calc(l - 0.22) calc(c * 2.4) h)`;
 }
 
 export function sectionHref(section: SectionId) {
   return `#${section}`;
+}
+
+export function sectionTitleId(section: SectionId) {
+  return `${section}-title`;
 }

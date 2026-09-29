@@ -1,11 +1,6 @@
 import type { Prisma } from "@/generated/prisma/client";
 import type { DateRange, TransactionFilters, TransactionSummary } from "../types";
-
-/*
- * Consultas del feed de movimientos. Orden estable (fecha, alta, id) para
- * paginar por cursor: con OFFSET, una alta entre dos páginas duplicaría o
- * saltaría filas, y cada página sería más lenta que la anterior.
- */
+import { toUTCISODate } from "./serialize";
 
 export const FEED_ORDER = [
   { transactionDate: "desc" },
@@ -21,6 +16,15 @@ function dateWhere({ from, to }: DateRange): Prisma.DateTimeFilter | undefined {
   };
 }
 
+function searchWhere(q: string): Prisma.TransactionWhereInput {
+  return {
+    OR: [
+      { description: { contains: q, mode: "insensitive" } },
+      { category: { name: { contains: q, mode: "insensitive" } } },
+    ],
+  };
+}
+
 export function summaryWhere(userId: string, range: DateRange): Prisma.TransactionWhereInput {
   return { userId, transactionDate: dateWhere(range) };
 }
@@ -31,14 +35,7 @@ export function feedWhere(userId: string, filters: TransactionFilters): Prisma.T
     ...summaryWhere(userId, filters),
     ...(type ? { type } : {}),
     ...(categoryId ? { categoryId } : {}),
-    ...(q
-      ? {
-          OR: [
-            { description: { contains: q, mode: "insensitive" } },
-            { category: { name: { contains: q, mode: "insensitive" } } },
-          ],
-        }
-      : {}),
+    ...(q ? searchWhere(q) : {}),
   };
 }
 
@@ -50,30 +47,29 @@ interface Cursor {
 
 export function encodeCursor(row: { transactionDate: Date; createdAt: Date; id: string }) {
   const cursor: Cursor = {
-    date: row.transactionDate.toISOString().slice(0, 10),
+    date: toUTCISODate(row.transactionDate),
     createdAt: row.createdAt.toISOString(),
     id: row.id,
   };
   return Buffer.from(JSON.stringify(cursor)).toString("base64url");
 }
 
-/** `null` si el cursor no es válido (manipulado o de otra versión). */
+const isDateString = (value: unknown): value is string =>
+  typeof value === "string" && !Number.isNaN(Date.parse(value));
+
+function isCursor(value: Partial<Cursor>): value is Cursor {
+  return isDateString(value.date) && isDateString(value.createdAt) && typeof value.id === "string";
+}
+
 export function decodeCursor(value: string): Cursor | null {
   try {
     const cursor = JSON.parse(Buffer.from(value, "base64url").toString()) as Partial<Cursor>;
-    const valid =
-      typeof cursor.date === "string" &&
-      typeof cursor.createdAt === "string" &&
-      typeof cursor.id === "string" &&
-      !Number.isNaN(Date.parse(cursor.date)) &&
-      !Number.isNaN(Date.parse(cursor.createdAt));
-    return valid ? (cursor as Cursor) : null;
+    return isCursor(cursor) ? cursor : null;
   } catch {
     return null;
   }
 }
 
-/** Filas estrictamente posteriores al cursor en el orden del feed. */
 export function afterCursor({ date, createdAt, id }: Cursor): Prisma.TransactionWhereInput {
   const day = new Date(date);
   const created = new Date(createdAt);
@@ -93,21 +89,21 @@ interface SummaryGroup {
   _count: { _all: number };
 }
 
+function addGroup(summary: TransactionSummary, group: SummaryGroup) {
+  const amount = Number(group._sum.amount?.toString() ?? 0);
+  const totals = (summary.byCategory[group.categoryId] ??= { expense: 0, income: 0 });
+  summary.count += group._count._all;
+  if (group.type === "expense") {
+    summary.expenseTotal += amount;
+    totals.expense += amount;
+  } else {
+    summary.incomeTotal += amount;
+    totals.income += amount;
+  }
+}
+
 export function toSummary(groups: SummaryGroup[]): TransactionSummary {
   const summary: TransactionSummary = { count: 0, expenseTotal: 0, incomeTotal: 0, byCategory: {} };
-
-  for (const group of groups) {
-    const amount = Number(group._sum.amount?.toString() ?? 0);
-    const totals = (summary.byCategory[group.categoryId] ??= { expense: 0, income: 0 });
-    summary.count += group._count._all;
-    if (group.type === "expense") {
-      summary.expenseTotal += amount;
-      totals.expense += amount;
-    } else {
-      summary.incomeTotal += amount;
-      totals.income += amount;
-    }
-  }
-
+  for (const group of groups) addGroup(summary, group);
   return summary;
 }

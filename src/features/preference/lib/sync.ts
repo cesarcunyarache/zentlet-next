@@ -8,13 +8,6 @@ export interface DevicePreferences {
   timezone: string;
 }
 
-/**
- * Qué hacer al abrir la app. Sin fila en el servidor (cuenta nueva o previa
- * a esta tabla), se crea con lo que ya usa el dispositivo. Con fila, el
- * idioma y la moneda de la cuenta mandan y la zona horaria sigue al
- * dispositivo. Los cambios pendientes de confirmar mandan sobre ambos y se
- * reenvían.
- */
 export function planPreferenceSync(
   server: Preferences | null,
   device: DevicePreferences,

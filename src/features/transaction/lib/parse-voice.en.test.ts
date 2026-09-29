@@ -37,6 +37,14 @@ describe("parseVoiceEntry en inglés · monto", () => {
 });
 
 describe("parseVoiceEntry en inglés · fecha", () => {
+  it("today's weekday means last week", () => {
+    expect(parse("on thursday I spent 8 on coffee").transactionDate).toBe("2026-09-17");
+  });
+
+  it("a word starting like a multiplier does not multiply", () => {
+    expect(parse("bought 3 kilos of rice").amount).toBe(3);
+  });
+
   it.each([
     ["taxi 10", "2026-09-24"],
     ["yesterday I spent 20 on lunch", "2026-09-23"],

@@ -10,11 +10,6 @@ import type { PeriodRange, TBudget } from "../types";
 
 const rangeKey = ({ from, to }: PeriodRange) => `${from}/${to}`;
 
-/**
- * Tope y gasto de cada presupuesto en su propio periodo. Usa los mismos
- * resúmenes que el panel: un gasto nuevo, también sin conexión, mueve la
- * barra al instante.
- */
 export function useBudgetBars(budgets: TBudget[], view: DateRange): Map<string, BudgetBar> {
   const queryClient = useQueryClient();
   const measurements = budgetMeasurements(budgets, view, todayISO());

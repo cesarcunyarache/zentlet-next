@@ -15,8 +15,8 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { AuthTransition } from "@/core/components/auth-transition";
 import { cn } from "@heroui/react";
-import { CategoryEmoji } from "@/features/transaction/components/category-emoji";
-import { formatNumber } from "@/features/transaction/lib/format";
+import { CategoryEmoji } from "@/features/category/ui/category-emoji";
+import { formatNumber } from "@/lib/money";
 import { SPRING_MOUSE } from "@/lib/ease";
 
 /*

@@ -1,0 +1,581 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`parseVoiceEntry · salida completa (caracterización) > en español 1`] = `
+[
+  [
+    "",
+    {
+      "amount": null,
+      "categoryId": null,
+      "description": "",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "   ",
+    {
+      "amount": null,
+      "categoryId": null,
+      "description": "",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "gasté 1.500 soles en alquiler",
+    {
+      "amount": 1500,
+      "categoryId": "home",
+      "description": "Alquiler",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "pagué 1 500 de alquiler",
+    {
+      "amount": 1500,
+      "categoryId": "home",
+      "description": "Alquiler",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "gasté 1,234,567 en la casa",
+    {
+      "amount": 1234567,
+      "categoryId": null,
+      "description": "Casa",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "me depositaron 2 millones",
+    {
+      "amount": 2000000,
+      "categoryId": null,
+      "description": "",
+      "transactionDate": "2026-09-24",
+      "type": "income",
+    },
+  ],
+  [
+    "compré una laptop por 3k",
+    {
+      "amount": 3,
+      "categoryId": null,
+      "description": "Laptop por k",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "gasté 20 lucas en el mercado",
+    {
+      "amount": 20000,
+      "categoryId": null,
+      "description": "Mercado",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "5 lucas en pollo",
+    {
+      "amount": 5000,
+      "categoryId": "food",
+      "description": "Pollo",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "s/ 25 en farmacia",
+    {
+      "amount": 25,
+      "categoryId": "health",
+      "description": "Farmacia",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "S/. 30 de pasaje",
+    {
+      "amount": 30,
+      "categoryId": "transport",
+      "description": "Pasaje",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "gasté 12.5 soles en café",
+    {
+      "amount": 12.5,
+      "categoryId": "coffee",
+      "description": "Café",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "gasté 0 soles",
+    {
+      "amount": null,
+      "categoryId": null,
+      "description": "0",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "10.999 en algo",
+    {
+      "amount": 10999,
+      "categoryId": null,
+      "description": "Algo",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "me yapearon 50 soles",
+    {
+      "amount": 50,
+      "categoryId": null,
+      "description": "",
+      "transactionDate": "2026-09-24",
+      "type": "income",
+    },
+  ],
+  [
+    "me plinearon 20",
+    {
+      "amount": 20,
+      "categoryId": null,
+      "description": "",
+      "transactionDate": "2026-09-24",
+      "type": "income",
+    },
+  ],
+  [
+    "gané 300 en una venta",
+    {
+      "amount": 300,
+      "categoryId": null,
+      "description": "Venta",
+      "transactionDate": "2026-09-24",
+      "type": "income",
+    },
+  ],
+  [
+    "hoy gasté 10 en pan",
+    {
+      "amount": 10,
+      "categoryId": "food",
+      "description": "Pan",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "el viernes pasado gasté 40 en cine",
+    {
+      "amount": 40,
+      "categoryId": "fun",
+      "description": "Cine",
+      "transactionDate": "2026-09-18",
+      "type": "expense",
+    },
+  ],
+  [
+    "el jueves pagué 10 de luz",
+    {
+      "amount": 10,
+      "categoryId": "home",
+      "description": "Luz",
+      "transactionDate": "2026-09-17",
+      "type": "expense",
+    },
+  ],
+  [
+    "el 31 de febrero pagué 10",
+    {
+      "amount": 10,
+      "categoryId": null,
+      "description": "31 de febrero",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "el 15 de setiembre pagué 80 de internet",
+    {
+      "amount": 80,
+      "categoryId": "home",
+      "description": "Internet",
+      "transactionDate": "2026-09-15",
+      "type": "expense",
+    },
+  ],
+  [
+    "el 5 de abril compré zapatillas por 120",
+    {
+      "amount": 120,
+      "categoryId": null,
+      "description": "Zapatillas",
+      "transactionDate": "2026-04-05",
+      "type": "expense",
+    },
+  ],
+  [
+    "gasté veinte dólares en netflix",
+    {
+      "amount": 20,
+      "categoryId": "fun",
+      "description": "Netflix",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "gasté dos euros en un chicle",
+    {
+      "amount": 2,
+      "categoryId": null,
+      "description": "Chicle",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "gasté 45 soles en una cena muy larga con todos los amigos del trabajo y la familia",
+    {
+      "amount": 45,
+      "categoryId": "food",
+      "description": "Cena muy larga con todos los amigos del tr",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "compré en la bodega por 15 y",
+    {
+      "amount": 15,
+      "categoryId": null,
+      "description": "Bodega",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "antes de ayer puse 60 de gasolina",
+    {
+      "amount": 60,
+      "categoryId": "transport",
+      "description": "Gasolina",
+      "transactionDate": "2026-09-22",
+      "type": "expense",
+    },
+  ],
+  [
+    "registra 18 de uber",
+    {
+      "amount": 18,
+      "categoryId": "transport",
+      "description": "Uber",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "anota 35 con 5 de almuerzo",
+    {
+      "amount": 35.5,
+      "categoryId": "food",
+      "description": "Almuerzo",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "agrega 99,99 de spotify",
+    {
+      "amount": 99.99,
+      "categoryId": "fun",
+      "description": "Spotify",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "mi sueldo 4000",
+    {
+      "amount": 4000,
+      "categoryId": "salary",
+      "description": "Sueldo",
+      "transactionDate": "2026-09-24",
+      "type": "income",
+    },
+  ],
+  [
+    "cafe starbucks 14",
+    {
+      "amount": 14,
+      "categoryId": "coffee",
+      "description": "Cafe starbucks",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "gym 120 mensual",
+    {
+      "amount": 120,
+      "categoryId": "health",
+      "description": "Gym mensual",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "¿cuánto? 20 soles, ¡taxi!",
+    {
+      "amount": 20,
+      "categoryId": null,
+      "description": "Cuánto taxi",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "pagué 20 y luego 30 soles",
+    {
+      "amount": 30,
+      "categoryId": null,
+      "description": "20 y luego",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+]
+`;
+
+exports[`parseVoiceEntry · salida completa (caracterización) > en inglés 1`] = `
+[
+  [
+    "spent 1,500 on rent",
+    {
+      "amount": 1500,
+      "categoryId": "home",
+      "description": "Rent",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "paid 2 million for a house",
+    {
+      "amount": 2000000,
+      "categoryId": null,
+      "description": "House",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "spent 3k on a laptop",
+    {
+      "amount": 3,
+      "categoryId": null,
+      "description": "K on a laptop",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "sold my bike for 200",
+    {
+      "amount": 200,
+      "categoryId": null,
+      "description": "Sold my bike",
+      "transactionDate": "2026-09-24",
+      "type": "income",
+    },
+  ],
+  [
+    "got a refund of 30",
+    {
+      "amount": 30,
+      "categoryId": null,
+      "description": "Refund",
+      "transactionDate": "2026-09-24",
+      "type": "income",
+    },
+  ],
+  [
+    "paid me 500 for the job",
+    {
+      "amount": 500,
+      "categoryId": null,
+      "description": "Me for the job",
+      "transactionDate": "2026-09-24",
+      "type": "income",
+    },
+  ],
+  [
+    "earned 1200 freelance",
+    {
+      "amount": 1200,
+      "categoryId": null,
+      "description": "Freelance",
+      "transactionDate": "2026-09-24",
+      "type": "income",
+    },
+  ],
+  [
+    "last friday spent 25 at the cinema",
+    {
+      "amount": 25,
+      "categoryId": "fun",
+      "description": "Cinema",
+      "transactionDate": "2026-09-18",
+      "type": "expense",
+    },
+  ],
+  [
+    "on tuesday paid 9 for coffee",
+    {
+      "amount": 9,
+      "categoryId": "food",
+      "description": "Coffee",
+      "transactionDate": "2026-09-22",
+      "type": "expense",
+    },
+  ],
+  [
+    "may 5th paid 40 for books",
+    {
+      "amount": 40,
+      "categoryId": null,
+      "description": "Books",
+      "transactionDate": "2026-05-05",
+      "type": "expense",
+    },
+  ],
+  [
+    "december 3rd paid 70 for a gift",
+    {
+      "amount": 70,
+      "categoryId": null,
+      "description": "Gift",
+      "transactionDate": "2025-12-03",
+      "type": "expense",
+    },
+  ],
+  [
+    "on the 31st of february paid 10",
+    {
+      "amount": 10,
+      "categoryId": null,
+      "description": "31st of february",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "spent twenty bucks on beer",
+    {
+      "amount": 20,
+      "categoryId": "fun",
+      "description": "Beer",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "spent a dollar on gum",
+    {
+      "amount": 1,
+      "categoryId": null,
+      "description": "Gum",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "spent 12.5 dollars on a burger",
+    {
+      "amount": 12.5,
+      "categoryId": "food",
+      "description": "Burger",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "log 18 for uber",
+    {
+      "amount": 18,
+      "categoryId": "transport",
+      "description": "Uber",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "record 60 of gas",
+    {
+      "amount": 60,
+      "categoryId": "transport",
+      "description": "Gas",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "today I bought groceries for 85",
+    {
+      "amount": 85,
+      "categoryId": null,
+      "description": "Groceries",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "put 45 on electricity",
+    {
+      "amount": 45,
+      "categoryId": "home",
+      "description": "Electricity",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "I spent 45 dollars on a very long dinner with all my friends from work and family",
+    {
+      "amount": 45,
+      "categoryId": "food",
+      "description": "Very long dinner with all my friends from",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+  [
+    "paid 20 and then 30 dollars",
+    {
+      "amount": 30,
+      "categoryId": null,
+      "description": "20 and then",
+      "transactionDate": "2026-09-24",
+      "type": "expense",
+    },
+  ],
+]
+`;

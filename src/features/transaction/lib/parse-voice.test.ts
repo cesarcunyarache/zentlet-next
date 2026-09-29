@@ -33,6 +33,18 @@ describe("parseVoiceEntry · monto", () => {
     expect(parseVoiceEntry(transcript, categories).amount).toBe(amount);
   });
 
+  it("«millones» no se confunde con «mil»", () => {
+    expect(parseVoiceEntry("me depositaron 2 millones", categories)).toMatchObject({ amount: 2_000_000 });
+    expect(parseVoiceEntry("me depositaron 2 millones", categories).description).not.toMatch(/lones/i);
+    expect(parseVoiceEntry("gané un millón", categories).amount).not.toBe(1000);
+  });
+
+  it("una palabra que empieza como multiplicador no multiplica", () => {
+    expect(parseVoiceEntry("compré 3 kilos de arroz", categories).amount).toBe(3);
+    expect(parseVoiceEntry("compré 3 kilos de arroz", categories).description).toMatch(/kilos/i);
+    expect(parseVoiceEntry("pedí 3 milanesas", categories).amount).toBe(3);
+  });
+
   it("sin cifra no inventa un monto", () => {
     expect(parseVoiceEntry("almuerzo con amigos", categories).amount).toBeNull();
   });
@@ -47,6 +59,15 @@ describe("parseVoiceEntry · fecha", () => {
     ["el 5 de septiembre compré ropa por 90", "2026-09-05"],
   ])("«%s» → %s", (transcript, date) => {
     expect(parseVoiceEntry(transcript, categories).transactionDate).toBe(date);
+  });
+
+  it("una fecha que no existe no se desborda al mes siguiente", () => {
+    expect(parseVoiceEntry("el 31 de febrero pagué 10", categories).transactionDate).toBe("2026-09-24");
+    expect(parseVoiceEntry("el 31 de abril pagué 10", categories).transactionDate).toBe("2026-09-24");
+  });
+
+  it("el día de la semana de hoy se entiende de la semana pasada", () => {
+    expect(parseVoiceEntry("el jueves gasté 8 en café", categories).transactionDate).toBe("2026-09-17");
   });
 
   it("una fecha exacta en el futuro se entiende del año anterior", () => {

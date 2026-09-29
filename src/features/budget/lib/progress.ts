@@ -8,7 +8,6 @@ export interface BudgetMeasurement {
   limit: number;
 }
 
-/** Periodo y tope con que se mide cada presupuesto en la vista del panel. */
 export function budgetMeasurements(budgets: TBudget[], view: DateRange, date: string): BudgetMeasurement[] {
   return budgets.flatMap((budget) => {
     const range = budgetRangeForView(budget, view, date);
@@ -26,15 +25,17 @@ export function budgetPreview(spent: number, limit: number) {
   };
 }
 
+export function spentPercent(spent: number, limit: number) {
+  return limit > 0 ? Math.round((spent / limit) * 100) : 0;
+}
+
 const DAY_MS = 86_400_000;
 const utcDay = (isoDate: string) => new Date(`${isoDate}T00:00:00Z`);
 
-/** Días que quedan del periodo, contando hoy. */
 export function daysLeft({ to }: PeriodRange, date: string) {
   return Math.round((utcDay(to).getTime() - utcDay(date).getTime()) / DAY_MS);
 }
 
-/** "21–27 sept", en el idioma de la página. */
 export function periodRangeLabel({ from, to }: PeriodRange, locale: string) {
   const format = new Intl.DateTimeFormat(locale, { day: "numeric", month: "short", timeZone: "UTC" });
   return format.formatRange(utcDay(from), new Date(utcDay(to).getTime() - DAY_MS));

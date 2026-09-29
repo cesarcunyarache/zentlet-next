@@ -3,7 +3,7 @@ import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { getLandingContent } from "@/features/landing/content";
-import { LandingPage } from "@/features/landing/components/landing-page";
+import { LandingPage } from "@/features/landing/ui/landing-page";
 import { buildLandingMetadata } from "@/features/landing/lib/seo";
 import { routing } from "@/i18n/routing";
 

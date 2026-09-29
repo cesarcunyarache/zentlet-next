@@ -1,69 +1,44 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useState, useSyncExternalStore } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { accountService } from "@/features/account/services/account.service";
-
-/*
- * El recorrido de bienvenida se muestra una sola vez por cuenta: sólo a
- * cuentas nuevas (el servidor lo sabe: `onboardingCompletedAt` nulo) y
- * nunca más tras verlo, terminarlo u omitirlo. Se marca en el servidor y,
- * por si eso falla sin conexión, también en el dispositivo; la próxima vez
- * con red se vuelve a intentar.
- */
-
-const doneKey = (userId: string) => `zentlet-onboarding-done:${userId}`;
-
-function isDoneOnDevice(userId: string) {
-  try {
-    return localStorage.getItem(doneKey(userId)) !== null;
-  } catch {
-    return false;
-  }
-}
-
-const noopSubscribe = () => () => {};
+import { isDoneOnDevice, markDoneOnDevice } from "./lib/device-storage";
 
 interface OnboardingState {
   open: boolean;
   finish: () => void;
 }
 
+interface OnboardingProviderProps {
+  userId: string;
+  pending: boolean;
+  children: React.ReactNode;
+}
+
+const noopSubscribe = () => () => {};
+
+const completeOnServer = () => accountService.completeOnboarding().catch(() => {});
+
 const OnboardingContext = createContext<OnboardingState>({ open: false, finish: () => {} });
 
 export const useOnboarding = () => useContext(OnboardingContext);
 
-export function OnboardingProvider({
-  userId,
-  pending,
-  children,
-}: {
-  userId: string;
-  /** El servidor dice que esta cuenta aún no vio el recorrido. */
-  pending: boolean;
-  children: React.ReactNode;
-}) {
-  // en el servidor no se muestra: aparece al hidratar, con su animación de entrada
-  const doneOnDevice = useSyncExternalStore(noopSubscribe, () => isDoneOnDevice(userId), () => true);
-  const [finished, setFinished] = useState(false);
+export function OnboardingProvider({ userId, pending, children }: OnboardingProviderProps) {
+  const isDoneHere = useSyncExternalStore(noopSubscribe, () => isDoneOnDevice(userId), () => true);
+  const [isFinished, setIsFinished] = useState(false);
+  const open = pending && !isDoneHere && !isFinished;
 
-  // visto en este dispositivo pero el servidor no se enteró (p. ej. sin conexión): reintentar
   useEffect(() => {
-    if (pending && doneOnDevice) accountService.completeOnboarding().catch(() => {});
-  }, [pending, doneOnDevice]);
+    if (pending && isDoneHere) completeOnServer();
+  }, [pending, isDoneHere]);
 
   const finish = useCallback(() => {
-    setFinished(true);
-    try {
-      localStorage.setItem(doneKey(userId), new Date().toISOString());
-    } catch {
-      // sin almacenamiento, basta con el servidor
-    }
-    accountService.completeOnboarding().catch(() => {});
+    setIsFinished(true);
+    markDoneOnDevice(userId);
+    completeOnServer();
   }, [userId]);
 
-  return (
-    <OnboardingContext.Provider value={{ open: pending && !doneOnDevice && !finished, finish }}>
-      {children}
-    </OnboardingContext.Provider>
-  );
+  const value = useMemo(() => ({ open, finish }), [open, finish]);
+
+  return <OnboardingContext.Provider value={value}>{children}</OnboardingContext.Provider>;
 }

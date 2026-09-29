@@ -15,16 +15,10 @@ import {
 } from "./data";
 import type { DemoCategory, LandingContent } from "./types";
 
-/*
- * Punto único de acceso al contenido de la landing: une el copy del idioma
- * (`src/locales/<locale>/landing.json`) con los datos de ./data.ts. Los
- * componentes reciben el resultado por props, así que siguen siendo
- * Server Components sin saber de i18n.
- */
 export async function getLandingContent(locale: Locale): Promise<LandingContent> {
   const { landing: copy } = await getMessages({ locale });
 
-  const category = (key: CategoryKey): DemoCategory => ({
+  const toDemoCategory = (key: CategoryKey): DemoCategory => ({
     ...CATEGORY_STYLES[key],
     name: copy.categories[key],
   });
@@ -45,7 +39,7 @@ export async function getLandingContent(locale: Locale): Promise<LandingContent>
           typed: copy.hero.demo.entries[entry.key],
           amount: entry.amount,
           type: entry.type,
-          category: category(entry.category),
+          category: toDemoCategory(entry.category),
         })),
       },
     },
@@ -54,7 +48,7 @@ export async function getLandingContent(locale: Locale): Promise<LandingContent>
       dashboard: {
         ...copy.showcase.dashboard,
         totals: DASHBOARD.totals,
-        categories: DASHBOARD.categories.map((item) => ({ ...category(item.category), total: item.total })),
+        categories: DASHBOARD.categories.map((item) => ({ ...toDemoCategory(item.category), total: item.total })),
       },
     },
     manifesto: copy.manifesto,
@@ -64,9 +58,9 @@ export async function getLandingContent(locale: Locale): Promise<LandingContent>
       samples: {
         phrases: copy.features.samples.phrases,
         suggestionFrom: copy.features.samples.suggestionFrom,
-        suggestionCategory: category(FEATURE_SAMPLES.suggestionCategory),
-        categoryIdeas: FEATURE_SAMPLES.categoryIdeas.map(category),
-        budgets: FEATURE_SAMPLES.budgets.map((item) => ({ ...category(item.category), spent: item.spent, budget: item.budget })),
+        suggestionCategory: toDemoCategory(FEATURE_SAMPLES.suggestionCategory),
+        categoryIdeas: FEATURE_SAMPLES.categoryIdeas.map(toDemoCategory),
+        budgets: FEATURE_SAMPLES.budgets.map((item) => ({ ...toDemoCategory(item.category), spent: item.spent, budget: item.budget })),
         budgetLabels: copy.features.samples.budgetLabels,
         currencies: FEATURE_SAMPLES.currencies.map(({ symbol, key }) => ({
           symbol,
@@ -79,7 +73,7 @@ export async function getLandingContent(locale: Locale): Promise<LandingContent>
       ...copy.movements[movement.key],
       amount: movement.amount,
       type: movement.type,
-      category: category(movement.category),
+      category: toDemoCategory(movement.category),
     })),
     steps: copy.steps,
     stats: {

@@ -110,7 +110,51 @@ describe("alta de categoría", () => {
   });
 });
 
+describe("edición de categoría", () => {
+  it("se ve al instante y guarda la respuesta como detalle", async () => {
+    const renamed = { ...food, name: "Restaurantes" };
+    service.updateCategory.mockResolvedValue(renamed);
+    run(categoryMutationKeys.update, { categoryId: "food", data: { name: "Restaurantes" } });
+
+    await vi.waitFor(() =>
+      expect(queryClient.getQueryData<TCategory[]>(categoryKeys.all)?.[0].name).toBe("Restaurantes"),
+    );
+    await settle();
+
+    expect(service.updateCategory).toHaveBeenCalledWith("food", { name: "Restaurantes" });
+    expect(queryClient.getQueryData(categoryKeys.detail("food"))).toEqual(renamed);
+  });
+
+  it("un rechazo del servidor vuelve a pedir la lista, avisa y lo reporta", async () => {
+    const rejection = httpError(422);
+    service.updateCategory.mockRejectedValue(rejection);
+    service.getCategories.mockResolvedValue([food]);
+    const unsubscribe = new QueryObserver(queryClient, {
+      queryKey: categoryKeys.all,
+      queryFn: () => categoryService.getCategories(),
+      staleTime: Infinity,
+    }).subscribe(() => {});
+    run(categoryMutationKeys.update, { categoryId: "food", data: { name: "Restaurantes" } });
+    await settle();
+
+    expect(emitSyncError).toHaveBeenCalledWith("updateCategory");
+    expect(reportSyncFailure).toHaveBeenCalledWith("updateCategory", rejection);
+    await vi.waitFor(() => expect(queryClient.getQueryData<TCategory[]>(categoryKeys.all)?.[0].name).toBe("Comida"));
+    unsubscribe();
+  });
+});
+
 describe("borrado de categoría", () => {
+  it("borra también su detalle", async () => {
+    queryClient.setQueryData(categoryKeys.detail("food"), food);
+    service.deleteCategory.mockResolvedValue(undefined);
+    run(categoryMutationKeys.remove, "food");
+    await settle();
+
+    expect(listIds()).toEqual([]);
+    expect(queryClient.getQueryData(categoryKeys.detail("food"))).toBeUndefined();
+  });
+
   it("con movimientos (409): vuelve a la lista, avisa «en uso» y NO lo reporta como fallo", async () => {
     service.deleteCategory.mockRejectedValue(httpError(409));
     service.getCategories.mockResolvedValue([food]);

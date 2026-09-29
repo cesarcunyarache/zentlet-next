@@ -1,16 +1,9 @@
 import type { Messages } from "next-intl";
-import type { FeatureId, SectionId, Testimonial } from "./types";
-
-/*
- * Datos de la landing que no dependen del idioma: montos de la demo,
- * colores, emojis, anclas y orden de las secciones. El texto vive en
- * `src/locales/<locale>/landing.json` y se une a esto en ./index.ts.
- */
+import type { FeatureId, MovementType, SectionId, Testimonial } from "./types";
 
 type Copy = Messages["landing"];
 export type CategoryKey = keyof Copy["categories"];
 
-/** Moneda de la demo: el producto nace en Perú, se muestra igual en todos los idiomas. */
 export const DEMO_CURRENCY = "S/";
 
 export const CATEGORY_STYLES = {
@@ -24,7 +17,6 @@ export const CATEGORY_STYLES = {
   fun: { icon: "🎬", color: "oklch(0.92 0.05 330)" },
 } satisfies Record<CategoryKey, { icon: string; color: string }>;
 
-/** Anclas: son identificadores de la página, no se traducen. */
 export const NAV_SECTIONS: { key: keyof Copy["nav"]["links"]; section: SectionId }[] = [
   { key: "product", section: "producto" },
   { key: "features", section: "funciones" },
@@ -32,12 +24,14 @@ export const NAV_SECTIONS: { key: keyof Copy["nav"]["links"]; section: SectionId
   { key: "faq", section: "preguntas" },
 ];
 
-export const HERO_ENTRIES: {
-  key: keyof Copy["hero"]["demo"]["entries"];
+interface SampleTransaction<Key> {
+  key: Key;
   amount: number;
-  type: "expense" | "income";
+  type: MovementType;
   category: CategoryKey;
-}[] = [
+}
+
+export const HERO_ENTRIES: SampleTransaction<keyof Copy["hero"]["demo"]["entries"]>[] = [
   { key: "taxi", amount: 12.5, type: "expense", category: "transport" },
   { key: "salary", amount: 3000, type: "income", category: "salary" },
   { key: "market", amount: 84.3, type: "expense", category: "market" },
@@ -69,7 +63,6 @@ export const FEATURES: { id: FeatureId; key: keyof Copy["features"]["items"] }[]
 export const FEATURE_SAMPLES = {
   suggestionCategory: "transport",
   categoryIdeas: ["food", "coffee", "health", "fun"],
-  /** Mismos gastos que el dashboard de la demo, frente a un tope mensual. */
   budgets: [
     { category: "market", spent: 412.8, budget: 380 },
     { category: "food", spent: 298.5, budget: 400 },
@@ -87,12 +80,7 @@ export const FEATURE_SAMPLES = {
   currencies: { symbol: string; key: keyof Copy["features"]["samples"]["currencies"] }[];
 };
 
-export const MOVEMENTS: {
-  key: keyof Copy["movements"];
-  amount: number;
-  type: "expense" | "income";
-  category: CategoryKey;
-}[] = [
+export const MOVEMENTS: SampleTransaction<keyof Copy["movements"]>[] = [
   { key: "payroll", amount: 3000, type: "income", category: "salary" },
   { key: "market", amount: 84.3, type: "expense", category: "market" },
   { key: "taxi", amount: 12.5, type: "expense", category: "transport" },
@@ -114,9 +102,4 @@ export const STATS: {
   { key: "formulas", value: 0, from: 12 },
 ];
 
-/**
- * Opiniones reales, en el idioma en que se escribieron. Con 1 o más se
- * muestra el carrusel; vacío, la invitación `testimonials.empty`.
- * { name: "Ana Torres", role: "Diseñadora, Lima", quote: "…", avatar: "/testimonials/ana.jpg" }
- */
 export const TESTIMONIALS: Testimonial[] = [];

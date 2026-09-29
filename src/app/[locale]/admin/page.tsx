@@ -8,7 +8,7 @@ import { useTranslations } from "next-intl";
 import { SPRING_LAYOUT, SPRING_PRESS } from "@/lib/ease";
 import { useCategoryStore } from "@/features/category/stores/category.store";
 import { useBudgetStore } from "@/features/budget/stores/budget.store";
-import { BudgetSheet } from "@/features/budget/components/budget-sheet";
+import { BudgetSheet } from "@/features/budget/ui/budget-sheet";
 import { useBudgetBars } from "@/features/budget/hooks/useBudgetBars";
 import { onSyncError } from "@/core/offline/sync-events";
 import { SyncStatusPill } from "@/core/offline/sync-status";
@@ -20,21 +20,19 @@ import {
 } from "@/features/transaction/stores/transaction.store";
 import { useCurrency } from "@/features/preference/hooks/useCurrency";
 import { useToast } from "@/features/transaction/hooks/useToast";
-import { SummaryHeader } from "@/features/transaction/components/summary-header";
-import {
-  CategoryStrip,
-  type CategoryTotal,
-} from "@/features/transaction/components/category-strip";
-import { TransactionList } from "@/features/transaction/components/transaction-list";
-import { TransactionFormSheet } from "@/features/transaction/components/transaction-form-sheet";
-import { VoiceEntry } from "@/features/transaction/components/voice-entry";
+import { SummaryHeader } from "@/features/transaction/ui/summary/summary-header";
+import { CategoryStrip } from "@/features/transaction/ui/summary/category-strip";
+import type { CategoryTotal } from "@/features/transaction/types";
+import { TransactionList } from "@/features/transaction/ui/list/transaction-list";
+import { TransactionFormSheet } from "@/features/transaction/ui/form/transaction-form-sheet";
+import { VoiceEntry } from "@/features/transaction/ui/voice/voice-entry";
 import type { TransactionFormValues } from "@/features/transaction/schemas/transaction.schema";
-import { TransactionDetailSheet } from "@/features/transaction/components/transaction-detail-sheet";
-import { DeleteTransactionDialog } from "@/features/transaction/components/delete-transaction-dialog";
-import { CategoriesSheet } from "@/features/transaction/components/categories-sheet";
-import { SettingsSheet } from "@/features/transaction/components/settings-sheet";
+import { TransactionDetailSheet } from "@/features/transaction/ui/detail/transaction-detail-sheet";
+import { DeleteTransactionDialog } from "@/features/transaction/ui/detail/delete-transaction-dialog";
+import { CategoriesSheet } from "@/features/category/ui/categories-sheet";
+import { SettingsSheet } from "@/features/account/ui/settings-sheet";
 import { ToastBubble } from "@/core/components/ui/toast-bubble";
-import { Onboarding } from "@/features/onboarding/components/onboarding";
+import { Onboarding } from "@/features/onboarding/ui/onboarding";
 import { periodRange } from "@/features/transaction/lib/format";
 import { buildStripData, categoryValue } from "@/features/transaction/lib/strip-data";
 import { track } from "@/lib/observability/client";

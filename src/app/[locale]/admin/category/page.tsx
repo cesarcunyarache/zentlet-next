@@ -6,8 +6,9 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { siteConfig } from "@/lib/site";
 import { useCategoryStore } from "@/features/category/stores/category.store";
-import { CategoryGrid } from "@/features/category/components/category-grid";
-import { CategoryFormSheet, type EditableCategory } from "./CategoryForm";
+import { CategoryGrid } from "@/features/category/ui/category-grid";
+import type { EditableCategory } from "@/features/category/types";
+import { CategoryFormSheet } from "@/features/category/ui/category-form-sheet";
 
 export default function CategoryPage() {
   const t = useTranslations();

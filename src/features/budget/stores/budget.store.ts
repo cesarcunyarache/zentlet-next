@@ -35,22 +35,28 @@ function localBudget({ id, categoryId, kind, periodUnit, periodCount, startDate,
   return { id, categoryId, kind, periodUnit, periodCount, startDate, limits: [{ effectiveFrom: startDate, amount }] };
 }
 
+function applyLimit(rows: TBudget[], { budgetId, effectiveFrom, amount }: LimitVariables): TBudget[] {
+  return rows.map((row) => (row.id === budgetId ? withLimit(row, { effectiveFrom, amount }) : row));
+}
+
 function applyMutation(rows: TBudget[], mutation: Mutation<unknown, unknown, unknown>): TBudget[] {
   const kind = mutation.options.mutationKey?.[2];
   const variables = mutation.state.variables;
-  if (kind === "create") {
-    const created = localBudget(variables as CreateBudgetPayload);
-    return rows.some((row) => row.id === created.id) ? rows : [...rows, created];
+
+  switch (kind) {
+    case "create": {
+      const created = localBudget(variables as CreateBudgetPayload);
+      return rows.some((row) => row.id === created.id) ? rows : [...rows, created];
+    }
+    case "limit":
+      return applyLimit(rows, variables as LimitVariables);
+    case "delete":
+      return rows.filter((row) => row.id !== variables);
+    default:
+      return rows;
   }
-  if (kind === "limit") {
-    const { budgetId, effectiveFrom, amount } = variables as LimitVariables;
-    return rows.map((row) => (row.id === budgetId ? withLimit(row, { effectiveFrom, amount }) : row));
-  }
-  if (kind === "delete") return rows.filter((row) => row.id !== variables);
-  return rows;
 }
 
-/** Lista del servidor con los cambios aún en cola aplicados encima. */
 export async function fetchBudgetsWithPending(queryClient: QueryClient) {
   const rows = await budgetService.getBudgets();
   return pendingMutations(queryClient, budgetMutationKeys.all).reduce(applyMutation, rows);
@@ -66,8 +72,10 @@ function refreshWhenQueueDrains(queryClient: QueryClient) {
   }
 }
 
+const HTTP_CONFLICT = 409;
+
 function reportError(error: unknown, key: BudgetErrorKey) {
-  const alreadyBudgeted = key === "createBudget" && getApiErrorStatus(error) === 409;
+  const alreadyBudgeted = key === "createBudget" && getApiErrorStatus(error) === HTTP_CONFLICT;
   emitSyncError(alreadyBudgeted ? "budgetExists" : key);
   if (!alreadyBudgeted) reportSyncFailure(key, error);
 }
@@ -79,6 +87,7 @@ export function registerBudgetMutations(queryClient: QueryClient) {
     retryDelay: mutationRetryDelay,
   };
   const cancelList = () => queryClient.cancelQueries({ queryKey: budgetKeys.all });
+  const refetchList = () => void queryClient.invalidateQueries({ queryKey: budgetKeys.all });
 
   queryClient.setMutationDefaults(budgetMutationKeys.create, {
     ...shared,
@@ -98,14 +107,12 @@ export function registerBudgetMutations(queryClient: QueryClient) {
     ...shared,
     mutationFn: ({ budgetId, effectiveFrom, amount }: LimitVariables) =>
       budgetService.setBudgetLimit(budgetId, effectiveFrom, amount),
-    onMutate: async ({ budgetId, effectiveFrom, amount }: LimitVariables) => {
+    onMutate: async (variables: LimitVariables) => {
       await cancelList();
-      setList(queryClient, (rows) =>
-        rows.map((row) => (row.id === budgetId ? withLimit(row, { effectiveFrom, amount }) : row)),
-      );
+      setList(queryClient, (rows) => applyLimit(rows, variables));
     },
     onError: (error: unknown) => {
-      void queryClient.invalidateQueries({ queryKey: budgetKeys.all });
+      refetchList();
       reportError(error, "updateBudget");
     },
     onSettled: () => refreshWhenQueueDrains(queryClient),
@@ -125,14 +132,13 @@ export function registerBudgetMutations(queryClient: QueryClient) {
       setList(queryClient, (rows) => rows.filter((row) => row.id !== budgetId));
     },
     onError: (error: unknown) => {
-      void queryClient.invalidateQueries({ queryKey: budgetKeys.all });
+      refetchList();
       reportError(error, "deleteBudget");
     },
     onSettled: () => refreshWhenQueueDrains(queryClient),
   });
 }
 
-/** Presupuestos del usuario. Las escrituras no se esperan: se sincronizan por detrás. */
 export function useBudgetStore() {
   const queryClient = useQueryClient();
   const query = useQuery({
@@ -144,15 +150,17 @@ export function useBudgetStore() {
   const remove = useMutation<void, unknown, string>({ mutationKey: budgetMutationKeys.remove });
   const budgets = query.data ?? [];
 
+  function saveBudget(input: BudgetInput) {
+    const existing = budgets.find((budget) => budget.categoryId === input.categoryId);
+    const plan = planBudgetSave(existing, input, todayISO());
+    if (plan.limit) limit.mutate(plan.limit);
+    if (plan.remove) remove.mutate(plan.remove);
+    if (plan.create) create.mutate({ id: crypto.randomUUID(), ...plan.create });
+  }
+
   return {
     budgets,
-    saveBudget: (input: BudgetInput) => {
-      const existing = budgets.find((budget) => budget.categoryId === input.categoryId);
-      const plan = planBudgetSave(existing, input, todayISO());
-      if (plan.limit) limit.mutate(plan.limit);
-      if (plan.remove) remove.mutate(plan.remove);
-      if (plan.create) create.mutate({ id: crypto.randomUUID(), ...plan.create });
-    },
+    saveBudget,
     deleteBudget: (budgetId: string) => remove.mutate(budgetId),
   };
 }
