@@ -1,17 +1,12 @@
 "use client";
 
 import { Button, Form } from "@heroui/react";
-
 import { useForm } from "react-hook-form";
-
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { AnimatePresence, motion } from "motion/react";
-
 import { useDebounce } from "use-debounce";
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-
 import {
   categorySchema,
   type CategoryFormValues,
@@ -27,10 +22,6 @@ import { GhostInput } from "./ghost-input";
 
 type CategoryIcon = Pick<TCategory, "icon" | "color">;
 
-/**
- * Iconos de reserva cuando la IA no está disponible (sin conexión, cuota
- * agotada, sin sesión): la categoría se puede crear igual.
- */
 const FALLBACK_ICONS: CategoryIcon[] = [
   { icon: "🏷️", color: "#E9E4F5" },
   { icon: "🛒", color: "#FDECC8" },
@@ -44,9 +35,7 @@ const FALLBACK_ICONS: CategoryIcon[] = [
 
 const TOUCH_FIELD = { shouldValidate: true, shouldDirty: true } as const;
 
-/** Iconos sugeridos por la IA, o `null` si no está disponible. */
 async function suggestIcons(name: string): Promise<CategoryIcon[] | null> {
-  // sin red la llamada fallaría seguro
   if (!navigator.onLine) return null;
   try {
     return (await generateCategory(name))?.categories ?? null;
@@ -75,22 +64,34 @@ export default function CategoryForm({
   category?: EditableCategory;
 }) {
   const t = useTranslations();
-  const { categories: stored, createCategory, updateCategory } = useCategoryStore();
+  const {
+    categories: stored,
+    createCategory,
+    updateCategory,
+  } = useCategoryStore();
   // al editar, el carrusel arranca con el icono actual y lo que la IA ya
   // propuso para este nombre (guardado con la categoría): sin llamar a la IA
   const current = category?.icon
     ? { icon: category.icon, color: category.color || "" }
     : null;
-  const saved = category ? (stored.find((c) => c.id === category.id)?.aiSuggestions ?? []) : [];
+  const saved = category
+    ? (stored.find((c) => c.id === category.id)?.aiSuggestions ?? [])
+    : [];
   const withCurrent = (icons: CategoryIcon[]) =>
-    current ? [current, ...icons.filter((s) => s.icon !== current.icon)] : icons;
-  const [categoriesIcons, setCategoriesIcons] = useState<CategoryIcon[]>(() => withCurrent(saved));
+    current
+      ? [current, ...icons.filter((s) => s.icon !== current.icon)]
+      : icons;
+  const [categoriesIcons, setCategoriesIcons] = useState<CategoryIcon[]>(() =>
+    withCurrent(saved),
+  );
   /**
    * Lo que la IA propuso en esta sesión del formulario, para guardarlo con
    * la categoría. `undefined`: no hay nada nuevo que guardar (se conserva lo
    * que ya tenía); los iconos de reserva nunca se guardan.
    */
-  const [aiSuggestions, setAiSuggestions] = useState<CategoryIcon[] | undefined>();
+  const [aiSuggestions, setAiSuggestions] = useState<
+    CategoryIcon[] | undefined
+  >();
   const [loadingAI, setLoadingAI] = useState(false);
   const [aiUnavailable, setAiUnavailable] = useState(false);
   const online = useIsOnline();
@@ -243,7 +244,11 @@ export default function CategoryForm({
 
       {aiUnavailable && (
         <p className="text-app-muted w-full text-center text-sm">
-          {t(online ? "categories.form.aiUnavailable" : "categories.form.aiOffline")}
+          {t(
+            online
+              ? "categories.form.aiUnavailable"
+              : "categories.form.aiOffline",
+          )}
         </p>
       )}
 
