@@ -86,6 +86,10 @@ export function capitalize(text: string) {
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
+export function describeOrFallback(description: string, categoryName: string | undefined, defaultDescription: string) {
+  return description || categoryName || defaultDescription;
+}
+
 export function dayLabel(isoDate: string, locale: string) {
   const d = parseISODate(isoDate);
   const daysAgo = Math.round((today().getTime() - d.getTime()) / MS_PER_DAY);

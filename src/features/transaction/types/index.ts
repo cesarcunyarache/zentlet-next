@@ -51,4 +51,10 @@ export interface CategoryLike {
   color?: string | null;
 }
 
+export interface CategoryTotal {
+  category: CategoryLike;
+  total: number;
+  budget: number | null;
+}
+
 export type TTransactionPayload = Omit<TTransaction, "id">;

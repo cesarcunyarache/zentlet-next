@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { siteConfig } from "@/lib/site";
 import { useCategoryStore } from "@/features/category/stores/category.store";
-import { TransactionFormSheet } from "@/features/transaction/components/transaction-form-sheet";
+import { TransactionFormSheet } from "@/features/transaction/ui/form/transaction-form-sheet";
 import type { CategoryLike } from "@/features/transaction/types";
 
 /**

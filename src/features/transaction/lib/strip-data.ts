@@ -1,5 +1,4 @@
-import type { CategoryTotal } from "../components/category-strip";
-import type { CategoryLike, CategoryTotals, TransactionType } from "../types";
+import type { CategoryLike, CategoryTotal, CategoryTotals, TransactionType } from "../types";
 
 export function categoryValue(totals: CategoryTotals | undefined, kind: TransactionType | null) {
   if (!totals) return 0;
@@ -20,7 +19,7 @@ interface StripInput {
   budgetFor: (categoryId: string) => BudgetBar | null;
 }
 
-const visibleSize = ({ total, budget }: CategoryTotal) => Math.max(Math.abs(total), budget ?? 0);
+export const visibleSize = ({ total, budget }: CategoryTotal) => Math.max(Math.abs(total), budget ?? 0);
 
 function toStripBar(category: CategoryLike, { byCategory, kind, budgetFor }: StripInput): CategoryTotal {
   const bar = kind === "income" ? null : budgetFor(category.id);

@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { generateObject } from "@/lib/ai/client";
 import { allowAiCall } from "@/lib/ai/quota";
-import { buildTransactionCategoryPrompt } from "../promps/transaction-category.prompt";
+import { buildTransactionCategoryPrompt } from "../prompts/transaction-category.prompt";
 import {
   transactionSuggestionSchema,
   type TransactionSuggestion,

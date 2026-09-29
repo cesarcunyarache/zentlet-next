@@ -3,6 +3,7 @@ import type { TTransaction } from "../types";
 import {
   cleanAmountInput,
   dayLabel,
+  describeOrFallback,
   dayShift,
   displayAmount,
   formatMoney,
@@ -136,5 +137,13 @@ describe("montos", () => {
     ["7", 7],
   ])("parseAmount(%j) → %d", (raw, expected) => {
     expect(parseAmount(raw)).toBe(expected);
+  });
+});
+
+describe("describeOrFallback", () => {
+  it("usa la descripción, luego la categoría y al final el texto por defecto", () => {
+    expect(describeOrFallback("Almuerzo", "Comida", "Movimiento")).toBe("Almuerzo");
+    expect(describeOrFallback("", "Comida", "Movimiento")).toBe("Comida");
+    expect(describeOrFallback("", undefined, "Movimiento")).toBe("Movimiento");
   });
 });
