@@ -7,19 +7,17 @@ interface SectionHeadingProps {
   title: string;
   subtitle?: string;
   align?: "center" | "left";
-  /** Sobre fondo oscuro (`bg-app-fg`). */
-  inverted?: boolean;
+  isInverted?: boolean;
   className?: string;
 }
 
-/** Antetítulo + título + bajada, con entrada al hacer scroll. */
 export function SectionHeading({
   id,
   eyebrow,
   title,
   subtitle,
   align = "center",
-  inverted = false,
+  isInverted = false,
   className,
 }: SectionHeadingProps) {
   return (
@@ -34,7 +32,7 @@ export function SectionHeading({
         <span
           className={cn(
             "inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold tracking-wide uppercase",
-            inverted ? "bg-app-bg/10 text-app-bg/80" : "bg-app-fill text-app-muted",
+            isInverted ? "bg-app-bg/10 text-app-bg/80" : "bg-app-fill text-app-muted",
           )}
         >
           <span aria-hidden className="bg-app-expense size-1.5 rounded-full" />
@@ -46,7 +44,7 @@ export function SectionHeading({
           id={id}
           className={cn(
             "font-display m-0 text-4xl leading-[1.05] font-bold tracking-[-0.04em] text-balance md:text-5xl",
-            inverted ? "text-app-bg" : "text-app-fg",
+            isInverted ? "text-app-bg" : "text-app-fg",
           )}
         >
           {title}
@@ -57,7 +55,7 @@ export function SectionHeading({
           <p
             className={cn(
               "m-0 text-lg leading-relaxed text-pretty",
-              inverted ? "text-app-bg/70" : "text-app-muted",
+              isInverted ? "text-app-bg/70" : "text-app-muted",
             )}
           >
             {subtitle}

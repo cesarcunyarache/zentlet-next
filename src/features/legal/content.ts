@@ -1,17 +1,5 @@
 import type { Locale } from "@/i18n/routing";
-import { legalConfig as c } from "./config";
-
-/*
- * Textos legales. Describen lo que la app hace de verdad con los datos:
- * si cambia el código (un proveedor nuevo, otro dato recogido), hay que
- * actualizarlos aquí y subir `updatedAt` en config.ts (es la versión que
- * aceptan los usuarios al registrarse).
- *
- * Marco: Ley 29733 de Protección de Datos Personales y su Reglamento
- * (D.S. 016-2024-JUS); Código de Protección y Defensa del Consumidor
- * (Ley 29571); Ley sobre el Derecho de Autor (D. Leg. 822). Para usuarios
- * de otros países: RGPD (UE) y leyes de privacidad de EE. UU.
- */
+import { legalConfig as c, type LegalDocumentId } from "./config";
 
 export type LegalBlock = string | { list: string[] };
 
@@ -20,16 +8,16 @@ export interface LegalSection {
   blocks: LegalBlock[];
 }
 
-export interface LegalDocument {
+export interface LegalDocumentContent {
   title: string;
   description: string;
   updated: string;
   sections: LegalSection[];
 }
 
-export type LegalDocumentId = "privacy" | "terms";
+export type { LegalDocumentId };
 
-const privacyEs: LegalDocument = {
+const privacyEs: LegalDocumentContent = {
   title: "Política de privacidad",
   description: "Cómo trata Zentlet tus datos personales, con qué base legal, con quién los comparte y cómo ejercer tus derechos.",
   updated: `Última actualización: ${c.updatedAt}`,
@@ -170,7 +158,7 @@ const privacyEs: LegalDocument = {
   ],
 };
 
-const privacyEn: LegalDocument = {
+const privacyEn: LegalDocumentContent = {
   title: "Privacy Policy",
   description: "How Zentlet processes your personal data, on what legal basis, who it is shared with and how to exercise your rights.",
   updated: `Last updated: ${c.updatedAt}`,
@@ -311,7 +299,7 @@ const privacyEn: LegalDocument = {
   ],
 };
 
-const termsEs: LegalDocument = {
+const termsEs: LegalDocumentContent = {
   title: "Términos de servicio",
   description: "Las condiciones de uso de Zentlet y de su software.",
   updated: `Última actualización: ${c.updatedAt}`,
@@ -416,7 +404,7 @@ const termsEs: LegalDocument = {
   ],
 };
 
-const termsEn: LegalDocument = {
+const termsEn: LegalDocumentContent = {
   title: "Terms of Service",
   description: "The conditions for using Zentlet and its software.",
   updated: `Last updated: ${c.updatedAt}`,
@@ -521,7 +509,7 @@ const termsEn: LegalDocument = {
   ],
 };
 
-export const legalDocuments: Record<LegalDocumentId, Record<Locale, LegalDocument>> = {
+export const legalDocuments: Record<LegalDocumentId, Record<Locale, LegalDocumentContent>> = {
   privacy: { es: privacyEs, en: privacyEn },
   terms: { es: termsEs, en: termsEn },
 };

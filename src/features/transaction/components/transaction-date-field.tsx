@@ -12,25 +12,22 @@ import { dayLabel, dayShift, toISODate } from "../lib/format";
 const CUSTOM = "custom";
 const RECENT_DAYS = 7;
 
+function recentIsoDates() {
+  return Array.from({ length: RECENT_DAYS }, (_, offset) => toISODate(dayShift(offset)));
+}
+
 interface TransactionDateFieldProps {
-  /** Fecha ISO (`2026-09-23`). */
   value: string;
   onChange: (isoDate: string) => void;
 }
 
-/**
- * Los últimos días a un toque; "Otra fecha…" cambia a un selector con
- * calendario para cualquier día anterior.
- */
 export function TransactionDateField({ value, onChange }: TransactionDateFieldProps) {
   const t = useTranslations("transactions");
   const locale = useLocale();
   const [isCustom, setIsCustom] = useState(false);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
-  // se recalcula en cada render: si la app quedó abierta de un día para
-  // otro, "Hoy" tiene que seguir siendo hoy
-  const recentDays = Array.from({ length: RECENT_DAYS }, (_, offset) => toISODate(dayShift(offset)));
+  const recentDays = recentIsoDates();
   const showCalendarField = isCustom || !recentDays.includes(value);
 
   function pickRecent(next: string) {
@@ -80,27 +77,7 @@ export function TransactionDateField({ value, onChange }: TransactionDateFieldPr
             </DateField.Suffix>
           </DateField.Group>
           <DatePicker.Popover>
-            <Calendar aria-label={t("date.calendar")}>
-              <Calendar.Header>
-                <Calendar.YearPickerTrigger>
-                  <Calendar.YearPickerTriggerHeading />
-                  <Calendar.YearPickerTriggerIndicator />
-                </Calendar.YearPickerTrigger>
-                <Calendar.NavButton slot="previous" />
-                <Calendar.NavButton slot="next" />
-              </Calendar.Header>
-              <Calendar.Grid>
-                <Calendar.GridHeader>
-                  {(day) => <Calendar.HeaderCell>{day}</Calendar.HeaderCell>}
-                </Calendar.GridHeader>
-                <Calendar.GridBody>{(date) => <Calendar.Cell date={date} />}</Calendar.GridBody>
-              </Calendar.Grid>
-              <Calendar.YearPickerGrid>
-                <Calendar.YearPickerGridBody>
-                  {({ year }) => <Calendar.YearPickerCell year={year} />}
-                </Calendar.YearPickerGridBody>
-              </Calendar.YearPickerGrid>
-            </Calendar>
+            <PickerCalendar label={t("date.calendar")} />
           </DatePicker.Popover>
         </DatePicker>
       </I18nProvider>
@@ -113,5 +90,27 @@ export function TransactionDateField({ value, onChange }: TransactionDateFieldPr
         <X className="size-3.5" strokeWidth={2.2} />
       </button>
     </div>
+  );
+}
+
+function PickerCalendar({ label }: { label: string }) {
+  return (
+    <Calendar aria-label={label}>
+      <Calendar.Header>
+        <Calendar.YearPickerTrigger>
+          <Calendar.YearPickerTriggerHeading />
+          <Calendar.YearPickerTriggerIndicator />
+        </Calendar.YearPickerTrigger>
+        <Calendar.NavButton slot="previous" />
+        <Calendar.NavButton slot="next" />
+      </Calendar.Header>
+      <Calendar.Grid>
+        <Calendar.GridHeader>{(day) => <Calendar.HeaderCell>{day}</Calendar.HeaderCell>}</Calendar.GridHeader>
+        <Calendar.GridBody>{(date) => <Calendar.Cell date={date} />}</Calendar.GridBody>
+      </Calendar.Grid>
+      <Calendar.YearPickerGrid>
+        <Calendar.YearPickerGridBody>{({ year }) => <Calendar.YearPickerCell year={year} />}</Calendar.YearPickerGridBody>
+      </Calendar.YearPickerGrid>
+    </Calendar>
   );
 }

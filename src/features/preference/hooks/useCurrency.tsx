@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useCallback, useContext, useSyncExternalStore } from "react";
+import { createContext, useCallback, useContext, useSyncExternalStore, type ReactNode } from "react";
 import { useOfflineSession } from "@/core/offline/offline-query-provider";
 import { DEFAULT_CURRENCY, currencySymbol, type CurrencyCode } from "../lib/currency";
 import { changeCurrency, getDeviceCurrency, subscribeDeviceCurrency } from "../lib/device-currency";
@@ -9,16 +9,14 @@ function getServerSnapshot() {
   return null;
 }
 
-// leída en el servidor: la hidratación la usa mientras no puede leer el dispositivo
 const AccountCurrencyContext = createContext<CurrencyCode | null>(null);
 
-export function AccountCurrencyProvider({
-  currency,
-  children,
-}: {
+interface AccountCurrencyProviderProps {
   currency: CurrencyCode | null;
-  children: React.ReactNode;
-}) {
+  children: ReactNode;
+}
+
+export function AccountCurrencyProvider({ currency, children }: AccountCurrencyProviderProps) {
   return <AccountCurrencyContext value={currency}>{children}</AccountCurrencyContext>;
 }
 

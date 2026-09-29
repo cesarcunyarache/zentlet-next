@@ -1,10 +1,9 @@
 import { cn } from "@heroui/react";
-import type { CategoryLike } from "@/features/transaction/types";
-
-const FALLBACK_TINT = "oklch(0.90 0.01 290)";
+import { CATEGORY_FALLBACK_ICON, CATEGORY_FALLBACK_TINT } from "../constants";
+import type { CategoryBase } from "../types";
 
 interface CategoryEmojiProps {
-  category?: Pick<CategoryLike, "icon" | "color">;
+  category?: Pick<CategoryBase, "icon" | "color">;
   className?: string;
 }
 
@@ -13,9 +12,9 @@ export function CategoryEmoji({ category, className }: CategoryEmojiProps) {
     <span
       aria-hidden
       className={cn("grid shrink-0 place-items-center leading-none", className)}
-      style={{ background: category?.color || FALLBACK_TINT }}
+      style={{ background: category?.color || CATEGORY_FALLBACK_TINT }}
     >
-      {category?.icon || "📦"}
+      {category?.icon || CATEGORY_FALLBACK_ICON}
     </span>
   );
 }

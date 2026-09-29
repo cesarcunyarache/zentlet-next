@@ -388,7 +388,7 @@ const t = await getTranslations({ locale, namespace: "common" });
 1. Copia `src/locales/es/` a `src/locales/pt/` y traduce los valores.
 2. En [`i18n/routing.ts`](src/i18n/routing.ts), añade `"pt"` a `locales`, a `intlLocales` (`"pt-BR"`) y a `localeNames` (`"Português"`).
 3. En [`i18n/types.ts`](src/i18n/types.ts), repite el bloque de comprobación de `en` para `pt`.
-4. Añade sus reglas al dictado ([`parse-voice.ts`](src/features/transaction/lib/parse-voice.ts)), a las plantillas de correo ([`email/templates.ts`](src/lib/email/templates.ts)), a los textos legales ([`legal/content.ts`](src/features/legal/content.ts)) y al [manifest](src/app/manifest.webmanifest/route.ts): TypeScript señala cada sitio que falta.
+4. Añade sus reglas al dictado (un archivo en [`lib/voice/`](src/features/transaction/lib/voice/) como [`es.ts`](src/features/transaction/lib/voice/es.ts), registrado en [`parse-voice.ts`](src/features/transaction/lib/parse-voice.ts)), a las plantillas de correo ([`email/templates.ts`](src/lib/email/templates.ts)), a los textos legales ([`legal/content.ts`](src/features/legal/content.ts)) y al [manifest](src/app/manifest.webmanifest/route.ts): TypeScript señala cada sitio que falta.
 5. `pnpm build`: la landing, el sitemap, hreflang, el selector de idioma y el proxy lo recogen solos.
 
 <br/>

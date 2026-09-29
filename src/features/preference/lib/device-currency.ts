@@ -3,11 +3,9 @@ import { savePreferences } from "./save";
 
 const KEY_PREFIX = "zentlet.currency";
 const currencyKey = (userId: string) => `${KEY_PREFIX}:${userId}`;
-/** Versiones anteriores: una sola moneda por dispositivo y, aparte, su dueño. */
 const LEGACY_KEY = "zentlet.currency.v1";
 const LEGACY_OWNER_KEY = "zentlet.currency.owner.v1";
 
-/** Copia local de la moneda de cada cuenta; `null` = este dispositivo aún no la tiene. */
 const cache = new Map<string, CurrencyCode | null>();
 const listeners = new Set<() => void>();
 
@@ -15,7 +13,6 @@ function notify() {
   for (const listener of listeners) listener();
 }
 
-// `key` es null cuando otra pestaña borra todo el almacenamiento
 function onStorage(event: StorageEvent) {
   if (event.key !== null && !event.key.startsWith(KEY_PREFIX)) return;
   cache.clear();
@@ -35,7 +32,6 @@ function readStored(userId: string): CurrencyCode | null {
   try {
     const stored = localStorage.getItem(currencyKey(userId));
     if (stored !== null) return parseStoredCurrency(stored);
-    // sin dueño no se sabe de quién es; esas versiones ya guardaban la moneda en el servidor
     if (localStorage.getItem(LEGACY_OWNER_KEY) !== userId) return null;
     return parseStoredCurrency(localStorage.getItem(LEGACY_KEY));
   } catch {
@@ -58,9 +54,7 @@ export function setDeviceCurrency(userId: string, next: CurrencyCode) {
       localStorage.removeItem(LEGACY_KEY);
       localStorage.removeItem(LEGACY_OWNER_KEY);
     }
-  } catch {
-    /* sin almacenamiento: queda en memoria */
-  }
+  } catch {}
   if (changed) notify();
 }
 

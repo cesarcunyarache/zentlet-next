@@ -8,7 +8,6 @@ export interface TCategory {
   description: string | null;
   aiSuggestions: CategoryIcon[] | null;
   userId: string;
-
   createdAt: string;
   updatedAt: string;
 }
@@ -18,10 +17,13 @@ export type TCategoryPayload = Pick<TCategory, "name" | "icon" | "color"> & {
   aiSuggestions?: CategoryIcon[] | null;
 };
 
-export interface EditableCategory {
+export interface CategoryBase {
   id: string;
   name: string;
   icon?: string | null;
   color?: string | null;
+}
+
+export interface EditableCategory extends CategoryBase {
   description?: string | null;
 }

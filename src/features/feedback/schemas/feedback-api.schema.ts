@@ -1,15 +1,10 @@
 import { z } from "zod";
-import { FEEDBACK_MAX_LENGTH, FEEDBACK_TYPES } from "../constants";
-
-/*
- * Contrato de `POST /api/feedback`. El contexto es sólo técnico, para poder
- * reproducir un problema: nunca montos, movimientos ni categorías.
- */
+import { FEEDBACK_CONTEXT_LIMITS, FEEDBACK_MAX_LENGTH, FEEDBACK_TYPES } from "../constants";
 
 export const feedbackContextSchema = z.object({
-  locale: z.string().max(10).optional(),
-  path: z.string().max(200).optional(),
-  userAgent: z.string().max(400).optional(),
+  locale: z.string().max(FEEDBACK_CONTEXT_LIMITS.locale).optional(),
+  path: z.string().max(FEEDBACK_CONTEXT_LIMITS.path).optional(),
+  userAgent: z.string().max(FEEDBACK_CONTEXT_LIMITS.userAgent).optional(),
   online: z.boolean().optional(),
 });
 

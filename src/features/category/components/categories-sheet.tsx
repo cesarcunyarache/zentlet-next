@@ -3,15 +3,14 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Sheet } from "@/core/components/ui/sheet";
-import type { EditableCategory } from "../types";
+import type { CategoryBase, EditableCategory } from "../types";
 import { CategoryFormSheet } from "./category-form-sheet";
 import { CategoryGrid } from "./category-grid";
-import type { CategoryLike } from "@/features/transaction/types";
 
 interface CategoriesSheetProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  categories: CategoryLike[];
+  categories: CategoryBase[];
 }
 
 export function CategoriesSheet({
@@ -22,7 +21,7 @@ export function CategoriesSheet({
   const t = useTranslations("categories");
   const [isCreating, setIsCreating] = useState(false);
   const [editing, setEditing] = useState<EditableCategory | null>(null);
-  const formOpen = isCreating || Boolean(editing);
+  const isFormOpen = isCreating || Boolean(editing);
 
   function closeForm() {
     setIsCreating(false);
@@ -32,7 +31,7 @@ export function CategoriesSheet({
   return (
     <>
       <Sheet
-        isOpen={isOpen && !formOpen}
+        isOpen={isOpen && !isFormOpen}
         onOpenChange={onOpenChange}
         title={t("title")}
         hideTitle
@@ -49,7 +48,7 @@ export function CategoriesSheet({
       </Sheet>
 
       <CategoryFormSheet
-        isOpen={formOpen}
+        isOpen={isFormOpen}
         category={editing}
         onClose={closeForm}
       />

@@ -17,7 +17,6 @@ export class BudgetService extends APIService {
     return response.data;
   }
 
-  /** Idempotente: el id viaja en el cuerpo y repetirlo no duplica. */
   async createBudget(data: CreateBudgetPayload): Promise<TBudget> {
     const response = await this.post<TBudget>("/api/budget", data);
     return response.data;

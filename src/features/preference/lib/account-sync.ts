@@ -16,12 +16,11 @@ export interface PreferenceSyncOptions {
   cancelled: () => boolean;
 }
 
-// cambiar de idioma vuelve a montar el layout: sin esto cada cambio repetiría el GET
-const synced = new Set<string>();
+const UNAUTHORIZED_STATUS = 401;
+
+const syncedUserIds = new Set<string>();
 
 export async function syncPreferences({ userId, currentLocale, switchLanguage, cancelled }: PreferenceSyncOptions) {
-  // un cambio recién confirmado ya no está pendiente, pero la
-  // respuesta del servidor pudo salir antes: lo leído al empezar también cuenta
   const pendingBefore = readPendingPreferences(userId);
   const currencyBefore = getDeviceCurrency(userId);
   const localeBefore = currentLocale();
@@ -31,7 +30,6 @@ export async function syncPreferences({ userId, currentLocale, switchLanguage, c
   const locale = currentLocale();
   const currencyNow = getDeviceCurrency(userId);
   const pending = { ...pendingBefore, ...readPendingPreferences(userId) };
-  // lo elegido mientras se esperaba al servidor manda sobre su respuesta
   if (currencyNow !== null && currencyNow !== currencyBefore) pending.currency = currencyNow;
   if (locale !== localeBefore) pending.language = locale;
 
@@ -41,7 +39,7 @@ export async function syncPreferences({ userId, currentLocale, switchLanguage, c
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
   };
   const { language, currency, update } = planPreferenceSync(server, device, pending);
-  synced.add(userId);
+  syncedUserIds.add(userId);
   setDeviceCurrency(userId, currency);
   if (language !== locale) switchLanguage(language);
   if (update) await savePreferences(userId, update);
@@ -53,14 +51,13 @@ export async function flushPendingPreferences(userId: string) {
 }
 
 export function runPreferenceSync(options: PreferenceSyncOptions) {
-  const work = synced.has(options.userId) ? flushPendingPreferences(options.userId) : syncPreferences(options);
+  const work = syncedUserIds.has(options.userId) ? flushPendingPreferences(options.userId) : syncPreferences(options);
   return work.catch(reportPreferenceSyncError);
 }
 
-// error propio y no el de Axios, que lleva el contenido de la petición
 function reportPreferenceSyncError(error: unknown) {
   const status = getApiErrorStatus(error);
-  if (isNetworkError(error) || status === 401) return;
+  if (isNetworkError(error) || status === UNAUTHORIZED_STATUS) return;
   const failure = new Error(`Preference sync failed (${status ?? "none"})`);
   failure.name = "PreferenceSyncError";
   reportClientError(failure);

@@ -1,37 +1,42 @@
 import { z } from "zod";
 
-/*
- * Contrato de la API de movimientos (lo que valida el servidor). El `id`
- * lo genera el cliente: así se puede crear sin conexión y reintentar sin
- * duplicar (el POST es idempotente por id).
- */
+const ISO_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+const MIN_YEAR = 1900;
+const MAX_YEAR = 2100;
+const MAX_TEXT_LENGTH = 200;
+const MAX_AMOUNT = 9_999_999_999;
+const MAX_CATEGORY_ID_LENGTH = 64;
+const MAX_SUMMARY_IDS = 100;
+const MAX_SEARCH_LENGTH = 60;
+const MAX_CURSOR_LENGTH = 200;
+const MAX_PAGE_SIZE = 500;
+const DEFAULT_PAGE_SIZE = 200;
 
-/** `YYYY-MM-DD` que exista en el calendario: `2026-02-30` o `2026-13-45` no pasan. */
+function isCalendarDate(value: string) {
+  const date = new Date(`${value}T00:00:00.000Z`);
+  if (Number.isNaN(date.getTime())) return false;
+  const year = date.getUTCFullYear();
+  return date.toISOString().startsWith(value) && year >= MIN_YEAR && year <= MAX_YEAR;
+}
+
 export const isoDate = z
   .string()
-  .regex(/^\d{4}-\d{2}-\d{2}$/, "Formato YYYY-MM-DD")
-  .refine((value) => {
-    const date = new Date(`${value}T00:00:00.000Z`);
-    // un mes 13 da Invalid Date; un 30 de febrero, otra fecha (1 de marzo)
-    if (Number.isNaN(date.getTime())) return false;
-    const year = date.getUTCFullYear();
-    return date.toISOString().startsWith(value) && year >= 1900 && year <= 2100;
-  }, "Fecha inexistente");
+  .regex(ISO_DATE_PATTERN, "Formato YYYY-MM-DD")
+  .refine(isCalendarDate, "Fecha inexistente");
 
 const fields = {
-  description: z.string().trim().max(200),
-  amount: z.number().positive().max(9_999_999_999),
+  description: z.string().trim().max(MAX_TEXT_LENGTH),
+  amount: z.number().positive().max(MAX_AMOUNT),
   type: z.enum(["expense", "income"]),
-  categoryId: z.string().min(1).max(64),
+  categoryId: z.string().min(1).max(MAX_CATEGORY_ID_LENGTH),
   transactionDate: isoDate,
-  reference: z.string().max(200).nullable().optional(),
+  reference: z.string().max(MAX_TEXT_LENGTH).nullable().optional(),
 };
 
 export const createTransactionSchema = z.object({ id: z.uuid(), ...fields });
 
 export const updateTransactionSchema = z.object(fields).partial();
 
-/** Periodo `[from, to)` en fechas locales del cliente; sin ellos, todo el historial. */
 const range = {
   from: isoDate.optional(),
   to: isoDate.optional(),
@@ -39,19 +44,18 @@ const range = {
 
 export const transactionSummaryQuerySchema = z.object({
   ...range,
-  /** Ids con cambios aún en cola: el servidor dice cuáles ya tiene. */
   ids: z
     .string()
     .optional()
     .transform((value) => (value ? value.split(",") : []))
-    .pipe(z.array(z.uuid()).max(100)),
+    .pipe(z.array(z.uuid()).max(MAX_SUMMARY_IDS)),
 });
 
 export const transactionListQuerySchema = z.object({
   ...range,
   type: fields.type.optional(),
   categoryId: fields.categoryId.optional(),
-  q: z.string().trim().max(60).optional(),
-  cursor: z.string().max(200).optional(),
-  limit: z.coerce.number().int().min(1).max(500).default(200),
+  q: z.string().trim().max(MAX_SEARCH_LENGTH).optional(),
+  cursor: z.string().max(MAX_CURSOR_LENGTH).optional(),
+  limit: z.coerce.number().int().min(1).max(MAX_PAGE_SIZE).default(DEFAULT_PAGE_SIZE),
 });

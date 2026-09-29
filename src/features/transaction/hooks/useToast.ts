@@ -2,25 +2,26 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-export function useToast(duration = 1900) {
+const DEFAULT_DURATION_MS = 1900;
+
+export function useToast(duration = DEFAULT_DURATION_MS) {
   const [message, setMessage] = useState<string | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearTimer = useCallback(() => {
+    if (timer.current) clearTimeout(timer.current);
+  }, []);
 
   const show = useCallback(
     (next: string) => {
       setMessage(next);
-      if (timer.current) clearTimeout(timer.current);
+      clearTimer();
       timer.current = setTimeout(() => setMessage(null), duration);
     },
-    [duration],
+    [duration, clearTimer],
   );
 
-  useEffect(
-    () => () => {
-      if (timer.current) clearTimeout(timer.current);
-    },
-    [],
-  );
+  useEffect(() => clearTimer, [clearTimer]);
 
   return { message, show };
 }

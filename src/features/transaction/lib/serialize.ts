@@ -1,9 +1,7 @@
 import type { TTransaction, TransactionType } from "../types";
 
-/**
- * Fila tal y como sale de Prisma. Se describe de forma estructural para no
- * acoplar esta función al cliente generado.
- */
+const ISO_DATE_LENGTH = "YYYY-MM-DD".length;
+
 interface TransactionRow {
   id: string;
   description: string | null;
@@ -14,11 +12,10 @@ interface TransactionRow {
   reference: string | null;
 }
 
-/**
- * Traduce la fila de base de datos al contrato que consume la UI:
- * `Decimal` → `number` y `DateTime @db.Date` → `YYYY-MM-DD`.
- * Sin esto el JSON llevaría el monto como string y la fecha con hora.
- */
+export function toUTCISODate(date: Date) {
+  return date.toISOString().slice(0, ISO_DATE_LENGTH);
+}
+
 export function serializeTransaction(row: TransactionRow): TTransaction {
   return {
     id: row.id,
@@ -26,7 +23,7 @@ export function serializeTransaction(row: TransactionRow): TTransaction {
     amount: Number(row.amount),
     type: row.type as TransactionType,
     categoryId: row.categoryId,
-    transactionDate: row.transactionDate.toISOString().slice(0, 10),
+    transactionDate: toUTCISODate(row.transactionDate),
     reference: row.reference,
   };
 }

@@ -1,12 +1,5 @@
 import type { CategoryLike, TransactionType } from "../types";
 
-/*
- * Lectura instantánea del asunto mientras se escribe, sin red: "sueldo" →
- * ingreso; "taxi" → la categoría cuyo nombre aparezca. El monto nunca se
- * toma del texto: va sólo en su campo. La IA llega después y afina lo que
- * esto no alcanza (sinónimos, contexto).
- */
-
 export interface DescriptionHints {
   type: TransactionType | null;
   categoryId: string | null;
@@ -30,7 +23,6 @@ const INCOME_WORDS = [
   "aguinaldo",
   "gratificacion",
   "freelance",
-  // inglés
   "salary",
   "paycheck",
   "payroll",
@@ -41,12 +33,19 @@ const INCOME_WORDS = [
   "got paid",
 ];
 
+const COMBINING_MARKS = /[̀-ͯ]/g;
+const WORD_SEPARATOR = /[^a-z0-9ñ]+/;
+const MIN_WORD_LENGTH = 3;
+const STEM_LENGTH = 4;
+const EXACT_MATCH_SCORE = 3;
+const PARTIAL_MATCH_SCORE = 2;
+
+export function fold(text: string) {
+  return text.toLowerCase().normalize("NFD").replace(COMBINING_MARKS, "");
+}
+
 export function normalize(text: string) {
-  return text
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .trim();
+  return fold(text).trim();
 }
 
 export function inferType(text: string): TransactionType | null {
@@ -54,27 +53,33 @@ export function inferType(text: string): TransactionType | null {
   return INCOME_WORDS.some((word) => clean.includes(word)) ? "income" : null;
 }
 
-/** Categoría cuyo nombre (o su raíz) aparece en el texto. */
+function significantWords(normalized: string) {
+  return normalized.split(WORD_SEPARATOR).filter((word) => word.length >= MIN_WORD_LENGTH);
+}
+
+function wordScore(word: string, name: string, nameWords: string[]) {
+  if (name === word) return EXACT_MATCH_SCORE;
+  const isPartial = nameWords.some(
+    (nameWord) => nameWord.startsWith(word) || word.startsWith(nameWord.slice(0, STEM_LENGTH)),
+  );
+  return isPartial ? PARTIAL_MATCH_SCORE : 0;
+}
+
+function categoryScore(words: string[], category: CategoryLike) {
+  const name = normalize(category.name);
+  const nameWords = significantWords(name);
+  return words.reduce((best, word) => Math.max(best, wordScore(word, name, nameWords)), 0);
+}
+
 export function matchCategory(text: string, categories: CategoryLike[]): string | null {
-  const words = normalize(text).split(/[^a-z0-9ñ]+/).filter((w) => w.length >= 3);
+  const words = significantWords(normalize(text));
   if (!words.length) return null;
 
   let best: { id: string; score: number } | null = null;
-
   for (const category of categories) {
-    const name = normalize(category.name);
-    const nameWords = name.split(/[^a-z0-9ñ]+/).filter((w) => w.length >= 3);
-    let score = 0;
-
-    for (const word of words) {
-      if (name === word) score = Math.max(score, 3);
-      else if (nameWords.some((n) => n.startsWith(word) || word.startsWith(n.slice(0, 4))))
-        score = Math.max(score, 2);
-    }
-
-    if (score > 0 && (!best || score > best.score)) best = { id: category.id, score };
+    const score = categoryScore(words, category);
+    if (score > (best?.score ?? 0)) best = { id: category.id, score };
   }
-
   return best?.id ?? null;
 }
 

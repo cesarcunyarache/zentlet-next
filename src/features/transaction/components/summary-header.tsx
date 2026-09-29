@@ -11,12 +11,19 @@ import type { Period, TransactionType } from "../types";
 
 const PERIODS: Period[] = ["month", "previous", "all"];
 
+type SummaryTone = "neutral" | "expense" | "income";
+
+const TONE_CLASS: Record<SummaryTone, string> = {
+  expense: "text-app-expense",
+  income: "text-app-income",
+  neutral: "text-app-fg",
+};
+
 interface SummaryHeaderProps {
   currency: string;
-  /** Cifra grande, con signo ya aplicado. */
   headline: number;
   headlineLabel: string;
-  tone: "neutral" | "expense" | "income";
+  tone: SummaryTone;
   expenseTotal: number;
   incomeTotal: number;
   period: Period;
@@ -39,6 +46,10 @@ export function SummaryHeader({
 }: SummaryHeaderProps) {
   const t = useTranslations("transactions.summary");
 
+  function toggleKind(next: TransactionType) {
+    onKindChange(kind === next ? null : next);
+  }
+
   return (
     <section>
       <p className="text-app-muted m-0 text-sm">{headlineLabel}</p>
@@ -46,22 +57,12 @@ export function SummaryHeader({
       <h1
         className={cn(
           "font-display m-0 mt-1 flex items-baseline gap-1.5 leading-none font-bold tracking-[-0.045em] tabular-nums transition-colors duration-300",
-          tone === "expense" && "text-app-expense",
-          tone === "income" && "text-app-income",
-          tone === "neutral" && "text-app-fg",
+          TONE_CLASS[tone],
         )}
       >
-        {headline < 0 && (
-          <span className="text-app-muted text-[28px] font-semibold">−</span>
-        )}
-        <AnimatedNumber
-          value={Math.abs(headline)}
-          format={formatNumber}
-          className="text-[clamp(52px,15vw,72px)]"
-        />
-        <span className="text-app-muted text-[22px] font-semibold tracking-normal">
-          {currency}
-        </span>
+        {headline < 0 ? <span className="text-app-muted text-[28px] font-semibold">−</span> : null}
+        <AnimatedNumber value={Math.abs(headline)} format={formatNumber} className="text-[clamp(52px,15vw,72px)]" />
+        <span className="text-app-muted text-[22px] font-semibold tracking-normal">{currency}</span>
       </h1>
 
       <div
@@ -69,18 +70,10 @@ export function SummaryHeader({
         aria-label={t("filterByType")}
         className="bg-app-fill mt-4 inline-flex items-center gap-0.5 rounded-full p-[3px]"
       >
-        <KindChip
-          kind="expense"
-          active={kind === "expense"}
-          onClick={() => onKindChange(kind === "expense" ? null : "expense")}
-        >
+        <KindChip kind="expense" isActive={kind === "expense"} onClick={() => toggleKind("expense")}>
           −<AnimatedNumber value={expenseTotal} format={formatNumber} />
         </KindChip>
-        <KindChip
-          kind="income"
-          active={kind === "income"}
-          onClick={() => onKindChange(kind === "income" ? null : "income")}
-        >
+        <KindChip kind="income" isActive={kind === "income"} onClick={() => toggleKind("income")}>
           +<AnimatedNumber value={incomeTotal} format={formatNumber} />
         </KindChip>
       </div>
@@ -98,39 +91,33 @@ export function SummaryHeader({
   );
 }
 
-function KindChip({
-  kind,
-  active,
-  onClick,
-  children,
-}: {
+interface KindChipProps {
   kind: TransactionType;
-  active: boolean;
+  isActive: boolean;
   onClick: () => void;
   children: React.ReactNode;
-}) {
+}
+
+function KindChip({ kind, isActive, onClick, children }: KindChipProps) {
   return (
     <motion.button
       type="button"
-      aria-pressed={active}
+      aria-pressed={isActive}
       onClick={onClick}
       whileTap={{ scale: 0.95 }}
       transition={SPRING_PRESS}
       className={cn(
         "relative min-h-[38px] rounded-full px-3.5 text-sm font-semibold tabular-nums transition-colors",
-        active ? "text-app-surface" : "text-app-muted hover:text-app-fg bg-transparent",
+        isActive ? "text-app-surface" : "text-app-muted hover:text-app-fg bg-transparent",
       )}
     >
-      {active && (
+      {isActive ? (
         <motion.span
           layoutId="summary-kind-pill"
           transition={SPRING_LAYOUT}
-          className={cn(
-            "absolute inset-0 rounded-full",
-            kind === "expense" ? "bg-app-expense" : "bg-app-income",
-          )}
+          className={cn("absolute inset-0 rounded-full", kind === "expense" ? "bg-app-expense" : "bg-app-income")}
         />
-      )}
+      ) : null}
       <span className="relative">{children}</span>
     </motion.button>
   );

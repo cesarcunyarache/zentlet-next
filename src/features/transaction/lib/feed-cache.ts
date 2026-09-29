@@ -7,19 +7,12 @@ import type {
   TransactionSummary,
 } from "../types";
 
-/*
- * Cambios locales sobre lo que ya está en cache (páginas del feed y
- * resúmenes), para que una alta o un borrado se vean al instante —también
- * sin conexión— sin volver a pedir todo al servidor.
- */
-
 export type FeedData = InfiniteData<TransactionPage, string | null>;
 
 export function inRange(date: string, { from, to }: DateRange) {
   return (!from || date >= from) && (!to || date < to);
 }
 
-/** La búsqueda por nombre de categoría sólo la resuelve el servidor; aquí basta la descripción. */
 export function matchesFilters(tx: TTransaction, filters: TransactionFilters) {
   if (!inRange(tx.transactionDate, filters)) return false;
   if (filters.type && tx.type !== filters.type) return false;
@@ -28,12 +21,12 @@ export function matchesFilters(tx: TTransaction, filters: TransactionFilters) {
   return true;
 }
 
-/**
- * Inserta en su sitio por fecha (lo recién creado va primero dentro de su
- * día). Si cae más allá de lo cargado y quedan páginas, llegará al paginar.
- */
+function withoutItem(page: TransactionPage, id: string): TransactionPage {
+  return { ...page, items: page.items.filter((item) => item.id !== id) };
+}
+
 export function insertIntoFeed(data: FeedData, tx: TTransaction): FeedData {
-  const pages = data.pages.map((page) => ({ ...page, items: page.items.filter((item) => item.id !== tx.id) }));
+  const pages = data.pages.map((page) => withoutItem(page, tx.id));
 
   for (const page of pages) {
     const index = page.items.findIndex((item) => item.transactionDate <= tx.transactionDate);
@@ -49,21 +42,10 @@ export function insertIntoFeed(data: FeedData, tx: TTransaction): FeedData {
 }
 
 export function removeFromFeed(data: FeedData, id: string): FeedData {
-  return {
-    ...data,
-    pages: data.pages.map((page) => ({ ...page, items: page.items.filter((item) => item.id !== id) })),
-  };
+  return { ...data, pages: data.pages.map((page) => withoutItem(page, id)) };
 }
 
-/**
- * Aplica una edición: sale de la lista si deja de cumplir el filtro, entra
- * si ahora lo cumple (p. ej. cambió a la categoría filtrada) y se recoloca
- * si cambió de fecha.
- */
-export function patchInFeed(data: FeedData, updated: TTransaction, filters: TransactionFilters): FeedData {
-  if (!matchesFilters(updated, filters)) return removeFromFeed(data, updated.id);
-  const current = findInFeed(data, updated.id);
-  if (current?.transactionDate !== updated.transactionDate) return insertIntoFeed(data, updated);
+function replaceInFeed(data: FeedData, updated: TTransaction): FeedData {
   return {
     ...data,
     pages: data.pages.map((page) => ({
@@ -71,6 +53,13 @@ export function patchInFeed(data: FeedData, updated: TTransaction, filters: Tran
       items: page.items.map((item) => (item.id === updated.id ? updated : item)),
     })),
   };
+}
+
+export function patchInFeed(data: FeedData, updated: TTransaction, filters: TransactionFilters): FeedData {
+  if (!matchesFilters(updated, filters)) return removeFromFeed(data, updated.id);
+  const current = findInFeed(data, updated.id);
+  if (current?.transactionDate !== updated.transactionDate) return insertIntoFeed(data, updated);
+  return replaceInFeed(data, updated);
 }
 
 export function findInFeed(data: FeedData | undefined, id: string) {
@@ -81,7 +70,6 @@ export function findInFeed(data: FeedData | undefined, id: string) {
   return undefined;
 }
 
-/** Suma (`sign = 1`) o resta (`-1`) un movimiento de un resumen. */
 export function applyToSummary(
   summary: TransactionSummary,
   tx: TTransaction,
@@ -89,17 +77,18 @@ export function applyToSummary(
 ): TransactionSummary {
   const amount = tx.amount * sign;
   const previous = summary.byCategory[tx.categoryId] ?? { expense: 0, income: 0 };
-  const isExpense = tx.type === "expense";
+  const expense = tx.type === "expense" ? amount : 0;
+  const income = tx.type === "expense" ? 0 : amount;
 
   return {
     count: summary.count + sign,
-    expenseTotal: summary.expenseTotal + (isExpense ? amount : 0),
-    incomeTotal: summary.incomeTotal + (isExpense ? 0 : amount),
+    expenseTotal: summary.expenseTotal + expense,
+    incomeTotal: summary.incomeTotal + income,
     byCategory: {
       ...summary.byCategory,
       [tx.categoryId]: {
-        expense: previous.expense + (isExpense ? amount : 0),
-        income: previous.income + (isExpense ? 0 : amount),
+        expense: previous.expense + expense,
+        income: previous.income + income,
       },
     },
   };

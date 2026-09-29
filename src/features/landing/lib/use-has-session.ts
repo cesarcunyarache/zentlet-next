@@ -2,17 +2,14 @@
 
 import { useEffect, useState } from "react";
 
-/**
- * `null` mientras se comprueba. Una petición directa en lugar del cliente
- * de Better Auth: la landing no carga ese bundle sólo para esto y sigue
- * siendo estática.
- */
+const SESSION_ENDPOINT = "/api/auth/get-session";
+
 export function useHasSession() {
   const [hasSession, setHasSession] = useState<boolean | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
-    fetch("/api/auth/get-session", { signal: controller.signal, cache: "no-store" })
+    fetch(SESSION_ENDPOINT, { signal: controller.signal, cache: "no-store" })
       .then((response) => (response.ok ? response.json() : null))
       .then((body) => setHasSession(Boolean(body?.session)))
       .catch(() => {

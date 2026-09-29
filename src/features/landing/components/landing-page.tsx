@@ -1,4 +1,5 @@
 import type { LandingContent } from "../content";
+import { serializeJsonLd } from "../lib/json-ld";
 import { buildLandingJsonLd } from "../lib/seo";
 import { FaqSection } from "./faq-section";
 import { FeaturesSection } from "./features/features-section";
@@ -13,13 +14,9 @@ import { SiteHeader } from "./site-header";
 import { StatsSection } from "./stats-section";
 import { TestimonialsSection } from "./testimonials-section";
 
-/**
- * Landing completa. Recibe el contenido ya resuelto por idioma; ningún
- * componente de aquí abajo tiene texto propio.
- */
 export function LandingPage({ content }: { content: LandingContent }) {
   const { locale, common, showcase, movements } = content;
-  const jsonLd = JSON.stringify(buildLandingJsonLd(content)).replace(/</g, "\\u003c");
+  const jsonLd = serializeJsonLd(buildLandingJsonLd(content));
 
   return (
     <LandingMotion>

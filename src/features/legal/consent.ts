@@ -1,18 +1,13 @@
 import { z } from "zod";
 import prisma from "@/lib/prisma";
-import { LEGAL_VERSION } from "./config";
+import { LEGAL_DOCUMENTS, LEGAL_VERSION } from "./config";
 
-/** Textos que se aceptan al registrarse. Se guardan como texto: añadir uno no requiere migración. */
-export const LEGAL_DOCUMENTS = ["terms", "privacy"] as const;
+export { LEGAL_DOCUMENTS };
 
 export const legalDocumentSchema = z.enum(LEGAL_DOCUMENTS);
 
 export type LegalDocument = z.infer<typeof legalDocumentSchema>;
 
-/**
- * Prueba del consentimiento: una fila por texto y versión, nunca se
- * sobrescribe. Aceptar de nuevo la misma versión no duplica filas.
- */
 export async function recordLegalConsent(
   userId: string,
   documents: readonly LegalDocument[] = LEGAL_DOCUMENTS,
@@ -25,10 +20,6 @@ export async function recordLegalConsent(
   });
 }
 
-/**
- * Una cuenta no puede existir sin la prueba de su consentimiento: si no se
- * pudo guardar, se deshace el alta y el registro falla.
- */
 export async function recordSignUpConsent(userId: string) {
   try {
     await recordLegalConsent(userId);

@@ -1,84 +1,29 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
 import { AlertDialog, Button, Input, Label, TextField } from "@heroui/react";
 import { UserX } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { authClient } from "@/lib/auth-client";
+import { useDeleteAccount } from "../hooks/useDeleteAccount";
 
 interface DeleteAccountDialogProps {
   isOpen: boolean;
   transactionCount: number;
   onCancel: () => void;
-  /** La cuenta ya no existe en el servidor: queda limpiar el dispositivo y salir. */
   onDeleted: () => Promise<void>;
 }
 
-type ErrorKey = "invalidPassword" | "sessionExpired" | "fallback";
+const PASSWORD_INPUT_ID = "delete-account-password";
 
-const ERROR_KEYS: Record<string, ErrorKey> = {
-  INVALID_PASSWORD: "invalidPassword",
-  SESSION_EXPIRED: "sessionExpired",
-};
-
-/**
- * Confirmación del borrado de la cuenta. Quien tiene contraseña la escribe
- * de nuevo; quien entra sólo con Google o GitHub necesita una sesión
- * reciente (si no, se le pide volver a entrar).
- */
 export function DeleteAccountDialog({ isOpen, transactionCount, onCancel, onDeleted }: DeleteAccountDialogProps) {
   const t = useTranslations();
-  const [hasPassword, setHasPassword] = useState<boolean | null>(null);
-  const [error, setError] = useState<ErrorKey | null>(null);
-  const [deleting, setDeleting] = useState(false);
-
-  useEffect(() => {
-    if (!isOpen) return;
-    let cancelled = false;
-    authClient
-      .listAccounts()
-      .then(({ data, error: listError }) => {
-        if (cancelled) return;
-        if (listError) return setError("fallback");
-        setHasPassword(Boolean(data?.some((account) => account.providerId === "credential")));
-      })
-      .catch(() => !cancelled && setError("fallback"));
-    return () => {
-      cancelled = true;
-    };
-  }, [isOpen]);
-
-  function cancel() {
-    setError(null);
-    onCancel();
-  }
-
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const password = hasPassword ? String(new FormData(event.currentTarget).get("password")) : undefined;
-    setDeleting(true);
-    setError(null);
-
-    try {
-      const { error: deleteError } = await authClient.deleteUser({ password });
-      if (deleteError) {
-        setError(ERROR_KEYS[deleteError.code ?? ""] ?? "fallback");
-        setDeleting(false);
-        return;
-      }
-      await onDeleted();
-    } catch {
-      setError("fallback");
-      setDeleting(false);
-    }
-  }
+  const { hasPassword, error, isDeleting, cancel, handleSubmit } = useDeleteAccount({ isOpen, onCancel, onDeleted });
 
   return (
     <AlertDialog.Backdrop
       isOpen={isOpen}
-      onOpenChange={(open) => !open && !deleting && cancel()}
-      isDismissable={!deleting}
-      isKeyboardDismissDisabled={deleting}
+      onOpenChange={(open) => !open && !isDeleting && cancel()}
+      isDismissable={!isDeleting}
+      isKeyboardDismissDisabled={isDeleting}
       className="bg-[var(--app-scrim)]"
     >
       <AlertDialog.Container placement="center" size="sm">
@@ -102,9 +47,9 @@ export function DeleteAccountDialog({ isOpen, transactionCount, onCancel, onDele
 
               {hasPassword && (
                 <TextField className="text-left">
-                  <Label htmlFor="delete-account-password">{t("settings.deleteAccount.password")}</Label>
+                  <Label htmlFor={PASSWORD_INPUT_ID}>{t("settings.deleteAccount.password")}</Label>
                   <Input
-                    id="delete-account-password"
+                    id={PASSWORD_INPUT_ID}
                     name="password"
                     type="password"
                     autoComplete="current-password"
@@ -124,18 +69,18 @@ export function DeleteAccountDialog({ isOpen, transactionCount, onCancel, onDele
               <Button
                 type="button"
                 onPress={cancel}
-                isDisabled={deleting}
+                isDisabled={isDeleting}
                 className="bg-app-fill text-app-fg hover:bg-app-fill-strong min-h-12 flex-1 rounded-2xl font-semibold"
               >
                 {t("common.actions.cancel")}
               </Button>
               <Button
                 type="submit"
-                isPending={deleting}
+                isPending={isDeleting}
                 isDisabled={hasPassword === null}
                 className="bg-app-expense text-app-surface min-h-12 flex-1 rounded-2xl font-semibold"
               >
-                {t(deleting ? "settings.deleteAccount.pending" : "settings.deleteAccount.confirm")}
+                {t(isDeleting ? "settings.deleteAccount.pending" : "settings.deleteAccount.confirm")}
               </Button>
             </AlertDialog.Footer>
           </form>

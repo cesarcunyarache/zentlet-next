@@ -15,11 +15,6 @@ export interface BudgetSavePlan {
   limit?: { budgetId: string; effectiveFrom: string; amount: number };
 }
 
-/**
- * Cambiar sólo el monto conserva el historial de topes. Cambiar el periodo
- * o la recurrencia (o rehacer uno de una sola vez ya vencido) crea un
- * presupuesto nuevo: sus periodos pasados no se pueden reinterpretar.
- */
 export function planBudgetSave(existing: TBudget | undefined, input: BudgetInput, date: string): BudgetSavePlan {
   const rule = BUDGET_PERIODS[input.period];
   const current = periodContaining(rule, date);

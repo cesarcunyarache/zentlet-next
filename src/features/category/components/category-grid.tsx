@@ -5,13 +5,10 @@ import { Plus } from "lucide-react";
 import { cn } from "@heroui/react";
 import { useTranslations } from "next-intl";
 import { SPRING_LAYOUT, SPRING_PRESS } from "@/lib/ease";
+import { CATEGORY_FALLBACK_ICON, CATEGORY_FALLBACK_TINT } from "../constants";
+import type { CategoryBase } from "../types";
 
-export interface GridCategory {
-  id: string;
-  name: string;
-  icon?: string | null;
-  color?: string | null;
-}
+export type GridCategory = CategoryBase;
 
 interface CategoryGridProps {
   categories: GridCategory[];
@@ -22,7 +19,8 @@ interface CategoryGridProps {
   className?: string;
 }
 
-const FALLBACK_TINT = "var(--app-fill-strong)";
+const MAX_STAGGERED_TILES = 12;
+const STAGGER_DELAY_S = 0.035;
 
 export function CategoryGrid({
   categories,
@@ -41,7 +39,7 @@ export function CategoryGrid({
       : {
           initial: { opacity: 0, y: 12, scale: 0.94 },
           animate: { opacity: 1, y: 0, scale: 1 },
-          transition: { ...SPRING_LAYOUT, delay: Math.min(index, 12) * 0.035 },
+          transition: { ...SPRING_LAYOUT, delay: Math.min(index, MAX_STAGGERED_TILES) * STAGGER_DELAY_S },
         };
 
   return (
@@ -49,7 +47,7 @@ export function CategoryGrid({
       className={cn("grid grid-cols-3 gap-x-4 gap-y-5 sm:gap-x-5", className)}
     >
       {categories.map((category, index) => {
-        const selected = selectedId === category.id;
+        const isSelected = selectedId === category.id;
         const detail = caption?.(category);
         const Tile = onSelect ? motion.button : motion.div;
 
@@ -64,15 +62,15 @@ export function CategoryGrid({
                 ? { type: "button" as const, onClick: () => onSelect(category) }
                 : {})}
               aria-label={onSelect ? category.name : undefined}
-              aria-pressed={onSelect ? selected : undefined}
+              aria-pressed={onSelect ? isSelected : undefined}
               whileHover={reduceMotion || !onSelect ? undefined : { y: -3 }}
               whileTap={
                 onSelect ? { scale: 0.93, transition: SPRING_PRESS } : undefined
               }
-              style={{ backgroundColor: category.color || FALLBACK_TINT }}
+              style={{ backgroundColor: category.color || CATEGORY_FALLBACK_TINT }}
               className={cn(
                 "group grid aspect-square w-full place-items-center rounded-[26px] transition-shadow",
-                selected &&
+                isSelected &&
                   "ring-app-fg ring-offset-app-bg ring-2 ring-offset-2",
               )}
             >
@@ -80,7 +78,7 @@ export function CategoryGrid({
                 aria-hidden
                 className="text-[40px] leading-none transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6 sm:text-5xl"
               >
-                {category.icon || "📦"}
+                {category.icon || CATEGORY_FALLBACK_ICON}
               </span>
             </Tile>
             <span className="flex min-w-0 flex-col items-center">

@@ -13,6 +13,7 @@ export const BUDGET_PERIODS = {
 export const BUDGET_PERIOD_OPTIONS = Object.keys(BUDGET_PERIODS) as BudgetPeriod[];
 
 const HALF_MONTH_START = 16;
+const DAYS_PER_WEEK = 7;
 
 export function budgetPeriodOf({ periodUnit, periodCount }: BudgetRule): BudgetPeriod | null {
   const match = BUDGET_PERIOD_OPTIONS.find(
@@ -24,14 +25,13 @@ export function budgetPeriodOf({ periodUnit, periodCount }: BudgetRule): BudgetP
 const isoDay = (year: number, monthIndex: number, day: number) =>
   new Date(Date.UTC(year, monthIndex, day)).toISOString().slice(0, 10);
 
-/** Periodo del calendario que contiene `date`: semanas de lunes a domingo, quincenas del 1 y del 16. */
 export function periodContaining({ periodUnit, periodCount }: BudgetRule, date: string): PeriodRange {
   const [year, month, day] = date.split("-").map(Number);
   const monthIndex = month - 1;
 
   if (periodUnit === "week") {
-    const sinceMonday = (new Date(Date.UTC(year, monthIndex, day)).getUTCDay() + 6) % 7;
-    return { from: isoDay(year, monthIndex, day - sinceMonday), to: isoDay(year, monthIndex, day - sinceMonday + 7 * periodCount) };
+    const monday = day - (new Date(Date.UTC(year, monthIndex, day)).getUTCDay() + DAYS_PER_WEEK - 1) % DAYS_PER_WEEK;
+    return { from: isoDay(year, monthIndex, monday), to: isoDay(year, monthIndex, monday + DAYS_PER_WEEK * periodCount) };
   }
   if (periodUnit === "half_month") {
     return day < HALF_MONTH_START
@@ -49,7 +49,6 @@ export function isPeriodStart(rule: BudgetRule, date: string) {
   return periodContaining(rule, date).from === date;
 }
 
-/** Periodo en que el presupuesto se aplica a `date`, o `null` si no está vigente. */
 export function activePeriod(budget: TBudget, date: string): PeriodRange | null {
   if (date < budget.startDate) return null;
   const period = periodContaining(budget, date);
@@ -57,11 +56,6 @@ export function activePeriod(budget: TBudget, date: string): PeriodRange | null 
   return period;
 }
 
-/**
- * Periodo en que se mide el presupuesto en la vista del panel. En el mes
- * actual, su propio periodo actual (esta semana, este trimestre…); en un
- * mes pasado, sólo si su periodo es ese mes.
- */
 export function budgetRangeForView(budget: TBudget, view: DateRange, date: string): PeriodRange | null {
   if (!view.from || !view.to) return null;
   if (view.from <= date && date < view.to) return activePeriod(budget, date);
@@ -73,7 +67,6 @@ export function todayISO() {
   return toISODate(today());
 }
 
-/** Tope del periodo que empieza en `start`, o `null` si el presupuesto aún no existía. */
 export function limitAt(budget: Pick<TBudget, "startDate" | "limits">, start: string): number | null {
   if (start < budget.startDate) return null;
   const current = budget.limits

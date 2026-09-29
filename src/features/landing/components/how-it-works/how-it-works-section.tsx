@@ -1,7 +1,12 @@
 import { StickyScroll } from "@/core/components/ui/sticky-scroll-reveal";
-import type { LandingContent } from "../../content";
+import type { LandingContent, SectionId } from "../../content";
+import { sectionTitleId } from "../../lib/format";
 import { SectionHeading } from "../shared/section-heading";
-import { MonthPreview, SignUpPreview, TypePreview } from "./step-previews";
+import { MonthPreview } from "./month-preview";
+import { SignUpPreview } from "./sign-up-preview";
+import { TypePreview } from "./type-preview";
+
+const SECTION: SectionId = "como-funciona";
 
 interface HowItWorksSectionProps {
   steps: LandingContent["steps"];
@@ -12,7 +17,7 @@ interface HowItWorksSectionProps {
 }
 
 export function HowItWorksSection({ steps, phrases, dashboard, common, locale }: HowItWorksSectionProps) {
-  // una vista previa por paso, en el mismo orden que steps.items
+  const titleId = sectionTitleId(SECTION);
   const previews = [
     <SignUpPreview key="signup" preview={steps.preview} />,
     <TypePreview key="type" phrases={phrases} savedLabel={steps.preview.savedLabel} />,
@@ -20,12 +25,8 @@ export function HowItWorksSection({ steps, phrases, dashboard, common, locale }:
   ];
 
   return (
-    <section
-      id="como-funciona"
-      aria-labelledby="como-funciona-title"
-      className="mx-auto max-w-6xl scroll-mt-24 px-4 pt-24 sm:px-6 md:pt-32"
-    >
-      <SectionHeading id="como-funciona-title" eyebrow={steps.eyebrow} title={steps.title} />
+    <section id={SECTION} aria-labelledby={titleId} className="mx-auto max-w-6xl scroll-mt-24 px-4 pt-24 sm:px-6 md:pt-32">
+      <SectionHeading id={titleId} eyebrow={steps.eyebrow} title={steps.title} />
       <StickyScroll
         className="mt-8"
         content={steps.items.map((item, index) => ({ ...item, content: previews[index] }))}

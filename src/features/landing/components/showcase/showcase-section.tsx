@@ -1,7 +1,10 @@
 import { ContainerScroll } from "@/core/components/ui/container-scroll-animation";
-import type { LandingContent } from "../../content";
+import type { LandingContent, SectionId } from "../../content";
+import { sectionTitleId } from "../../lib/format";
 import { SectionHeading } from "../shared/section-heading";
 import { AppDashboardMock } from "./app-dashboard-mock";
+
+const SECTION: SectionId = "producto";
 
 interface ShowcaseSectionProps {
   showcase: LandingContent["showcase"];
@@ -10,14 +13,15 @@ interface ShowcaseSectionProps {
   locale: string;
 }
 
-/** La app completa, que se endereza mientras bajas. */
 export function ShowcaseSection({ showcase, movements, common, locale }: ShowcaseSectionProps) {
+  const titleId = sectionTitleId(SECTION);
+
   return (
-    <section id="producto" aria-labelledby="producto-title" className="relative -mt-24 overflow-hidden md:-mt-40">
+    <section id={SECTION} aria-labelledby={titleId} className="relative -mt-24 overflow-hidden md:-mt-40">
       <ContainerScroll
         titleComponent={
           <SectionHeading
-            id="producto-title"
+            id={titleId}
             eyebrow={showcase.eyebrow}
             title={showcase.title}
             subtitle={showcase.subtitle}

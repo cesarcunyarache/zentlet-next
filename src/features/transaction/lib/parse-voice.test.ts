@@ -33,6 +33,12 @@ describe("parseVoiceEntry · monto", () => {
     expect(parseVoiceEntry(transcript, categories).amount).toBe(amount);
   });
 
+  it("«millones» no se confunde con «mil»", () => {
+    expect(parseVoiceEntry("me depositaron 2 millones", categories)).toMatchObject({ amount: 2_000_000 });
+    expect(parseVoiceEntry("me depositaron 2 millones", categories).description).not.toMatch(/lones/i);
+    expect(parseVoiceEntry("gané un millón", categories).amount).not.toBe(1000);
+  });
+
   it("sin cifra no inventa un monto", () => {
     expect(parseVoiceEntry("almuerzo con amigos", categories).amount).toBeNull();
   });
@@ -47,6 +53,11 @@ describe("parseVoiceEntry · fecha", () => {
     ["el 5 de septiembre compré ropa por 90", "2026-09-05"],
   ])("«%s» → %s", (transcript, date) => {
     expect(parseVoiceEntry(transcript, categories).transactionDate).toBe(date);
+  });
+
+  it("una fecha que no existe no se desborda al mes siguiente", () => {
+    expect(parseVoiceEntry("el 31 de febrero pagué 10", categories).transactionDate).toBe("2026-09-24");
+    expect(parseVoiceEntry("el 31 de abril pagué 10", categories).transactionDate).toBe("2026-09-24");
   });
 
   it("una fecha exacta en el futuro se entiende del año anterior", () => {

@@ -24,7 +24,7 @@ export function DeleteTransactionDialog({
   return (
     <AlertDialog.Backdrop
       isOpen={transaction !== null}
-      onOpenChange={(open) => !open && onCancel()}
+      onOpenChange={(isOpen) => !isOpen && onCancel()}
       isDismissable
       isKeyboardDismissDisabled={false}
       className="bg-[var(--app-scrim)]"
@@ -41,14 +41,16 @@ export function DeleteTransactionDialog({
           </AlertDialog.Header>
 
           <AlertDialog.Body className="mt-2 text-center">
-            {transaction && (
+            {transaction ? (
               <p className="text-app-muted m-0 text-sm leading-relaxed">
-                <span className="text-app-fg font-semibold">{transaction.description || t("transactions.defaultDescription")}</span>{" "}
+                <span className="text-app-fg font-semibold">
+                  {transaction.description || t("transactions.defaultDescription")}
+                </span>{" "}
                 <span className="num">{formatSigned(signedAmount(transaction), currency)}</span>
                 <br />
                 {t("transactions.deleteDialog.irreversible")}
               </p>
-            )}
+            ) : null}
           </AlertDialog.Body>
 
           <AlertDialog.Footer className="mt-6 flex gap-2.5">

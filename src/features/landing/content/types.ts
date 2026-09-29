@@ -1,10 +1,3 @@
-/*
- * Forma del contenido de la landing que reciben los componentes. Se arma en
- * ./index.ts con el copy de `src/locales/<locale>/landing.json` y los datos
- * de ./data.ts. Sólo texto y datos serializables: ni JSX ni iconos.
- */
-
-/** Anclas de las secciones; el menú y los CTA enlazan a ellas. */
 export type SectionId = "producto" | "funciones" | "como-funciona" | "testimonios" | "preguntas";
 
 export type FeatureId =
@@ -22,41 +15,38 @@ export interface DemoCategory {
   color: string;
 }
 
-export interface DemoMovement {
+export type MovementType = "expense" | "income";
+
+interface DemoTransaction {
+  amount: number;
+  type: MovementType;
+  category: DemoCategory;
+}
+
+export interface DemoMovement extends DemoTransaction {
   id: string;
   description: string;
-  amount: number;
-  type: "expense" | "income";
-  category: DemoCategory;
-  /** Texto relativo ya traducido: "Hoy", "Ayer"… */
   when: string;
 }
 
-/** Un ejemplo de la demo: lo que se escribe y lo que Zentlet deduce. */
-export interface DemoEntry {
+export interface DemoEntry extends DemoTransaction {
   typed: string;
-  amount: number;
-  type: "expense" | "income";
-  category: DemoCategory;
 }
 
 export interface Testimonial {
   name: string;
   role: string;
   quote: string;
-  /** Ruta en /public o URL permitida en next.config; opcional. */
   avatar?: string;
 }
 
 export interface LandingContent {
-  /** Etiqueta BCP 47 para <html lang>, Intl y Open Graph. */
   locale: string;
   meta: {
     title: string;
     description: string;
     keywords: string[];
     ogImageAlt: string;
-    /** Frase corta bajo el titular en la imagen para redes. */
     ogSubtitle: string;
   };
   common: {
@@ -135,9 +125,7 @@ export interface LandingContent {
     eyebrow: string;
     title: string;
     items: {
-      /** Cifra final que se lee. */
       value: number;
-      /** Desde dónde cuenta; 0 por defecto. Mayor que `value` = cuenta hacia atrás. */
       from?: number;
       prefix?: string;
       suffix?: string;
@@ -148,7 +136,6 @@ export interface LandingContent {
     eyebrow: string;
     title: string;
     subtitle: string;
-    /** Vacío = se muestra la invitación `empty` en lugar del carrusel. */
     items: Testimonial[];
     empty: { title: string; body: string; cta: string };
   };
