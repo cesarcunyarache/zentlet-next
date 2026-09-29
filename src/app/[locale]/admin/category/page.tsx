@@ -7,7 +7,7 @@ import { Link } from "@/i18n/navigation";
 import { siteConfig } from "@/lib/site";
 import { useCategoryStore } from "@/features/category/stores/category.store";
 import { CategoryGrid } from "@/features/category/components/category-grid";
-import type { EditableCategory } from "@/features/category/components/category-form";
+import type { EditableCategory } from "@/features/category/types";
 import { CategoryFormSheet } from "@/features/category/components/category-form-sheet";
 
 export default function CategoryPage() {

@@ -1,99 +1,31 @@
 "use client";
 
 import { Button, Form } from "@heroui/react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { AnimatePresence, motion } from "motion/react";
-import { useDebounce } from "use-debounce";
-import { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
-import {
-  categorySchema,
-  type CategoryFormValues,
-} from "@/features/category/schemas/category.schema";
-import { useCategoryStore } from "@/features/category/stores/category.store";
-import type { TCategory } from "@/features/category/types";
 import { Check } from "@gravity-ui/icons";
-import { GestureCarousel } from "@/core/components/carrusel";
-import { generateCategory } from "@/features/category/ai/actions/category-generator";
-import { track } from "@/lib/observability/client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
+import { useForm, useWatch } from "react-hook-form";
 import { useIsOnline } from "@/core/offline/sync-status";
+import { track } from "@/lib/observability/client";
+import type { CategoryIcon } from "../ai/schemas/category-ai.schema";
+import { useIconSuggestions } from "../hooks/useIconSuggestions";
+import { categorySchema, type CategoryFormValues } from "../schemas/category.schema";
+import { useCategoryStore } from "../stores/category.store";
+import type { EditableCategory } from "../types";
+import { CategoryIconPicker } from "./category-icon-picker";
 import { GhostInput } from "./ghost-input";
-
-type CategoryIcon = Pick<TCategory, "icon" | "color">;
-
-const FALLBACK_ICONS: CategoryIcon[] = [
-  { icon: "🏷️", color: "#E9E4F5" },
-  { icon: "🛒", color: "#FDECC8" },
-  { icon: "🍽️", color: "#FBDDD5" },
-  { icon: "🚌", color: "#D6E8F7" },
-  { icon: "🏠", color: "#E4DDF3" },
-  { icon: "💡", color: "#FFF1B8" },
-  { icon: "🎉", color: "#F8D9EA" },
-  { icon: "💼", color: "#D5F0DD" },
-];
 
 const TOUCH_FIELD = { shouldValidate: true, shouldDirty: true } as const;
 
-async function suggestIcons(name: string): Promise<CategoryIcon[] | null> {
-  if (!navigator.onLine) return null;
-  try {
-    return (await generateCategory(name))?.categories ?? null;
-  } catch {
-    return null;
-  }
-}
-
-export interface EditableCategory {
-  id: string;
-  name: string;
-  icon?: string | null;
-  color?: string | null;
-  description?: string | null;
-}
-
-export default function CategoryForm({
-  onSuccess,
-  initialName = "",
-  category,
-}: {
+interface CategoryFormProps {
   onSuccess: () => void;
-  /** Nombre con el que arranca, p. ej. la primera palabra del asunto. */
   initialName?: string;
-  /** Si llega, el formulario edita esta categoría en lugar de crear una. */
   category?: EditableCategory;
-}) {
+}
+
+export function CategoryForm({ onSuccess, initialName = "", category }: CategoryFormProps) {
   const t = useTranslations();
-  const {
-    categories: stored,
-    createCategory,
-    updateCategory,
-  } = useCategoryStore();
-  // al editar, el carrusel arranca con el icono actual y lo que la IA ya
-  // propuso para este nombre (guardado con la categoría): sin llamar a la IA
-  const current = category?.icon
-    ? { icon: category.icon, color: category.color || "" }
-    : null;
-  const saved = category
-    ? (stored.find((c) => c.id === category.id)?.aiSuggestions ?? [])
-    : [];
-  const withCurrent = (icons: CategoryIcon[]) =>
-    current
-      ? [current, ...icons.filter((s) => s.icon !== current.icon)]
-      : icons;
-  const [categoriesIcons, setCategoriesIcons] = useState<CategoryIcon[]>(() =>
-    withCurrent(saved),
-  );
-  /**
-   * Lo que la IA propuso en esta sesión del formulario, para guardarlo con
-   * la categoría. `undefined`: no hay nada nuevo que guardar (se conserva lo
-   * que ya tenía); los iconos de reserva nunca se guardan.
-   */
-  const [aiSuggestions, setAiSuggestions] = useState<
-    CategoryIcon[] | undefined
-  >();
-  const [loadingAI, setLoadingAI] = useState(false);
-  const [aiUnavailable, setAiUnavailable] = useState(false);
+  const { createCategory, updateCategory } = useCategoryStore();
   const online = useIsOnline();
 
   const form = useForm<CategoryFormValues>({
@@ -106,133 +38,46 @@ export default function CategoryForm({
       color: category?.color ?? "",
     },
   });
+  const [name, icon, color] = useWatch({ control: form.control, name: ["name", "icon", "color"] });
 
-  const name = form.watch("name");
-  const [debouncedName] = useDebounce(name, 700);
-
-  function selectIcon({ icon, color }: CategoryIcon) {
-    form.setValue("icon", icon, TOUCH_FIELD);
-    form.setValue("color", color, TOUCH_FIELD);
+  function selectIcon(next: CategoryIcon) {
+    form.setValue("icon", next.icon, TOUCH_FIELD);
+    form.setValue("color", next.color, TOUCH_FIELD);
   }
 
-  /** Muestra estos iconos y, si el elegido ya no está, selecciona el primero. */
-  function showIcons(icons: CategoryIcon[]) {
-    setCategoriesIcons(icons);
-    // sin esto el form queda vacío y Guardar no se habilita hasta deslizar
+  function ensureIconSelected(icons: CategoryIcon[]) {
     const selected = form.getValues("icon");
     const first = icons[0];
-    if (first && !icons.some((item) => item.icon === selected)) {
-      selectIcon(first);
-    }
+    if (first && !icons.some((item) => item.icon === selected)) selectIcon(first);
   }
 
-  useEffect(() => {
-    if (!debouncedName.trim()) return;
-    // editando con el nombre de siempre: vuelven las sugerencias guardadas
-    if (category && debouncedName === category.name) {
-      setAiSuggestions(undefined);
-      showIcons(withCurrent(saved));
-      return;
-    }
-    let cancelled = false;
+  const { icons, aiSuggestions, isLoading, isAiUnavailable } = useIconSuggestions({
+    name,
+    category,
+    onIconsChange: ensureIconSelected,
+  });
 
-    async function generate() {
-      try {
-        setLoadingAI(true);
-        const fromAI = await suggestIcons(debouncedName);
-        if (cancelled) return;
-        setAiUnavailable(!fromAI);
-        setAiSuggestions(fromAI ?? undefined);
-        // al editar, el icono actual sigue siendo una opción del carrusel
-        showIcons(withCurrent(fromAI ?? FALLBACK_ICONS));
-      } finally {
-        if (!cancelled) {
-          setLoadingAI(false);
-        }
-      }
-    }
-    generate();
-    return () => {
-      cancelled = true;
-    };
-    // category/current/saved sólo cambian al abrir otra categoría (se remonta)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedName]);
-
-  /**
-   * No se espera al servidor: la categoría aparece al instante y se
-   * sincroniza por detrás (en cola si no hay conexión). Si el servidor la
-   * rechaza después, el aviso llega por `onSyncError`.
-   */
   function onSubmit(values: CategoryFormValues) {
     if (category) {
       const { description, ...rest } = values;
       updateCategory(category.id, {
         ...rest,
         ...(category.description !== undefined && { description }),
-        // sólo si cambió el nombre y la IA propuso algo nuevo
         ...(aiSuggestions && { aiSuggestions }),
       });
       track("category_updated", {});
     } else {
       createCategory({ ...values, aiSuggestions: aiSuggestions ?? null });
-      // el carrusel sólo ofrece iconos de la IA o, si falló, los de reserva
-      track("category_created", { ai_suggested: !aiUnavailable });
+      track("category_created", { ai_suggested: !isAiUnavailable });
     }
     form.reset();
     onSuccess();
   }
 
   return (
-    <Form
-      className="flex flex-1 flex-col gap-5 h-full justify-center justify-items-center"
-      onSubmit={form.handleSubmit(onSubmit)}
-    >
-      <div className="flex flex-1 flex-col  justify-center gap-5">
-        <div className="h-32 w-32">
-          <AnimatePresence mode="wait">
-            {loadingAI ? (
-              <motion.div
-                key="skeleton"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.2 }}
-                className="h-full w-full rounded-2xl bg-gray-100 overflow-hidden relative"
-              >
-                <motion.div
-                  className="absolute inset-0 -translate-x-full from-transparent via-white/40 to-transparent"
-                  animate={{
-                    translateX: ["-100%", "100%"],
-                  }}
-                  transition={{
-                    repeat: Infinity,
-                    duration: 1.2,
-                    ease: "linear",
-                  }}
-                />
-              </motion.div>
-            ) : categoriesIcons.length > 0 ? (
-              <motion.div
-                key="carousel"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.2 }}
-                className="h-full w-full"
-              >
-                <GestureCarousel
-                  items={categoriesIcons}
-                  value={{
-                    icon: form.watch("icon"),
-                    color: form.watch("color"),
-                  }}
-                  onChange={selectIcon}
-                />
-              </motion.div>
-            ) : null}
-          </AnimatePresence>
-        </div>
-
+    <Form className="flex h-full flex-1 flex-col justify-center gap-5" onSubmit={form.handleSubmit(onSubmit)}>
+      <div className="flex flex-1 flex-col justify-center gap-5">
+        <CategoryIconPicker icons={icons} value={{ icon, color }} isLoading={isLoading} onChange={selectIcon} />
         <GhostInput
           id=""
           value={name}
@@ -242,21 +87,13 @@ export default function CategoryForm({
         />
       </div>
 
-      {aiUnavailable && (
+      {isAiUnavailable && (
         <p className="text-app-muted w-full text-center text-sm">
-          {t(
-            online
-              ? "categories.form.aiUnavailable"
-              : "categories.form.aiOffline",
-          )}
+          {t(online ? "categories.form.aiUnavailable" : "categories.form.aiOffline")}
         </p>
       )}
 
-      <Button
-        type="submit"
-        className="w-full"
-        isDisabled={!form.formState.isValid}
-      >
+      <Button type="submit" className="w-full" isDisabled={!form.formState.isValid}>
         <Check />
         {t("common.actions.save")}
       </Button>

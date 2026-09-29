@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Sheet } from "@/core/components/ui/sheet";
-import type { EditableCategory } from "./category-form";
+import type { EditableCategory } from "../types";
 import { CategoryFormSheet } from "./category-form-sheet";
 import { CategoryGrid } from "./category-grid";
 import type { CategoryLike } from "@/features/transaction/types";

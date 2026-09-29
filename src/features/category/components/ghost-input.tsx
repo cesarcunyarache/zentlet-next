@@ -4,6 +4,8 @@ import { cn } from "@heroui/react";
 import { AnimatePresence, motion } from "motion/react";
 import { EASE_OUT } from "@/lib/ease";
 
+const CHAR_TRANSITION = { duration: 0.18, ease: EASE_OUT } as const;
+
 function keyedChars(value: string) {
   const seen = new Map<string, number>();
   return value.split("").map((char) => {
@@ -13,23 +15,16 @@ function keyedChars(value: string) {
   });
 }
 
-const CHAR_TRANSITION = { duration: 0.18, ease: EASE_OUT } as const;
-
-export function GhostInput({
-  id,
-  value,
-  placeholder,
-  inputSize,
-  onChange,
-}: {
+interface GhostInputProps {
   id: string;
   value: string;
   placeholder?: string;
   inputSize: string;
   onChange: (value: string) => void;
-}) {
-  const displayValue = value || placeholder || "";
-  const chars = keyedChars(displayValue);
+}
+
+export function GhostInput({ id, value, placeholder, inputSize, onChange }: GhostInputProps) {
+  const chars = keyedChars(value || placeholder || "");
 
   return (
     <div className="flex min-w-0 items-center overflow-hidden">

@@ -2,19 +2,17 @@
 
 import { useTranslations } from "next-intl";
 import { Sheet } from "@/core/components/ui/sheet";
-import CategoryForm, { type EditableCategory } from "./category-form";
+import type { EditableCategory } from "../types";
+import { CategoryForm } from "./category-form";
 
-export function CategoryFormSheet({
-  isOpen,
-  category,
-  initialName,
-  onClose,
-}: {
+interface CategoryFormSheetProps {
   isOpen: boolean;
   category?: EditableCategory | null;
   initialName?: string;
   onClose: () => void;
-}) {
+}
+
+export function CategoryFormSheet({ isOpen, category, initialName, onClose }: CategoryFormSheetProps) {
   const t = useTranslations("categories.form");
 
   return (
