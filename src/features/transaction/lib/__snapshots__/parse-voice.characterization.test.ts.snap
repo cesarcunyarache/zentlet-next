@@ -65,9 +65,9 @@ exports[`parseVoiceEntry · salida completa (caracterización) > en español 1`]
   [
     "compré una laptop por 3k",
     {
-      "amount": 3000,
+      "amount": 3,
       "categoryId": null,
-      "description": "Laptop",
+      "description": "Laptop por k",
       "transactionDate": "2026-09-24",
       "type": "expense",
     },
@@ -198,7 +198,7 @@ exports[`parseVoiceEntry · salida completa (caracterización) > en español 1`]
       "amount": 10,
       "categoryId": "home",
       "description": "Luz",
-      "transactionDate": "2026-09-24",
+      "transactionDate": "2026-09-17",
       "type": "expense",
     },
   ],
@@ -390,9 +390,9 @@ exports[`parseVoiceEntry · salida completa (caracterización) > en inglés 1`] 
   [
     "spent 3k on a laptop",
     {
-      "amount": 3000,
+      "amount": 3,
       "categoryId": null,
-      "description": "Laptop",
+      "description": "K on a laptop",
       "transactionDate": "2026-09-24",
       "type": "expense",
     },

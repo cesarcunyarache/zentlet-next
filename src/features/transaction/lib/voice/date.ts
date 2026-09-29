@@ -40,7 +40,7 @@ function findWeekday(clean: string, lang: VoiceLanguage): SpokenDate | null {
   const found = lang.weekday.exec(clean);
   if (!found) return null;
   const target = lang.days.indexOf(found[1]);
-  const daysAgo = (today().getDay() - target + DAYS_IN_WEEK) % DAYS_IN_WEEK;
+  const daysAgo = (today().getDay() - target + DAYS_IN_WEEK) % DAYS_IN_WEEK || DAYS_IN_WEEK;
   return { isoDate: toISODate(dayShift(daysAgo)), match: found[0] };
 }
 

@@ -41,8 +41,8 @@ export function defineLanguage(vocabulary: VoiceVocabulary): VoiceLanguage {
   return {
     ...vocabulary,
     amount: new RegExp(
-      String.raw`${SPOKEN_NUMBER}(?:${cents})?\s*(${multiplier}|${SLANG_THOUSANDS})?\s*(${currency})?`,
-      "gi",
+      String.raw`${SPOKEN_NUMBER}(?:${cents})?\s*(?:(${multiplier}|${SLANG_THOUSANDS})${WORD_END})?\s*(${currency})?`,
+      "giu",
     ),
     numberWordAmount: new RegExp(String.raw`\b(${Object.keys(numberWords).join("|")})\s+(${currency})`, "i"),
     currencyWord: new RegExp(String.raw`${WORD_START}${currency}${WORD_END}`, "giu"),

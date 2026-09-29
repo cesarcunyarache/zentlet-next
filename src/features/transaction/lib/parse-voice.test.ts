@@ -39,6 +39,12 @@ describe("parseVoiceEntry · monto", () => {
     expect(parseVoiceEntry("gané un millón", categories).amount).not.toBe(1000);
   });
 
+  it("una palabra que empieza como multiplicador no multiplica", () => {
+    expect(parseVoiceEntry("compré 3 kilos de arroz", categories).amount).toBe(3);
+    expect(parseVoiceEntry("compré 3 kilos de arroz", categories).description).toMatch(/kilos/i);
+    expect(parseVoiceEntry("pedí 3 milanesas", categories).amount).toBe(3);
+  });
+
   it("sin cifra no inventa un monto", () => {
     expect(parseVoiceEntry("almuerzo con amigos", categories).amount).toBeNull();
   });
@@ -58,6 +64,10 @@ describe("parseVoiceEntry · fecha", () => {
   it("una fecha que no existe no se desborda al mes siguiente", () => {
     expect(parseVoiceEntry("el 31 de febrero pagué 10", categories).transactionDate).toBe("2026-09-24");
     expect(parseVoiceEntry("el 31 de abril pagué 10", categories).transactionDate).toBe("2026-09-24");
+  });
+
+  it("el día de la semana de hoy se entiende de la semana pasada", () => {
+    expect(parseVoiceEntry("el jueves gasté 8 en café", categories).transactionDate).toBe("2026-09-17");
   });
 
   it("una fecha exacta en el futuro se entiende del año anterior", () => {

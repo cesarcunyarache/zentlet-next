@@ -4,8 +4,8 @@ const DAYS = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "s
 
 export const ES = defineLanguage({
   currency: String.raw`(?:soles?|s\/\.?|d[oó]lares?|usd|euros?|pesos?|lucas?)`,
-  multiplier: String.raw`(?:millones?|mill[oó]n|mil|k)`,
-  multipliers: { mil: 1_000, k: 1_000, lucas: 1_000, luca: 1_000, millon: 1_000_000, millones: 1_000_000 },
+  multiplier: String.raw`(?:millones?|mill[oó]n|mil)`,
+  multipliers: { mil: 1_000, lucas: 1_000, luca: 1_000, millon: 1_000_000, millones: 1_000_000 },
   numberWords: {
     un: 1, uno: 1, una: 1, dos: 2, tres: 3, cuatro: 4, cinco: 5, seis: 6, siete: 7, ocho: 8,
     nueve: 9, diez: 10, once: 11, doce: 12, quince: 15, veinte: 20, treinta: 30, cuarenta: 40,

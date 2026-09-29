@@ -3,12 +3,10 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { SPRING_LAYOUT } from "@/lib/ease";
-import { CHART_HEIGHT } from "../../lib/chart";
-import type { CategoryLike } from "../../types";
-import { CategoryColumn } from "./category-column";
-import type { CategoryTotal } from "../../types";
 import { stripScaleMax } from "../../lib/category-strip";
-
+import { CHART_HEIGHT } from "../../lib/chart";
+import type { CategoryLike, CategoryTotal } from "../../types";
+import { CategoryColumn } from "./category-column";
 
 const GHOST_BARS = [
   { id: "first", ratio: 1 },

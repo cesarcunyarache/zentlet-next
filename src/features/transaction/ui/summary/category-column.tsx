@@ -4,16 +4,15 @@ import { motion } from "motion/react";
 import { cn } from "@heroui/react";
 import { useTranslations } from "next-intl";
 import { EASE_OUT_CSS, SPRING_LAYOUT, SPRING_PRESS } from "@/lib/ease";
-import { useLongPress } from "../../hooks/useLongPress";
 import { formatMoney, formatShort } from "@/lib/money";
-import type { CategoryLike } from "../../types";
-import type { CategoryTotal } from "../../types";
+import { CATEGORY_FALLBACK_ICON } from "@/features/category/constants";
+import { useLongPress } from "../../hooks/useLongPress";
 import { barLayout, isOverBudget as exceedsBudget } from "../../lib/category-strip";
+import type { CategoryLike, CategoryTotal } from "../../types";
 
 const COLUMN_CLASS = "flex h-full w-[76px] shrink-0 flex-col justify-end sm:w-[88px]";
 const COLUMN_STAGGER_MS = 50;
 const DIMMED_OPACITY = 0.4;
-const FALLBACK_ICON = "📦";
 
 interface CategoryColumnProps {
   item: CategoryTotal;
@@ -24,6 +23,7 @@ interface CategoryColumnProps {
   shouldReduceMotion: boolean;
   onSelect: (categoryId: string | null) => void;
   onLongPress: (category: CategoryLike) => void;
+  ref?: React.Ref<HTMLButtonElement>;
 }
 
 function useAmountLabel({ total, budget }: CategoryTotal, isIdle: boolean, currency: string) {
@@ -46,6 +46,7 @@ export function CategoryColumn({
   shouldReduceMotion,
   onSelect,
   onLongPress,
+  ref,
 }: CategoryColumnProps) {
   const tBudget = useTranslations("budgets.strip");
   const { category, total } = item;
@@ -65,6 +66,7 @@ export function CategoryColumn({
 
   return (
     <motion.button
+      ref={ref}
       layout={!shouldReduceMotion}
       type="button"
       aria-pressed={isSelected}
@@ -118,7 +120,7 @@ export function CategoryColumn({
           whileHover={shouldReduceMotion ? undefined : { scale: 1.2, rotate: -8 }}
           transition={SPRING_PRESS}
         >
-          {category.icon || FALLBACK_ICON}
+          {category.icon || CATEGORY_FALLBACK_ICON}
         </motion.span>
         <span className="num relative text-[13px] leading-none font-semibold">{formatShort(total)}</span>
       </span>
