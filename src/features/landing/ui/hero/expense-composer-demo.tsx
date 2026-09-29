@@ -4,12 +4,12 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Sparkles } from "lucide-react";
 import { TypingAnimation } from "@/core/components/ui/typing-animation";
 import { BorderBeam } from "@/core/components/ui/border-beam";
-import { CategoryEmoji } from "@/features/category/components/category-emoji";
+import { CategoryEmoji } from "@/features/category/ui/category-emoji";
 import { SPRING_SWAP } from "@/lib/ease";
 import { cn } from "@/lib/utils";
 import type { DemoEntry, LandingContent } from "../../content";
 import { amountSign, formatAmount } from "../../lib/format";
-import { TYPE_SPEED_MS, useComposerCycle } from "../../lib/use-composer-cycle";
+import { TYPE_SPEED_MS, useComposerCycle } from "../../hooks/useComposerCycle";
 import { DemoTypingField } from "../shared/demo-typing-field";
 import { BRAND_ACCENT, GOLD_ACCENT, TYPED_TEXT_CLASS } from "../shared/tokens";
 

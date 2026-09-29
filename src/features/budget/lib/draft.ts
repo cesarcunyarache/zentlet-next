@@ -1,4 +1,4 @@
-import { parseAmount } from "@/features/transaction/lib/format";
+import { parseAmount } from "@/lib/money";
 import type { BudgetKind, BudgetPeriod, TBudget } from "../types";
 import { activePeriod, budgetPeriodOf, limitAt } from "./period";
 

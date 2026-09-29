@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { Sheet } from "@/core/components/ui/sheet";
 import { currencySymbol, type CurrencyCode } from "@/features/preference/lib/currency";
-import { FeedbackRow } from "@/features/feedback/components/feedback-row";
+import { FeedbackRow } from "@/features/feedback/ui/feedback-row";
 import { analyticsAvailable } from "@/lib/observability/client";
 import { AnalyticsRow } from "./analytics-row";
 import { AppearanceRow } from "./appearance-row";

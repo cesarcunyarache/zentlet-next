@@ -3,8 +3,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { Locale } from "@/i18n/routing";
 import type { Preferences } from "../schemas/preference.schema";
 
-vi.mock("@/features/account/services/account.service", () => ({
-  accountService: { getPreferences: vi.fn(), updatePreferences: vi.fn() },
+vi.mock("../services/preference.service", () => ({
+  preferenceService: { getPreferences: vi.fn(), updatePreferences: vi.fn() },
 }));
 vi.mock("@/lib/observability/client", () => ({ reportClientError: vi.fn() }));
 
@@ -41,10 +41,10 @@ async function load() {
   const sync = await import("./account-sync");
   const device = await import("./device-currency");
   const pending = await import("./pending");
-  const { accountService } = await import("@/features/account/services/account.service");
+  const { preferenceService } = await import("../services/preference.service");
   const { reportClientError } = await import("@/lib/observability/client");
-  const getPreferences = vi.mocked(accountService.getPreferences);
-  const updatePreferences = vi.mocked(accountService.updatePreferences);
+  const getPreferences = vi.mocked(preferenceService.getPreferences);
+  const updatePreferences = vi.mocked(preferenceService.updatePreferences);
   updatePreferences.mockImplementation(async (update) => serverRow(update));
 
   let locale: Locale = "es";

@@ -1,13 +1,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { accountService } from "@/features/account/services/account.service";
+import { preferenceService } from "../services/preference.service";
 import { addPendingPreferences, clearPendingPreferences, readPendingPreferences } from "./pending";
 import { savePreferences } from "./save";
 
-vi.mock("@/features/account/services/account.service", () => ({
-  accountService: { updatePreferences: vi.fn() },
+vi.mock("../services/preference.service", () => ({
+  preferenceService: { updatePreferences: vi.fn() },
 }));
 
-const updatePreferences = vi.mocked(accountService.updatePreferences);
+const updatePreferences = vi.mocked(preferenceService.updatePreferences);
 
 function memoryStorage() {
   const data = new Map<string, string>();

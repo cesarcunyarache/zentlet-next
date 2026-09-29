@@ -4,7 +4,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { Mic } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { TypingAnimation } from "@/core/components/ui/typing-animation";
-import { CategoryEmoji } from "@/features/category/components/category-emoji";
+import { CategoryEmoji } from "@/features/category/ui/category-emoji";
 import { EASE_OUT } from "@/lib/ease";
 import { FOOD, Glow, Pop, SceneFrame } from "./scene-primitives";
 

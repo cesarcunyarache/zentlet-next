@@ -6,7 +6,7 @@ import { cn } from "@heroui/react";
 import { Plus, Sparkles } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { SPRING_LAYOUT, SPRING_PRESS } from "@/lib/ease";
-import { CategoryEmoji } from "@/features/category/components/category-emoji";
+import { CategoryEmoji } from "@/features/category/ui/category-emoji";
 import type { CategoryLike } from "../../types";
 
 interface TransactionCategoryPickerProps {

@@ -4,7 +4,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { Sparkles } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { TypingAnimation } from "@/core/components/ui/typing-animation";
-import { CategoryEmoji } from "@/features/category/components/category-emoji";
+import { CategoryEmoji } from "@/features/category/ui/category-emoji";
 import { Glow, Pop, SceneFrame, TRANSPORT } from "./scene-primitives";
 
 const TYPING_DELAY_MS = 300;

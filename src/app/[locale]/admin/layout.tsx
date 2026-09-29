@@ -9,7 +9,7 @@ import { AnalyticsIdentity } from "@/lib/observability/analytics-identity";
 import { logger } from "@/lib/observability/logger";
 import prisma from "@/lib/prisma";
 import { OnboardingProvider } from "@/features/onboarding/onboarding-context";
-import { PreferenceSync } from "@/features/preference/components/preference-sync";
+import { PreferenceSync } from "@/features/preference/ui/preference-sync";
 import { AccountCurrencyProvider } from "@/features/preference/hooks/useCurrency";
 import { preferencesSchema } from "@/features/preference/schemas/preference.schema";
 

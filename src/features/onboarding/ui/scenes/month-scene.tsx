@@ -4,7 +4,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { CloudOff, Lock } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { NumberTicker } from "@/core/components/ui/number-ticker";
-import { CategoryEmoji } from "@/features/category/components/category-emoji";
+import { CategoryEmoji } from "@/features/category/ui/category-emoji";
 import { EASE_OUT, SPRING_PRESS } from "@/lib/ease";
 import { donutArcs } from "../../lib/donut";
 import { FOOD, Glow, HOME, Pop, SceneFrame, TRANSPORT } from "./scene-primitives";

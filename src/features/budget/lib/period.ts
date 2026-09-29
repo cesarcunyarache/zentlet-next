@@ -1,4 +1,4 @@
-import { today, toISODate } from "@/features/transaction/lib/format";
+import { today, toISODate } from "@/lib/dates";
 import type { DateRange } from "@/features/transaction/types";
 import type { BudgetPeriod, BudgetRule, PeriodRange, TBudget, TBudgetLimit } from "../types";
 

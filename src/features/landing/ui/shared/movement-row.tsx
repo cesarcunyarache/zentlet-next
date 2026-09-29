@@ -1,4 +1,4 @@
-import { CategoryEmoji } from "@/features/category/components/category-emoji";
+import { CategoryEmoji } from "@/features/category/ui/category-emoji";
 import { cn } from "@/lib/utils";
 import type { DemoMovement } from "../../content";
 import { formatSigned } from "../../lib/format";

@@ -1,3 +1,5 @@
+import type { CategoryBase } from "@/features/category/types";
+
 export type TransactionType = "expense" | "income";
 
 export interface TTransaction {
@@ -44,12 +46,7 @@ export interface TransactionSummaryResponse extends TransactionSummary {
   presentIds: string[];
 }
 
-export interface CategoryLike {
-  id: string;
-  name: string;
-  icon?: string | null;
-  color?: string | null;
-}
+export type CategoryLike = CategoryBase;
 
 export interface CategoryTotal {
   category: CategoryLike;

@@ -7,7 +7,7 @@ import { X } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { intlLocales } from "@/i18n/routing";
 import { PillSelect } from "@/core/components/ui/pill-select";
-import { dayLabel, dayShift, toISODate } from "../../lib/format";
+import { dayLabel, dayShift, toISODate } from "@/lib/dates";
 
 const CUSTOM = "custom";
 const RECENT_DAYS = 7;

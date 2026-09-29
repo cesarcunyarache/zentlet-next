@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from "motion/react";
 import { ArrowRight, Sparkles } from "lucide-react";
-import { CategoryEmoji } from "@/features/category/components/category-emoji";
+import { CategoryEmoji } from "@/features/category/ui/category-emoji";
 import type { DemoCategory } from "../../../content";
 
 const BOUNCE = { y: [0, 4, 0] };

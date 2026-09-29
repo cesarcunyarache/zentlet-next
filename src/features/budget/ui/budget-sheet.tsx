@@ -3,8 +3,8 @@
 import { useTranslations } from "next-intl";
 import { Sheet } from "@/core/components/ui/sheet";
 import { PillSelect } from "@/core/components/ui/pill-select";
-import { CategoryEmoji } from "@/features/category/components/category-emoji";
-import type { CategoryLike } from "@/features/transaction/types";
+import { CategoryEmoji } from "@/features/category/ui/category-emoji";
+import type { CategoryBase } from "@/features/category/types";
 import { BUDGET_PERIOD_OPTIONS } from "../lib/period";
 import { useBudgetSheet } from "../hooks/useBudgetSheet";
 import { BudgetAmountField } from "./budget-amount-field";
@@ -13,7 +13,7 @@ import { BudgetRing } from "./budget-ring";
 import { BudgetSheetFooter } from "./budget-sheet-footer";
 
 interface BudgetSheetProps {
-  category: CategoryLike | null;
+  category: CategoryBase | null;
   currency: string;
   onClose: () => void;
   onSaved: () => void;

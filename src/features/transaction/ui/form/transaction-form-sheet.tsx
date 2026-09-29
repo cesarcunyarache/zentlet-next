@@ -4,7 +4,7 @@ import { Button } from "@heroui/react";
 import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Sheet } from "@/core/components/ui/sheet";
-import { CategoryFormSheet } from "@/features/category/components/category-form-sheet";
+import { CategoryFormSheet } from "@/features/category/ui/category-form-sheet";
 import { track } from "@/lib/observability/client";
 import type { TransactionFormValues } from "../../schemas/transaction.schema";
 import type { CategoryLike } from "../../types";

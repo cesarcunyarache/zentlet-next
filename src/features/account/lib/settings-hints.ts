@@ -1,4 +1,4 @@
-import { toISODate } from "@/features/transaction/lib/format";
+import { toISODate } from "@/lib/dates";
 
 export interface HintMessage<Key extends string> {
   key: Key;

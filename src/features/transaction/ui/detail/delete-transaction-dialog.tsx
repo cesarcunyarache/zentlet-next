@@ -3,7 +3,8 @@
 import { AlertDialog, Button } from "@heroui/react";
 import { Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { formatSigned, signedAmount } from "../../lib/format";
+import { formatSigned } from "@/lib/money";
+import { signedAmount } from "../../lib/format";
 import type { TTransaction } from "../../types";
 
 interface DeleteTransactionDialogProps {

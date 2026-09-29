@@ -3,7 +3,7 @@
 import { motion, useReducedMotion } from "motion/react";
 import { Hand } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { CategoryEmoji } from "@/features/category/components/category-emoji";
+import { CategoryEmoji } from "@/features/category/ui/category-emoji";
 import { EASE_OUT } from "@/lib/ease";
 import { FOOD, Glow, HOME, Pop, SceneFrame, TRANSPORT } from "./scene-primitives";
 

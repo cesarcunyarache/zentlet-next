@@ -1,6 +1,6 @@
 import { AnimatedList } from "@/core/components/ui/animated-list";
 import { NumberTicker } from "@/core/components/ui/number-ticker";
-import { CategoryEmoji } from "@/features/category/components/category-emoji";
+import { CategoryEmoji } from "@/features/category/ui/category-emoji";
 import { cn } from "@/lib/utils";
 import type { LandingContent } from "../../content";
 import { formatAmount, vivid } from "../../lib/format";

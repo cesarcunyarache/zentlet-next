@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { cleanAmountInput } from "@/features/transaction/lib/format";
+import { cleanAmountInput } from "@/lib/money";
 import { useTransactionSummary } from "@/features/transaction/stores/transaction.store";
-import type { CategoryLike } from "@/features/transaction/types";
+import type { CategoryBase } from "@/features/category/types";
 import { track } from "@/lib/observability/client";
 import { draftFrom, draftStatus, toggledKind, type BudgetDraft } from "../lib/draft";
 import { BUDGET_PERIODS, periodContaining, todayISO } from "../lib/period";
@@ -11,7 +11,7 @@ import { useBudgetStore } from "../stores/budget.store";
 import type { BudgetPeriod } from "../types";
 
 interface UseBudgetSheetOptions {
-  category: CategoryLike | null;
+  category: CategoryBase | null;
   onSaved: () => void;
   onRemoved: () => void;
 }
@@ -22,8 +22,8 @@ export function useBudgetSheet({ category, onSaved, onRemoved }: UseBudgetSheetO
   const today = todayISO();
   const { budgets, saveBudget, deleteBudget } = useBudgetStore();
 
-  const [shown, setShown] = useState<CategoryLike | null>(null);
-  const [opened, setOpened] = useState<CategoryLike | null>(null);
+  const [shown, setShown] = useState<CategoryBase | null>(null);
+  const [opened, setOpened] = useState<CategoryBase | null>(null);
   const [draft, setDraft] = useState<BudgetDraft>(() => draftFrom(undefined, today));
   const [isConfirmingRemove, setIsConfirmingRemove] = useState(false);
 

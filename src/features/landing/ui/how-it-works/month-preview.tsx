@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
-import { CategoryEmoji } from "@/features/category/components/category-emoji";
+import { CategoryEmoji } from "@/features/category/ui/category-emoji";
 import { EASE_OUT } from "@/lib/ease";
 import { cn } from "@/lib/utils";
 import type { LandingContent } from "../../content";

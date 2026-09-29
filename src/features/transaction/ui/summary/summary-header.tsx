@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { AnimatedNumber } from "@/core/components/ui/animated-number";
 import { PillSelect } from "@/core/components/ui/pill-select";
 import { SPRING_LAYOUT, SPRING_PRESS } from "@/lib/ease";
-import { formatNumber } from "../../lib/format";
+import { formatNumber } from "@/lib/money";
 import type { Period, TransactionType } from "../../types";
 
 const PERIODS: Period[] = ["month", "previous", "all"];

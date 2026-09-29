@@ -4,7 +4,7 @@ import { useCallback, useId, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { cn } from "@heroui/react";
 import { useLocale, useTranslations } from "next-intl";
-import { formatMoney } from "@/features/transaction/lib/format";
+import { formatMoney } from "@/lib/money";
 import { SPRING_LAYOUT } from "@/lib/ease";
 import { useDismissOnOutside } from "../hooks/useDismissOnOutside";
 import { budgetPreview, daysLeft, periodRangeLabel, spentPercent } from "../lib/progress";

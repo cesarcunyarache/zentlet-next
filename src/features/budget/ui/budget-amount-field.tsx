@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { displayAmount } from "@/features/transaction/lib/format";
+import { displayAmount } from "@/lib/money";
 
 interface BudgetAmountFieldProps {
   currency: string;

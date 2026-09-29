@@ -1,4 +1,4 @@
-import { accountService } from "@/features/account/services/account.service";
+import { preferenceService } from "../services/preference.service";
 import { getApiErrorStatus } from "@/core/services/api-error";
 import { isNetworkError } from "@/core/offline/sync-policy";
 import { reportClientError } from "@/lib/observability/client";
@@ -24,7 +24,7 @@ export async function syncPreferences({ userId, currentLocale, switchLanguage, c
   const pendingBefore = readPendingPreferences(userId);
   const currencyBefore = getDeviceCurrency(userId);
   const localeBefore = currentLocale();
-  const server = await accountService.getPreferences();
+  const server = await preferenceService.getPreferences();
   if (cancelled()) return;
 
   const locale = currentLocale();

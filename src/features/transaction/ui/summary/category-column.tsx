@@ -5,7 +5,7 @@ import { cn } from "@heroui/react";
 import { useTranslations } from "next-intl";
 import { EASE_OUT_CSS, SPRING_LAYOUT, SPRING_PRESS } from "@/lib/ease";
 import { useLongPress } from "../../hooks/useLongPress";
-import { formatMoney, formatShort } from "../../lib/format";
+import { formatMoney, formatShort } from "@/lib/money";
 import type { CategoryLike } from "../../types";
 import type { CategoryTotal } from "../../types";
 import { barLayout, isOverBudget as exceedsBudget } from "../../lib/category-strip";

@@ -1,6 +1,6 @@
 import type { Locale } from "@/i18n/routing";
 import type { CategoryLike, TransactionType } from "../types";
-import { today, toISODate } from "./format";
+import { today, toISODate } from "@/lib/dates";
 import { inferType, matchCategory, normalize } from "./parse-description";
 import { findAmount } from "./voice/amount";
 import { findDate } from "./voice/date";

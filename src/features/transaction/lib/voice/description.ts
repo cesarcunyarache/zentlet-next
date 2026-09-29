@@ -1,5 +1,5 @@
 import { DESCRIPTION_MAX_LENGTH } from "../../schemas/transaction.schema";
-import { capitalize } from "../format";
+import { capitalize } from "@/lib/utils";
 import { fold } from "../parse-description";
 import type { VoiceLanguage } from "./language";
 

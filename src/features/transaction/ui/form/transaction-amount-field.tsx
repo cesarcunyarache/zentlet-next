@@ -2,7 +2,7 @@
 
 import { cn } from "@heroui/react";
 import { useTranslations } from "next-intl";
-import { displayAmount } from "../../lib/format";
+import { displayAmount } from "@/lib/money";
 import type { TransactionType } from "../../types";
 
 const AMOUNT_MAX_LENGTH = 16;
