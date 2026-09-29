@@ -20,10 +20,10 @@ import {
   transactionCreatedPayload,
   transactionUpdatedPayload,
   visibleCategoriesFor,
-} from "./transaction-form.logic";
+} from "../../lib/transaction-form";
 import { TransactionTypeToggle } from "./transaction-type-toggle";
-import { useCategoryCreation } from "./useCategoryCreation";
-import { useTransactionForm } from "./useTransactionForm";
+import { useCategoryCreation } from "../../hooks/form/useCategoryCreation";
+import { useTransactionForm } from "../../hooks/form/useTransactionForm";
 
 const DESCRIPTION_MAX_LENGTH = 42;
 

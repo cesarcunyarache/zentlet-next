@@ -3,8 +3,8 @@
 import { Button, cn } from "@heroui/react";
 import { Check, Keyboard, Pencil, RotateCcw } from "lucide-react";
 import { useTranslations } from "next-intl";
-import type { SpeechError } from "./useSpeechRecognition";
-import type { VoiceStage } from "./voice-entry.logic";
+import type { SpeechError } from "../../types";
+import type { VoiceStage } from "../../lib/voice-entry";
 
 const CHECK_ICON = <Check className="size-[17px]" strokeWidth={2.4} />;
 const PENCIL_ICON = <Pencil className="size-4" strokeWidth={2.2} />;

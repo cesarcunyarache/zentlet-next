@@ -8,7 +8,7 @@ import { Sheet } from "@/core/components/ui/sheet";
 import { CategoryEmoji } from "@/features/category/components/category-emoji";
 import { formatSigned, fullDate, signedAmount } from "../../lib/format";
 import type { CategoryLike, TTransaction } from "../../types";
-import { useDeleteConfirmation } from "./useDeleteConfirmation";
+import { useDeleteConfirmation } from "../../hooks/useDeleteConfirmation";
 
 interface TransactionDetailSheetProps {
   transaction: TTransaction | null;

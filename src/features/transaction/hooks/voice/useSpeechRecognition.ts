@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Locale } from "@/i18n/routing";
+import type { SpeechError, SpeechStatus } from "../../types";
 
 interface SpeechRecognitionAlternative {
   transcript: string;
@@ -32,9 +33,6 @@ interface SpeechRecognitionInstance extends EventTarget {
   onend: (() => void) | null;
 }
 type SpeechRecognitionConstructor = new () => SpeechRecognitionInstance;
-
-export type SpeechError = "unsupported" | "denied" | "no-mic" | "no-speech" | "network" | "unknown";
-export type SpeechStatus = "idle" | "starting" | "listening" | "done" | "error";
 
 const ABORTED = "aborted";
 const DEFAULT_LANG: Record<Locale, string> = { es: "es-PE", en: "en-US" };

@@ -1,6 +1,6 @@
 import { useEffect, useEffectEvent, useRef, useState } from "react";
 import type { CategoryLike } from "../../types";
-import { findCreatedCategory } from "./transaction-form.logic";
+import { findCreatedCategory } from "../../lib/transaction-form";
 
 export function useCategoryCreation(categories: CategoryLike[], onCreated: (category: CategoryLike) => void) {
   const [isCreating, setIsCreating] = useState(false);

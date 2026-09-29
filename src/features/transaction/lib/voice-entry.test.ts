@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { VoiceDraft } from "../../lib/parse-voice";
+import type { VoiceDraft } from "./parse-voice";
 import {
   canSaveVoiceEntry,
   hasFooterActions,
@@ -10,7 +10,7 @@ import {
   toEditDraft,
   toFormValues,
   voiceStage,
-} from "./voice-entry.logic";
+} from "./voice-entry";
 
 const categories = [
   { id: "food", name: "Comida" },

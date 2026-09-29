@@ -7,7 +7,7 @@ import { CHART_HEIGHT } from "../../lib/chart";
 import type { CategoryLike } from "../../types";
 import { CategoryColumn } from "./category-column";
 import type { CategoryTotal } from "../../types";
-import { stripScaleMax } from "./category-strip.logic";
+import { stripScaleMax } from "../../lib/category-strip";
 
 
 const GHOST_BARS = [

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { IDLE_HEIGHT } from "../../lib/chart";
-import type { CategoryTotal } from "../../types";
-import { barLayout, isOverBudget, stripScaleMax } from "./category-strip.logic";
+import { IDLE_HEIGHT } from "./chart";
+import type { CategoryTotal } from "../types";
+import { barLayout, isOverBudget, stripScaleMax } from "./category-strip";
 
 const category = { id: "c", name: "Comida" };
 

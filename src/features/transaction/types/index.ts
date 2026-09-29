@@ -58,3 +58,6 @@ export interface CategoryTotal {
 }
 
 export type TTransactionPayload = Omit<TTransaction, "id">;
+
+export type SpeechError = "unsupported" | "denied" | "no-mic" | "no-speech" | "network" | "unknown";
+export type SpeechStatus = "idle" | "starting" | "listening" | "done" | "error";

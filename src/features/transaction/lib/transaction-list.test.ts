@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import type { TTransaction } from "../../types";
-import { dayTotal, groupByDay, groupStartIndexes, rowEnterDelay, transactionName } from "./transaction-list.logic";
+import type { TTransaction } from "../types";
+import { dayTotal, groupByDay, groupStartIndexes, rowEnterDelay, transactionName } from "./transaction-list";
 
 function tx(id: string, transactionDate: string, amount = 10, type: TTransaction["type"] = "expense"): TTransaction {
   return { id, description: id, amount, type, categoryId: "c", transactionDate };

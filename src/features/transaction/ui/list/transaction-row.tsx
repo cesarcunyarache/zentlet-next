@@ -9,7 +9,7 @@ import { CategoryEmoji } from "@/features/category/components/category-emoji";
 import { formatSigned, signedAmount } from "../../lib/format";
 import type { SwipeSide } from "../../lib/swipe";
 import type { CategoryLike, TTransaction } from "../../types";
-import { rowEnterDelay, transactionName } from "./transaction-list.logic";
+import { rowEnterDelay, transactionName } from "../../lib/transaction-list";
 import { SwipeRow } from "./swipe-row";
 
 const ROW_EXIT = { opacity: 0, x: -28, transition: { duration: 0.2 } };

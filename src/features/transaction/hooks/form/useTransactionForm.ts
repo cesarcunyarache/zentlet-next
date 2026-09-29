@@ -5,7 +5,7 @@ import type { TransactionSuggestion } from "../../ai/schemas/transaction-ai.sche
 import { readDescription } from "../../lib/parse-description";
 import { transactionSchema, type TransactionFormValues } from "../../schemas/transaction.schema";
 import type { CategoryLike, TransactionType } from "../../types";
-import { initialFormValues, initialRawAmount, readAmountInput } from "./transaction-form.logic";
+import { initialFormValues, initialRawAmount, readAmountInput } from "../../lib/transaction-form";
 import { useCategorySuggestion } from "./useCategorySuggestion";
 
 interface UseTransactionFormOptions {

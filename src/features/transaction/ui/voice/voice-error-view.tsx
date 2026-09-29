@@ -4,8 +4,8 @@ import { motion } from "motion/react";
 import { MicOff, WifiOff } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { SPRING_PRESS } from "@/lib/ease";
-import type { SpeechError } from "./useSpeechRecognition";
-import { useVoiceExamples } from "./useVoiceExamples";
+import type { SpeechError } from "../../types";
+import { useVoiceExamples } from "../../hooks/voice/useVoiceExamples";
 import { VOICE_VIEW_MOTION } from "./voice-view-motion";
 
 const ERROR_KEYS = {

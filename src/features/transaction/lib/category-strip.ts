@@ -1,6 +1,6 @@
-import { barHeight, budgetBarHeights } from "../../lib/chart";
-import type { CategoryTotal } from "../../types";
-import { visibleSize } from "../../lib/strip-data";
+import { barHeight, budgetBarHeights } from "./chart";
+import type { CategoryTotal } from "../types";
+import { visibleSize } from "./strip-data";
 
 export interface BarLayout {
   isIdle: boolean;

@@ -5,8 +5,8 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { cn } from "@heroui/react";
 import { Mic } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useVoiceExamples } from "./useVoiceExamples";
-import { listeningStatusKey } from "./voice-entry.logic";
+import { useVoiceExamples } from "../../hooks/voice/useVoiceExamples";
+import { listeningStatusKey } from "../../lib/voice-entry";
 import { VOICE_VIEW_MOTION } from "./voice-view-motion";
 
 const BAR_PEAKS = [18, 30, 42, 26, 38, 22, 14];

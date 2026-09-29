@@ -8,7 +8,7 @@ import { useLongPress } from "../../hooks/useLongPress";
 import { formatMoney, formatShort } from "../../lib/format";
 import type { CategoryLike } from "../../types";
 import type { CategoryTotal } from "../../types";
-import { barLayout, isOverBudget as exceedsBudget } from "./category-strip.logic";
+import { barLayout, isOverBudget as exceedsBudget } from "../../lib/category-strip";
 
 const COLUMN_CLASS = "flex h-full w-[76px] shrink-0 flex-col justify-end sm:w-[88px]";
 const COLUMN_STAGGER_MS = 50;

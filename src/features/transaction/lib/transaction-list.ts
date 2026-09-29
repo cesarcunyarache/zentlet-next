@@ -1,5 +1,5 @@
-import { signedAmount } from "../../lib/format";
-import type { CategoryLike, TTransaction } from "../../types";
+import { signedAmount } from "./format";
+import type { CategoryLike, TTransaction } from "../types";
 
 const STAGGERED_ROWS = 8;
 const STAGGER_STEP_SECONDS = 0.03;

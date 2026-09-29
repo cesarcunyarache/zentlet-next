@@ -3,7 +3,7 @@ import { useDebounce } from "use-debounce";
 import { suggestTransactionCategory } from "../../ai/actions/category-suggester";
 import type { TransactionSuggestion } from "../../ai/schemas/transaction-ai.schema";
 import type { CategoryLike } from "../../types";
-import { MIN_SUGGESTION_LENGTH, normalizeSuggestionText } from "./transaction-form.logic";
+import { MIN_SUGGESTION_LENGTH, normalizeSuggestionText } from "../../lib/transaction-form";
 
 const SUGGESTION_DEBOUNCE_MS = 550;
 

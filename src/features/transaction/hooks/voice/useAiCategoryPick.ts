@@ -2,7 +2,7 @@ import { useEffect, useEffectEvent, useState } from "react";
 import { suggestTransactionCategory } from "../../ai/actions/category-suggester";
 import type { VoiceDraft } from "../../lib/parse-voice";
 import type { CategoryLike } from "../../types";
-import { needsAiCategory, type TranscriptCategory } from "./voice-entry.logic";
+import { needsAiCategory, type TranscriptCategory } from "../../lib/voice-entry";
 
 interface UseAiCategoryPickOptions {
   parsed: VoiceDraft | null;

@@ -1,7 +1,7 @@
 import type { AnalyticsEvents } from "@/lib/observability/events";
-import { cleanAmountInput, dayShift, describeOrFallback, parseAmount, toISODate } from "../../lib/format";
-import type { TransactionFormValues } from "../../schemas/transaction.schema";
-import type { CategoryLike } from "../../types";
+import { cleanAmountInput, dayShift, describeOrFallback, parseAmount, toISODate } from "./format";
+import type { TransactionFormValues } from "../schemas/transaction.schema";
+import type { CategoryLike } from "../types";
 
 export const MIN_SUGGESTION_LENGTH = 3;
 

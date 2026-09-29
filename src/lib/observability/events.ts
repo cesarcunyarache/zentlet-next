@@ -1,4 +1,4 @@
-import type { SpeechError } from "@/features/transaction/ui/voice/useSpeechRecognition";
+import type { SpeechError } from "@/features/transaction/types";
 import type { TransactionType } from "@/features/transaction/types";
 import type { FeedbackType } from "@/features/feedback/constants";
 import type { BudgetKind, BudgetPeriod } from "@/features/budget/types";

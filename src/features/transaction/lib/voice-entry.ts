@@ -1,8 +1,8 @@
-import type { SpeechStatus } from "./useSpeechRecognition";
-import type { VoiceDraft } from "../../lib/parse-voice";
-import type { TransactionFormValues } from "../../schemas/transaction.schema";
-import type { CategoryLike } from "../../types";
-import { describeOrFallback } from "../../lib/format";
+import type { SpeechStatus } from "../types";
+import type { VoiceDraft } from "./parse-voice";
+import type { TransactionFormValues } from "../schemas/transaction.schema";
+import type { CategoryLike } from "../types";
+import { describeOrFallback } from "./format";
 
 export interface TranscriptCategory {
   transcript: string;

@@ -15,7 +15,7 @@ import {
   toFormValues,
   voiceStage,
   type TranscriptCategory,
-} from "./voice-entry.logic";
+} from "../../lib/voice-entry";
 
 interface UseVoiceEntryOptions {
   categories: CategoryLike[];

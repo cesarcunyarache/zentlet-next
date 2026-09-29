@@ -10,7 +10,7 @@ import { dayLabel, formatSigned } from "../../lib/format";
 import type { SwipeSide } from "../../lib/swipe";
 import type { CategoryLike, TTransaction } from "../../types";
 import { EndSentinel } from "./end-sentinel";
-import { dayTotal, groupByDay, groupStartIndexes, type DayGroup } from "./transaction-list.logic";
+import { dayTotal, groupByDay, groupStartIndexes, type DayGroup } from "../../lib/transaction-list";
 import { TransactionRow } from "./transaction-row";
 
 const LAYOUT_ANIMATION_LIMIT = 120;
