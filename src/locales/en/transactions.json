@@ -130,5 +130,35 @@
       "salary": "Got paid 2500 salary",
       "mouse": "Bought a mouse for 120"
     }
+  },
+  "receipt": {
+    "title": "Scan receipt",
+    "reading": "Reading the receipt…",
+    "readingHint": "Receipts, card slips or payment app screenshots",
+    "redo": "Read again",
+    "noAmount": "Couldn't read the amount · tap Edit to type it",
+    "foreignCurrency": "This receipt is in {currency}. It will be saved in your currency without conversion; check the amount.",
+    "errors": {
+      "notReceipt": {
+        "title": "This doesn't look like a receipt",
+        "body": "Take a clear photo of a receipt, card slip or payment screenshot where the amount is visible."
+      },
+      "invalidImage": {
+        "title": "We couldn't open the image",
+        "body": "Try another photo or a JPG or PNG screenshot."
+      },
+      "limited": {
+        "title": "Too many scans in a row",
+        "body": "Wait a minute and try again."
+      },
+      "failed": {
+        "title": "We couldn't read the receipt",
+        "body": "Something went wrong processing the image. Try again or type it in."
+      },
+      "offline": {
+        "title": "Scanning needs internet",
+        "body": "Offline you can type it in; it syncs when you're back online."
+      }
+    }
   }
 }

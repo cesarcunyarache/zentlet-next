@@ -12,11 +12,34 @@ import { AI_MODEL } from "./models";
 const TIMEOUT_MS = 10_000;
 const MAX_RETRIES = 1;
 
+interface GenerateObjectImage {
+  data: Uint8Array;
+  mediaType: string;
+}
+
 interface GenerateObjectParams<T extends ZodTypeAny> {
   /** Nombre estable de la operación en logs y trazas (p. ej. `category.generate`). */
   operation: string;
   prompt: string;
   schema: T;
+  /** Imagen que acompaña al prompt (p. ej. una boleta). Nunca se registra. */
+  image?: GenerateObjectImage;
+  timeoutMs?: number;
+}
+
+function buildInput(prompt: string, image?: GenerateObjectImage) {
+  if (!image) return { prompt };
+  return {
+    messages: [
+      {
+        role: "user" as const,
+        content: [
+          { type: "text" as const, text: prompt },
+          { type: "file" as const, data: image.data, mediaType: image.mediaType },
+        ],
+      },
+    ],
+  };
 }
 
 /**
@@ -28,6 +51,8 @@ export async function generateObject<T extends ZodTypeAny>({
   operation,
   prompt,
   schema,
+  image,
+  timeoutMs = TIMEOUT_MS,
 }: GenerateObjectParams<T>) {
   const startedAt = performance.now();
   const durationMs = () => Math.round(performance.now() - startedAt);
@@ -35,8 +60,8 @@ export async function generateObject<T extends ZodTypeAny>({
   try {
     const { output, usage } = await generateText({
       model: AI_MODEL,
-      prompt,
-      timeout: TIMEOUT_MS,
+      ...buildInput(prompt, image),
+      timeout: timeoutMs,
       maxRetries: MAX_RETRIES,
       output: Output.object({
         schema,

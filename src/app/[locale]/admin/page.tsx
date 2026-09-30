@@ -26,6 +26,7 @@ import type { CategoryTotal } from "@/features/transaction/types";
 import { TransactionList } from "@/features/transaction/ui/list/transaction-list";
 import { TransactionFormSheet } from "@/features/transaction/ui/form/transaction-form-sheet";
 import { VoiceEntry } from "@/features/transaction/ui/voice/voice-entry";
+import { ReceiptScan } from "@/features/transaction/ui/receipt/receipt-scan";
 import type { TransactionFormValues } from "@/features/transaction/schemas/transaction.schema";
 import { TransactionDetailSheet } from "@/features/transaction/ui/detail/transaction-detail-sheet";
 import { DeleteTransactionDialog } from "@/features/transaction/ui/detail/delete-transaction-dialog";
@@ -358,7 +359,13 @@ export default function HomePage() {
           </motion.div>
 
           <div className="relative">
-          <div className="absolute bottom-full left-1/2 mb-3 -translate-x-1/2">
+          <div className="absolute bottom-full left-1/2 mb-3 flex -translate-x-1/2 flex-col items-center gap-3">
+            <ReceiptScan
+              categories={categories}
+              currency={currency}
+              onSave={saveTransaction}
+              onEdit={(draft) => openForm(draft)}
+            />
             <VoiceEntry
               categories={categories}
               currency={currency}

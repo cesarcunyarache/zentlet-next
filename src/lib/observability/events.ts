@@ -1,4 +1,5 @@
 import type { SpeechError } from "@/features/transaction/types";
+import type { ReceiptError } from "@/features/transaction/lib/receipt/receipt-draft";
 import type { TransactionType } from "@/features/transaction/types";
 import type { FeedbackType } from "@/features/feedback/constants";
 import type { BudgetKind, BudgetPeriod } from "@/features/budget/types";
@@ -14,7 +15,7 @@ export interface AnalyticsEvents {
   user_signed_up: { method: AuthMethod };
   login_completed: { method: AuthMethod };
   transaction_created: {
-    source: "form" | "voice";
+    source: "form" | "voice" | "receipt";
     type: TransactionType;
     /** La categoría la eligió la app (texto o IA) y el usuario la mantuvo. */
     category_auto: boolean;
@@ -28,6 +29,9 @@ export interface AnalyticsEvents {
   voice_entry_started: Record<string, never>;
   voice_entry_completed: { outcome: "saved" | "edited" };
   voice_entry_failed: { reason: SpeechError };
+  receipt_scan_started: Record<string, never>;
+  receipt_scan_completed: { outcome: "saved" | "edited" };
+  receipt_scan_failed: { reason: ReceiptError };
   data_exported: Record<string, never>;
   feedback_sent: { type: FeedbackType };
   onboarding_completed: { skipped: boolean; step: number; next: "categories" | "app" };

@@ -20,6 +20,7 @@ interface VoiceEntryFooterProps {
   onSave: () => void;
   onTypeInstead: () => void;
   onRetry: () => void;
+  canRetry?: boolean;
 }
 
 export function VoiceEntryFooter({
@@ -31,6 +32,7 @@ export function VoiceEntryFooter({
   onSave,
   onTypeInstead,
   onRetry,
+  canRetry = error !== "unsupported",
 }: VoiceEntryFooterProps) {
   const t = useTranslations();
 
@@ -58,7 +60,6 @@ export function VoiceEntryFooter({
   }
 
   if (stage === "error") {
-    const canRetry = error !== "unsupported";
     return (
       <div className="flex gap-2.5">
         <FooterButton variant="secondary" onPress={onTypeInstead} icon={KEYBOARD_ICON}>

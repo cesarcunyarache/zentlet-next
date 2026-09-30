@@ -22,7 +22,12 @@ interface VoicePreviewViewProps {
   isAiSuggested: boolean;
   onPickCategory: (categoryId: string) => void;
   onRetry: () => void;
+  redoLabel?: string;
+  redoIcon?: React.ReactNode;
+  noAmountLabel?: string;
 }
+
+const MIC_ICON = <Mic className="size-4" strokeWidth={2} />;
 
 export function VoicePreviewView({
   transcript,
@@ -33,6 +38,9 @@ export function VoicePreviewView({
   isAiSuggested,
   onPickCategory,
   onRetry,
+  redoLabel,
+  redoIcon = MIC_ICON,
+  noAmountLabel,
 }: VoicePreviewViewProps) {
   const t = useTranslations("transactions");
   const locale = useLocale();
@@ -50,10 +58,10 @@ export function VoicePreviewView({
         <button
           type="button"
           onClick={onRetry}
-          aria-label={t("voice.redo")}
+          aria-label={redoLabel ?? t("voice.redo")}
           className="bg-app-fill hover:bg-app-fill-strong text-app-fg grid size-9 shrink-0 place-items-center rounded-full transition-colors"
         >
-          <Mic className="size-4" strokeWidth={2} />
+          {redoIcon}
         </button>
       </div>
 
@@ -75,7 +83,7 @@ export function VoicePreviewView({
             {formatNumber(draft.amount)}
           </p>
         ) : (
-          <p className="text-app-expense m-0 mt-3 text-sm font-semibold">{t("voice.noAmount")}</p>
+          <p className="text-app-expense m-0 mt-3 text-sm font-semibold">{noAmountLabel ?? t("voice.noAmount")}</p>
         )}
 
         <dl className="m-0 mt-5 grid grid-cols-[auto_1fr] gap-x-4 gap-y-3 text-sm">
