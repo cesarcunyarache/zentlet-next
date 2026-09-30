@@ -56,6 +56,7 @@ beforeEach(() => {
   vi.stubEnv("MERCADOPAGO_WEBHOOK_SECRET", SECRET);
   vi.stubEnv("MERCADOPAGO_TEST_PAYER_EMAIL", "");
   vi.stubEnv("VERCEL_ENV", "");
+  vi.stubEnv("MERCADOPAGO_API_URL", "");
 });
 
 afterEach(() => {
@@ -111,6 +112,20 @@ describe("createCheckout", () => {
   it("sin url de checkout en la respuesta es un error", async () => {
     fetchMock.mockResolvedValue(json({ id: "pre-1", status: "pending" }));
     await expect(createMercadoPagoProvider().createCheckout(checkoutInput)).rejects.toThrow("no checkout url");
+  });
+
+  it("la url de la API sólo se puede cambiar fuera de producción (tests E2E)", async () => {
+    vi.stubEnv("MERCADOPAGO_API_URL", "http://localhost:4010");
+    fetchMock.mockImplementation(() =>
+      Promise.resolve(json({ id: "pre-1", status: "pending", init_point: "https://mp/checkout" })),
+    );
+
+    await createMercadoPagoProvider().createCheckout(checkoutInput);
+    expect(lastCall().url).toBe("http://localhost:4010/preapproval");
+
+    vi.stubEnv("VERCEL_ENV", "production");
+    await createMercadoPagoProvider().createCheckout(checkoutInput);
+    expect(lastCall().url).toBe("https://api.mercadopago.com/preapproval");
   });
 
   it("sin token configurado falla antes de llamar a la pasarela", async () => {

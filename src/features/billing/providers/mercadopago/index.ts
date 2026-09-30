@@ -10,7 +10,7 @@ import {
 } from "./mapper";
 import { checkSignature, type SignatureCheck } from "./signature";
 
-const API_URL = "https://api.mercadopago.com";
+const PRODUCTION_API_URL = "https://api.mercadopago.com";
 const TIMEOUT_MS = 10_000;
 const MAX_WEBHOOK_BYTES = 16 * 1024;
 
@@ -31,9 +31,14 @@ interface WebhookBody {
   data?: { id?: string | number };
 }
 
+const isProduction = () => process.env.VERCEL_ENV === "production";
+
 function sandboxPayerEmail() {
-  if (process.env.VERCEL_ENV === "production") return undefined;
-  return process.env.MERCADOPAGO_TEST_PAYER_EMAIL || undefined;
+  return isProduction() ? undefined : process.env.MERCADOPAGO_TEST_PAYER_EMAIL || undefined;
+}
+
+function apiUrl() {
+  return (!isProduction() && process.env.MERCADOPAGO_API_URL) || PRODUCTION_API_URL;
 }
 
 function requireEnv(name: string) {
@@ -43,7 +48,7 @@ function requireEnv(name: string) {
 }
 
 async function mpRequest<T>(path: string, { method = "GET", body, idempotencyKey }: RequestOptions = {}): Promise<T> {
-  const response = await fetch(`${API_URL}${path}`, {
+  const response = await fetch(`${apiUrl()}${path}`, {
     method,
     headers: {
       Authorization: `Bearer ${requireEnv("MERCADOPAGO_ACCESS_TOKEN")}`,

@@ -1,15 +1,15 @@
 "use client";
 
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
+import { intlLocales } from "@/i18n/routing";
 import { useSyncStatus } from "@/core/offline/sync-status";
 import { SettingsRow } from "@/features/account/ui/settings-row";
 import { useBillingActions } from "../hooks/useBillingActions";
 import { planAction, planHint } from "../lib/plan-hint";
+import { formatPrice } from "../lib/price";
 import { useBillingSummary } from "../stores/billing.store";
 import type { BillingSummary } from "../types";
 import { UpgradeButton } from "./upgrade-button";
-
-const CENTS = 100;
 
 interface CancelButtonProps {
   isConfirming: boolean;
@@ -20,13 +20,11 @@ interface CancelButtonProps {
 function useHintText(summary: BillingSummary, hasFailed: boolean) {
   const t = useTranslations("billing.plan");
   const format = useFormatter();
+  const locale = useLocale();
   if (hasFailed) return t("failed");
 
   const { key, date } = planHint(summary);
-  const price = format.number(summary.price.amount / CENTS, {
-    style: "currency",
-    currency: summary.price.currency,
-  });
+  const price = formatPrice(summary.price.amount, summary.price.currency, intlLocales[locale]);
   const formattedDate = date ? format.dateTime(new Date(date), { day: "numeric", month: "long" }) : "";
   return t(key, { price, date: formattedDate });
 }

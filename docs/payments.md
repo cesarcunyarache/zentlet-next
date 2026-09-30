@@ -243,4 +243,29 @@ Route Handlers reales contra un **Postgres real**; sólo se simulan la pasarela 
 | Integridad | Una viva por usuario, CHECK de estados e importes, reembolso ≤ cobro, cascada al borrar la cuenta conservando `billing_event` |
 | Auditoría | Rastro completo `checkout.started → status_changed → webhook → canceled` |
 
+### End-to-end (`pnpm test:e2e`)
+
+Chromium (Playwright) contra un **build de producción** de la app, la base `<base>_e2e_test` y un **Mercado Pago simulado** (`e2e/mock-mercadopago.mjs`): su API de suscripciones, su página de pago y webhooks firmados como los reales. El adaptador real se usa completo; sólo cambia la URL (`MERCADOPAGO_API_URL`, ignorada en producción).
+
+| Pieza | Qué hace |
+|---|---|
+| `playwright.config.ts` | Levanta el mock (puerto 4010) y la app (`next build` + `next start`, puerto 3100) con el entorno de `e2e/env.ts`; los cierra al terminar |
+| `e2e/global-setup.ts` | Crea y migra la base de prueba |
+| `e2e/auth.setup.ts` | Registra una cuenta y guarda la sesión para todos los tests |
+| `e2e/fixtures.ts` | Antes de cada test vacía las tablas de billing y reinicia el mock; `gateway.charge()` / `gateway.setWebhooks()` provocan escenarios |
+
+| Test | Comprueba en el navegador |
+|---|---|
+| Plan Free | Ajustes muestra "Free · Pro desde S/ 14.90 al mes", la oferta de prueba y exportar bloqueado; la API responde 403 a presupuestos y exportación |
+| Suscripción | Ajustes → *Probar 15 días* → página de pago → vuelta a la app → "Prueba de Pro hasta…", *Cancelar* y exportar disponibles |
+| Datos enviados a la pasarela | Precio del servidor (14.9 PEN mensual), correo del usuario y primer cobro a 15 días |
+| Sin webhook | Con los webhooks apagados, la app se sincroniza sola al volver del pago |
+| Pago abandonado | "Esperando la confirmación del pago" y reintentar lleva al mismo checkout (sin crear otro) |
+| Cancelación | *Cancelar* → *Confirmar* → "Pro hasta el… No se renovará", sin segunda prueba, cancelada en la pasarela |
+| Cobros | Cobro rechazado → aviso en Ajustes; cobro aprobado → "Pro · se renueva el…" |
+| Volver a suscribirse | Tras cancelar en la prueba: sin segunda prueba y el primer cobro de la nueva suscripción coincide con el fin de la anterior (sin cobro doble) |
+| Presupuestos | En Free la hoja de presupuesto ofrece Pro en lugar de *Guardar*; con Pro se guarda y queda en la cuenta |
+| Borrar la cuenta | Con suscripción activa se cancela antes en la pasarela; si la pasarela falla, la cuenta **no** se borra y el usuario ve el error |
+| Público | Sección de precios de la landing, enlace del menú, `/admin` redirige al login, rutas de billing sin sesión → 401, webhook con firma falsa → 401 |
+
 Cobertura de líneas del backend de billing (medida con v8, 2026-09-30): integración 67 % · unitarios 84 % · **ambos 96 %**. Sin cubrir: ramas de error 500 de las rutas y el código de cliente (hooks, store, servicio).

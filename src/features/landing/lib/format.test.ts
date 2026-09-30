@@ -3,7 +3,6 @@ import {
   amountSign,
   fillTemplate,
   formatAmount,
-  formatPlanPrice,
   formatSigned,
   sectionHref,
   sectionTitleId,
@@ -51,13 +50,6 @@ describe("amountSign", () => {
 describe("sectionTitleId", () => {
   it("devuelve el id del título de la sección", () => {
     expect(sectionTitleId("preguntas")).toBe("preguntas-title");
-  });
-});
-
-describe("formatPlanPrice", () => {
-  it("convierte céntimos a la moneda del plan", () => {
-    expect(formatPlanPrice(1490, "PEN", "es-PE").replace(/\s/g, " ")).toBe("S/ 14.90");
-    expect(formatPlanPrice(1490, "PEN", "en-US")).toContain("14.90");
   });
 });
 

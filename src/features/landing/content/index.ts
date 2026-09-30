@@ -1,7 +1,8 @@
 import { getMessages } from "next-intl/server";
 import { intlLocales, type Locale } from "@/i18n/routing";
 import { planPrice, TRIAL_DAYS } from "@/features/billing/lib/plans";
-import { fillTemplate, formatPlanPrice } from "../lib/format";
+import { formatPrice } from "@/features/billing/lib/price";
+import { fillTemplate } from "../lib/format";
 import {
   CATEGORY_STYLES,
   DASHBOARD,
@@ -23,7 +24,7 @@ export async function getLandingContent(locale: Locale): Promise<LandingContent>
   const proPrice = planPrice("pro");
   const pricingValues = {
     days: TRIAL_DAYS,
-    price: formatPlanPrice(proPrice.amount, proPrice.currency, intlLocales[locale]),
+    price: formatPrice(proPrice.amount, proPrice.currency, intlLocales[locale]),
     period: copy.pricing.period,
   };
   const fill = (template: string) => fillTemplate(template, pricingValues);
