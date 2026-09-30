@@ -1,6 +1,7 @@
+import { timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 import { errorResponse } from "@/lib/api/route-helpers";
-import { runHealthChecks } from "@/lib/health/checks";
+import { runDatabaseCheck, runHealthChecks } from "@/lib/health/checks";
 import { rateLimit } from "@/lib/rate-limit";
 
 /** El informe llama a APIs externas: pocas veces por minuto basta. */
@@ -8,16 +9,34 @@ const REPORTS_PER_MINUTE = 10;
 
 const noStore = { "Cache-Control": "no-store" };
 
-function clientIp(req: Request) {
-  return req.headers.get("x-forwarded-for")?.split(",")[0].trim() || req.headers.get("x-real-ip") || "unknown";
+/** `Authorization: Bearer <HEALTH_TOKEN>`; sin `HEALTH_TOKEN` configurado no hay informe detallado. */
+function hasValidToken(req: Request) {
+  const expected = process.env.HEALTH_TOKEN;
+  const given = req.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
+  if (!expected || !given) return false;
+  const a = Buffer.from(given);
+  const b = Buffer.from(expected);
+  return a.length === b.length && timingSafeEqual(a, b);
 }
 
 /**
- * Público por ahora (sin sesión): estado de cada servicio. 200 mientras la
- * base de datos responda, 503 si no. Ningún secreto sale en la respuesta.
+ * Sin credencial: sólo si la base de datos responde (200 / 503), para
+ * monitores de uptime; ni configuración ni llamadas a terceros. Con
+ * `HEALTH_TOKEN`: el estado de cada servicio. Ningún secreto sale en la respuesta.
  */
 export async function GET(req: Request) {
-  const { allowed } = await rateLimit(`health:${clientIp(req)}`, REPORTS_PER_MINUTE, 60_000);
+  if (!req.headers.has("authorization")) {
+    const database = await runDatabaseCheck();
+    const up = database.status === "ok";
+    return NextResponse.json(
+      { status: up ? "ok" : "down", checkedAt: new Date().toISOString() },
+      { status: up ? 200 : 503, headers: noStore },
+    );
+  }
+
+  if (!hasValidToken(req)) return errorResponse("Invalid health token", 401);
+
+  const { allowed } = await rateLimit("health:report", REPORTS_PER_MINUTE, 60_000);
   if (!allowed) return errorResponse("Too many requests", 429);
 
   const checks = await runHealthChecks();

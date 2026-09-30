@@ -6,14 +6,11 @@ import { generateObject } from "@/lib/ai/client";
 import { allowAiCall } from "@/lib/ai/quota";
 import { buildTransactionCategoryPrompt } from "../prompts/transaction-category.prompt";
 import {
+  suggestCategoryInputSchema,
   transactionSuggestionSchema,
+  type SuggestCategoryInput,
   type TransactionSuggestion,
 } from "../schemas/transaction-ai.schema";
-
-interface SuggestCategoryInput {
-  description: string;
-  categories: { id: string; name: string }[];
-}
 
 const OPERATION = "transaction.suggest_category";
 const MAX_DESCRIPTION_LENGTH = 80;
@@ -33,10 +30,11 @@ function promptCategories(categories: SuggestCategoryInput["categories"]) {
     .map(({ id, name }) => ({ id, name: name.slice(0, MAX_CATEGORY_NAME_LENGTH) }));
 }
 
-export async function suggestTransactionCategory({
-  description,
-  categories,
-}: SuggestCategoryInput): Promise<TransactionSuggestion | null> {
+export async function suggestTransactionCategory(input: SuggestCategoryInput): Promise<TransactionSuggestion | null> {
+  const parsed = suggestCategoryInputSchema.safeParse(input);
+  if (!parsed.success) return null;
+  const { description, categories } = parsed.data;
+
   const text = description.trim().slice(0, MAX_DESCRIPTION_LENGTH);
   if (text.length < MIN_DESCRIPTION_LENGTH || !categories.length) return null;
   if (!(await canSuggest())) return null;

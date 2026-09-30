@@ -8,7 +8,8 @@ export default defineConfig({
   migrations: {
     path: "prisma/migrations",
   },
+  // el CLI (migraciones) usa la conexión directa si existe: el pooler en modo transacción no admite sus locks
   datasource: {
-    url: process.env["DATABASE_URL"],
+    url: process.env["DIRECT_URL"] || process.env["DATABASE_URL"],
   },
 });

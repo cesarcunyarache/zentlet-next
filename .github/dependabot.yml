@@ -1,0 +1,18 @@
+# Avisos de seguridad y actualizaciones semanales. Las dependencias npm se
+# agrupan en un solo PR para no llenar la bandeja; las de seguridad llegan
+# aparte y en cuanto se publican.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      dependencies:
+        patterns: ["*"]
+        update-types: [minor, patch]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

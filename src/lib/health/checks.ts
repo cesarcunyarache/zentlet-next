@@ -146,6 +146,11 @@ function oauth(idVar: string, secretVar: string) {
   };
 }
 
+/** Sólo la base de datos: barata y sin llamadas a terceros (monitores de uptime). */
+export function runDatabaseCheck(): Promise<CheckResult> {
+  return timed("database", "Base de datos", database);
+}
+
 export function runHealthChecks(): Promise<CheckResult[]> {
   return Promise.all([
     timed("database", "Base de datos", database),

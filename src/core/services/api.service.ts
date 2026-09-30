@@ -15,6 +15,12 @@ import { siteConfig } from "@/lib/site";
  */
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
+/**
+ * Las escrituras se envían de una en una: una petición colgada bloquearía
+ * toda la cola. Un timeout cuenta como error de red y se reintenta.
+ */
+const REQUEST_TIMEOUT_MS = 15_000;
+
 /** Sesión caducada: al login (no a `/`, que es la landing). */
 let onUnauthorized = () => window.location.replace(siteConfig.routes.signIn);
 
@@ -44,6 +50,7 @@ export abstract class APIService {
     this.axiosInstance = create({
       baseURL,
       withCredentials: true,
+      timeout: REQUEST_TIMEOUT_MS,
     });
 
     this.setupInterceptors();

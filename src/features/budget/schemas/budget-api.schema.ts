@@ -2,7 +2,7 @@ import { z } from "zod";
 import { isoDate } from "@/features/transaction/schemas/transaction-api.schema";
 import { budgetPeriodOf, isPeriodStart } from "../lib/period";
 
-const amount = z.number().positive().max(9_999_999_999);
+const amount = z.number().positive().multipleOf(0.01).max(9_999_999_999);
 
 export const createBudgetSchema = z
   .object({

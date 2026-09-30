@@ -219,6 +219,7 @@ Sólo las cinco primeras son necesarias para desarrollar. El resto activa funcio
 | Variable | Para qué sirve | Obligatoria |
 |---|---|:---:|
 | `DATABASE_URL` | Conexión a PostgreSQL | ✅ |
+| `DIRECT_URL` | Conexión directa (sin pooler) para `prisma migrate deploy` | En producción con pooler |
 | `BETTER_AUTH_SECRET` | Firma de sesiones (≥ 32 caracteres). Genera una con `openssl rand -base64 32` | ✅ |
 | `BETTER_AUTH_URL` | URL base de la app (servidor) | ✅ |
 | `NEXT_PUBLIC_BETTER_AUTH_URL` | La misma URL, para el cliente de auth (se fija en el build) | ✅ |
@@ -233,6 +234,8 @@ Sólo las cinco primeras son necesarias para desarrollar. El resto activa funcio
 | `SENTRY_AUTH_TOKEN` / `SENTRY_ORG` / `SENTRY_PROJECT` | Subida de source maps en el build (el token es secreto) | Opcional |
 | `NEXT_PUBLIC_POSTHOG_KEY` / `NEXT_PUBLIC_POSTHOG_HOST` | Estadísticas de uso (PostHog), sólo con el consentimiento del usuario | Opcional |
 | `LOG_LEVEL` | Nivel de los logs del servidor (`debug`, `info`, `warn`…) | Opcional |
+| `HEALTH_TOKEN` | Da acceso al informe detallado de `/health` (sin él sólo responde si la base de datos está arriba) | Opcional |
+| `CRON_SECRET` | Protege el cron diario de limpieza (`/api/cron/cleanup`, programado en `vercel.json`) | En producción |
 
 ### Scripts
 
@@ -336,7 +339,7 @@ La [Política de privacidad](src/features/legal/content.ts) y los Términos sigu
 ## 🚢 Desplegar a producción
 
 - [ ] **Node.js 24** en la plataforma (Vercel lo toma de `engines` en `package.json`).
-- [ ] **Migraciones**: ejecuta `pnpm prisma migrate deploy` contra la base de datos de producción en cada despliegue con migraciones nuevas.
+- [ ] **Migraciones**: en Vercel se aplican solas (`vercel-build` ejecuta `prisma migrate deploy` antes de `next build`). Define `DIRECT_URL` con la conexión directa (sin pooler) para el CLI de Prisma; en otra plataforma, ejecuta `pnpm prisma migrate deploy` en cada despliegue.
 - [ ] **Base de datos serverless**: usa el pooler en modo transacción (Supabase: puerto `6543`) en `DATABASE_URL`.
 - [ ] **Variables**: todas las obligatorias, más `NEXT_PUBLIC_SITE_URL`, Resend (con tu dominio verificado: SPF, DKIM y DMARC) y Turnstile.
 - [ ] **OAuth**: callbacks de producción en Google (`/api/auth/callback/google`) y GitHub (`/api/auth/callback/github`), y pantalla de consentimiento de Google publicada.
@@ -396,8 +399,6 @@ const t = await getTranslations({ locale, namespace: "common" });
 ## 🗺️ Próximos pasos
 
 - [ ] Rendimiento de la app privada en móviles de gama media: animaciones de `layout` por fila, lista por tramos y carga diferida de las hojas
-- [ ] Actualizar Next.js a 16.3.x y retirar `next-auth` / `@auth/prisma-adapter`, que no se usan
-- [ ] Ejecutar `prisma migrate deploy` automáticamente en el despliegue
 - [ ] Pedir el consentimiento legal a las cuentas creadas antes de la casilla
 - [ ] Testimonios de los primeros usuarios (la sección ya está lista en `content/data.ts`)
 

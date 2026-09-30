@@ -6,6 +6,7 @@ import {
   errorResponse,
   getSessionUserId,
   internalError,
+  isForeignKeyViolation,
   parseBody,
   unauthorized,
   writeLimit,
@@ -74,6 +75,8 @@ export async function PATCH(req: Request, { params }: RouteContext) {
 
     return NextResponse.json(serializeTransaction(transaction));
   } catch (error) {
+    // la categoría se borró entre la comprobación y la actualización
+    if (isForeignKeyViolation(error)) return errorResponse("Category not found", 422);
     return internalError(req, error, "Error updating transaction");
   }
 }

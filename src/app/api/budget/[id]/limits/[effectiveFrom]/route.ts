@@ -9,6 +9,7 @@ import {
   errorResponse,
   getSessionUserId,
   internalError,
+  isForeignKeyViolation,
   parseBody,
   unauthorized,
   writeLimit,
@@ -62,6 +63,8 @@ export async function PUT(req: Request, { params }: RouteContext) {
 
     return NextResponse.json(serializeBudget(updated));
   } catch (error) {
+    // el presupuesto se borró entre la comprobación y el upsert
+    if (isForeignKeyViolation(error)) return errorResponse("Budget not found", 404);
     return internalError(req, error, "Error updating budget limit");
   }
 }

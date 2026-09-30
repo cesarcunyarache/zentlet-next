@@ -36,3 +36,19 @@ describe("fecha del movimiento", () => {
     expect(transactionListQuerySchema.safeParse({ from: "2026-02-01" }).success).toBe(true);
   });
 });
+
+describe("importe", () => {
+  const amountIsValid = (amount: number) => createTransactionSchema.safeParse({ ...valid, amount }).success;
+
+  it("acepta céntimos, incluidos los que no son exactos en coma flotante", () => {
+    for (const amount of [0.01, 0.07, 19.99, 0.1 + 0.2, 1_234_567.89, 9_999_999_999]) {
+      expect(amountIsValid(amount)).toBe(true);
+    }
+  });
+
+  it("rechaza más de dos decimales en lugar de redondearlos a cero en la base de datos", () => {
+    for (const amount of [0.001, 1.005, 33.333]) {
+      expect(amountIsValid(amount)).toBe(false);
+    }
+  });
+});

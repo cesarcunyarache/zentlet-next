@@ -5,6 +5,7 @@ const MIN_YEAR = 1900;
 const MAX_YEAR = 2100;
 const MAX_TEXT_LENGTH = 200;
 const MAX_AMOUNT = 9_999_999_999;
+const CENT = 0.01;
 const MAX_CATEGORY_ID_LENGTH = 64;
 const MAX_SUMMARY_IDS = 100;
 const MAX_SEARCH_LENGTH = 60;
@@ -26,7 +27,7 @@ export const isoDate = z
 
 const fields = {
   description: z.string().trim().max(MAX_TEXT_LENGTH),
-  amount: z.number().positive().max(MAX_AMOUNT),
+  amount: z.number().positive().multipleOf(CENT).max(MAX_AMOUNT),
   type: z.enum(["expense", "income"]),
   categoryId: z.string().min(1).max(MAX_CATEGORY_ID_LENGTH),
   transactionDate: isoDate,

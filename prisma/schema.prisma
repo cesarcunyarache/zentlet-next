@@ -149,9 +149,7 @@ model Transaction {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([userId])
   @@index([categoryId])
-  @@index([transactionDate])
   @@index([userId, transactionDate(sort: Desc), createdAt(sort: Desc), id(sort: Desc)])
   @@map("transaction")
 }

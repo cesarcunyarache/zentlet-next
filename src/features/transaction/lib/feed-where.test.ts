@@ -46,6 +46,7 @@ describe("afterCursor", () => {
     const day = new Date("2026-09-10");
     const created = new Date("2026-09-10T15:30:12.345Z");
     expect(afterCursor({ date: "2026-09-10", createdAt: "2026-09-10T15:30:12.345Z", id: "b" })).toEqual({
+      transactionDate: { lte: day },
       OR: [
         { transactionDate: { lt: day } },
         { transactionDate: day, createdAt: { lt: created } },

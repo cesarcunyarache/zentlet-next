@@ -19,9 +19,14 @@ const WRITES_PER_MINUTE = 120;
  * que es lo que lee `getApiErrorMessage` en el cliente.
  */
 
+/** Usuario de cada petición, para que `internalError` lo adjunte sin pasarlo a mano. */
+const requestUsers = new WeakMap<Request, string>();
+
 export async function getSessionUserId(req: Request) {
   const session = await auth.api.getSession({ headers: req.headers });
-  return session?.user.id ?? null;
+  const userId = session?.user.id ?? null;
+  if (userId) requestUsers.set(req, userId);
+  return userId;
 }
 
 export function errorResponse(message: string, status: number) {
@@ -39,9 +44,17 @@ export async function writeLimit(userId: string) {
   return response;
 }
 
-/** 500 para el cliente; el error real queda registrado (log + Sentry si está activo). */
+/**
+ * 500 para el cliente; el error real queda registrado (log + Sentry si está
+ * activo) con el usuario y el id de la petición en Vercel para cruzarlo.
+ */
 export function internalError(req: Request, error: unknown, message: string) {
-  reportError(error, message, { method: req.method, path: new URL(req.url).pathname });
+  reportError(error, message, {
+    userId: requestUsers.get(req),
+    requestId: req.headers.get("x-vercel-id") ?? undefined,
+    method: req.method,
+    path: new URL(req.url).pathname,
+  });
   return errorResponse(message, 500);
 }
 
