@@ -11,7 +11,7 @@ import type { AuthMethod } from "./observability/events";
 import { logger } from "./observability/logger";
 import { trackServerEvent } from "./observability/server";
 
-type HookContext = { path?: string; params?: Record<string, string> } | null;
+type HookContext = { path?: string; params?: Record<string, string | undefined> } | null;
 
 const DAY = 60 * 60 * 24;
 
