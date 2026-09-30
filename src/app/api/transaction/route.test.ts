@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { DELETE, GET, PATCH } from "./[id]/route";
 import { POST } from "./route";
+import { scheduleBudgetCheck } from "@/features/budget/server/check";
 
 /*
  * Idempotencia del alta: el id lo genera el cliente y la cola offline puede
@@ -11,6 +12,7 @@ import { POST } from "./route";
  */
 
 vi.mock("@/lib/auth", () => ({ auth: { api: { getSession: vi.fn() } } }));
+vi.mock("@/features/budget/server/check", () => ({ scheduleBudgetCheck: vi.fn() }));
 vi.mock("@/lib/prisma", () => ({
   default: {
     transaction: {
@@ -102,6 +104,14 @@ describe("POST /api/transaction", () => {
     expect(db.transaction.create).toHaveBeenCalledWith({
       data: expect.objectContaining({ id: ID, userId: "user-1", transactionDate: new Date("2026-09-20") }),
     });
+    expect(scheduleBudgetCheck).toHaveBeenCalledWith("user-1", "health");
+  });
+
+  it("un ingreso no revisa presupuestos", async () => {
+    db.transaction.create.mockResolvedValue({ ...row("user-1"), type: "income" } as never);
+
+    expect((await post({ ...body, type: "income" })).status).toBe(201);
+    expect(scheduleBudgetCheck).not.toHaveBeenCalled();
   });
 
   it("reenviar la misma alta devuelve la existente con 200 y no crea otra", async () => {
@@ -216,6 +226,7 @@ describe("PATCH /api/transaction/[id]", () => {
       where: { id: ID, userId: "user-1" },
       data: expect.objectContaining({ amount: 30, transactionDate: new Date("2026-09-21") }),
     });
+    expect(scheduleBudgetCheck).toHaveBeenCalledWith("user-1", "health");
   });
 
   it("uno de otro usuario o inexistente es 404 y no se lee de vuelta", async () => {

@@ -13,6 +13,7 @@ vi.mock("@/lib/prisma", () => ({
     rateLimit: { deleteMany: vi.fn() },
     session: { deleteMany: vi.fn() },
     verification: { deleteMany: vi.fn() },
+    notification: { deleteMany: vi.fn() },
     user: { count: vi.fn() },
   },
 }));
@@ -27,7 +28,7 @@ beforeEach(() => {
   vi.resetAllMocks();
   vi.useFakeTimers({ now: new Date("2026-09-29T09:00:00.000Z"), toFake: ["Date"] });
   vi.stubEnv("CRON_SECRET", SECRET);
-  for (const model of [db.usageLimit, db.rateLimit, db.session, db.verification]) {
+  for (const model of [db.usageLimit, db.rateLimit, db.session, db.verification, db.notification]) {
     model.deleteMany.mockResolvedValue({ count: 2 } as never);
   }
   db.user.count.mockResolvedValue(0 as never);
@@ -46,7 +47,13 @@ describe("GET /api/cron/cleanup", () => {
     const response = await get(`Bearer ${SECRET}`);
 
     expect(response.status).toBe(200);
-    expect((await response.json()).deleted).toEqual({ usageLimits: 2, authRateLimits: 2, sessions: 2, verifications: 2 });
+    expect((await response.json()).deleted).toEqual({
+      usageLimits: 2,
+      authRateLimits: 2,
+      sessions: 2,
+      verifications: 2,
+      notifications: 2,
+    });
 
     const now = new Date("2026-09-29T09:00:00.000Z");
     const dayAgo = new Date("2026-09-28T09:00:00.000Z");
@@ -54,5 +61,8 @@ describe("GET /api/cron/cleanup", () => {
     expect(db.rateLimit.deleteMany).toHaveBeenCalledWith({ where: { lastRequest: { lt: BigInt(dayAgo.getTime()) } } });
     expect(db.session.deleteMany).toHaveBeenCalledWith({ where: { expiresAt: { lt: now } } });
     expect(db.verification.deleteMany).toHaveBeenCalledWith({ where: { expiresAt: { lt: now } } });
+    expect(db.notification.deleteMany).toHaveBeenCalledWith({
+      where: { createdAt: { lt: new Date("2026-07-01T09:00:00.000Z") } },
+    });
   });
 });

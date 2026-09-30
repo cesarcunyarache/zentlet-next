@@ -61,6 +61,9 @@ export const ModelName = {
   Transaction: 'Transaction',
   Feedback: 'Feedback',
   Budget: 'Budget',
+  BudgetAlert: 'BudgetAlert',
+  Notification: 'Notification',
+  NotificationDelivery: 'NotificationDelivery',
   BudgetLimit: 'BudgetLimit',
   RateLimit: 'RateLimit',
   UsageLimit: 'UsageLimit',
@@ -229,6 +232,44 @@ export const BudgetScalarFieldEnum = {
 } as const
 
 export type BudgetScalarFieldEnum = (typeof BudgetScalarFieldEnum)[keyof typeof BudgetScalarFieldEnum]
+
+
+export const BudgetAlertScalarFieldEnum = {
+  id: 'id',
+  budgetId: 'budgetId',
+  kind: 'kind',
+  value: 'value',
+  createdAt: 'createdAt'
+} as const
+
+export type BudgetAlertScalarFieldEnum = (typeof BudgetAlertScalarFieldEnum)[keyof typeof BudgetAlertScalarFieldEnum]
+
+
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  data: 'data',
+  dedupeKey: 'dedupeKey',
+  readAt: 'readAt',
+  createdAt: 'createdAt'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+export const NotificationDeliveryScalarFieldEnum = {
+  id: 'id',
+  notificationId: 'notificationId',
+  channel: 'channel',
+  status: 'status',
+  attempts: 'attempts',
+  nextAttemptAt: 'nextAttemptAt',
+  sentAt: 'sentAt',
+  createdAt: 'createdAt'
+} as const
+
+export type NotificationDeliveryScalarFieldEnum = (typeof NotificationDeliveryScalarFieldEnum)[keyof typeof NotificationDeliveryScalarFieldEnum]
 
 
 export const BudgetLimitScalarFieldEnum = {

@@ -22,6 +22,10 @@ const COPY = {
       action: "Elegir una contraseña nueva",
       footer: "Si no lo pediste, ignora este mensaje: tu contraseña no cambiará.",
     },
+    notification: {
+      action: "Abrir Zentlet",
+      footer: "Recibes este correo porque tienes presupuestos activos en Zentlet.",
+    },
     fallbackLink: "Si el botón no funciona, copia este enlace en tu navegador:",
   },
   en: {
@@ -37,6 +41,10 @@ const COPY = {
       body: "We received a request to change your password. The link expires in 1 hour.",
       action: "Choose a new password",
       footer: "If you didn't request this, ignore this message: your password won't change.",
+    },
+    notification: {
+      action: "Open Zentlet",
+      footer: "You're receiving this email because you have active budgets in Zentlet.",
     },
     fallbackLink: "If the button doesn't work, paste this link into your browser:",
   },
@@ -57,13 +65,18 @@ function escapeHtml(value: string) {
   return value.replace(/[&<>"']/g, (char) => `&#${char.charCodeAt(0)};`);
 }
 
-function accountEmail(
-  locale: Locale,
-  kind: "verify" | "reset",
-  { to, name, url }: { to: string; name: string; url: string },
-): Email {
+interface EmailContent {
+  to: string;
+  name: string;
+  subject: string;
+  body: string;
+  action: string;
+  url: string;
+  footer: string;
+}
+
+function renderEmail(locale: Locale, { to, name, subject, body, action, url, footer }: EmailContent): Email {
   const copy = COPY[locale];
-  const { subject, body, action, footer } = copy[kind];
   const greeting = copy.greeting(name);
   const safeUrl = escapeHtml(url);
 
@@ -73,11 +86,11 @@ function accountEmail(
     <div style="max-width:480px;margin:0 auto;background:#ffffff;border-radius:16px;padding:32px">
       <p style="margin:0 0 24px;font-size:20px;font-weight:700">${siteConfig.name}</p>
       <p style="margin:0 0 12px;font-size:15px">${escapeHtml(greeting)}</p>
-      <p style="margin:0 0 24px;font-size:15px;line-height:1.5">${body}</p>
-      <a href="${safeUrl}" style="display:inline-block;background:#1c1c1a;color:#ffffff;text-decoration:none;font-weight:600;font-size:15px;padding:12px 20px;border-radius:12px">${action}</a>
+      <p style="margin:0 0 24px;font-size:15px;line-height:1.5">${escapeHtml(body)}</p>
+      <a href="${safeUrl}" style="display:inline-block;background:#1c1c1a;color:#ffffff;text-decoration:none;font-weight:600;font-size:15px;padding:12px 20px;border-radius:12px">${escapeHtml(action)}</a>
       <p style="margin:24px 0 4px;font-size:12px;color:#6b6b66">${copy.fallbackLink}</p>
       <p style="margin:0 0 24px;font-size:12px;word-break:break-all"><a href="${safeUrl}" style="color:#6b6b66">${safeUrl}</a></p>
-      <p style="margin:0;font-size:12px;color:#6b6b66">${footer}</p>
+      <p style="margin:0;font-size:12px;color:#6b6b66">${escapeHtml(footer)}</p>
     </div>
   </body>
 </html>`;
@@ -87,8 +100,29 @@ function accountEmail(
   return { to, subject, html, text };
 }
 
+function accountEmail(
+  locale: Locale,
+  kind: "verify" | "reset",
+  { to, name, url }: { to: string; name: string; url: string },
+): Email {
+  return renderEmail(locale, { to, name, url, ...COPY[locale][kind] });
+}
+
 export const verificationEmail = (locale: Locale, data: { to: string; name: string; url: string }) =>
   accountEmail(locale, "verify", data);
 
 export const resetPasswordEmail = (locale: Locale, data: { to: string; name: string; url: string }) =>
   accountEmail(locale, "reset", data);
+
+export function notificationEmail(
+  locale: Locale,
+  { to, name, title, body }: { to: string; name: string; title: string; body: string },
+): Email {
+  const { action, footer } = COPY[locale].notification;
+  return renderEmail(locale, { to, name, subject: title, body: `${title}. ${body}`, action, footer, url: appUrl(locale) });
+}
+
+function appUrl(locale: Locale) {
+  const prefix = locale === routing.defaultLocale ? "" : `/${locale}`;
+  return `${siteConfig.url}${prefix}${siteConfig.routes.app}`;
+}

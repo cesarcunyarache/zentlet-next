@@ -1,0 +1,17 @@
+{
+  "title": "Notifications",
+  "label": "{count, plural, =0 {Notifications} one {Notifications, # unread} other {Notifications, # unread}}",
+  "empty": "You have no notifications yet",
+  "types": {
+    "budget": {
+      "alert": {
+        "title": "You're close to your {category} limit",
+        "body": "You've spent {spent} of {limit} ({percent}%)."
+      },
+      "exceeded": {
+        "title": "You went over your {category} limit",
+        "body": "You've spent {spent} of {limit} ({percent}%)."
+      }
+    }
+  }
+}
