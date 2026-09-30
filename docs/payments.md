@@ -211,9 +211,36 @@ En Mercado Pago → Tus integraciones → Webhooks: URL `https://<dominio>/api/b
 | Archivo | Cubre |
 |---|---|
 | `lib/*.test.ts` | acceso por estado, plan efectivo, prueba, primer cobro, prorrateo, textos de UI |
-| `providers/mercadopago/*.test.ts` | firma (válida, alterada, caducada), body del checkout, mapeo de estados y céntimos |
+| `providers/mercadopago/*.test.ts` | firma (válida, alterada, caducada, hora en segundos), body del checkout, mapeo de estados y céntimos, llamadas HTTP del adaptador (cabeceras, idempotencia, motivo del error, comprador de prueba) |
 | `api/billing/checkout` | prueba, sin prueba, 409 activa, doble clic, carrera, fallo de pasarela, plan inválido |
 | `api/billing/webhooks` | firma inválida, activación, trialing, duplicado, reintento, cobro fallido, referencia ajena, tópico ignorado |
 | `api/billing/cancel` | prueba, activa, pending, idempotencia, fallo de pasarela |
 | `api/billing/admin/refunds` | auth, total, prorrateado, revocar acceso, no reembolsable, carrera |
 | `api/budget`, `api/account/export` | 403 con plan free |
+
+### Integración (`pnpm test:integration`)
+
+Route Handlers reales contra un **Postgres real**; sólo se simulan la pasarela (`src/test/integration/fake-provider.ts`, en memoria y con estado) y la sesión.
+
+| Pieza | Qué hace |
+|---|---|
+| `vitest.integration.config.mts` | Sólo `*.integration.test.ts`, en serie. `pnpm test` los excluye y no necesita base de datos |
+| `global-setup.ts` | Crea `<base>_test` si no existe y aplica las migraciones (`prisma migrate deploy`) |
+| `setup.ts` | Apunta `DATABASE_URL` a la base de prueba antes de cargar Prisma |
+| `database.ts` | `resetDatabase()` se niega a truncar una base cuyo nombre no termine en `_test` |
+| `TEST_DATABASE_URL` | Opcional: otra base de prueba. Por defecto, la de `DATABASE_URL` + `_test` |
+
+| Escenario (`billing.integration.test.ts`) | Comprueba |
+|---|---|
+| Checkout | Fila `pending` con prueba y precio del catálogo; doble clic simultáneo → una sola suscripción viva (índice parcial real) |
+| Ciclo por webhooks | pending → trialing → active; cobro fallido → past_due → recuperación; acceso real a `/api/account/export` |
+| Webhooks | Duplicado, fuera de orden, firma inválida, recurso ajeno |
+| Sincronización | `POST /api/billing/sync` activa la prueba sin webhook; sin pagar; sin suscripción |
+| Fallos | Pasarela caída en el checkout (no queda nada vivo, el reintento funciona); checkout de más de un día; rutas sin sesión → 401 |
+| Cancelación | En prueba (acceso hasta el fin, sin segunda prueba, re-suscripción sin cobro doble), checkout sin pagar, doble cancelación |
+| Reembolsos | Total, no repetible, con revocación de acceso, sin secreto |
+| Cron | Abandono de checkouts viejos, corrección de estados que la pasarela cambió sin webhook |
+| Integridad | Una viva por usuario, CHECK de estados e importes, reembolso ≤ cobro, cascada al borrar la cuenta conservando `billing_event` |
+| Auditoría | Rastro completo `checkout.started → status_changed → webhook → canceled` |
+
+Cobertura de líneas del backend de billing (medida con v8, 2026-09-30): integración 67 % · unitarios 84 % · **ambos 96 %**. Sin cubrir: ramas de error 500 de las rutas y el código de cliente (hooks, store, servicio).

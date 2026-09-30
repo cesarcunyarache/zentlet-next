@@ -18,6 +18,21 @@ jobs:
     name: Lint · Typecheck · Test · Build
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    # Postgres sólo para los tests de integración, que crean y migran `ci_test`
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: ci
+          POSTGRES_PASSWORD: ci
+          POSTGRES_DB: ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U ci"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     env:
       # El build importa los módulos del servidor pero no se conecta a nada:
       # valores de relleno, nunca secretos reales. La observabilidad queda
@@ -47,4 +62,5 @@ jobs:
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm test
+      - run: pnpm test:integration
       - run: pnpm build
