@@ -9,7 +9,12 @@
 * 🟢 You can import this file directly.
 */
 
+export const FeatureType = {
+  RELEASE: 'RELEASE',
+  EXPERIMENT: 'EXPERIMENT',
+  OPERATIONAL: 'OPERATIONAL',
+  KILL_SWITCH: 'KILL_SWITCH',
+  PERMISSION: 'PERMISSION'
+} as const
 
-
-// This file is empty because there are no enums in the schema.
-export {}
+export type FeatureType = (typeof FeatureType)[keyof typeof FeatureType]

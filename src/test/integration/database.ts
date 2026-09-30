@@ -10,7 +10,7 @@ async function assertTestDatabase() {
 export async function resetDatabase() {
   await assertTestDatabase();
   await prisma.$executeRawUnsafe(
-    'TRUNCATE "billing_event", "billing_payment", "subscription", "usage_limit", "user" CASCADE',
+    'TRUNCATE "billing_event", "billing_payment", "subscription", "usage_limit", "feature", "user" CASCADE',
   );
 }
 

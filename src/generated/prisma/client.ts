@@ -121,3 +121,13 @@ export type BillingPayment = Prisma.BillingPaymentModel
  * 
  */
 export type BillingEvent = Prisma.BillingEventModel
+/**
+ * Model Feature
+ * 
+ */
+export type Feature = Prisma.FeatureModel
+/**
+ * Model UserFeature
+ * 
+ */
+export type UserFeature = Prisma.UserFeatureModel

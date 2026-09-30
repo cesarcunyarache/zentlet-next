@@ -1,4 +1,5 @@
 import { after } from "next/server";
+import type { FeatureFlagsIntegration } from "@sentry/nextjs";
 import type { Instrumentation } from "next";
 import { logger } from "./logger";
 import type { AnalyticsEvent, AnalyticsEvents } from "./events";
@@ -104,4 +105,11 @@ export function trackServerEvent<E extends AnalyticsEvent>(
     // fuera de una petición (scripts, tests) `after` no está disponible
     void send();
   }
+}
+
+/** Evaluación de un feature flag: Sentry la adjunta a los errores de esta petición. */
+export function recordFlag(slug: string, isOn: boolean) {
+  withSentry((sdk) =>
+    sdk.getClient()?.getIntegrationByName<FeatureFlagsIntegration>("FeatureFlags")?.addFeatureFlag(slug, isOn),
+  );
 }

@@ -26,6 +26,7 @@ model User {
   consents              UserConsent[]
   preference            UserPreference?
   subscriptions         Subscription[]
+  features              UserFeature[]
 
   @@unique([email])
   @@map("user")
@@ -290,4 +291,46 @@ model BillingEvent {
   @@index([subscriptionId, createdAt])
   @@index([userId, createdAt])
   @@map("billing_event")
+}
+
+enum FeatureType {
+  RELEASE
+  EXPERIMENT
+  OPERATIONAL
+  KILL_SWITCH
+  PERMISSION
+}
+
+model Feature {
+  slug        String        @id
+  enabled     Boolean       @default(false)
+  rollout     Int           @default(100)
+  description String?
+  type        FeatureType   @default(RELEASE)
+  stale       Boolean       @default(false)
+  lastUsedAt  DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  updatedBy   String?
+  users       UserFeature[]
+
+  @@index([enabled])
+  @@index([stale])
+  @@map("feature")
+}
+
+model UserFeature {
+  userId     String
+  featureId  String
+  enabled    Boolean
+  assignedAt DateTime @default(now())
+  assignedBy String
+  updatedAt  DateTime @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  feature Feature @relation(fields: [featureId], references: [slug], onDelete: Cascade)
+
+  @@id([userId, featureId])
+  @@index([featureId])
+  @@map("user_feature")
 }

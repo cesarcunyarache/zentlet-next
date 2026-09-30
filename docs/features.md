@@ -12,7 +12,7 @@ Qué funcionalidades tiene cada usuario según su plan. Complementa [payments.md
 | ¿Qué incluye tu plan? | `can(plan, feature)` | `billing/lib/entitlements.ts` |
 | ¿Este recurso es tuyo? | Authorization | `where: { userId }` en cada query |
 
-Entitlement ≠ feature flag: el primero depende de lo pagado; los flags (lanzamientos, experimentos) irían en PostHog.
+Entitlement ≠ feature flag: el primero depende de lo pagado; los flags (lanzamientos graduales, interruptores de emergencia) son independientes del plan y están en [feature-flags.md](feature-flags.md).
 
 ## 2. Catálogo (código)
 
@@ -85,6 +85,6 @@ Mientras el resumen carga, `canUse` devuelve `true` para no parpadear un paywall
 | Necesidad | Solución |
 |---|---|
 | Límites por plan (p. ej. 3 presupuestos en free) | `limits` en el catálogo + `requireLimit()` |
-| Regalar Pro / acceso anticipado | Tabla `user_feature (userId, featureKey, expiresAt?)` consultada por `can()` |
+| Regalar Pro | Tabla `plan_grant (userId, planKey, expiresAt?)` consultada por `effectivePlan()` (el nombre `user_feature` ya lo usan los feature flags) |
 | Editar planes sin deploy | Tablas `plan` + `plan_feature`; `subscription.planKey` → FK |
-| Rollouts / experimentos | Feature flags de PostHog |
+| Experimentos A/B con métricas | PostHog (los rollouts por porcentaje ya existen: [feature-flags.md](feature-flags.md)) |
