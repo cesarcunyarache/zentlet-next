@@ -1,3 +1,4 @@
+import { timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 import type { z } from "zod";
 import { auth } from "@/lib/auth";
@@ -34,6 +35,15 @@ export function errorResponse(message: string, status: number) {
 }
 
 export const unauthorized = () => errorResponse("Unauthorized", 401);
+
+/** `Authorization: Bearer <secreto>` en tiempo constante; sin secreto configurado, nadie pasa. */
+export function hasBearerSecret(req: Request, secret: string | undefined) {
+  const given = req.headers.get("authorization");
+  if (!secret || !given) return false;
+  const a = Buffer.from(given);
+  const b = Buffer.from(`Bearer ${secret}`);
+  return a.length === b.length && timingSafeEqual(a, b);
+}
 
 /** 429 si el usuario superó su cupo de escrituras; `null` si puede seguir. */
 export async function writeLimit(userId: string) {

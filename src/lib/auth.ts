@@ -2,6 +2,7 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { APIError, createAuthMiddleware } from "better-auth/api";
 import { captcha } from "better-auth/plugins";
+import { cancelUserSubscription } from "@/features/billing/server/cancel";
 import { LEGAL_CONSENT_HEADER, LEGAL_VERSION } from "@/features/legal/config";
 import { recordSignUpConsent } from "@/features/legal/consent";
 import prisma from "./prisma";
@@ -148,7 +149,8 @@ export const auth = betterAuth({
   /*
    * El usuario puede borrar su cuenta desde Ajustes. Con contraseña se pide
    * de nuevo; sin ella, una sesión reciente. Categorías, movimientos y
-   * sesiones se borran en cascada en la base de datos.
+   * sesiones se borran en cascada en la base de datos. Antes se cancela la
+   * suscripción en la pasarela: si falla, la cuenta no se borra (seguiría cobrando).
    */
   user: {
     additionalFields: {
@@ -157,6 +159,9 @@ export const auth = betterAuth({
     },
     deleteUser: {
       enabled: true,
+      beforeDelete: async (user) => {
+        await cancelUserSubscription(user.id, "system");
+      },
       afterDelete: async (user) => {
         logger.info({ userId: user.id }, "account.deleted");
       },

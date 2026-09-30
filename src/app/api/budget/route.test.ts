@@ -17,6 +17,7 @@ vi.mock("@/lib/prisma", () => ({
     },
     budgetLimit: { upsert: vi.fn() },
     category: { findFirst: vi.fn() },
+    subscription: { findMany: vi.fn() },
     $queryRaw: vi.fn(),
   },
 }));
@@ -44,6 +45,7 @@ const row = (userId = "user-1", limits = [{ effectiveFrom: new Date("2026-09-01"
   userId,
   limits,
 });
+const PRO = [{ status: "active", planKey: "pro", trialEndsAt: null, currentPeriodEnd: null }];
 const uniqueViolation = Object.assign(new Error("Unique constraint failed"), { code: "P2002" });
 
 const get = () => GET(new Request("http://localhost/api/budget"));
@@ -64,6 +66,7 @@ beforeEach(() => {
   vi.resetAllMocks();
   getSession.mockResolvedValue({ user: { id: "user-1" } } as never);
   db.$queryRaw.mockResolvedValue([{ count: 1 }] as never);
+  db.subscription.findMany.mockResolvedValue(PRO as never);
   db.budget.findUnique.mockResolvedValue(null);
   db.category.findFirst.mockResolvedValue({ id: "food" } as never);
   db.budget.create.mockResolvedValue(row() as never);
@@ -96,6 +99,16 @@ describe("GET /api/budget", () => {
 });
 
 describe("POST /api/budget", () => {
+  it("sin plan PRO es 403 y no crea nada", async () => {
+    db.subscription.findMany.mockResolvedValue([]);
+
+    const res = await post();
+
+    expect(res.status).toBe(403);
+    expect(await res.json()).toMatchObject({ feature: "budgets" });
+    expect(db.budget.create).not.toHaveBeenCalled();
+  });
+
   it("crea el presupuesto con su primer tope desde el inicio del periodo", async () => {
     const response = await post();
 
@@ -198,6 +211,15 @@ describe("POST /api/budget", () => {
 });
 
 describe("PUT /api/budget/[id]/limits/[effectiveFrom]", () => {
+  it("sin plan PRO es 403 y no cambia el tope", async () => {
+    db.subscription.findMany.mockResolvedValue([]);
+
+    const res = await put({ amount: 700 });
+
+    expect(res.status).toBe(403);
+    expect(db.budgetLimit.upsert).not.toHaveBeenCalled();
+  });
+
   beforeEach(() => {
     db.budget.findFirst.mockResolvedValue({
       startDate: new Date("2026-09-01"),

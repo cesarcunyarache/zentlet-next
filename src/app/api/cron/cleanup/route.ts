@@ -1,7 +1,6 @@
-import { timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { errorResponse, internalError } from "@/lib/api/route-helpers";
+import { errorResponse, hasBearerSecret, internalError } from "@/lib/api/route-helpers";
 import { logger } from "@/lib/observability/logger";
 
 /*
@@ -14,18 +13,8 @@ import { logger } from "@/lib/observability/logger";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
-/** Vercel envía `Authorization: Bearer <CRON_SECRET>`; sin la variable no se ejecuta. */
-function isAuthorized(req: Request) {
-  const secret = process.env.CRON_SECRET;
-  const given = req.headers.get("authorization");
-  if (!secret || !given) return false;
-  const a = Buffer.from(given);
-  const b = Buffer.from(`Bearer ${secret}`);
-  return a.length === b.length && timingSafeEqual(a, b);
-}
-
 export async function GET(req: Request) {
-  if (!isAuthorized(req)) return errorResponse("Unauthorized", 401);
+  if (!hasBearerSecret(req, process.env.CRON_SECRET)) return errorResponse("Unauthorized", 401);
 
   try {
     const now = new Date();

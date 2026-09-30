@@ -63,7 +63,10 @@ export const ModelName = {
   Budget: 'Budget',
   BudgetLimit: 'BudgetLimit',
   RateLimit: 'RateLimit',
-  UsageLimit: 'UsageLimit'
+  UsageLimit: 'UsageLimit',
+  Subscription: 'Subscription',
+  BillingPayment: 'BillingPayment',
+  BillingEvent: 'BillingEvent'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -254,6 +257,62 @@ export const UsageLimitScalarFieldEnum = {
 } as const
 
 export type UsageLimitScalarFieldEnum = (typeof UsageLimitScalarFieldEnum)[keyof typeof UsageLimitScalarFieldEnum]
+
+
+export const SubscriptionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  planKey: 'planKey',
+  status: 'status',
+  amount: 'amount',
+  currency: 'currency',
+  interval: 'interval',
+  provider: 'provider',
+  externalId: 'externalId',
+  checkoutUrl: 'checkoutUrl',
+  trialEndsAt: 'trialEndsAt',
+  currentPeriodEnd: 'currentPeriodEnd',
+  canceledAt: 'canceledAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SubscriptionScalarFieldEnum = (typeof SubscriptionScalarFieldEnum)[keyof typeof SubscriptionScalarFieldEnum]
+
+
+export const BillingPaymentScalarFieldEnum = {
+  id: 'id',
+  subscriptionId: 'subscriptionId',
+  provider: 'provider',
+  externalId: 'externalId',
+  providerPaymentId: 'providerPaymentId',
+  status: 'status',
+  amount: 'amount',
+  refundedAmount: 'refundedAmount',
+  currency: 'currency',
+  paidAt: 'paidAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BillingPaymentScalarFieldEnum = (typeof BillingPaymentScalarFieldEnum)[keyof typeof BillingPaymentScalarFieldEnum]
+
+
+export const BillingEventScalarFieldEnum = {
+  id: 'id',
+  source: 'source',
+  type: 'type',
+  provider: 'provider',
+  externalId: 'externalId',
+  resourceId: 'resourceId',
+  userId: 'userId',
+  subscriptionId: 'subscriptionId',
+  data: 'data',
+  processedAt: 'processedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type BillingEventScalarFieldEnum = (typeof BillingEventScalarFieldEnum)[keyof typeof BillingEventScalarFieldEnum]
 
 
 export const SortOrder = {

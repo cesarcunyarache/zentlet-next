@@ -8,6 +8,7 @@ vi.mock("@/lib/prisma", () => ({
   default: {
     transaction: { findMany: vi.fn() },
     category: { findMany: vi.fn() },
+    subscription: { findMany: vi.fn() },
     $queryRaw: vi.fn(),
   },
 }));
@@ -29,11 +30,14 @@ function signIn() {
   return `user-${userId}`;
 }
 
+const PRO = [{ status: "active", planKey: "pro", trialEndsAt: null, currentPeriodEnd: null }];
+
 const exportFile = (query = "") => GET(new Request(`http://localhost/api/account/export${query}`));
 
 beforeEach(() => {
   vi.resetAllMocks();
   db.$queryRaw.mockImplementation(countUsage as never);
+  db.subscription.findMany.mockResolvedValue(PRO as never);
   db.transaction.findMany.mockResolvedValue([
     {
       transactionDate: new Date("2026-09-20T00:00:00.000Z"),
@@ -90,5 +94,18 @@ describe("GET /api/account/export", () => {
 
     expect(response.status).toBe(500);
     expect(await response.json()).toEqual({ message: "Error exporting data" });
+  });
+});
+
+describe("GET /api/account/export sin plan PRO", () => {
+  it("el plan free recibe 403 con la feature que falta y no lee datos", async () => {
+    signIn();
+    db.subscription.findMany.mockResolvedValue([]);
+
+    const res = await exportFile();
+
+    expect(res.status).toBe(403);
+    expect(await res.json()).toEqual({ message: "Upgrade required", feature: "export" });
+    expect(db.transaction.findMany).not.toHaveBeenCalled();
   });
 });

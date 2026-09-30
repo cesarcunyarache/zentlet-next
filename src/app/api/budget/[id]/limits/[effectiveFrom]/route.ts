@@ -14,6 +14,7 @@ import {
   unauthorized,
   writeLimit,
 } from "@/lib/api/route-helpers";
+import { requireFeature } from "@/features/billing/server/guard";
 
 type RouteContext = { params: Promise<{ id: string; effectiveFrom: string }> };
 
@@ -29,6 +30,9 @@ export async function PUT(req: Request, { params }: RouteContext) {
 
     const limited = await writeLimit(userId);
     if (limited) return limited;
+
+    const denied = await requireFeature(userId, "budgets");
+    if (denied) return denied;
 
     const { id, effectiveFrom } = await params;
     if (!isoDate.safeParse(effectiveFrom).success) return errorResponse("Invalid period start", 422);

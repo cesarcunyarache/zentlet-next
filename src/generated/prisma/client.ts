@@ -106,3 +106,18 @@ export type RateLimit = Prisma.RateLimitModel
  * 
  */
 export type UsageLimit = Prisma.UsageLimitModel
+/**
+ * Model Subscription
+ * 
+ */
+export type Subscription = Prisma.SubscriptionModel
+/**
+ * Model BillingPayment
+ * 
+ */
+export type BillingPayment = Prisma.BillingPaymentModel
+/**
+ * Model BillingEvent
+ * 
+ */
+export type BillingEvent = Prisma.BillingEventModel

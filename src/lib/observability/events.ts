@@ -31,6 +31,8 @@ export interface AnalyticsEvents {
   data_exported: Record<string, never>;
   feedback_sent: { type: FeedbackType };
   onboarding_completed: { skipped: boolean; step: number; next: "categories" | "app" };
+  checkout_started: { plan: string };
+  subscription_canceled: Record<string, never>;
 }
 
 export type AnalyticsEvent = keyof AnalyticsEvents;

@@ -1,282 +1,219 @@
 # Pagos y suscripciones
 
-Propuesta para la v1: **1 proveedor (Mercado Pago), 1 plan de pago, PEN**. Base preparada para más planes y proveedores sin migrar datos.
+Implementación v1: **Mercado Pago (suscripciones sin plan asociado), 1 plan de pago (Pro), PEN, prueba de 15 días**.
+Planes, features y control de acceso: [features.md](features.md) · Auditoría y pendientes: [billing-review.md](billing-review.md).
 
-Planes, features y control de acceso: [features.md](features.md).
-
-## 1. Punto de partida
-
-| Qué hay | Implicación |
-|---|---|
-| Solo `User` (sin teams/orgs) | La suscripción pertenece al **usuario** |
-| Route Handlers + Prisma directo (`src/app/api/*`) | Billing sigue el mismo patrón; sin repositorios |
-| Servicios axios (`APIService`) con `NEXT_PUBLIC_API_URL` | El frontend ya habla HTTP: separar el backend es cambiar la URL |
-| Server Actions solo para IA | Billing **no** usa Server Actions |
-| Helpers `writeLimit`, `parseBody`, `internalError` | El guard de features copia ese estilo |
-| Idempotencia por `id` generado en cliente | Se reutiliza la idea para checkout |
-| Cron diario (`/api/cron/cleanup`, `CRON_SECRET`) | La reconciliación va en un cron igual |
-| Nada de planes/pagos/permisos | Se parte de cero, sin reemplazar nada |
-
-## 2. Decisiones
-
-1. **Catálogo de planes y features en código**, no en tablas ([por qué](features.md#2-catálogo-en-código)). La BD guarda `planKey` (string) y el precio cobrado, así que pasar a tablas más adelante no migra suscripciones.
-2. **Sin fila de suscripción = FREE.** No se crean filas para usuarios gratuitos.
-3. **Una sola interfaz `BillingProvider`** (Strategy + Adapter en uno) y un mapa `nombre → implementación`. Sin factory, registry, ni ports por capa.
-4. **El webhook no confía en el payload**: solo usa el id del recurso y vuelve a consultar al proveedor. Eso resuelve autenticidad, orden y duplicados de una vez.
-5. **Entitlements = función pura** `can(plan, feature)` + un guard en los Route Handlers. El frontend solo lo usa para UX. Detalle en [features.md](features.md).
-
-## 3. Estructura
+## 1. Estructura
 
 ```
 src/features/billing/
-  lib/            plans.ts · entitlements.ts · status.ts   (puro, con tests)
-  providers/      types.ts · mercadopago.ts · index.ts     (solo servidor)
-  server/         subscription.ts · guard.ts              (Prisma + provider)
-  services/       billing.service.ts                     (axios, cliente)
-  hooks/          useBilling.ts
-  ui/             pricing/ · paywall/
-  schemas/ types/
-
-src/app/api/billing/
-  me/route.ts                    GET   plan, estado, features
-  checkout/route.ts              POST  { planKey } → { redirectUrl }
-  cancel/route.ts                POST
-  sync/route.ts                  POST  refresca desde el proveedor (al volver del checkout)
-  webhooks/[provider]/route.ts   POST
+  types/        estados, eventos, BillingSummary
+  lib/          plans · entitlements · lifecycle · proration · plan-hint      (puro, con tests)
+  providers/    types.ts (puerto) · index.ts (registro) · mercadopago/         (adaptador)
+  server/       checkout · cancel · subscriptions · payments · webhooks · reconcile · guard · events
+  schemas/      billing-api.schema.ts (zod)
+  services/     billing.service.ts (axios)
+  stores/       billing.store.ts (TanStack Query)
+  hooks/        useBillingActions · useBillingReturn
+  ui/           plan-row · upgrade-button · billing-return
+src/app/api/billing/…   Route Handlers (finos: sesión → validación → server/)
 src/app/api/cron/billing-sync/route.ts
 ```
 
-Regla: fuera de `providers/` nadie importa el SDK ni la API de Mercado Pago.
-
-## 4. Precio en el catálogo
-
-El catálogo (`lib/plans.ts`, ver [features.md](features.md#2-catálogo-en-código)) define features y precio de cada plan:
-
-```ts
-pro: { features: [...], price: { amount: 1490, currency: "PEN", interval: "month" } }
-```
-
-- Precio en **céntimos (entero)**, moneda ISO, intervalo `month | year`.
-- El catálogo fija el precio de las suscripciones **nuevas**; cada suscripción guarda lo que realmente paga (`amount`, `currency`).
-- El precio lo decide el servidor; el cliente solo envía `planKey`.
-- IDs externos por proveedor (si el proveedor los necesita) van en env o en `providers/<x>.ts`, nunca en el plan.
-
-## 5. Modelo de datos
-
-```prisma
-model Subscription {
-  id                     String    @id @default(uuid())
-  userId                 String
-  planKey                String
-  status                 String    // pending | active | past_due | canceled
-  amount                 Int       // céntimos cobrados en esta suscripción
-  currency               String    // "PEN"
-  interval               String    // month | year
-  provider               String    // "mercadopago"
-  externalId             String?   // id de la suscripción en el proveedor
-  checkoutUrl            String?
-  currentPeriodEnd       DateTime?
-  canceledAt             DateTime?
-  createdAt              DateTime  @default(now())
-  updatedAt              DateTime  @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Restrict)
-
-  @@unique([provider, externalId])
-  @@index([userId, status])
-  @@map("subscription")
-}
-
-model BillingEvent {
-  id          String   @id @default(uuid())
-  provider    String
-  externalId  String   // id de la notificación
-  type        String
-  resourceId  String
-  processedAt DateTime?
-  createdAt   DateTime @default(now())
-
-  @@unique([provider, externalId])
-  @@map("billing_event")
-}
-```
-
-**¿Bastan dos tablas?** Sí para la v1:
-
-| Tabla | Responde |
+| Regla | Cómo se cumple |
 |---|---|
-| `subscription` | ¿Qué plan tiene?, ¿en qué estado?, ¿cuánto paga?, ¿hasta cuándo? |
-| `billing_event` | ¿Ya procesé este webhook? |
-| `payment` (**no ahora**) | Historial de cada cobro. Solo si se muestra "mis pagos" o se emiten comprobantes; MP ya lo guarda |
+| Nada fuera de `providers/mercadopago/` conoce Mercado Pago | El resto usa `BillingProvider` y tipos propios |
+| La UI no toca la base de datos ni la pasarela | UI → `billingService` (HTTP) → `/api/billing/*` |
+| `lib/` es puro | Sin Prisma, sin red: se testea sin mocks |
+| El precio lo decide el servidor | El cliente sólo envía `planKey` (zod: `z.enum(PAID_PLAN_KEYS)`) |
 
-- **Índice parcial en SQL** (Prisma no lo expresa): una sola suscripción viva por usuario.
-  `CREATE UNIQUE INDEX ON subscription ("userId") WHERE status IN ('pending','active','past_due');`
-- `BillingEvent` guarda **solo metadata**, sin payload: el estado real se consulta al proveedor.
-- `onDelete: Restrict` a propósito: borrar la cuenta debe cancelar antes en el proveedor (ver riesgos).
-- `amount`/`currency`/`interval` son una **foto** del precio al suscribirse: si el catálogo cambia de 14.90 a 19.90, los suscriptores antiguos siguen registrados con lo que MP les cobra.
-- No hay `customer_id`: Mercado Pago no lo necesita para preapproval. Se añade como columna nullable si otro proveedor lo exige.
+## 2. Patrón
 
-## 6. Provider
+**Ports & Adapters con Strategy**: `BillingProvider` es el puerto; `createMercadoPagoProvider()` el adaptador; `getBillingProvider(name)` elige la estrategia desde un mapa (`BILLING_PROVIDER` o el `provider` guardado en cada suscripción). Sin factory, DI ni repositorios: Prisma directo como el resto del proyecto.
 
-```ts
-// providers/types.ts
-interface BillingProvider {
-  createCheckout(input: { subscriptionId: string; plan: Plan; email: string; returnUrl: string }):
-    Promise<{ externalId: string; checkoutUrl: string }>;
-  getSubscription(externalId: string): Promise<ProviderSnapshot>;
-  cancel(externalId: string): Promise<void>;
-  parseWebhook(req: Request, rawBody: string): Promise<WebhookRef | null>; // null = firma inválida
-}
-
-type ProviderSnapshot = { status: SubscriptionStatus; currentPeriodEnd: Date | null };
-type WebhookRef = { eventId: string; type: string; resourceId: string };
-```
-
-- El mapeo de estados vive dentro de cada provider: el dominio solo ve `SubscriptionStatus`.
-- `providers/index.ts`: `getProvider(name = process.env.BILLING_PROVIDER)`.
-- Cada suscripción guarda su `provider`: las operaciones sobre una suscripción existente usan **ese**, no el de env. Con eso ya conviven dos proveedores (los antiguos siguen en MP aunque los nuevos vayan a Culqi) sin routing.
-
-**Mercado Pago**: API de *preapproval* con redirección (`init_point`). El usuario paga en MP; nunca vemos tarjetas. `external_reference = subscription.id`.
-
-## 7. Estados
-
-| Interno | Significado | Acceso a PRO |
-|---|---|---|
-| `pending` | Checkout creado, sin pago | No |
-| `active` | Cobrando al día | Sí |
-| `past_due` | Cobro fallido o pausado | Sí (gracia hasta `currentPeriodEnd`) |
-| `canceled` | Cancelada | Sí hasta `currentPeriodEnd`, luego no |
-
-`expired` no es un estado: se deriva de `canceled/past_due + currentPeriodEnd < now`.
-
-| Mercado Pago (preapproval) | Interno |
+| Operación del puerto | Mercado Pago |
 |---|---|
-| `pending` | `pending` |
-| `authorized` | `active` |
-| `paused` | `past_due` |
-| `cancelled` | `canceled` |
-| pago autorizado `rejected` | `past_due` |
+| `createCheckout` | `POST /preapproval` (`status: pending`, `external_reference = subscription.id`, `X-Idempotency-Key`) |
+| `getSubscription` | `GET /preapproval/{id}` |
+| `getPayment` | `GET /authorized_payments/{id}` |
+| `cancelSubscription` | `PUT /preapproval/{id}` `{ status: "cancelled" }` |
+| `refundPayment` | `POST /v1/payments/{id}/refunds` (`X-Idempotency-Key`) |
+| `parseWebhook` | Valida `x-signature` (HMAC-SHA256) y normaliza la notificación |
 
-## 8. Flujos
+**Añadir Culqi/Stripe**: crear `providers/<nombre>/`, implementar las 6 operaciones, registrarlo en `providers/index.ts`, añadir `"<nombre>"` a `ProviderName`. Las suscripciones existentes siguen en su proveedor (columna `provider`); no hay migración.
 
-**Suscripción**
-```
-Pricing → POST /api/billing/checkout {planKey}
-  ├─ ¿existe viva? pending → devuelve su checkoutUrl · active → 409
-  ├─ crea Subscription(pending, amount/currency del catálogo)  ← índice parcial frena el doble clic
-  ├─ provider.createCheckout → guarda externalId + checkoutUrl
-  └─ { redirectUrl }
-Usuario paga en MP → vuelve a /billing/return → POST /api/billing/sync → UI actualizada
-En paralelo llega el webhook (fuente de verdad).
-```
+## 3. Modelo de datos
 
-**Webhook**
-```
-POST /api/billing/webhooks/mercadopago
-  1. provider.parseWebhook → valida x-signature (HMAC con MERCADOPAGO_WEBHOOK_SECRET) → 401 si falla
-  2. INSERT BillingEvent (unique provider+externalId) → duplicado: 200 y fin
-  3. provider.getSubscription(resourceId) → snapshot actual
-  4. UPDATE Subscription por (provider, externalId); si no existe → log + 200
-  5. processedAt = now → 200
-  Error en 3-4 → 500 (MP reintenta; el evento sin processedAt se reprocesa)
-```
-Como siempre se lee el estado actual del proveedor, un evento viejo que llega tarde escribe el estado nuevo: el orden deja de importar.
+Migración: `prisma/migrations/20260929120000_billing_subscriptions` (fusiona la anterior de índices/checks).
 
-**Cancelación**: `POST /api/billing/cancel` → `provider.cancel` → `status=canceled`, `canceledAt`. Mantiene acceso hasta `currentPeriodEnd`. Repetirla no hace nada.
+### `subscription`
 
-## 9. Entitlements
+| Columna | Tipo | Nota |
+|---|---|---|
+| `id` | uuid | Se envía a la pasarela como `external_reference` |
+| `userId` | FK `user` (cascade) | Dueño: el usuario (no hay teams) |
+| `planKey` | text | Clave del catálogo en código (`pro`) |
+| `status` | text + CHECK | `pending · trialing · active · past_due · canceled` |
+| `amount` / `currency` / `interval` | int (céntimos) / text / text | Foto del precio al suscribirse |
+| `provider` / `externalId` | text / text? | `UNIQUE(provider, externalId)` |
+| `checkoutUrl` | text? | Se reutiliza 24 h (doble clic) |
+| `trialEndsAt` | timestamp? | Fin de la prueba; `null` si no hubo |
+| `currentPeriodEnd` | timestamp? | Hasta cuándo hay acceso pagado |
+| `canceledAt` | timestamp? | |
 
-```
-userId → subscription que hoy da acceso → planKey (o free) → can(plan, feature)
-```
+Índices: `(userId, status)`, `(status, updatedAt)` y **parcial único** `subscription_one_live_per_user` sobre `userId` cuando `status IN (pending, trialing, active, past_due)`.
 
-- El plan efectivo sale de la suscripción que **hoy da acceso** (`active`, o `past_due`/`canceled` con periodo vigente), no de la más reciente.
-- La **barrera real** es `requireFeature(userId, feature)` en el Route Handler y en las Server Actions de IA.
-- El frontend usa `GET /api/billing/me` → `{ plan, status, features, currentPeriodEnd }` solo para UX.
+### `billing_payment`
 
-Consulta, guard y cómo agregar features de pago: [features.md](features.md).
-
-## 10. Seguridad
-
-- `MERCADOPAGO_ACCESS_TOKEN` y `MERCADOPAGO_WEBHOOK_SECRET` solo en servidor; nada `NEXT_PUBLIC_`.
-- El cliente envía solo `planKey`, validado con zod contra el catálogo. Precio, estado y features los decide el servidor.
-- Webhook: firma HMAC + comparación en tiempo constante + tolerancia de `ts` + re-consulta al proveedor + comprobar que `external_reference` coincide con nuestra suscripción.
-- Sin PAN/CVV: el pago ocurre en la página de MP.
-- `writeLimit` en checkout/cancel/sync. El webhook no requiere sesión, solo firma.
-- Logs sin payload ni email (seguir `scrub.ts`).
-
-## 11. Idempotencia
-
-| Operación | Mecanismo |
+| Columna | Nota |
 |---|---|
-| Checkout (doble clic) | Índice parcial único + reusar la `pending` existente |
-| Webhook duplicado | `UNIQUE(provider, externalId)` en `BillingEvent` |
-| Webhook fuera de orden | Re-consulta del estado actual |
-| Cancel | Idempotente por naturaleza (si ya está `canceled`, 200) |
-| Sync / cron | Escribe el snapshot del proveedor; repetir no cambia nada |
+| `subscriptionId` | FK `subscription` (cascade) |
+| `provider` / `externalId` | Cuota (authorized payment). `UNIQUE(provider, externalId)` |
+| `providerPaymentId` | Pago real, necesario para reembolsar |
+| `status` + CHECK | `pending · approved · failed · refunded · partially_refunded` |
+| `amount` / `refundedAmount` | Céntimos. CHECK `0 ≤ refundedAmount ≤ amount` |
+| `currency` / `paidAt` | |
 
-Sin tabla de idempotency keys genérica.
+### `billing_event` (auditoría + idempotencia)
 
-## 12. Reconciliación
+| Columna | Nota |
+|---|---|
+| `source` | `webhook · user · system · admin` |
+| `type` | `checkout.started`, `subscription.status_changed`, `subscription.canceled`, `payment.refunded`, `checkout.abandoned`, tópico del webhook… |
+| `provider` / `externalId` | Id de la notificación. `UNIQUE(provider, externalId)` |
+| `resourceId` / `userId` / `subscriptionId` | Sin FK: sobrevive al borrado de la cuenta |
+| `data` | Metadata mínima (`from/to`, importe, modo). **Nunca el payload** |
+| `processedAt` | `null` = recibido pero no procesado (se reintenta) |
 
-- **Bajo demanda**: `POST /api/billing/sync` al volver del checkout.
-- **Cron diario** `/api/cron/billing-sync` (mismo patrón que `cleanup`): refresca suscripciones `pending` > 1 h, `past_due`, y `active/canceled` con `currentPeriodEnd` vencido. Marca `pending` abandonadas > 7 días como `canceled`.
-- Si MP y la BD discrepan, **gana MP**, y se registra `billing.reconciled` en logs.
+## 4. Estados
 
-## 13. Separación futura del backend
-
-Ya está casi resuelta por el patrón actual:
-- La UI solo usa `billingService` (axios) → endpoints `/api/billing/*`.
-- Toda la lógica está en `features/billing/{lib,server,providers}`, sin React.
-- Mover el backend = copiar `server/`, `providers/`, `lib/` y las rutas; cambiar `NEXT_PUBLIC_API_URL` y la URL del webhook en MP.
-- Única atención: la sesión (Better Auth por cookie) tendrá que viajar cross-origin; es un tema de auth, no de billing.
-
-## 14. Fases
-
-| Fase | Entregable | Hecho cuando |
+| Interno | Acceso Pro | Origen |
 |---|---|---|
-| 1 | `lib/plans`, `lib/entitlements`, `lib/status` + tests | `can()` y el mapeo de estados cubiertos |
-| 2 | Migración `Subscription`, `BillingEvent`, índice parcial | `prisma migrate` aplicado |
-| 3 | `providers/types` + `mercadopago` (checkout, get, cancel, parseWebhook) | Tests con fetch mockeado + prueba manual en sandbox |
-| 4 | Rutas `checkout`, `me`, `cancel`, `sync` | Tests de ruta como los existentes |
-| 5 | Webhook + cron `billing-sync` | Duplicado/firma inválida/fuera de orden testeados |
-| 6 | `getEffectivePlan` + `requireFeature` en las rutas PRO | 403 sin plan, 200 con plan, canceled vigente = PRO |
-| 7 | UI: pricing, paywall, página de retorno, estado en ajustes | Flujo completo en sandbox |
-| 8 | Eventos PostHog (`checkout_started`, `subscription_activated`) + alertas Sentry en webhook | Visible en dashboards |
+| `pending` | No | Checkout creado, sin autorizar |
+| `trialing` | Hasta `trialEndsAt` | Autorizada, sin cobros, dentro de la prueba |
+| `active` | Sí | Autorizada y al día |
+| `past_due` | `currentPeriodEnd` + 10 días (ventana de reintentos de MP) | Último cobro fallido o pausada |
+| `canceled` | Hasta `currentPeriodEnd` | Cancelada por usuario, sistema o MP (3 cuotas rechazadas) |
 
-## 15. Qué NO implementar
-
-- Tablas `plans` / `features` / `plan_features` (hasta necesitar editar planes sin deploy).
-- Tabla `payment` con historial de cobros.
-- Overrides por usuario (`user_feature`) y límites por plan: ver evolución en [features.md](features.md#6-evolución-no-ahora).
-- Routing por país o método de pago entre proveedores.
-- Tabla `provider_plans` / IDs externos por plan en BD.
-- Historial de precios, cupones, trials, prorrateo, upgrades/downgrades.
-- Multi-moneda.
-- Facturas/comprobantes propios (SUNAT) — tema aparte.
-- Repository pattern, DI container, event sourcing, CQRS, colas/broker, microservicio.
-- Guardar payloads completos de webhooks.
-- Permisos por rol (no hay teams).
-
-## 16. Referencias (Dub / Cal.com)
-
-| Idea | Lo hacen | Nosotros |
+| Mercado Pago | Snapshot | Regla de dominio (`resolveStatus`) |
 |---|---|---|
-| Plan y límites definidos en código | Dub | **Sí** |
-| Un handler por tipo de evento de webhook | Dub | No: con MP basta re-consultar el recurso |
-| Plan/ids de Stripe como columnas del workspace | Dub | No: acoplado al proveedor |
-| Billing por team/org | Cal.com, Dub (workspace) | No: sin teams |
-| Tablas `Feature` / `UserFeatures` / `TeamFeatures` | Cal.com | No: son feature flags, no plan → features ([detalle](features.md#7-referencia-calcom)) |
-| `@unique` en `externalId` / `idempotencyKey` | Cal.com | **Sí**: idempotencia por restricción en BD |
-| Payload completo del proveedor en `Payment.data` | Cal.com | No: solo metadata |
-| Paquete de billing separado en monorepo | Cal.com | No: una carpeta `features/billing` basta |
+| `pending` | `pending` | — |
+| `authorized` | `active` | → `trialing` si no hay cobros y `now < trialEndsAt`; → `past_due` si el último cobro falló |
+| `paused` | `past_due` | — |
+| `cancelled` / `finished` | `canceled` | — |
+| otro | error | No se adivina: se reintenta y se reporta |
 
-## 17. Riesgos pendientes
+| Cuota MP (`authorized_payment`) | `billing_payment.status` |
+|---|---|
+| `payment.status = approved` | `approved` |
+| `payment.status = rejected` · cuota `recycling` / `cancelled` | `failed` |
+| `scheduled`, `waiting for gateway`, `in_process` | `pending` |
+| `refunded` / `charged_back` | `refunded` |
 
-- **Borrado de cuenta**: el flujo actual borra en cascada; con suscripción activa hay que cancelar en MP primero (por eso `Restrict`). Revisar `/api/account`.
-- **Email del pagador en MP**: preapproval puede exigir que coincida con la cuenta MP del usuario; validar en sandbox.
-- **Webhooks de MP** llegan por varios *topics* (`subscription_preapproval`, `subscription_authorized_payment`); confirmar cuáles resolver a qué recurso.
-- **Periodo de gracia en `past_due`**: decidir si dar acceso hasta `currentPeriodEnd` o cortar al instante.
-- **Re-suscribirse con un `canceled` vigente**: MP cobraría desde hoy aunque quede periodo pagado. Decidir si bloquear el checkout hasta `currentPeriodEnd` o aceptarlo.
-- **Datos creados con PRO** (p. ej. presupuestos) al volver a FREE: ¿solo lectura o se ocultan? Decisión de producto.
-- **Comprobantes electrónicos** en Perú: fuera de alcance, pero necesario antes de escalar.
+## 5. Flujos
+
+**Checkout** — `POST /api/billing/checkout { planKey }`
+```
+¿suscripción viva?  active/trialing/past_due → 409 · pending con url < 24 h → misma url · pending vieja → abandonar
+prueba = nunca tuvo una prueba iniciada ? 15 días : 0
+primer cobro = max(hoy + prueba, fin del periodo pagado de una cancelada)   ← re-suscribirse no cobra doble
+INSERT subscription(pending)        ← índice parcial: segundo clic simultáneo → 409
+provider.createCheckout → guarda externalId + checkoutUrl   (si falla → abandona y 500)
+→ { redirectUrl }  →  usuario autoriza en MP  →  vuelve a /admin?billing=return  →  POST /api/billing/sync
+```
+
+**Webhook** — `POST /api/billing/webhooks/mercadopago`
+```
+1. firma x-signature (HMAC, ts ±5 min, comparación en tiempo constante) → 401 si falla
+2. INSERT billing_event(provider, notificationId) → ya procesado: 200 "duplicate"
+3. re-consulta el recurso a MP (nunca se confía en el payload)
+   subscription_preapproval       → applySnapshot
+   subscription_authorized_payment → upsert billing_payment → applySnapshot
+4. external_reference ≠ subscription.id → se ignora (log)
+5. processedAt = now → 200.  Error → 500 → MP reintenta cada 15 min → se reprocesa
+```
+
+**Cancelación** — `POST /api/billing/cancel`
+| Estado | Efecto |
+|---|---|
+| `pending` | Se abandona; **no consume la prueba** |
+| `trialing` | Cancela en MP (no habrá cobro); acceso hasta `trialEndsAt` |
+| `active` | Cancela en MP; acceso hasta `currentPeriodEnd`; sin reembolso automático |
+| `past_due` | Cancela en MP; acceso termina (no hay periodo pagado vigente) |
+| sin suscripción viva | 200, no hace nada (idempotente) |
+| MP falla | 500 y **no** se marca como cancelada |
+
+**Borrado de cuenta**: `deleteUser.beforeDelete` cancela en la pasarela; si falla, la cuenta no se borra.
+
+**Reconciliación** — cron diario `GET /api/cron/billing-sync` (10:00 UTC, `CRON_SECRET`), lotes de 100:
+- `pending` > 1 h → sync; > 7 días → cancelar en MP y abandonar.
+- `trialing/active/past_due` con `currentPeriodEnd` vencido y todos los `past_due` → sync.
+- MP manda: si discrepa, se escribe el snapshot de MP y queda `subscription.status_changed` en `billing_event`.
+
+## 6. Prueba gratuita (15 días)
+
+| Regla | Implementación |
+|---|---|
+| Pide medio de pago al empezar | Checkout de MP con `auto_recurring.start_date = hoy + 15 días` |
+| Primer cobro al día 15 | MP cobra en `start_date`; el webhook de la cuota activa `active` |
+| Cancelar en la prueba = 0 cobros | `cancel` → `PUT status: cancelled` antes de `start_date` |
+| Una prueba por usuario | `isTrialEligible`: ninguna suscripción previa con `trialEndsAt` fuera de `pending` |
+| Checkout abandonado no gasta la prueba | `abandonPending` pone `trialEndsAt = null` |
+| Sin integración con plan asociado | MP sólo expone `free_trial` en `preapproval_plan`; `start_date` diferido logra lo mismo sin plan |
+
+## 7. Reembolsos y prorrateo
+
+`POST /api/billing/admin/refunds` — `Authorization: Bearer BILLING_ADMIN_SECRET` (soporte, no autoservicio).
+
+| Campo | Valores |
+|---|---|
+| `paymentId` | id de `billing_payment` |
+| `mode` | `full` (lo pendiente de reembolsar) · `prorated` (días sin usar del periodo) |
+| `revokeAccess` | `true` → cancela en MP y corta el acceso ya |
+
+| Garantía | Cómo |
+|---|---|
+| Nunca más de lo cobrado | `min(calculado, amount − refundedAmount)` + CHECK en BD |
+| Doble envío | `X-Idempotency-Key = refund:{paymentId}:{refundedAmount previo}` → MP no duplica |
+| Carrera entre dos admins | `updateMany where refundedAmount = previo` → el segundo recibe 409 |
+| Redondeo | `Math.floor` a céntimo (a favor del comercio) |
+| Plazo | MP Perú permite reembolsar hasta **90 días** tras la aprobación |
+
+**Prorrateo** (`lib/proration.ts`): `unusedAmount = amount × (fin − ahora) / (fin − inicio)`. Hoy se usa en reembolsos. Con un solo plan no hay upgrades/downgrades; la estrategia para cuando existan está en [billing-review.md](billing-review.md#prorrateo-de-cambios-de-plan).
+
+## 8. API
+
+| Método y ruta | Auth | Idempotencia |
+|---|---|---|
+| `GET /api/billing/me` | sesión | lectura |
+| `POST /api/billing/checkout` | sesión + `writeLimit` | índice parcial + reuso de `pending` + `X-Idempotency-Key` |
+| `POST /api/billing/cancel` | sesión + `writeLimit` | sin viva → no-op |
+| `POST /api/billing/sync` | sesión + `writeLimit` | escribe el snapshot de MP |
+| `POST /api/billing/webhooks/[provider]` | firma HMAC | `UNIQUE(provider, externalId)` + `processedAt` |
+| `POST /api/billing/admin/refunds` | `BILLING_ADMIN_SECRET` | clave de MP + update condicional |
+| `GET /api/cron/billing-sync` | `CRON_SECRET` | snapshot |
+
+## 9. Configuración
+
+| Variable | Uso |
+|---|---|
+| `BILLING_PROVIDER` | `mercadopago` (defecto) |
+| `MERCADOPAGO_ACCESS_TOKEN` | Credencial privada (TEST- en desarrollo) |
+| `MERCADOPAGO_WEBHOOK_SECRET` | Clave secreta de Webhooks para `x-signature` |
+| `MERCADOPAGO_TEST_PAYER_EMAIL` | Sólo sandbox: comprador de prueba que paga en lugar del usuario logueado. Ignorada con `VERCEL_ENV=production` |
+| `BILLING_ADMIN_SECRET` | Endpoint de reembolsos |
+| `CRON_SECRET` | Ya existía; también protege `billing-sync` |
+
+En Mercado Pago → Tus integraciones → Webhooks: URL `https://<dominio>/api/billing/webhooks/mercadopago`, tópicos **Planes y suscripciones** (`subscription_preapproval`, `subscription_authorized_payment`). También se puede configurar con la tool `save_webhook` del MCP de Mercado Pago una vez desplegado.
+
+## 10. Tests
+
+| Archivo | Cubre |
+|---|---|
+| `lib/*.test.ts` | acceso por estado, plan efectivo, prueba, primer cobro, prorrateo, textos de UI |
+| `providers/mercadopago/*.test.ts` | firma (válida, alterada, caducada), body del checkout, mapeo de estados y céntimos |
+| `api/billing/checkout` | prueba, sin prueba, 409 activa, doble clic, carrera, fallo de pasarela, plan inválido |
+| `api/billing/webhooks` | firma inválida, activación, trialing, duplicado, reintento, cobro fallido, referencia ajena, tópico ignorado |
+| `api/billing/cancel` | prueba, activa, pending, idempotencia, fallo de pasarela |
+| `api/billing/admin/refunds` | auth, total, prorrateado, revocar acceso, no reembolsable, carrera |
+| `api/budget`, `api/account/export` | 403 con plan free |

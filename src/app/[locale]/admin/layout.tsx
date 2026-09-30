@@ -9,6 +9,7 @@ import { AnalyticsIdentity } from "@/lib/observability/analytics-identity";
 import { logger } from "@/lib/observability/logger";
 import prisma from "@/lib/prisma";
 import { OnboardingProvider } from "@/features/onboarding/onboarding-context";
+import { BillingReturn } from "@/features/billing/ui/billing-return";
 import { PreferenceSync } from "@/features/preference/ui/preference-sync";
 import { AccountCurrencyProvider } from "@/features/preference/hooks/useCurrency";
 import { preferencesSchema } from "@/features/preference/schemas/preference.schema";
@@ -49,6 +50,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <ThemeController />
       <AnalyticsIdentity userId={session.user.id} />
       <PreferenceSync />
+      <BillingReturn />
       <AccountCurrencyProvider currency={currency}>
         <OnboardingProvider userId={session.user.id} pending={!session.user.onboardingCompletedAt}>
           {children}

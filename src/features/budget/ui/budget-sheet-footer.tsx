@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { Button, cn } from "@heroui/react";
 import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
+import type { ReactNode } from "react";
 
 interface BudgetSheetFooterProps {
   hasBudget: boolean;
@@ -11,6 +12,7 @@ interface BudgetSheetFooterProps {
   canSave: boolean;
   onRemove: () => void;
   onSave: () => void;
+  upgrade?: ReactNode;
 }
 
 interface RemoveBudgetButtonProps {
@@ -26,24 +28,33 @@ const LABEL_ANIMATE = { opacity: 1, y: 0 };
 const LABEL_EXIT = { opacity: 0, y: -12 };
 const LABEL_TRANSITION = { duration: 0.16 };
 
-export function BudgetSheetFooter({ hasBudget, isConfirmingRemove, canSave, onRemove, onSave }: BudgetSheetFooterProps) {
+export function BudgetSheetFooter({
+  hasBudget,
+  isConfirmingRemove,
+  canSave,
+  onRemove,
+  onSave,
+  upgrade,
+}: BudgetSheetFooterProps) {
   const tActions = useTranslations("common.actions");
 
   return (
     <div className="flex gap-2.5">
       {hasBudget && <RemoveBudgetButton isConfirming={isConfirmingRemove} onPress={onRemove} />}
-      <Button
-        type="button"
-        onPress={onSave}
-        isDisabled={!canSave}
-        className={cn(
-          BUTTON_CLASS,
-          "bg-app-fg text-app-surface disabled:bg-app-fill-strong disabled:text-app-muted flex-[2]",
-        )}
-      >
-        <Check className="size-[17px]" strokeWidth={2.4} />
-        {tActions("save")}
-      </Button>
+      {upgrade ?? (
+        <Button
+          type="button"
+          onPress={onSave}
+          isDisabled={!canSave}
+          className={cn(
+            BUTTON_CLASS,
+            "bg-app-fg text-app-surface disabled:bg-app-fill-strong disabled:text-app-muted flex-[2]",
+          )}
+        >
+          <Check className="size-[17px]" strokeWidth={2.4} />
+          {tActions("save")}
+        </Button>
+      )}
     </div>
   );
 }

@@ -11,6 +11,7 @@ import {
   unauthorized,
   writeLimit,
 } from "@/lib/api/route-helpers";
+import { requireFeature } from "@/features/billing/server/guard";
 
 export async function GET(req: Request) {
   try {
@@ -37,6 +38,9 @@ export async function POST(req: Request) {
 
     const limited = await writeLimit(userId);
     if (limited) return limited;
+
+    const denied = await requireFeature(userId, "budgets");
+    if (denied) return denied;
 
     const parsed = await parseBody(req, createBudgetSchema);
     if ("error" in parsed) return parsed.error;

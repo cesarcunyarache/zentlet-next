@@ -1,0 +1,23 @@
+{
+  "plan": {
+    "label": "Plan",
+    "free": "Free · Pro from {price} a month",
+    "trial": "Pro trial until {date}. Cancel anytime",
+    "active": "Pro · renews on {date}",
+    "pastDue": "We couldn't charge your plan. Check your payment method",
+    "canceled": "Pro until {date}. It won't renew",
+    "pending": "Waiting for payment confirmation",
+    "failed": "Couldn't complete that. Try again"
+  },
+  "actions": {
+    "startTrial": "Try {days} days",
+    "upgrade": "Upgrade to Pro",
+    "cancel": "Cancel",
+    "confirmCancel": "Confirm",
+    "working": "One moment…"
+  },
+  "paywall": {
+    "budgets": "Budgets are part of Pro",
+    "export": "Export is part of Pro"
+  }
+}

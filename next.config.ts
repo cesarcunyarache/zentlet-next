@@ -31,6 +31,8 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // en desarrollo, túneles HTTPS (pagos y webhooks de Mercado Pago exigen una URL pública)
+  allowedDevOrigins: ["*.ngrok-free.app", "*.trycloudflare.com"],
   async headers() {
     return [
       { source: "/:path*", headers: securityHeaders },

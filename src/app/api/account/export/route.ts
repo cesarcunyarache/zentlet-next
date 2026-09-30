@@ -9,6 +9,7 @@ import { routing, type Locale } from "@/i18n/routing";
 import en from "@/locales/en/settings.json";
 import es from "@/locales/es/settings.json";
 import { errorResponse, getSessionUserId, internalError, unauthorized } from "@/lib/api/route-helpers";
+import { requireFeature } from "@/features/billing/server/guard";
 
 /*
  * Descarga de todos los datos del usuario en Excel (.xlsx): movimientos y
@@ -38,6 +39,9 @@ export async function GET(req: Request) {
   try {
     const userId = await getSessionUserId(req);
     if (!userId) return unauthorized();
+
+    const denied = await requireFeature(userId, "export");
+    if (denied) return denied;
 
     if (!(await rateLimit(`export:${userId}`, EXPORTS_PER_MINUTE, 60_000)).allowed) {
       return errorResponse("Too many exports, try again in a minute", 429);

@@ -214,6 +214,7 @@ export type UserWhereInput = {
   budgets?: Prisma.BudgetListRelationFilter
   consents?: Prisma.UserConsentListRelationFilter
   preference?: Prisma.XOR<Prisma.UserPreferenceNullableScalarRelationFilter, Prisma.UserPreferenceWhereInput> | null
+  subscriptions?: Prisma.SubscriptionListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -233,6 +234,7 @@ export type UserOrderByWithRelationInput = {
   budgets?: Prisma.BudgetOrderByRelationAggregateInput
   consents?: Prisma.UserConsentOrderByRelationAggregateInput
   preference?: Prisma.UserPreferenceOrderByWithRelationInput
+  subscriptions?: Prisma.SubscriptionOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -255,6 +257,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   budgets?: Prisma.BudgetListRelationFilter
   consents?: Prisma.UserConsentListRelationFilter
   preference?: Prisma.XOR<Prisma.UserPreferenceNullableScalarRelationFilter, Prisma.UserPreferenceWhereInput> | null
+  subscriptions?: Prisma.SubscriptionListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -302,6 +305,7 @@ export type UserCreateInput = {
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -321,6 +325,7 @@ export type UserUncheckedCreateInput = {
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -340,6 +345,7 @@ export type UserUpdateInput = {
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -359,6 +365,7 @@ export type UserUncheckedUpdateInput = {
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -564,6 +571,20 @@ export type UserUpdateOneRequiredWithoutBudgetsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBudgetsInput, Prisma.UserUpdateWithoutBudgetsInput>, Prisma.UserUncheckedUpdateWithoutBudgetsInput>
 }
 
+export type UserCreateNestedOneWithoutSubscriptionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSubscriptionsInput, Prisma.UserUncheckedCreateWithoutSubscriptionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSubscriptionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSubscriptionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSubscriptionsInput, Prisma.UserUncheckedCreateWithoutSubscriptionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSubscriptionsInput
+  upsert?: Prisma.UserUpsertWithoutSubscriptionsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSubscriptionsInput, Prisma.UserUpdateWithoutSubscriptionsInput>, Prisma.UserUncheckedUpdateWithoutSubscriptionsInput>
+}
+
 export type UserCreateWithoutConsentsInput = {
   id: string
   name: string
@@ -580,6 +601,7 @@ export type UserCreateWithoutConsentsInput = {
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutConsentsInput = {
@@ -598,6 +620,7 @@ export type UserUncheckedCreateWithoutConsentsInput = {
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutConsentsInput = {
@@ -632,6 +655,7 @@ export type UserUpdateWithoutConsentsInput = {
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutConsentsInput = {
@@ -650,6 +674,7 @@ export type UserUncheckedUpdateWithoutConsentsInput = {
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPreferenceInput = {
@@ -668,6 +693,7 @@ export type UserCreateWithoutPreferenceInput = {
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPreferenceInput = {
@@ -686,6 +712,7 @@ export type UserUncheckedCreateWithoutPreferenceInput = {
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPreferenceInput = {
@@ -720,6 +747,7 @@ export type UserUpdateWithoutPreferenceInput = {
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPreferenceInput = {
@@ -738,6 +766,7 @@ export type UserUncheckedUpdateWithoutPreferenceInput = {
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -756,6 +785,7 @@ export type UserCreateWithoutSessionsInput = {
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -774,6 +804,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -808,6 +839,7 @@ export type UserUpdateWithoutSessionsInput = {
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -826,6 +858,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -844,6 +877,7 @@ export type UserCreateWithoutAccountsInput = {
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -862,6 +896,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -896,6 +931,7 @@ export type UserUpdateWithoutAccountsInput = {
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -914,6 +950,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCategoriesInput = {
@@ -932,6 +969,7 @@ export type UserCreateWithoutCategoriesInput = {
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCategoriesInput = {
@@ -950,6 +988,7 @@ export type UserUncheckedCreateWithoutCategoriesInput = {
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCategoriesInput = {
@@ -984,6 +1023,7 @@ export type UserUpdateWithoutCategoriesInput = {
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCategoriesInput = {
@@ -1002,6 +1042,7 @@ export type UserUncheckedUpdateWithoutCategoriesInput = {
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTransactionsInput = {
@@ -1020,6 +1061,7 @@ export type UserCreateWithoutTransactionsInput = {
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTransactionsInput = {
@@ -1038,6 +1080,7 @@ export type UserUncheckedCreateWithoutTransactionsInput = {
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTransactionsInput = {
@@ -1072,6 +1115,7 @@ export type UserUpdateWithoutTransactionsInput = {
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTransactionsInput = {
@@ -1090,6 +1134,7 @@ export type UserUncheckedUpdateWithoutTransactionsInput = {
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutFeedbackInput = {
@@ -1108,6 +1153,7 @@ export type UserCreateWithoutFeedbackInput = {
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutFeedbackInput = {
@@ -1126,6 +1172,7 @@ export type UserUncheckedCreateWithoutFeedbackInput = {
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutFeedbackInput = {
@@ -1160,6 +1207,7 @@ export type UserUpdateWithoutFeedbackInput = {
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFeedbackInput = {
@@ -1178,6 +1226,7 @@ export type UserUncheckedUpdateWithoutFeedbackInput = {
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutBudgetsInput = {
@@ -1196,6 +1245,7 @@ export type UserCreateWithoutBudgetsInput = {
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBudgetsInput = {
@@ -1214,6 +1264,7 @@ export type UserUncheckedCreateWithoutBudgetsInput = {
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBudgetsInput = {
@@ -1248,6 +1299,7 @@ export type UserUpdateWithoutBudgetsInput = {
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBudgetsInput = {
@@ -1266,6 +1318,99 @@ export type UserUncheckedUpdateWithoutBudgetsInput = {
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutSubscriptionsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutSubscriptionsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutSubscriptionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSubscriptionsInput, Prisma.UserUncheckedCreateWithoutSubscriptionsInput>
+}
+
+export type UserUpsertWithoutSubscriptionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSubscriptionsInput, Prisma.UserUncheckedUpdateWithoutSubscriptionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSubscriptionsInput, Prisma.UserUncheckedCreateWithoutSubscriptionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSubscriptionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSubscriptionsInput, Prisma.UserUncheckedUpdateWithoutSubscriptionsInput>
+}
+
+export type UserUpdateWithoutSubscriptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSubscriptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
 }
 
 
@@ -1281,6 +1426,7 @@ export type UserCountOutputType = {
   feedback: number
   budgets: number
   consents: number
+  subscriptions: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1291,6 +1437,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   feedback?: boolean | UserCountOutputTypeCountFeedbackArgs
   budgets?: boolean | UserCountOutputTypeCountBudgetsArgs
   consents?: boolean | UserCountOutputTypeCountConsentsArgs
+  subscriptions?: boolean | UserCountOutputTypeCountSubscriptionsArgs
 }
 
 /**
@@ -1352,6 +1499,13 @@ export type UserCountOutputTypeCountConsentsArgs<ExtArgs extends runtime.Types.E
   where?: Prisma.UserConsentWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSubscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SubscriptionWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1370,6 +1524,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   budgets?: boolean | Prisma.User$budgetsArgs<ExtArgs>
   consents?: boolean | Prisma.User$consentsArgs<ExtArgs>
   preference?: boolean | Prisma.User$preferenceArgs<ExtArgs>
+  subscriptions?: boolean | Prisma.User$subscriptionsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1416,6 +1571,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   budgets?: boolean | Prisma.User$budgetsArgs<ExtArgs>
   consents?: boolean | Prisma.User$consentsArgs<ExtArgs>
   preference?: boolean | Prisma.User$preferenceArgs<ExtArgs>
+  subscriptions?: boolean | Prisma.User$subscriptionsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1432,6 +1588,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     budgets: Prisma.$BudgetPayload<ExtArgs>[]
     consents: Prisma.$UserConsentPayload<ExtArgs>[]
     preference: Prisma.$UserPreferencePayload<ExtArgs> | null
+    subscriptions: Prisma.$SubscriptionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1844,6 +2001,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   budgets<T extends Prisma.User$budgetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$budgetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BudgetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   consents<T extends Prisma.User$consentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$consentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserConsentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   preference<T extends Prisma.User$preferenceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$preferenceArgs<ExtArgs>>): Prisma.Prisma__UserPreferenceClient<runtime.Types.Result.GetResult<Prisma.$UserPreferencePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  subscriptions<T extends Prisma.User$subscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$subscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2458,6 +2616,30 @@ export type User$preferenceArgs<ExtArgs extends runtime.Types.Extensions.Interna
    */
   include?: Prisma.UserPreferenceInclude<ExtArgs> | null
   where?: Prisma.UserPreferenceWhereInput
+}
+
+/**
+ * User.subscriptions
+ */
+export type User$subscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Subscription
+   */
+  select?: Prisma.SubscriptionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Subscription
+   */
+  omit?: Prisma.SubscriptionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubscriptionInclude<ExtArgs> | null
+  where?: Prisma.SubscriptionWhereInput
+  orderBy?: Prisma.SubscriptionOrderByWithRelationInput | Prisma.SubscriptionOrderByWithRelationInput[]
+  cursor?: Prisma.SubscriptionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SubscriptionScalarFieldEnum | Prisma.SubscriptionScalarFieldEnum[]
 }
 
 /**
