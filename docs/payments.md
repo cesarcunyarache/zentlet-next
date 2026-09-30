@@ -266,6 +266,14 @@ Chromium (Playwright) contra un **build de producción** de la app, la base `<ba
 | Volver a suscribirse | Tras cancelar en la prueba: sin segunda prueba y el primer cobro de la nueva suscripción coincide con el fin de la anterior (sin cobro doble) |
 | Presupuestos | En Free la hoja de presupuesto ofrece Pro en lugar de *Guardar*; con Pro se guarda y queda en la cuenta |
 | Borrar la cuenta | Con suscripción activa se cancela antes en la pasarela; si la pasarela falla, la cuenta **no** se borra y el usuario ve el error |
+
+Además de pagos, la suite cubre el resto de features de la app (cada test usa una cuenta nueva):
+
+| Spec | Comprueba |
+|---|---|
+| `auth.spec.ts` | Registro por formulario → bienvenida que no vuelve tras *Saltar*; validación del formulario; login con contraseña incorrecta y correcta |
+| `transactions.spec.ts` | Registrar gasto e ingreso (total y persistencia tras recargar), editar y eliminar un movimiento, búsqueda; crear y renombrar una categoría |
+| `settings.spec.ts` | Moneda guardada en la cuenta, cambio de idioma, enviar comentario, cerrar sesión protege `/admin`, exportar con Pro descarga un `.xlsx` |
 | Público | Sección de precios de la landing, enlace del menú, `/admin` redirige al login, rutas de billing sin sesión → 401, webhook con firma falsa → 401 |
 
 Cobertura de líneas del backend de billing (medida con v8, 2026-09-30): integración 67 % · unitarios 84 % · **ambos 96 %**. Sin cubrir: ramas de error 500 de las rutas y el código de cliente (hooks, store, servicio).

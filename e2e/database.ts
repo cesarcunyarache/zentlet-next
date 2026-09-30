@@ -2,7 +2,7 @@ import { Client } from "pg";
 import { databaseName, isTestDatabase } from "../src/test/integration/test-database-url";
 import { e2eDatabaseUrl } from "./env";
 
-const BILLING_TABLES = '"billing_event", "billing_payment", "subscription", "usage_limit", "budget"';
+const BILLING_TABLES = '"billing_event", "billing_payment", "subscription", "usage_limit", "budget", "rate_limit"';
 
 async function run(sql: string) {
   const connectionString = e2eDatabaseUrl();

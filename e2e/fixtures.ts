@@ -1,4 +1,4 @@
-import { expect, test as base, type Page } from "@playwright/test";
+import { expect, test as base, type Browser, type Page } from "@playwright/test";
 import { LEGAL_CONSENT_HEADER, LEGAL_VERSION } from "../src/features/legal/config";
 import { resetBillingData } from "./database";
 import { MOCK_URL } from "./env";
@@ -38,6 +38,28 @@ export const gateway = {
   failNextCancel: () => control("fail-next-cancel"),
   state: async () => (await (await fetch(`${MOCK_URL}/__control/state`)).json()) as GatewayState,
 };
+
+export const newUser = (prefix = "e2e"): TestUser => ({
+  name: "Nuevo E2E",
+  email: `${prefix}.${Date.now()}.${Math.floor(Math.random() * 1e6)}@example.com`,
+  password: "Zentlet-e2e-2026!",
+});
+
+export async function newPage(browser: Browser) {
+  const context = await browser.newContext({ locale: "es-PE", serviceWorkers: "block" });
+  return context.newPage();
+}
+
+export async function freshAccount(browser: Browser) {
+  const user = newUser();
+  const page = await newPage(browser);
+  await createAccount(page, user);
+  expect(
+    await apiStatus(page, "/api/category", { method: "POST", body: { ...SHARED_CATEGORY, id: crypto.randomUUID() } }),
+  ).toBe(201);
+  await page.reload();
+  return { page, user };
+}
 
 export const test = base.extend<{ cleanState: void }>({
   cleanState: [
