@@ -27,6 +27,7 @@ model User {
   preference            UserPreference?
   subscriptions         Subscription[]
   features              UserFeature[]
+  notifications         Notification[]
 
   @@unique([email])
   @@map("user")
@@ -189,12 +190,60 @@ model Budget {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   limits BudgetLimit[]
+  alerts BudgetAlert[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([userId])
   @@map("budget")
+}
+
+model BudgetAlert {
+  id       String  @id @default(uuid())
+  budgetId String
+  budget   Budget  @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  kind     String
+  value    Decimal @db.Decimal(12, 2)
+
+  createdAt DateTime @default(now())
+
+  @@unique([budgetId, kind, value])
+  @@map("budget_alert")
+}
+
+model Notification {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  data      Json
+  dedupeKey String?
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  deliveries NotificationDelivery[]
+
+  @@unique([userId, dedupeKey])
+  @@index([userId, createdAt(sort: Desc)])
+  @@map("notification")
+}
+
+model NotificationDelivery {
+  id             String       @id @default(uuid())
+  notificationId String
+  notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+  channel        String
+  status         String       @default("pending")
+  attempts       Int          @default(0)
+  nextAttemptAt  DateTime     @default(now())
+  sentAt         DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@unique([notificationId, channel])
+  @@index([status, nextAttemptAt])
+  @@map("notification_delivery")
 }
 
 model BudgetLimit {

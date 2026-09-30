@@ -14,6 +14,7 @@ const NAMESPACES = [
   "onboarding",
   "budgets",
   "billing",
+  "notifications",
 ] as const satisfies readonly (keyof Messages)[];
 
 async function loadMessages(locale: Locale) {

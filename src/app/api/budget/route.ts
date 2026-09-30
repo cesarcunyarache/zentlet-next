@@ -12,6 +12,7 @@ import {
   writeLimit,
 } from "@/lib/api/route-helpers";
 import { requireFeature } from "@/features/billing/server/guard";
+import { DEFAULT_ALERTS } from "@/features/budget/lib/alerts";
 
 export async function GET(req: Request) {
   try {
@@ -68,6 +69,7 @@ export async function POST(req: Request) {
           startDate: start,
           userId,
           limits: { create: { effectiveFrom: start, amount } },
+          alerts: { create: DEFAULT_ALERTS },
         },
         include: BUDGET_LIMITS,
       });

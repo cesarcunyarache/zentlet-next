@@ -92,6 +92,21 @@ export type Feedback = Prisma.FeedbackModel
  */
 export type Budget = Prisma.BudgetModel
 /**
+ * Model BudgetAlert
+ * 
+ */
+export type BudgetAlert = Prisma.BudgetAlertModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel
+/**
+ * Model NotificationDelivery
+ * 
+ */
+export type NotificationDelivery = Prisma.NotificationDeliveryModel
+/**
  * Model BudgetLimit
  * 
  */

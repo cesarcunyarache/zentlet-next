@@ -11,6 +11,7 @@ import {
   unauthorized,
   writeLimit,
 } from "@/lib/api/route-helpers";
+import { scheduleBudgetCheck } from "@/features/budget/server/check";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -72,6 +73,7 @@ export async function PATCH(req: Request, { params }: RouteContext) {
     const transaction = await prisma.transaction.findUniqueOrThrow({
       where: { id },
     });
+    if (transaction.type === "expense") scheduleBudgetCheck(userId, transaction.categoryId);
 
     return NextResponse.json(serializeTransaction(transaction));
   } catch (error) {

@@ -31,6 +31,9 @@ import { TransactionDetailSheet } from "@/features/transaction/ui/detail/transac
 import { DeleteTransactionDialog } from "@/features/transaction/ui/detail/delete-transaction-dialog";
 import { CategoriesSheet } from "@/features/category/ui/categories-sheet";
 import { SettingsSheet } from "@/features/account/ui/settings-sheet";
+import { NotificationBell } from "@/features/notification/ui/notification-bell";
+import { NotificationSheet } from "@/features/notification/ui/notification-sheet";
+import { useNotifications } from "@/features/notification/stores/notification.store";
 import { ToastBubble } from "@/core/components/ui/toast-bubble";
 import { Onboarding } from "@/features/onboarding/ui/onboarding";
 import { periodRange } from "@/features/transaction/lib/format";
@@ -45,7 +48,7 @@ import type {
   TransactionType,
 } from "@/features/transaction/types";
 
-type Sheet = "new" | "categories" | "settings" | null;
+type Sheet = "new" | "categories" | "settings" | "notifications" | null;
 
 const ALL_TIME: DateRange = {};
 
@@ -53,6 +56,8 @@ export default function HomePage() {
   const t = useTranslations("transactions");
   const tSync = useTranslations("offline.syncErrors");
   const tBudget = useTranslations("budgets.toast");
+  const tNotifications = useTranslations("notifications");
+  const { unreadCount } = useNotifications();
   const { categories: rawCategories } = useCategoryStore();
 
   const categories = useMemo<CategoryLike[]>(
@@ -208,9 +213,17 @@ export default function HomePage() {
       <main className="mx-auto flex max-w-xl flex-col px-5 pt-[calc(14px+env(safe-area-inset-top))] pb-36 sm:px-6">
         <div className="flex h-11 items-center justify-between">
           <SyncStatusPill />
-          <IconButton label={t("home.settings")} onClick={() => setSheet("settings")}>
-            <Settings className="size-5" strokeWidth={1.7} />
-          </IconButton>
+          <div className="flex items-center">
+            <IconButton
+              label={tNotifications("label", { count: unreadCount })}
+              onClick={() => setSheet("notifications")}
+            >
+              <NotificationBell hasUnread={unreadCount > 0} />
+            </IconButton>
+            <IconButton label={t("home.settings")} onClick={() => setSheet("settings")}>
+              <Settings className="size-5" strokeWidth={1.7} />
+            </IconButton>
+          </div>
         </div>
 
         <SummaryHeader
@@ -441,6 +454,11 @@ export default function HomePage() {
         currency={currencyCode}
         transactionCount={lifetime?.count ?? 0}
         onCurrencyChange={setCurrency}
+      />
+
+      <NotificationSheet
+        isOpen={sheet === "notifications"}
+        onOpenChange={(open) => setSheet(open ? "notifications" : null)}
       />
     </div>
   );

@@ -1,4 +1,4 @@
-import type { BudgetKind, BudgetPeriodUnit, TBudget } from "../types";
+import type { BudgetAlert, BudgetAlertKind, BudgetKind, BudgetPeriodUnit, TBudget } from "../types";
 
 interface BudgetRow {
   id: string;
@@ -27,4 +27,14 @@ export function serializeBudget(row: BudgetRow): TBudget {
       amount: Number(limit.amount.toString()),
     })),
   };
+}
+
+interface BudgetAlertRow {
+  id: string;
+  kind: string;
+  value: { toString(): string };
+}
+
+export function serializeAlert(row: BudgetAlertRow): BudgetAlert {
+  return { id: row.id, kind: row.kind as BudgetAlertKind, value: Number(row.value.toString()) };
 }

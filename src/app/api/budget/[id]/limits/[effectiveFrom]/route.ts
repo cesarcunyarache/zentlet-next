@@ -15,6 +15,7 @@ import {
   writeLimit,
 } from "@/lib/api/route-helpers";
 import { requireFeature } from "@/features/billing/server/guard";
+import { scheduleBudgetCheck } from "@/features/budget/server/check";
 
 type RouteContext = { params: Promise<{ id: string; effectiveFrom: string }> };
 
@@ -64,6 +65,7 @@ export async function PUT(req: Request, { params }: RouteContext) {
 
     const updated = await prisma.budget.findUnique({ where: { id }, include: BUDGET_LIMITS });
     if (!updated) return errorResponse("Budget not found", 404);
+    scheduleBudgetCheck(userId, updated.categoryId);
 
     return NextResponse.json(serializeBudget(updated));
   } catch (error) {

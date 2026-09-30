@@ -13,6 +13,7 @@ import {
   feedWhere,
 } from "@/features/transaction/lib/feed-query";
 import type { TransactionPage } from "@/features/transaction/types";
+import { scheduleBudgetCheck } from "@/features/budget/server/check";
 import {
   errorResponse,
   getSessionUserId,
@@ -98,6 +99,7 @@ export async function POST(req: Request) {
           userId,
         },
       });
+      if (type === "expense") scheduleBudgetCheck(userId, categoryId);
       return NextResponse.json(serializeTransaction(transaction), { status: 201 });
     } catch (error) {
       // carrera: dos peticiones con el mismo id a la vez

@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { dayLabel, dayShift, fullDate, parseISODate, toISODate, today } from "./dates";
+import { dayLabel, dayShift, fullDate, isoDateIn, parseISODate, toISODate, today } from "./dates";
 
 beforeEach(() => {
   vi.useFakeTimers();
@@ -34,5 +34,13 @@ describe("fechas locales", () => {
 
   it("fullDate", () => {
     expect(fullDate("2026-09-21", "es")).toBe("lunes, 21 de septiembre de 2026");
+  });
+});
+
+describe("isoDateIn", () => {
+  it("uses the calendar day of the given time zone", () => {
+    const utcMorning = new Date("2026-10-01T03:00:00Z");
+    expect(isoDateIn("America/Lima", utcMorning)).toBe("2026-09-30");
+    expect(isoDateIn("UTC", utcMorning)).toBe("2026-10-01");
   });
 });

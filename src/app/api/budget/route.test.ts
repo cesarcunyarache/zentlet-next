@@ -4,8 +4,10 @@ import prisma from "@/lib/prisma";
 import { DELETE } from "./[id]/route";
 import { PUT } from "./[id]/limits/[effectiveFrom]/route";
 import { GET, POST } from "./route";
+import { scheduleBudgetCheck } from "@/features/budget/server/check";
 
 vi.mock("@/lib/auth", () => ({ auth: { api: { getSession: vi.fn() } } }));
+vi.mock("@/features/budget/server/check", () => ({ scheduleBudgetCheck: vi.fn() }));
 vi.mock("@/lib/prisma", () => ({
   default: {
     budget: {
@@ -124,6 +126,7 @@ describe("POST /api/budget", () => {
           startDate: new Date("2026-09-01"),
           userId: "user-1",
           limits: { create: { effectiveFrom: new Date("2026-09-01"), amount: 600 } },
+          alerts: { create: [{ kind: "percent", value: 80 }] },
         },
       }),
     );
@@ -248,6 +251,7 @@ describe("PUT /api/budget/[id]/limits/[effectiveFrom]", () => {
       { effectiveFrom: "2026-09-01", amount: 600 },
       { effectiveFrom: "2026-10-01", amount: 800 },
     ]);
+    expect(scheduleBudgetCheck).toHaveBeenCalledWith("user-1", "food");
   });
 
   it("un presupuesto de otro usuario o inexistente es 404", async () => {
