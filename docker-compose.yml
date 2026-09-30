@@ -1,0 +1,70 @@
+# Entorno de desarrollo completo: `docker compose up` y abre http://localhost:3000
+# Detalle en docs/docker.md
+name: zentlet
+
+x-database-url: &database-url postgresql://postgres:postgres@db:5432/zentlet?schema=public
+
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: zentlet
+    ports:
+      - "${DB_PORT:-5433}:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d zentlet"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  # Mercado Pago simulado (el mismo de los E2E): pagos, checkout y webhooks sin credenciales reales
+  mercadopago:
+    image: node:24-bookworm-slim
+    working_dir: /app
+    command: ["node", "e2e/mock-mercadopago.mjs"]
+    environment:
+      MOCK_MP_PORT: 4010
+      MOCK_MP_APP_URL: http://app:3000
+      MERCADOPAGO_WEBHOOK_SECRET: dev-webhook-secret
+    ports:
+      - "4010:4010"
+    volumes:
+      - ./e2e/mock-mercadopago.mjs:/app/e2e/mock-mercadopago.mjs:ro
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    depends_on:
+      db:
+        condition: service_healthy
+      mercadopago:
+        condition: service_started
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    # sólo valores no vacíos: lo demás (Gemini, OAuth, Sentry…) se toma del .env si existe
+    environment:
+      DATABASE_URL: *database-url
+      DIRECT_URL: *database-url
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:-docker-dev-secret-not-for-production-0000}
+      BETTER_AUTH_URL: http://localhost:${APP_PORT:-3000}
+      NEXT_PUBLIC_SITE_URL: http://localhost:${APP_PORT:-3000}
+      BILLING_PROVIDER: mercadopago
+      MERCADOPAGO_API_URL: http://mercadopago:4010
+      MERCADOPAGO_ACCESS_TOKEN: dev-access-token
+      MERCADOPAGO_WEBHOOK_SECRET: dev-webhook-secret
+    volumes:
+      - .:/app
+      - node-modules:/app/node_modules
+      - next-cache:/app/.next
+      - pnpm-store:/pnpm/store
+
+volumes:
+  db-data:
+  node-modules:
+  next-cache:
+  pnpm-store:

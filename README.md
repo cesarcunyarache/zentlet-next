@@ -190,7 +190,17 @@ flowchart LR
 
 ## 🚀 Empezar en local
 
-**Requisitos:** Node.js 24 (fijado en `.nvmrc`; con nvm basta `nvm install && nvm use`), [pnpm](https://pnpm.io) y una base de datos PostgreSQL.
+**Con Docker** (sin instalar Node ni PostgreSQL):
+
+```bash
+git clone https://github.com/cesarcunyarache/zentlet-next.git
+cd zentlet-next
+docker compose up           # http://localhost:3000
+```
+
+Incluye la base de datos y un Mercado Pago simulado para probar los pagos. Detalle en [docs/docker.md](docs/docker.md).
+
+**Sin Docker** · **Requisitos:** Node.js 24 (fijado en `.nvmrc`; con nvm basta `nvm install && nvm use`), [pnpm](https://pnpm.io) y una base de datos PostgreSQL.
 
 ```bash
 # 1. Clona e instala
