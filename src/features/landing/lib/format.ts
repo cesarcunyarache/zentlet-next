@@ -28,3 +28,15 @@ export function sectionHref(section: SectionId) {
 export function sectionTitleId(section: SectionId) {
   return `${section}-title`;
 }
+
+const CENTS = 100;
+
+export function formatPlanPrice(amountInCents: number, currency: string, locale: string) {
+  return (amountInCents / CENTS).toLocaleString(locale, { style: "currency", currency });
+}
+
+export function fillTemplate(template: string, values: Record<string, string | number>) {
+  return template.replace(/\{(\w+)\}/g, (placeholder, key: string) =>
+    key in values ? String(values[key]) : placeholder,
+  );
+}

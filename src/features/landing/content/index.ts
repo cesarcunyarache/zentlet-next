@@ -1,5 +1,7 @@
 import { getMessages } from "next-intl/server";
 import { intlLocales, type Locale } from "@/i18n/routing";
+import { planPrice, TRIAL_DAYS } from "@/features/billing/lib/plans";
+import { fillTemplate, formatPlanPrice } from "../lib/format";
 import {
   CATEGORY_STYLES,
   DASHBOARD,
@@ -17,6 +19,14 @@ import type { DemoCategory, LandingContent } from "./types";
 
 export async function getLandingContent(locale: Locale): Promise<LandingContent> {
   const { landing: copy } = await getMessages({ locale });
+
+  const proPrice = planPrice("pro");
+  const pricingValues = {
+    days: TRIAL_DAYS,
+    price: formatPlanPrice(proPrice.amount, proPrice.currency, intlLocales[locale]),
+    period: copy.pricing.period,
+  };
+  const fill = (template: string) => fillTemplate(template, pricingValues);
 
   const toDemoCategory = (key: CategoryKey): DemoCategory => ({
     ...CATEGORY_STYLES[key],
@@ -81,7 +91,27 @@ export async function getLandingContent(locale: Locale): Promise<LandingContent>
       items: STATS.map(({ key, ...stat }) => ({ ...stat, label: copy.stats.items[key] })),
     },
     testimonials: { ...copy.testimonials, items: TESTIMONIALS },
-    faq: copy.faq,
+    pricing: {
+      eyebrow: copy.pricing.eyebrow,
+      title: copy.pricing.title,
+      subtitle: fill(copy.pricing.subtitle),
+      plans: [
+        { id: "free", ...copy.pricing.free },
+        {
+          id: "pro",
+          ...copy.pricing.pro,
+          price: pricingValues.price,
+          period: copy.pricing.period,
+          badge: fill(copy.pricing.pro.badge),
+          cta: fill(copy.pricing.pro.cta),
+          note: fill(copy.pricing.pro.note),
+        },
+      ],
+    },
+    faq: {
+      ...copy.faq,
+      items: copy.faq.items.map((item) => ({ ...item, answer: fill(item.answer) })),
+    },
     cta: copy.cta,
     footer: copy.footer,
   };

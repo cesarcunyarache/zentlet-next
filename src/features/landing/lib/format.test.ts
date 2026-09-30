@@ -1,5 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { amountSign, formatAmount, formatSigned, sectionHref, sectionTitleId, vivid } from "./format";
+import {
+  amountSign,
+  fillTemplate,
+  formatAmount,
+  formatPlanPrice,
+  formatSigned,
+  sectionHref,
+  sectionTitleId,
+  vivid,
+} from "./format";
 
 describe("formatAmount", () => {
   it("usa dos decimales y el separador del idioma", () => {
@@ -42,5 +51,21 @@ describe("amountSign", () => {
 describe("sectionTitleId", () => {
   it("devuelve el id del título de la sección", () => {
     expect(sectionTitleId("preguntas")).toBe("preguntas-title");
+  });
+});
+
+describe("formatPlanPrice", () => {
+  it("convierte céntimos a la moneda del plan", () => {
+    expect(formatPlanPrice(1490, "PEN", "es-PE").replace(/\s/g, " ")).toBe("S/ 14.90");
+    expect(formatPlanPrice(1490, "PEN", "en-US")).toContain("14.90");
+  });
+});
+
+describe("fillTemplate", () => {
+  it("reemplaza los marcadores conocidos y deja los desconocidos", () => {
+    expect(fillTemplate("Prueba {days} días por {price}", { days: 15, price: "S/ 14.90" })).toBe(
+      "Prueba 15 días por S/ 14.90",
+    );
+    expect(fillTemplate("Hola {name}", {})).toBe("Hola {name}");
   });
 });
