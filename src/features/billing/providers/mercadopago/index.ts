@@ -1,3 +1,4 @@
+import { logger } from "@/lib/observability/logger";
 import { BillingProviderError, type BillingProvider, type WebhookNotification, type WebhookResource } from "../types";
 import {
   checkoutBody,
@@ -7,7 +8,7 @@ import {
   type MpAuthorizedPayment,
   type MpPreapproval,
 } from "./mapper";
-import { isValidSignature } from "./signature";
+import { checkSignature, type SignatureCheck } from "./signature";
 
 const API_URL = "https://api.mercadopago.com";
 const TIMEOUT_MS = 10_000;
@@ -75,23 +76,35 @@ async function readWebhookBody(req: Request): Promise<WebhookBody | null> {
   }
 }
 
+function verifyWebhook(req: Request, dataIds: (string | null)[]): SignatureCheck {
+  const input = {
+    header: req.headers.get("x-signature"),
+    requestId: req.headers.get("x-request-id"),
+    secret: requireEnv("MERCADOPAGO_WEBHOOK_SECRET"),
+    now: Date.now(),
+  };
+  const checks = dataIds.map((dataId) => checkSignature({ ...input, dataId }));
+  return checks.find((check) => check === "valid") ?? checks[0];
+}
+
 async function parseWebhook(req: Request): Promise<WebhookNotification | null> {
   const url = new URL(req.url);
   const body = await readWebhookBody(req);
-  const queryDataId = url.searchParams.get("data.id");
+  const queryDataId = url.searchParams.get("data.id") ?? url.searchParams.get("id");
+  const bodyDataId = body?.data?.id === undefined ? null : String(body.data.id);
   const requestId = req.headers.get("x-request-id");
 
-  const isAuthentic = isValidSignature({
-    header: req.headers.get("x-signature"),
-    requestId,
-    dataId: queryDataId,
-    secret: requireEnv("MERCADOPAGO_WEBHOOK_SECRET"),
-    now: Date.now(),
-  });
-  if (!isAuthentic || !body) return null;
+  const signature = verifyWebhook(req, [...new Set([queryDataId, bodyDataId])]);
+  if (signature !== "valid" || !body) {
+    logger.warn(
+      { signature, hasQueryDataId: queryDataId !== null, hasRequestId: requestId !== null, hasBody: body !== null },
+      "billing.webhook_rejected",
+    );
+    return null;
+  }
 
-  const type = url.searchParams.get("type") ?? body.type ?? "unknown";
-  const resourceId = queryDataId ?? (body.data?.id === undefined ? null : String(body.data.id));
+  const type = url.searchParams.get("type") ?? url.searchParams.get("topic") ?? body.type ?? "unknown";
+  const resourceId = queryDataId ?? bodyDataId;
   const eventId = body.id === undefined ? requestId : `${type}:${body.id}`;
   if (!resourceId || !eventId) return null;
 

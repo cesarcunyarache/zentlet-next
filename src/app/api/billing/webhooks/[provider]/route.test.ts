@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import prisma from "@/lib/prisma";
 import { getBillingProvider } from "@/features/billing/providers";
+import { BillingProviderError } from "@/features/billing/providers/types";
 import { subscriptionRow, type TestProvider } from "@/features/billing/server/test-provider";
 import { POST } from "./route";
 
@@ -174,6 +175,14 @@ describe("POST /api/billing/webhooks/[provider]", () => {
 
     await deliver();
 
+    expect(db.subscription.update).not.toHaveBeenCalled();
+  });
+
+  it("un recurso que no existe en la pasarela (simulación) responde 200 sin tocar suscripciones", async () => {
+    provider.parseWebhook.mockResolvedValue(notification("subscription", "123456"));
+    provider.getSubscription.mockRejectedValue(new BillingProviderError("not found", 404));
+
+    expect(await (await deliver()).json()).toEqual({ outcome: "processed" });
     expect(db.subscription.update).not.toHaveBeenCalled();
   });
 

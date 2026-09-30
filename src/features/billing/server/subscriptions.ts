@@ -43,6 +43,7 @@ export async function getBillingSummary(userId: string, now = new Date()): Promi
     trialEndsAt: current?.trialEndsAt?.toISOString() ?? null,
     currentPeriodEnd: current?.currentPeriodEnd?.toISOString() ?? null,
     isTrialEligible: isTrialEligible(history),
+    hasPendingCheckout: history.some((subscription) => subscription.status === "pending"),
     price: planPrice(PAID_PLAN_KEYS[0]),
   };
 }

@@ -23,5 +23,6 @@ export interface BillingSummary {
   trialEndsAt: string | null;
   currentPeriodEnd: string | null;
   isTrialEligible: boolean;
+  hasPendingCheckout: boolean;
   price: { amount: number; currency: string; interval: BillingInterval };
 }

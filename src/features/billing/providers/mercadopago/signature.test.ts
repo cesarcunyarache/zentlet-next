@@ -1,6 +1,6 @@
 import { createHmac } from "node:crypto";
 import { describe, expect, it } from "vitest";
-import { isValidSignature, signatureManifest, SIGNATURE_TOLERANCE_MS } from "./signature";
+import { checkSignature, isValidSignature, signatureManifest, SIGNATURE_TOLERANCE_MS } from "./signature";
 
 const SECRET = "test-secret";
 const NOW = 1_790_000_000_000;
@@ -55,5 +55,19 @@ describe("isValidSignature", () => {
     expect(isValidSignature({ ...base, header: null })).toBe(false);
     expect(isValidSignature({ ...base, secret: "", header: validHeader })).toBe(false);
     expect(isValidSignature({ ...base, header: "garbage" })).toBe(false);
+  });
+});
+
+describe("checkSignature", () => {
+  it("explica por qué rechaza", () => {
+    expect(checkSignature({ ...base, header: null })).toBe("missing");
+    expect(checkSignature({ ...base, now: NOW + SIGNATURE_TOLERANCE_MS + 1, header: validHeader })).toBe("stale");
+    expect(checkSignature({ ...base, dataId: "OTHER", header: validHeader })).toBe("mismatch");
+  });
+
+  it("acepta el timestamp en segundos", () => {
+    const seconds = Math.floor(NOW / 1000);
+    const manifest = signatureManifest({ dataId: "ABC123", requestId: "req-1", ts: String(seconds) });
+    expect(checkSignature({ ...base, header: header(seconds, sign(manifest)) })).toBe("valid");
   });
 });

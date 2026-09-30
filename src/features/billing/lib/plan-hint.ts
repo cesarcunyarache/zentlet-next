@@ -9,7 +9,7 @@ export function planHint(summary: BillingSummary): {
 } {
   if (summary.plan === "free") {
     return {
-      key: summary.status === "pending" ? "pending" : "free",
+      key: summary.hasPendingCheckout ? "pending" : "free",
       date: null,
     };
   }

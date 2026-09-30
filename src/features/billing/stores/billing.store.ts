@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { Feature } from "../lib/plans";
 import { billingService } from "../services/billing.service";
@@ -23,5 +24,8 @@ export function useBillingSummary() {
 
 export function useSetBillingSummary() {
   const queryClient = useQueryClient();
-  return (summary: BillingSummary) => queryClient.setQueryData(billingKeys.summary, summary);
+  return useCallback(
+    (summary: BillingSummary) => queryClient.setQueryData(billingKeys.summary, summary),
+    [queryClient],
+  );
 }

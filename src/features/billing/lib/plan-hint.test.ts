@@ -9,6 +9,7 @@ const summary = (overrides: Partial<BillingSummary> = {}): BillingSummary => ({
   trialEndsAt: null,
   currentPeriodEnd: null,
   isTrialEligible: true,
+  hasPendingCheckout: false,
   price: { amount: 1490, currency: "PEN", interval: "month" },
   ...overrides,
 });
@@ -19,7 +20,7 @@ describe("planHint", () => {
   });
 
   it("checkout pendiente", () => {
-    expect(planHint(summary({ status: "pending" })).key).toBe("pending");
+    expect(planHint(summary({ hasPendingCheckout: true })).key).toBe("pending");
   });
 
   it("prueba con su fecha de fin", () => {
