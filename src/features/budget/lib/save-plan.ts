@@ -9,7 +9,7 @@ export interface BudgetInput {
   kind: BudgetKind;
 }
 
-export interface BudgetSavePlan {
+interface BudgetSavePlan {
   remove?: string;
   create?: Omit<CreateBudgetPayload, "id">;
   limit?: { budgetId: string; effectiveFrom: string; amount: number };

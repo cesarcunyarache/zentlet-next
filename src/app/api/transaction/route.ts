@@ -5,13 +5,7 @@ import {
   createTransactionSchema,
   transactionListQuerySchema,
 } from "@/features/transaction/schemas/transaction-api.schema";
-import {
-  FEED_ORDER,
-  afterCursor,
-  decodeCursor,
-  encodeCursor,
-  feedWhere,
-} from "@/features/transaction/lib/feed-query";
+import { FEED_ORDER, afterCursor, decodeCursor, encodeCursor, feedWhere } from "@/features/transaction/lib/feed-query";
 import type { TransactionPage } from "@/features/transaction/types";
 import { scheduleBudgetCheck } from "@/features/budget/server/check";
 import {
@@ -25,7 +19,6 @@ import {
   writeLimit,
 } from "@/lib/api/route-helpers";
 
-/** Una página del feed, filtrada y ordenada en la base de datos. */
 export async function GET(req: Request) {
   try {
     const userId = await getSessionUserId(req);
@@ -56,11 +49,6 @@ export async function GET(req: Request) {
   }
 }
 
-/**
- * Idempotente por `id` (lo genera el cliente): si el mismo movimiento llega
- * dos veces (reintento tras perder la respuesta, dos pestañas reanudando la
- * cola) se devuelve el existente con 200 en lugar de duplicarlo.
- */
 export async function POST(req: Request) {
   try {
     const userId = await getSessionUserId(req);
@@ -80,10 +68,7 @@ export async function POST(req: Request) {
         : errorResponse("Transaction id already in use", 409);
     }
 
-    const category = await prisma.category.findFirst({
-      where: { id: categoryId, userId },
-      select: { id: true },
-    });
+    const category = await prisma.category.findFirst({ where: { id: categoryId, userId }, select: { id: true } });
     if (!category) return errorResponse("Category not found", 422);
 
     try {
@@ -102,7 +87,6 @@ export async function POST(req: Request) {
       if (type === "expense") scheduleBudgetCheck(userId, categoryId);
       return NextResponse.json(serializeTransaction(transaction), { status: 201 });
     } catch (error) {
-      // carrera: dos peticiones con el mismo id a la vez
       if (!isUniqueViolation(error)) throw error;
       const winner = await prisma.transaction.findFirst({ where: { id, userId } });
       return winner

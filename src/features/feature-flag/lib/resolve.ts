@@ -1,4 +1,4 @@
-export interface FlagState {
+interface FlagState {
   slug: string;
   enabled: boolean;
   rollout: number;

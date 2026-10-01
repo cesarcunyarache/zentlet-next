@@ -54,7 +54,8 @@ export async function deliver(deliveryId: string) {
 
   const isSent = await send(delivery);
   await prisma.notificationDelivery.update({ where: { id: deliveryId }, data: outcome(isSent, delivery.attempts, now) });
-  if (!isSent) logger.warn({ deliveryId, channel: delivery.channel, attempts: delivery.attempts }, "notification.delivery_failed");
+  if (isSent) return;
+  logger.warn({ deliveryId, channel: delivery.channel, attempts: delivery.attempts }, "notification.delivery_failed");
 }
 
 export async function deliverPending() {

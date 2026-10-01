@@ -23,12 +23,8 @@ export async function GET(req: Request, { params }: RouteContext) {
     if (!userId) return unauthorized();
 
     const { id } = await params;
-    const transaction = await prisma.transaction.findFirst({
-      where: { id, userId },
-    });
-
+    const transaction = await prisma.transaction.findFirst({ where: { id, userId } });
     if (!transaction) return notFound();
-
     return NextResponse.json(serializeTransaction(transaction));
   } catch (error) {
     return internalError(req, error, "Error fetching transaction");
@@ -70,20 +66,16 @@ export async function PATCH(req: Request, { params }: RouteContext) {
 
     if (count === 0) return notFound();
 
-    const transaction = await prisma.transaction.findUniqueOrThrow({
-      where: { id },
-    });
+    const transaction = await prisma.transaction.findUniqueOrThrow({ where: { id } });
     if (transaction.type === "expense") scheduleBudgetCheck(userId, transaction.categoryId);
 
     return NextResponse.json(serializeTransaction(transaction));
   } catch (error) {
-    // la categoría se borró entre la comprobación y la actualización
     if (isForeignKeyViolation(error)) return errorResponse("Category not found", 422);
     return internalError(req, error, "Error updating transaction");
   }
 }
 
-/** 404 si no existe: el cliente lo trata como éxito (ya estaba borrado). */
 export async function DELETE(req: Request, { params }: RouteContext) {
   try {
     const userId = await getSessionUserId(req);
@@ -93,12 +85,8 @@ export async function DELETE(req: Request, { params }: RouteContext) {
     if (limited) return limited;
 
     const { id } = await params;
-    const { count } = await prisma.transaction.deleteMany({
-      where: { id, userId },
-    });
-
+    const { count } = await prisma.transaction.deleteMany({ where: { id, userId } });
     if (count === 0) return notFound();
-
     return new NextResponse(null, { status: 204 });
   } catch (error) {
     return internalError(req, error, "Error deleting transaction");

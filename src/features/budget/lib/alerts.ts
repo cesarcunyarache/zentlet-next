@@ -6,7 +6,7 @@ export const MAX_ALERTS = 5;
 
 export const DEFAULT_ALERTS: Omit<BudgetAlert, "id">[] = [{ kind: "percent", value: 80 }];
 
-export type BudgetNotice = { type: "budget.alert" | "budget.exceeded"; dedupeKey: string };
+type BudgetNotice = { type: "budget.alert" | "budget.exceeded"; dedupeKey: string };
 
 interface BudgetState {
   budgetId: string;

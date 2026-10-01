@@ -17,7 +17,6 @@ export function useOnboardingSteps() {
     direction,
     isFirst: stepIndex === 0,
     isLast: stepIndex === LAST_STEP_INDEX,
-    goTo,
     goNext: () => goTo(stepIndex + 1),
     goBack: () => goTo(stepIndex - 1),
   };

@@ -13,11 +13,7 @@ interface CategoriesSheetProps {
   categories: CategoryBase[];
 }
 
-export function CategoriesSheet({
-  isOpen,
-  onOpenChange,
-  categories,
-}: CategoriesSheetProps) {
+export function CategoriesSheet({ isOpen, onOpenChange, categories }: CategoriesSheetProps) {
   const t = useTranslations("categories");
   const [isCreating, setIsCreating] = useState(false);
   const [editing, setEditing] = useState<EditableCategory | null>(null);
@@ -30,12 +26,7 @@ export function CategoriesSheet({
 
   return (
     <>
-      <Sheet
-        isOpen={isOpen && !isFormOpen}
-        onOpenChange={onOpenChange}
-        title={t("title")}
-        hideTitle
-      >
+      <Sheet isOpen={isOpen && !isFormOpen} onOpenChange={onOpenChange} title={t("title")} hideTitle>
         <h2 className="font-display text-app-fg mt-2 mb-6 text-[28px] font-bold tracking-[-0.03em]">
           {t("title")}
         </h2>
@@ -47,11 +38,7 @@ export function CategoriesSheet({
         />
       </Sheet>
 
-      <CategoryFormSheet
-        isOpen={isFormOpen}
-        category={editing}
-        onClose={closeForm}
-      />
+      <CategoryFormSheet isOpen={isFormOpen} category={editing} onClose={closeForm} />
     </>
   );
 }

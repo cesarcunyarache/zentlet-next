@@ -4,9 +4,9 @@ export type OnboardingStep = (typeof ONBOARDING_STEPS)[number];
 
 export type StepDirection = 1 | -1;
 
-export type KeyboardIntent = "next" | "back" | "skip";
+type KeyboardIntent = "next" | "back" | "skip";
 
-export type CompletionTarget = "categories" | "app";
+type CompletionTarget = "categories" | "app";
 
 interface DragGesture {
   offset: { x: number };

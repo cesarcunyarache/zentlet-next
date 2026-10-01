@@ -1,22 +1,13 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { errorResponse, hasBearerSecret, internalError } from "@/lib/api/route-helpers";
+import { hasBearerSecret, internalError, unauthorized } from "@/lib/api/route-helpers";
 import { logger } from "@/lib/observability/logger";
-
-/*
- * Limpieza diaria (Vercel Cron, ver vercel.json). Borra lo que ya no sirve
- * y crecería sin límite: contadores de uso con la ventana vencida (la más
- * larga es de 1 h), contadores de intentos de Better Auth, sesiones y
- * enlaces de verificación caducados y notificaciones de más de 90 días.
- * Además avisa si hay cuentas sin el consentimiento legal registrado (el
- * alta lo guarda en un paso aparte).
- */
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const NOTIFICATION_RETENTION_DAYS = 90;
 
 export async function GET(req: Request) {
-  if (!hasBearerSecret(req, process.env.CRON_SECRET)) return errorResponse("Unauthorized", 401);
+  if (!hasBearerSecret(req, process.env.CRON_SECRET)) return unauthorized();
 
   try {
     const now = new Date();

@@ -13,7 +13,7 @@ const HINT_TONE_CLASS: Record<Tone, string> = {
   danger: "text-app-expense",
 };
 
-export interface SettingsRowTextProps {
+interface SettingsRowTextProps {
   label: ReactNode;
   hint: ReactNode;
   labelTone?: Tone;

@@ -58,5 +58,7 @@ export async function checkBudget(userId: string, categoryId: string) {
 }
 
 export function scheduleBudgetCheck(userId: string, categoryId: string) {
-  after(() => checkBudget(userId, categoryId).catch((error) => reportError(error, "budget.check_failed", { userId, categoryId })));
+  after(() =>
+    checkBudget(userId, categoryId).catch((error) => reportError(error, "budget.check_failed", { userId, categoryId })),
+  );
 }

@@ -39,7 +39,6 @@ export async function GET(req: Request, { params }: RouteContext) {
   }
 }
 
-/** Reemplaza todas las alertas del presupuesto: repetirlo deja el mismo resultado. */
 export async function PUT(req: Request, { params }: RouteContext) {
   try {
     const userId = await getSessionUserId(req);

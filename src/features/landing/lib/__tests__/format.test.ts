@@ -60,4 +60,8 @@ describe("fillTemplate", () => {
     );
     expect(fillTemplate("Hola {name}", {})).toBe("Hola {name}");
   });
+
+  it("ignora claves heredadas del prototipo", () => {
+    expect(fillTemplate("{constructor} {toString}", {})).toBe("{constructor} {toString}");
+  });
 });

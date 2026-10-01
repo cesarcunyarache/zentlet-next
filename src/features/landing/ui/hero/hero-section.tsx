@@ -7,10 +7,30 @@ import { HeroVisual } from "./hero-visual";
 
 const PETALS = [
   { id: "expense-dot", className: "top-[16%] left-[6%] size-4 rounded-full", color: BRAND_ACCENT, depth: 18 },
-  { id: "expense-pill", className: "top-[22%] right-[8%] h-5 w-9 -rotate-[24deg] rounded-full", color: BRAND_ACCENT, depth: 30 },
-  { id: "income-pill", className: "bottom-[14%] left-[10%] h-3 w-6 rotate-[35deg] rounded-full", color: "var(--app-income)", depth: 24 },
-  { id: "indigo-dot", className: "top-[58%] right-[3%] size-3 rounded-full", color: "oklch(0.62 0.16 265)", depth: 14 },
-  { id: "gold-pill", className: "bottom-[8%] right-[30%] h-4 w-7 rotate-[12deg] rounded-full", color: GOLD_ACCENT, depth: 36 },
+  {
+    id: "expense-pill",
+    className: "top-[22%] right-[8%] h-5 w-9 -rotate-[24deg] rounded-full",
+    color: BRAND_ACCENT,
+    depth: 30,
+  },
+  {
+    id: "income-pill",
+    className: "bottom-[14%] left-[10%] h-3 w-6 rotate-[35deg] rounded-full",
+    color: "var(--app-income)",
+    depth: 24,
+  },
+  {
+    id: "indigo-dot",
+    className: "top-[58%] right-[3%] size-3 rounded-full",
+    color: "oklch(0.62 0.16 265)",
+    depth: 14,
+  },
+  {
+    id: "gold-pill",
+    className: "bottom-[8%] right-[30%] h-4 w-7 rotate-[12deg] rounded-full",
+    color: GOLD_ACCENT,
+    depth: 36,
+  },
   { id: "gold-dot", className: "top-[40%] left-[46%] size-2.5 rounded-full", color: GOLD_ACCENT, depth: 12 },
 ];
 

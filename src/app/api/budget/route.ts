@@ -31,7 +31,6 @@ export async function GET(req: Request) {
   }
 }
 
-/** Idempotente por `id`. Una categoría sólo admite un presupuesto: otro distinto es 409. */
 export async function POST(req: Request) {
   try {
     const userId = await getSessionUserId(req);

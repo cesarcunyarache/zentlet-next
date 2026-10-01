@@ -19,11 +19,9 @@ import { scheduleBudgetCheck } from "@/features/budget/server/check";
 
 type RouteContext = { params: Promise<{ id: string; effectiveFrom: string }> };
 
-/**
- * Tope desde un periodo en adelante. El periodo lo elige el cliente: un
- * cambio hecho sin conexión se aplica al mes en que se hizo, no al de su
- * sincronización. Repetirlo pisa la misma fila.
- */
+const notFound = () => errorResponse("Budget not found", 404);
+const invalidPeriodStart = () => errorResponse("Invalid period start", 422);
+
 export async function PUT(req: Request, { params }: RouteContext) {
   try {
     const userId = await getSessionUserId(req);
@@ -36,7 +34,7 @@ export async function PUT(req: Request, { params }: RouteContext) {
     if (denied) return denied;
 
     const { id, effectiveFrom } = await params;
-    if (!isoDate.safeParse(effectiveFrom).success) return errorResponse("Invalid period start", 422);
+    if (!isoDate.safeParse(effectiveFrom).success) return invalidPeriodStart();
 
     const parsed = await parseBody(req, budgetLimitSchema);
     if ("error" in parsed) return parsed.error;
@@ -45,10 +43,10 @@ export async function PUT(req: Request, { params }: RouteContext) {
       where: { id, userId },
       select: { startDate: true, kind: true, periodUnit: true, periodCount: true },
     });
-    if (!budget) return errorResponse("Budget not found", 404);
+    if (!budget) return notFound();
 
     const rule = { periodUnit: budget.periodUnit as BudgetPeriodUnit, periodCount: budget.periodCount };
-    if (!isPeriodStart(rule, effectiveFrom)) return errorResponse("Invalid period start", 422);
+    if (!isPeriodStart(rule, effectiveFrom)) return invalidPeriodStart();
 
     const start = new Date(effectiveFrom);
     if (start < budget.startDate) return errorResponse("Limit before budget start", 422);
@@ -64,13 +62,12 @@ export async function PUT(req: Request, { params }: RouteContext) {
     });
 
     const updated = await prisma.budget.findUnique({ where: { id }, include: BUDGET_LIMITS });
-    if (!updated) return errorResponse("Budget not found", 404);
+    if (!updated) return notFound();
     scheduleBudgetCheck(userId, updated.categoryId);
 
     return NextResponse.json(serializeBudget(updated));
   } catch (error) {
-    // el presupuesto se borró entre la comprobación y el upsert
-    if (isForeignKeyViolation(error)) return errorResponse("Budget not found", 404);
+    if (isForeignKeyViolation(error)) return notFound();
     return internalError(req, error, "Error updating budget limit");
   }
 }

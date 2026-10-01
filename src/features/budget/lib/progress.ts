@@ -2,7 +2,7 @@ import type { DateRange } from "@/features/transaction/types";
 import type { PeriodRange, TBudget } from "../types";
 import { budgetRangeForView, limitAt } from "./period";
 
-export interface BudgetMeasurement {
+interface BudgetMeasurement {
   categoryId: string;
   range: PeriodRange;
   limit: number;

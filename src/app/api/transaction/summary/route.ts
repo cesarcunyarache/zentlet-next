@@ -5,7 +5,6 @@ import { summaryWhere, toSummary } from "@/features/transaction/lib/feed-query";
 import { getSessionUserId, internalError, parseQuery, unauthorized } from "@/lib/api/route-helpers";
 import type { TransactionSummaryResponse } from "@/features/transaction/types";
 
-/** Totales del periodo agrupados por categoría y tipo: un resultado pequeño con cualquier volumen. */
 export async function GET(req: Request) {
   try {
     const userId = await getSessionUserId(req);
@@ -27,10 +26,7 @@ export async function GET(req: Request) {
         : [],
     ]);
 
-    const body: TransactionSummaryResponse = {
-      ...toSummary(groups),
-      presentIds: present.map((row) => row.id),
-    };
+    const body: TransactionSummaryResponse = { ...toSummary(groups), presentIds: present.map((row) => row.id) };
     return NextResponse.json(body);
   } catch (error) {
     return internalError(req, error, "Error summarizing transactions");

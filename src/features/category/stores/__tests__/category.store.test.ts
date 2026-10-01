@@ -18,7 +18,6 @@ vi.mock("../../services/category.service", () => ({
     updateCategory: vi.fn(),
     deleteCategory: vi.fn(),
     getCategories: vi.fn(),
-    getCategory: vi.fn(),
   },
 }));
 vi.mock("@/core/offline/sync-events", () => ({ emitSyncError: vi.fn() }));
@@ -111,7 +110,7 @@ describe("alta de categoría", () => {
 });
 
 describe("edición de categoría", () => {
-  it("se ve al instante y guarda la respuesta como detalle", async () => {
+  it("se ve al instante y se envía al servidor", async () => {
     const renamed = { ...food, name: "Restaurantes" };
     service.updateCategory.mockResolvedValue(renamed);
     run(categoryMutationKeys.update, { categoryId: "food", data: { name: "Restaurantes" } });
@@ -122,7 +121,6 @@ describe("edición de categoría", () => {
     await settle();
 
     expect(service.updateCategory).toHaveBeenCalledWith("food", { name: "Restaurantes" });
-    expect(queryClient.getQueryData(categoryKeys.detail("food"))).toEqual(renamed);
   });
 
   it("un rechazo del servidor vuelve a pedir la lista, avisa y lo reporta", async () => {
@@ -145,14 +143,12 @@ describe("edición de categoría", () => {
 });
 
 describe("borrado de categoría", () => {
-  it("borra también su detalle", async () => {
-    queryClient.setQueryData(categoryKeys.detail("food"), food);
+  it("la quita de la lista", async () => {
     service.deleteCategory.mockResolvedValue(undefined);
     run(categoryMutationKeys.remove, "food");
     await settle();
 
     expect(listIds()).toEqual([]);
-    expect(queryClient.getQueryData(categoryKeys.detail("food"))).toBeUndefined();
   });
 
   it("con movimientos (409): vuelve a la lista, avisa «en uso» y NO lo reporta como fallo", async () => {

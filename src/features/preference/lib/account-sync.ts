@@ -1,15 +1,15 @@
-import { preferenceService } from "../services/preference.service";
 import { getApiErrorStatus } from "@/core/services/api-error";
 import { isNetworkError } from "@/core/offline/sync-policy";
 import { reportClientError } from "@/lib/observability/client";
 import type { Locale } from "@/i18n/routing";
+import { preferenceService } from "../services/preference.service";
 import { DEFAULT_CURRENCY } from "./currency";
 import { getDeviceCurrency, setDeviceCurrency } from "./device-currency";
 import { readPendingPreferences } from "./pending";
 import { savePreferences } from "./save";
 import { planPreferenceSync } from "./sync";
 
-export interface PreferenceSyncOptions {
+interface PreferenceSyncOptions {
   userId: string;
   currentLocale: () => Locale;
   switchLanguage: (language: Locale) => void;
@@ -45,7 +45,7 @@ export async function syncPreferences({ userId, currentLocale, switchLanguage, c
   if (update) await savePreferences(userId, update);
 }
 
-export async function flushPendingPreferences(userId: string) {
+async function flushPendingPreferences(userId: string) {
   const pending = readPendingPreferences(userId);
   if (Object.keys(pending).length > 0) await savePreferences(userId, pending);
 }

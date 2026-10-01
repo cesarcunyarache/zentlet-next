@@ -1,14 +1,14 @@
 import type { Locale } from "@/i18n/routing";
 import { legalConfig as c, type LegalDocumentId } from "./config";
 
-export type LegalBlock = string | { list: string[] };
+type LegalBlock = string | { list: string[] };
 
-export interface LegalSection {
+interface LegalSection {
   title: string;
   blocks: LegalBlock[];
 }
 
-export interface LegalDocumentContent {
+interface LegalDocumentContent {
   title: string;
   description: string;
   updated: string;

@@ -58,9 +58,15 @@ const toColumns = (widths: number[]) => widths.map((width) => ({ width }));
 
 const header = (value: string) => ({ value, fontWeight: "bold" as const });
 
+const amountCell = (amount: { toString(): string }) => ({
+  value: Number(amount.toString()),
+  type: Number,
+  format: AMOUNT_FORMAT,
+});
+
 function budgetCell(budget: ExportCategory["budget"]) {
   const amount = budget?.limits[0]?.amount;
-  return amount ? { value: Number(amount.toString()), type: Number, format: AMOUNT_FORMAT } : null;
+  return amount ? amountCell(amount) : null;
 }
 
 function budgetPeriodCell(budget: ExportCategory["budget"], labels: WorkbookLabels) {
@@ -82,7 +88,7 @@ export function buildWorkbook(
     { header: header(columns.type), cell: (tx) => ({ value: labels.types[tx.type as TransactionType] ?? tx.type }) },
     { header: header(columns.category), cell: (tx) => ({ value: tx.category.name }) },
     { header: header(columns.description), cell: (tx) => ({ value: tx.description ?? "" }) },
-    { header: header(columns.amount), cell: (tx) => ({ value: Number(tx.amount.toString()), type: Number, format: AMOUNT_FORMAT }) },
+    { header: header(columns.amount), cell: (tx) => amountCell(tx.amount) },
     { header: header(columns.reference), cell: (tx) => ({ value: tx.reference ?? "" }) },
   ]);
 
@@ -91,8 +97,14 @@ export function buildWorkbook(
     { header: header(columns.icon), cell: (category) => ({ value: category.icon }) },
     { header: header(columns.color), cell: (category) => ({ value: category.color }) },
     { header: header(columns.description), cell: (category) => ({ value: category.description ?? "" }) },
-    { header: header(columns.transactions), cell: (category) => ({ value: category._count.transactions, type: Number }) },
-    { header: header(columns.createdAt), cell: (category) => ({ value: category.createdAt, type: Date, format: dateFormat }) },
+    {
+      header: header(columns.transactions),
+      cell: (category) => ({ value: category._count.transactions, type: Number }),
+    },
+    {
+      header: header(columns.createdAt),
+      cell: (category) => ({ value: category.createdAt, type: Date, format: dateFormat }),
+    },
     { header: header(columns.budget), cell: (category) => budgetCell(category.budget) },
     { header: header(columns.budgetPeriod), cell: (category) => budgetPeriodCell(category.budget, labels) },
   ]);

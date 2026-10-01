@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { notificationService } from "../services/notification.service";
 import type { NotificationFeed } from "../types";
 
-export const notificationKeys = {
+const notificationKeys = {
   feed: ["notifications"] as const,
 };
 
@@ -21,7 +21,7 @@ export function useNotifications() {
     queryFn: () => notificationService.getFeed(),
     refetchInterval: POLL_INTERVAL_MS,
   });
-  return { items: query.data?.items ?? [], unreadCount: query.data?.unreadCount ?? 0, isLoading: query.isPending };
+  return { items: query.data?.items ?? [], unreadCount: query.data?.unreadCount ?? 0 };
 }
 
 export function useMarkNotificationsRead() {
