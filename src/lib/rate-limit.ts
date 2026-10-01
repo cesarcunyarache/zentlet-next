@@ -1,11 +1,13 @@
+import { withKeyValueStore } from "@/lib/kv";
 import prisma from "@/lib/prisma";
 import { reportError } from "@/lib/observability/server";
 
 /*
- * Cupos de uso por clave con ventana fija, guardados en la base de datos:
- * el contador es el mismo para todas las instancias del servidor. Un solo
- * `INSERT … ON CONFLICT` cuenta el uso y reinicia la ventana si venció,
- * sin carreras entre peticiones simultáneas.
+ * Cupos de uso por clave con ventana fija, compartidos por todas las
+ * instancias del servidor. Con almacén clave-valor configurado se cuentan
+ * ahí (un incremento atómico); sin él, o si no responde, en la base de
+ * datos: un solo `INSERT … ON CONFLICT` cuenta el uso y reinicia la ventana
+ * si venció, sin carreras entre peticiones simultáneas.
  */
 
 export interface RateLimitResult {
@@ -15,10 +17,16 @@ export interface RateLimitResult {
 }
 
 /**
- * Cuenta un uso de `key`. Si la base de datos falla, deja pasar (y lo
- * reporta): el límite protege la app, no debe tumbarla.
+ * Cuenta un uso de `key`. Si ni el almacén ni la base de datos responden,
+ * deja pasar (y lo reporta): el límite protege la app, no debe tumbarla.
  */
 export async function rateLimit(key: string, limit: number, windowMs: number): Promise<RateLimitResult> {
+  const count = await withKeyValueStore((store) => store.increment(`rate:${key}`, windowMs));
+  if (count !== null) return { allowed: count <= limit, count };
+  return databaseRateLimit(key, limit, windowMs);
+}
+
+async function databaseRateLimit(key: string, limit: number, windowMs: number): Promise<RateLimitResult> {
   try {
     const [row] = await prisma.$queryRaw<{ count: number }[]>`
       INSERT INTO "usage_limit" ("key", "count", "windowStart")

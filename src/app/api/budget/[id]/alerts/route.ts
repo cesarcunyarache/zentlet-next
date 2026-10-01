@@ -4,16 +4,9 @@ import { budgetAlertsSchema } from "@/features/budget/schemas/budget-api.schema"
 import { isAlertBelowLimit } from "@/features/budget/lib/alerts";
 import { serializeAlert } from "@/features/budget/lib/serialize";
 import { scheduleBudgetCheck } from "@/features/budget/server/check";
-import { requireFeature } from "@/features/billing/server/guard";
-import {
-  errorResponse,
-  getSessionUserId,
-  internalError,
-  isForeignKeyViolation,
-  parseBody,
-  unauthorized,
-  writeLimit,
-} from "@/lib/api/route-helpers";
+import { requireFeature } from "@/features/billing/http/guard";
+import { errorResponse, getSessionUserId, internalError, parseBody, unauthorized, writeLimit } from "@/lib/api/route-helpers";
+import { isForeignKeyViolation } from "@/lib/db-errors";
 
 type RouteContext = { params: Promise<{ id: string }> };
 

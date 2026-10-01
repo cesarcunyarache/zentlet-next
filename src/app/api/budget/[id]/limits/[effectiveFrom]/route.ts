@@ -5,16 +5,9 @@ import { isPeriodStart } from "@/features/budget/lib/period";
 import type { BudgetPeriodUnit } from "@/features/budget/types";
 import { isoDate } from "@/features/transaction/schemas/transaction-api.schema";
 import { BUDGET_LIMITS, serializeBudget } from "@/features/budget/lib/serialize";
-import {
-  errorResponse,
-  getSessionUserId,
-  internalError,
-  isForeignKeyViolation,
-  parseBody,
-  unauthorized,
-  writeLimit,
-} from "@/lib/api/route-helpers";
-import { requireFeature } from "@/features/billing/server/guard";
+import { errorResponse, getSessionUserId, internalError, parseBody, unauthorized, writeLimit } from "@/lib/api/route-helpers";
+import { isForeignKeyViolation } from "@/lib/db-errors";
+import { requireFeature } from "@/features/billing/http/guard";
 import { scheduleBudgetCheck } from "@/features/budget/server/check";
 
 type RouteContext = { params: Promise<{ id: string; effectiveFrom: string }> };

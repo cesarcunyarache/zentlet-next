@@ -8,16 +8,8 @@ import {
 import { FEED_ORDER, afterCursor, decodeCursor, encodeCursor, feedWhere } from "@/features/transaction/lib/feed-query";
 import type { TransactionPage } from "@/features/transaction/types";
 import { scheduleBudgetCheck } from "@/features/budget/server/check";
-import {
-  errorResponse,
-  getSessionUserId,
-  internalError,
-  isUniqueViolation,
-  parseBody,
-  parseQuery,
-  unauthorized,
-  writeLimit,
-} from "@/lib/api/route-helpers";
+import { errorResponse, getSessionUserId, internalError, parseBody, parseQuery, unauthorized, writeLimit } from "@/lib/api/route-helpers";
+import { isUniqueViolation } from "@/lib/db-errors";
 
 export async function GET(req: Request) {
   try {

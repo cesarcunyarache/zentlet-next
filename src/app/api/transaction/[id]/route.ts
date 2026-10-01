@@ -2,15 +2,8 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { serializeTransaction } from "@/features/transaction/lib/serialize";
 import { updateTransactionSchema } from "@/features/transaction/schemas/transaction-api.schema";
-import {
-  errorResponse,
-  getSessionUserId,
-  internalError,
-  isForeignKeyViolation,
-  parseBody,
-  unauthorized,
-  writeLimit,
-} from "@/lib/api/route-helpers";
+import { errorResponse, getSessionUserId, internalError, parseBody, unauthorized, writeLimit } from "@/lib/api/route-helpers";
+import { isForeignKeyViolation } from "@/lib/db-errors";
 import { scheduleBudgetCheck } from "@/features/budget/server/check";
 
 type RouteContext = { params: Promise<{ id: string }> };

@@ -25,7 +25,7 @@ export async function register() {
 export const onRequestError: Instrumentation.onRequestError = async (...args) => {
   if (process.env.NEXT_RUNTIME !== "nodejs") return;
   try {
-    const { reportRequestError } = await import("./lib/observability/server");
+    const { reportRequestError } = await import("./lib/observability/next");
     reportRequestError(...args);
   } catch {
     // nunca propagar un fallo de la telemetría

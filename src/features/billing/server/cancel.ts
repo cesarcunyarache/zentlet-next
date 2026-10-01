@@ -2,7 +2,7 @@ import prisma from "@/lib/prisma";
 import { getBillingProvider } from "../providers";
 import type { BillingEventSource } from "../types";
 import { recordBillingEvent } from "./events";
-import { abandonPending, findLiveSubscription, type SubscriptionRow } from "./subscriptions";
+import { abandonPending, findLiveSubscription, forgetEffectivePlan, type SubscriptionRow } from "./subscriptions";
 
 interface CancelOptions {
   source: BillingEventSource;
@@ -29,6 +29,7 @@ export async function cancelSubscription(
       checkoutUrl: null,
     },
   });
+  await forgetEffectivePlan(subscription.userId);
   await recordBillingEvent({
     source,
     type: "subscription.canceled",

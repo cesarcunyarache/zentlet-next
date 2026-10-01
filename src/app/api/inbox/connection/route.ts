@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { requireFeature } from "@/features/billing/server/guard";
+import { requireFeature } from "@/features/billing/http/guard";
 import { createConnection, getConnection, inboundDomain } from "@/features/inbox/server/connection";
 import { errorResponse, getSessionUserId, internalError, unauthorized, writeLimit } from "@/lib/api/route-helpers";
 

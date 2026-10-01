@@ -1,8 +1,7 @@
 import prisma from "@/lib/prisma";
 import { isoDateIn } from "@/lib/dates";
-import { isUniqueViolation } from "@/lib/api/route-helpers";
-import { can } from "@/features/billing/lib/entitlements";
-import { getEffectivePlan } from "@/features/billing/server/subscriptions";
+import { isUniqueViolation } from "@/lib/db-errors";
+import { hasFeature } from "@/features/billing/server/access";
 import { matchCategory } from "@/features/transaction/lib/parse-description";
 import type { EmailMovement, InboundEmail, SenderRule } from "../types";
 import { knownBankFor } from "../lib/banks";
@@ -87,7 +86,7 @@ export async function ingestEmail(email: InboundEmail): Promise<IngestOutcome> {
   if (verification) return "verification";
 
   const { userId } = inbox;
-  if (!can(await getEffectivePlan(userId), "email_import")) return "not_allowed";
+  if (!(await hasFeature(userId, "email_import"))) return "not_allowed";
 
   const from = normalizeAddress(email.from);
   const rules: SenderRule[] = await prisma.inboxSender.findMany({ where: { userId } });

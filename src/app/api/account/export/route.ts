@@ -10,7 +10,7 @@ import { routing, type Locale } from "@/i18n/routing";
 import en from "@/locales/en/settings.json";
 import es from "@/locales/es/settings.json";
 import { getSessionUserId, internalError, parseQuery, tooManyRequests, unauthorized } from "@/lib/api/route-helpers";
-import { requireFeature } from "@/features/billing/server/guard";
+import { requireFeature } from "@/features/billing/http/guard";
 
 const EXPORTS_PER_MINUTE = 5;
 const RATE_WINDOW_SECONDS = 60;

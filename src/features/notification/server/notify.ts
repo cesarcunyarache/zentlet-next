@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { isUniqueViolation } from "@/lib/api/route-helpers";
+import { isUniqueViolation } from "@/lib/db-errors";
 import { logger } from "@/lib/observability/logger";
 import { isFlagEnabled } from "@/features/feature-flag/server/flags";
 import { CHANNELS_BY_TYPE, channelFlag } from "../lib/channels";

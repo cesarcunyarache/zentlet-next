@@ -1,9 +1,10 @@
 import pino, { type DestinationStream, type LevelWithSilent } from "pino";
+import type { Logger } from "./types";
 
 /*
- * Logs estructurados del servidor. En producción, una línea JSON por
- * evento en stdout (lo recoge la plataforma de despliegue); en desarrollo,
- * una línea legible. Sólo servidor: no importar desde componentes cliente.
+ * Adaptador de Pino: el único archivo que importa la librería. En
+ * producción, una línea JSON por evento en stdout (lo recoge la plataforma
+ * de despliegue); en desarrollo, una línea legible. Sólo servidor.
  */
 
 const isDev = process.env.NODE_ENV !== "production";
@@ -46,4 +47,12 @@ const options: pino.LoggerOptions = {
   redact: { paths: REDACT_PATHS, censor: "[Redacted]" },
 };
 
-export const logger = isDev ? pino(options, devStream) : pino(options);
+export function createPinoLogger(): Logger {
+  const instance = isDev ? pino(options, devStream) : pino(options);
+  return {
+    debug: (context, message) => instance.debug(context, message),
+    info: (context, message) => instance.info(context, message),
+    warn: (context, message) => instance.warn(context, message),
+    error: (context, message) => instance.error(context, message),
+  };
+}

@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import prisma from "@/lib/prisma";
-import { sendEmail } from "@/lib/email/send-email";
+import { sendEmail } from "@/lib/email";
 import { isFlagEnabled } from "@/features/feature-flag/server/flags";
 import { deliverPending } from "../deliver";
 import { notify } from "../notify";
@@ -12,7 +12,7 @@ vi.mock("@/lib/prisma", () => ({
   },
 }));
 vi.mock("@/features/feature-flag/server/flags", () => ({ isFlagEnabled: vi.fn() }));
-vi.mock("@/lib/email/send-email", () => ({ sendEmail: vi.fn() }));
+vi.mock("@/lib/email", () => ({ sendEmail: vi.fn() }));
 
 const db = vi.mocked(prisma, { deep: true });
 const NOW = new Date("2026-09-30T12:00:00.000Z");

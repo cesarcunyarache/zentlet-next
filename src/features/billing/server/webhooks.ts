@@ -1,4 +1,4 @@
-import { isUniqueViolation } from "@/lib/api/route-helpers";
+import { isUniqueViolation } from "@/lib/db-errors";
 import prisma from "@/lib/prisma";
 import { logger } from "@/lib/observability/logger";
 import { getBillingProvider, isProviderName } from "../providers";

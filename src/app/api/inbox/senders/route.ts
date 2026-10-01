@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { requireFeature } from "@/features/billing/server/guard";
+import { requireFeature } from "@/features/billing/http/guard";
 import { normalizeSenderPattern } from "@/features/inbox/lib/sender";
 import { serializeInboxSender } from "@/features/inbox/lib/serialize";
 import { addInboxSenderSchema } from "@/features/inbox/schemas/inbox-api.schema";

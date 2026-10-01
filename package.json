@@ -37,6 +37,7 @@
     "dotenv": "^17.4.2",
     "framer-motion": "^12.42.2",
     "idb-keyval": "^6.3.0",
+    "ioredis": "^6.0.0",
     "jsqr": "^1.4.0",
     "lucide-react": "^1.27.0",
     "motion": "^12.42.2",

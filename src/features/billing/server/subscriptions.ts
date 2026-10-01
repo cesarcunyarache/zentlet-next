@@ -1,4 +1,5 @@
 import type { Subscription } from "@/generated/prisma/client";
+import { cached, invalidate } from "@/lib/cache";
 import prisma from "@/lib/prisma";
 import { effectivePlan } from "../lib/entitlements";
 import { isTrialEligible, LIVE_STATUSES, resolveStatus } from "../lib/lifecycle";
@@ -9,6 +10,11 @@ import type { BillingSummary, PaymentStatus, SubscriptionStatus } from "../types
 import { recordBillingEvent } from "./events";
 
 const HISTORY_LIMIT = 10;
+const PLAN_CACHE_SECONDS = 60;
+
+const planCacheKey = (userId: string) => `billing:plan:${userId}`;
+
+export const forgetEffectivePlan = (userId: string) => invalidate(planCacheKey(userId));
 
 export type SubscriptionRow = Subscription & { status: SubscriptionStatus };
 
@@ -28,8 +34,10 @@ export async function findLiveSubscription(userId: string) {
   return row as SubscriptionRow | null;
 }
 
-export async function getEffectivePlan(userId: string, now = new Date()) {
-  return effectivePlan(await listUserSubscriptions(userId), now);
+export function getEffectivePlan(userId: string) {
+  return cached(planCacheKey(userId), PLAN_CACHE_SECONDS, async () =>
+    effectivePlan(await listUserSubscriptions(userId), new Date()),
+  );
 }
 
 export async function getBillingSummary(userId: string, now = new Date()): Promise<BillingSummary> {
@@ -75,6 +83,7 @@ export async function applySnapshot(subscription: SubscriptionRow, snapshot: Sub
       canceledAt: isNewlyCanceled ? now : subscription.canceledAt,
     },
   });
+  await forgetEffectivePlan(subscription.userId);
 
   if (status !== subscription.status) {
     await recordBillingEvent({
@@ -99,6 +108,7 @@ export async function abandonPending(subscription: SubscriptionRow, now = new Da
     where: { id: subscription.id },
     data: { status: "canceled", canceledAt: now, trialEndsAt: null, checkoutUrl: null },
   });
+  await forgetEffectivePlan(subscription.userId);
   await recordBillingEvent({
     source: "system",
     type: "checkout.abandoned",

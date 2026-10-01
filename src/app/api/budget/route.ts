@@ -2,16 +2,9 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { createBudgetSchema } from "@/features/budget/schemas/budget-api.schema";
 import { BUDGET_LIMITS, serializeBudget } from "@/features/budget/lib/serialize";
-import {
-  errorResponse,
-  getSessionUserId,
-  internalError,
-  isUniqueViolation,
-  parseBody,
-  unauthorized,
-  writeLimit,
-} from "@/lib/api/route-helpers";
-import { requireFeature } from "@/features/billing/server/guard";
+import { errorResponse, getSessionUserId, internalError, parseBody, unauthorized, writeLimit } from "@/lib/api/route-helpers";
+import { isUniqueViolation } from "@/lib/db-errors";
+import { requireFeature } from "@/features/billing/http/guard";
 import { DEFAULT_ALERTS } from "@/features/budget/lib/alerts";
 
 export async function GET(req: Request) {

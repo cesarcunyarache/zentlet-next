@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { requireFeature } from "@/features/billing/server/guard";
+import { requireFeature } from "@/features/billing/http/guard";
 import { serializeInboxItem } from "@/features/inbox/lib/serialize";
 import { getSessionUserId, internalError, unauthorized } from "@/lib/api/route-helpers";
 

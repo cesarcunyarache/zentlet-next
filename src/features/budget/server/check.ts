@@ -1,5 +1,5 @@
-import { after } from "next/server";
 import prisma from "@/lib/prisma";
+import { runInBackground } from "@/lib/background";
 import { isoDateIn } from "@/lib/dates";
 import { reportError } from "@/lib/observability/server";
 import { notify } from "@/features/notification/server/notify";
@@ -58,7 +58,7 @@ export async function checkBudget(userId: string, categoryId: string) {
 }
 
 export function scheduleBudgetCheck(userId: string, categoryId: string) {
-  after(() =>
+  runInBackground(() =>
     checkBudget(userId, categoryId).catch((error) => reportError(error, "budget.check_failed", { userId, categoryId })),
   );
 }

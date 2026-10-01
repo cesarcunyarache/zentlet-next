@@ -1,4 +1,4 @@
-import { sendEmail } from "@/lib/email/send-email";
+import { sendEmail } from "@/lib/email";
 import { notificationEmail } from "@/lib/email/templates";
 import { notificationText } from "../text";
 import type { ChannelStrategy } from "./types";

@@ -1,6 +1,6 @@
 import { routing, type Locale } from "@/i18n/routing";
 import { siteConfig } from "@/lib/site";
-import type { Email } from "./send-email";
+import type { Email } from "./types";
 
 /*
  * Correos de la cuenta, en el idioma de la página desde la que se pidieron

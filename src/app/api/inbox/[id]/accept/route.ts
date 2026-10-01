@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { requireFeature } from "@/features/billing/server/guard";
+import { requireFeature } from "@/features/billing/http/guard";
 import { acceptInboxItemSchema } from "@/features/inbox/schemas/inbox-api.schema";
 import { acceptInboxItem } from "@/features/inbox/server/review";
 import { serializeTransaction } from "@/features/transaction/lib/serialize";

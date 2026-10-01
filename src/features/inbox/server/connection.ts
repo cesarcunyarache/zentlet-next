@@ -1,6 +1,6 @@
 import { randomBytes } from "node:crypto";
 import prisma from "@/lib/prisma";
-import { isUniqueViolation } from "@/lib/api/route-helpers";
+import { isUniqueViolation } from "@/lib/db-errors";
 import type { TInboxConnection } from "../types";
 import { generateLocalPart, inboxAddress } from "../lib/address";
 import { isTrustedRule } from "../lib/sender";

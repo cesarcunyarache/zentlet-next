@@ -21,6 +21,12 @@ services:
       timeout: 3s
       retries: 20
 
+  # opcional para la app: sin él todo va a Postgres (prueba de caída: docker compose stop redis)
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+
   # Mercado Pago simulado (el mismo de los E2E): pagos, checkout y webhooks sin credenciales reales
   mercadopago:
     image: node:24-bookworm-slim
@@ -44,12 +50,15 @@ services:
         condition: service_healthy
       mercadopago:
         condition: service_started
+      redis:
+        condition: service_started
     ports:
       - "${APP_PORT:-3000}:3000"
     # sólo valores no vacíos: lo demás (Gemini, OAuth, Sentry…) se toma del .env si existe
     environment:
       DATABASE_URL: *database-url
       DIRECT_URL: *database-url
+      REDIS_URL: redis://redis:6379
       BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:-docker-dev-secret-not-for-production-0000}
       BETTER_AUTH_URL: http://localhost:${APP_PORT:-3000}
       NEXT_PUBLIC_SITE_URL: http://localhost:${APP_PORT:-3000}

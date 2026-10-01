@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { requireFeature } from "@/features/billing/server/guard";
+import { requireFeature } from "@/features/billing/http/guard";
 import { dismissInboxItem } from "@/features/inbox/server/review";
 import { errorResponse, getSessionUserId, internalError, unauthorized, writeLimit } from "@/lib/api/route-helpers";
 

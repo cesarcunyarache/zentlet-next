@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { reportError } from "@/lib/observability/server";
-import { sendEmail } from "../send-email";
+import { checkEmail, isEmailConfigured, sendEmail } from "..";
 import { emailLocale, resetPasswordEmail, verificationEmail } from "../templates";
 
 vi.mock("@/lib/observability/server", () => ({ reportError: vi.fn() }));
@@ -90,6 +90,41 @@ describe("sendEmail", () => {
     vi.mocked(fetch).mockRejectedValue(new Error("network down"));
 
     expect(await sendEmail(email)).toBe(false);
-    expect(reportError).toHaveBeenCalledWith(expect.any(Error), "email.unavailable", expect.anything());
+    expect(reportError).toHaveBeenCalledWith(expect.any(Error), "email.send_failed", expect.anything());
+  });
+});
+
+describe("proveedor de correo", () => {
+  beforeEach(() => {
+    vi.stubGlobal("fetch", vi.fn());
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.unstubAllGlobals();
+  });
+
+  it("se elige con EMAIL_PROVIDER; uno desconocido cuenta como sin configurar", async () => {
+    vi.stubEnv("RESEND_API_KEY", "re_test");
+    vi.stubEnv("EMAIL_FROM", "Zentlet <hola@example.com>");
+    expect(isEmailConfigured()).toBe(true);
+    vi.stubEnv("EMAIL_PROVIDER", "otro");
+    expect(isEmailConfigured()).toBe(false);
+    expect(await checkEmail()).toEqual({ status: "error", detail: "Proveedor desconocido: otro" });
+  });
+
+  it("el health check delega en el adaptador", async () => {
+    vi.stubEnv("RESEND_API_KEY", "re_test");
+    vi.stubEnv("EMAIL_FROM", "Zentlet <hola@example.com>");
+    vi.mocked(fetch).mockResolvedValue(new Response("{}", { status: 200 }));
+    expect(await checkEmail()).toEqual({ status: "ok", detail: "Clave válida" });
+  });
+
+  it("sin credenciales: apagado en desarrollo, error en producción", async () => {
+    vi.stubEnv("RESEND_API_KEY", "");
+    vi.stubEnv("NODE_ENV", "development");
+    expect((await checkEmail()).status).toBe("off");
+    vi.stubEnv("NODE_ENV", "production");
+    expect((await checkEmail()).status).toBe("error");
   });
 });

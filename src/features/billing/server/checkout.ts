@@ -1,4 +1,4 @@
-import { isUniqueViolation } from "@/lib/api/route-helpers";
+import { isUniqueViolation } from "@/lib/db-errors";
 import prisma from "@/lib/prisma";
 import { grantsAccess } from "../lib/entitlements";
 import { canReuseCheckout, firstChargeDate, isTrialEligible } from "../lib/lifecycle";

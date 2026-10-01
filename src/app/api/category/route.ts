@@ -3,15 +3,8 @@ import prisma from "@/lib/prisma";
 import { Prisma } from "@/generated/prisma/client";
 import { sanitizeSuggestions } from "@/features/category/ai/lib/normalize-suggestions";
 import { createCategorySchema } from "@/features/category/schemas/category-api.schema";
-import {
-  errorResponse,
-  getSessionUserId,
-  internalError,
-  isUniqueViolation,
-  parseBody,
-  unauthorized,
-  writeLimit,
-} from "@/lib/api/route-helpers";
+import { errorResponse, getSessionUserId, internalError, parseBody, unauthorized, writeLimit } from "@/lib/api/route-helpers";
+import { isUniqueViolation } from "@/lib/db-errors";
 
 const MAX_CATEGORIES = 200;
 

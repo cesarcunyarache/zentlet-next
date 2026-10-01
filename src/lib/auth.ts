@@ -6,7 +6,8 @@ import { cancelUserSubscription } from "@/features/billing/server/cancel";
 import { LEGAL_CONSENT_HEADER, LEGAL_VERSION } from "@/features/legal/config";
 import { recordSignUpConsent } from "@/features/legal/consent";
 import prisma from "./prisma";
-import { sendEmail } from "./email/send-email";
+import { rateLimit } from "./rate-limit";
+import { isEmailConfigured, sendEmail } from "./email";
 import { emailLocale, resetPasswordEmail, verificationEmail } from "./email/templates";
 import type { AuthMethod } from "./observability/events";
 import { logger } from "./observability/logger";
@@ -26,10 +27,10 @@ const turnstileSecret = process.env.TURNSTILE_SECRET_KEY;
 const captchaEnabled = Boolean(turnstileSecret && process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY);
 
 /*
- * Verificar el correo exige poder enviarlo: sin Resend configurado, el alta
- * abre sesión directamente y no se envían enlaces de verificación.
+ * Verificar el correo exige poder enviarlo: sin proveedor configurado, el
+ * alta abre sesión directamente y no se envían enlaces de verificación.
  */
-const emailEnabled = Boolean(process.env.RESEND_API_KEY && process.env.EMAIL_FROM);
+const emailEnabled = isEmailConfigured();
 
 /** Email por su ruta (o el enlace de verificación); OAuth por el proveedor del callback (`/callback/:id`). */
 function authMethod(context: HookContext): AuthMethod {
@@ -56,13 +57,23 @@ export const auth = betterAuth({
   },
 
   /*
-   * Intentos de login, registro y recuperación, contados en la base de datos:
-   * el mismo límite para todas las instancias. Por defecto, 3 intentos cada
-   * 10 s en esas rutas y 100 por minuto en el resto (Better Auth).
+   * Intentos de login, registro y recuperación, contados con el mismo
+   * `rateLimit` que el resto de la app (almacén clave-valor si existe, si no
+   * la base de datos): el mismo límite para todas las instancias. Por
+   * defecto, 3 intentos cada 10 s en esas rutas y 100 por minuto en el resto
+   * (Better Auth). Las sesiones no pasan por el almacén: siguen en la base
+   * de datos, así que su caída no cierra ni revive ninguna.
    */
   rateLimit: {
     enabled: process.env.NODE_ENV === "production",
-    storage: "database",
+    customStorage: {
+      get: async () => null,
+      set: async () => {},
+      consume: async (key, rule) => {
+        const { allowed } = await rateLimit(`auth:${key}`, rule.max, rule.window * 1000);
+        return { allowed, retryAfter: allowed ? null : rule.window };
+      },
+    },
   },
 
   plugins: captchaEnabled

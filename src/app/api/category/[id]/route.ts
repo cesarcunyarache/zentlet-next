@@ -3,15 +3,8 @@ import prisma from "@/lib/prisma";
 import { Prisma } from "@/generated/prisma/client";
 import { sanitizeSuggestions } from "@/features/category/ai/lib/normalize-suggestions";
 import { updateCategorySchema } from "@/features/category/schemas/category-api.schema";
-import {
-  errorResponse,
-  getSessionUserId,
-  internalError,
-  isForeignKeyViolation,
-  parseBody,
-  unauthorized,
-  writeLimit,
-} from "@/lib/api/route-helpers";
+import { errorResponse, getSessionUserId, internalError, parseBody, unauthorized, writeLimit } from "@/lib/api/route-helpers";
+import { isForeignKeyViolation } from "@/lib/db-errors";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
