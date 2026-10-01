@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseSunatQr, sunatSummary } from "./sunat-qr";
+import { parseSunatQr, sunatSummary } from "../sunat-qr";
 
 const BOLETA_QR = "20508565934|03|B105|00482211|11.43|74.90|2026-09-27|1|45678912|";
 

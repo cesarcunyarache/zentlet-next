@@ -35,6 +35,9 @@ import { SettingsSheet } from "@/features/account/ui/settings-sheet";
 import { NotificationBell } from "@/features/notification/ui/notification-bell";
 import { NotificationSheet } from "@/features/notification/ui/notification-sheet";
 import { useNotifications } from "@/features/notification/stores/notification.store";
+import { InboxIcon } from "@/features/inbox/ui/inbox-icon";
+import { InboxSheet } from "@/features/inbox/ui/inbox-sheet";
+import { useInboxItems } from "@/features/inbox/stores/inbox.store";
 import { ToastBubble } from "@/core/components/ui/toast-bubble";
 import { Onboarding } from "@/features/onboarding/ui/onboarding";
 import { periodRange } from "@/features/transaction/lib/format";
@@ -49,7 +52,7 @@ import type {
   TransactionType,
 } from "@/features/transaction/types";
 
-type Sheet = "new" | "categories" | "settings" | "notifications" | null;
+type Sheet = "new" | "categories" | "settings" | "notifications" | "inbox" | null;
 
 const ALL_TIME: DateRange = {};
 
@@ -59,6 +62,8 @@ export default function HomePage() {
   const tBudget = useTranslations("budgets.toast");
   const tNotifications = useTranslations("notifications");
   const { unreadCount } = useNotifications();
+  const tInbox = useTranslations("inbox");
+  const { items: inboxItems } = useInboxItems();
   const { categories: rawCategories } = useCategoryStore();
 
   const categories = useMemo<CategoryLike[]>(
@@ -215,6 +220,11 @@ export default function HomePage() {
         <div className="flex h-11 items-center justify-between">
           <SyncStatusPill />
           <div className="flex items-center">
+            {inboxItems.length > 0 ? (
+              <IconButton label={tInbox("label", { count: inboxItems.length })} onClick={() => setSheet("inbox")}>
+                <InboxIcon count={inboxItems.length} />
+              </IconButton>
+            ) : null}
             <IconButton
               label={tNotifications("label", { count: unreadCount })}
               onClick={() => setSheet("notifications")}
@@ -466,6 +476,13 @@ export default function HomePage() {
       <NotificationSheet
         isOpen={sheet === "notifications"}
         onOpenChange={(open) => setSheet(open ? "notifications" : null)}
+      />
+
+      <InboxSheet
+        isOpen={sheet === "inbox"}
+        onOpenChange={(open) => setSheet(open ? "inbox" : null)}
+        currency={currency}
+        categories={categories}
       />
     </div>
   );

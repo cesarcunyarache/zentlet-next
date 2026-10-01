@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { SWIPE_REVEAL, swipeOffset, swipeSideOnRelease } from "./swipe";
+import { SWIPE_REVEAL, swipeOffset, swipeSideOnRelease } from "../swipe";
 
 const both = { canEdit: true, canDelete: true };
 

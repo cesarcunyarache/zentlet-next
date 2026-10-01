@@ -27,7 +27,7 @@ export { transactionKeys, transactionMutationKeys } from "./transaction.keys";
 export { fetchSummaryWithPending, withPendingInPage } from "./pending-transactions";
 export { registerTransactionMutations } from "./transaction.mutations";
 
-export const PAGE_SIZE = 200;
+const PAGE_SIZE = 200;
 
 export function useTransactionFeed(filters: TransactionFilters) {
   const queryClient = useQueryClient();
@@ -43,10 +43,7 @@ export function useTransactionFeed(filters: TransactionFilters) {
     placeholderData: keepPreviousData,
   });
 
-  const transactions = useMemo(
-    () => query.data?.pages.flatMap((page) => page.items) ?? [],
-    [query.data],
-  );
+  const transactions = useMemo(() => query.data?.pages.flatMap((page) => page.items) ?? [], [query.data]);
 
   return {
     transactions,
@@ -68,14 +65,6 @@ export function useTransactionSummary(range: DateRange) {
   });
 }
 
-export function useTransaction(transactionId: string | null | undefined) {
-  return useQuery({
-    queryKey: transactionKeys.detail(transactionId ?? ""),
-    queryFn: () => transactionService.getTransaction(transactionId as string),
-    enabled: Boolean(transactionId),
-  });
-}
-
 export function usePendingTransactions() {
   const states = useMutationState({
     filters: { mutationKey: transactionMutationKeys.all, status: "pending" },
@@ -89,22 +78,12 @@ export function usePendingTransactions() {
 }
 
 export function useTransactionMutations() {
-  const create = useMutation<TTransaction, unknown, TTransaction>({
-    mutationKey: transactionMutationKeys.create,
-  });
-  const update = useMutation<TTransaction, unknown, UpdateVariables>({
-    mutationKey: transactionMutationKeys.update,
-  });
-  const remove = useMutation<void, unknown, DeleteVariables>({
-    mutationKey: transactionMutationKeys.remove,
-  });
+  const create = useMutation<TTransaction, unknown, TTransaction>({ mutationKey: transactionMutationKeys.create });
+  const update = useMutation<TTransaction, unknown, UpdateVariables>({ mutationKey: transactionMutationKeys.update });
+  const remove = useMutation<void, unknown, DeleteVariables>({ mutationKey: transactionMutationKeys.remove });
 
   return {
-    createTransaction: (payload: TTransactionPayload): TTransaction => {
-      const transaction = { ...payload, id: crypto.randomUUID() };
-      create.mutate(transaction);
-      return transaction;
-    },
+    createTransaction: (payload: TTransactionPayload) => create.mutate({ ...payload, id: crypto.randomUUID() }),
     updateTransaction: (transaction: TTransaction, data: Partial<TTransactionPayload>) =>
       update.mutate({ transactionId: transaction.id, data, previous: transaction }),
     deleteTransaction: (transaction: TTransaction) => remove.mutate(transaction),

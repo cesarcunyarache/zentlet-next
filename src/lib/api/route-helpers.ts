@@ -36,6 +36,12 @@ export function errorResponse(message: string, status: number) {
 
 export const unauthorized = () => errorResponse("Unauthorized", 401);
 
+export function tooManyRequests(message: string, retryAfterSeconds: number) {
+  const response = errorResponse(message, 429);
+  response.headers.set("Retry-After", String(retryAfterSeconds));
+  return response;
+}
+
 /** `Authorization: Bearer <secreto>` en tiempo constante; sin secreto configurado, nadie pasa. */
 export function hasBearerSecret(req: Request, secret: string | undefined) {
   const given = req.headers.get("authorization");
@@ -49,9 +55,7 @@ export function hasBearerSecret(req: Request, secret: string | undefined) {
 export async function writeLimit(userId: string) {
   const { allowed } = await rateLimit(`writes:${userId}`, WRITES_PER_MINUTE, 60_000);
   if (allowed) return null;
-  const response = errorResponse("Too many requests", 429);
-  response.headers.set("Retry-After", "60");
-  return response;
+  return tooManyRequests("Too many requests", 60);
 }
 
 /**

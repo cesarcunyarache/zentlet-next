@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { LONG_PRESS_MS, createLongPress } from "./long-press";
+import { LONG_PRESS_MS, createLongPress } from "../long-press";
 
 let onLongPress: ReturnType<typeof vi.fn<() => void>>;
 let press: ReturnType<typeof createLongPress>;

@@ -1,7 +1,6 @@
-import type { SpeechStatus } from "../types";
+import type { CategoryLike, SpeechStatus } from "../types";
 import type { VoiceDraft } from "./parse-voice";
 import type { TransactionFormValues } from "../schemas/transaction.schema";
-import type { CategoryLike } from "../types";
 import { describeOrFallback } from "./format";
 
 export interface TranscriptCategory {
@@ -16,7 +15,7 @@ interface VoiceCategoryInput {
   aiPick: TranscriptCategory | null;
 }
 
-export interface VoiceCategoryResolution {
+interface VoiceCategoryResolution {
   manualCategoryId: string | null;
   aiCategoryId: string | null;
   draft: VoiceDraft | null;
@@ -26,18 +25,11 @@ function categoryForTranscript(pick: TranscriptCategory | null, transcript: stri
   return pick?.transcript === transcript ? pick.categoryId : null;
 }
 
-export function resolveVoiceCategory({
-  parsed,
-  transcript,
-  manualPick,
-  aiPick,
-}: VoiceCategoryInput): VoiceCategoryResolution {
+export function resolveVoiceCategory(input: VoiceCategoryInput): VoiceCategoryResolution {
+  const { parsed, transcript, manualPick, aiPick } = input;
   const manualCategoryId = categoryForTranscript(manualPick, transcript);
   const aiCategoryId = parsed?.categoryId ? null : categoryForTranscript(aiPick, transcript);
-  const draft = parsed && {
-    ...parsed,
-    categoryId: manualCategoryId ?? parsed.categoryId ?? aiCategoryId,
-  };
+  const draft = parsed && { ...parsed, categoryId: manualCategoryId ?? parsed.categoryId ?? aiCategoryId };
   return { manualCategoryId, aiCategoryId, draft };
 }
 
@@ -54,7 +46,7 @@ export function toFormValues(
   categories: CategoryLike[],
   defaultDescription: string,
 ): TransactionFormValues {
-  const category = categories.find((c) => c.id === draft.categoryId);
+  const category = categories.find((category) => category.id === draft.categoryId);
   return {
     type: draft.type,
     amount: draft.amount ?? 0,

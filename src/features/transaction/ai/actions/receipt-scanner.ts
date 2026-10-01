@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { generateObject } from "@/lib/ai/client";
 import { allowAiCall } from "@/lib/ai/quota";
+import { limitPromptCategories } from "../prompts/prompt-categories";
 import { buildReceiptScanPrompt } from "../prompts/receipt-scan.prompt";
 import {
   RECEIPT_IMAGE_MAX_BYTES,
@@ -16,8 +17,6 @@ import {
 
 const OPERATION = "transaction.scan_receipt";
 const TIMEOUT_MS = 30_000;
-const MAX_CATEGORIES = 60;
-const MAX_CATEGORY_NAME_LENGTH = 40;
 
 async function currentUserId() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -53,14 +52,10 @@ export async function scanReceipt(formData: FormData): Promise<ScanReceiptResult
   if (!userId) return { ok: false, error: "failed" };
   if (!(await allowAiCall(userId, OPERATION))) return { ok: false, error: "limited" };
 
-  const categories = parsed.data.categories
-    .slice(0, MAX_CATEGORIES)
-    .map(({ id, name }) => ({ id, name: name.slice(0, MAX_CATEGORY_NAME_LENGTH) }));
-
   try {
     const extraction = (await generateObject({
       operation: OPERATION,
-      prompt: buildReceiptScanPrompt(categories, parsed.data.today),
+      prompt: buildReceiptScanPrompt(limitPromptCategories(parsed.data.categories), parsed.data.today),
       schema: receiptExtractionSchema,
       image: { data: new Uint8Array(await image.arrayBuffer()), mediaType: image.type },
       timeoutMs: TIMEOUT_MS,

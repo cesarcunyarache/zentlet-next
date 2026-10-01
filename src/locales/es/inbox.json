@@ -1,0 +1,47 @@
+{
+  "label": "{count, plural, =0 {Por confirmar} one {# movimiento por confirmar} other {# movimientos por confirmar}}",
+  "title": "Por confirmar",
+  "intro": "Movimientos que llegaron a tu correo. Revísalos y acéptalos para registrarlos.",
+  "empty": "No tienes movimientos por confirmar.",
+  "item": {
+    "card": "tarjeta •{last4}",
+    "learned": "Recordado",
+    "duplicate": "Posible duplicado",
+    "newSender": "Remitente nuevo",
+    "unverified": "Remitente no verificado",
+    "foreignCurrency": "En {currency}",
+    "merchant": "En el correo: {merchant}",
+    "accept": "Aceptar",
+    "pickCategory": "Elige categoría",
+    "dismiss": "Descartar",
+    "failed": "No pudimos registrarlo. Inténtalo de nuevo."
+  },
+  "connection": {
+    "label": "Movimientos por correo",
+    "hint": "Registra los avisos de tu banco desde tu correo",
+    "configure": "Configurar",
+    "hide": "Ocultar",
+    "loading": "Cargando…",
+    "unavailable": "Esta función aún no está disponible. Muy pronto.",
+    "pitch": "Te daremos una dirección propia. Reenvía ahí los avisos de tu banco y aparecerán aquí para que los confirmes.",
+    "create": "Crear mi dirección",
+    "creating": "Creando…",
+    "createFailed": "No pudimos crear tu dirección. Inténtalo de nuevo.",
+    "copy": "Copiar dirección",
+    "gmailCode": "Código de confirmación de Gmail: {code}",
+    "gmailLink": "Abrir enlace de confirmación",
+    "steps": {
+      "copy": "Copia tu dirección.",
+      "gmail": "En Gmail ve a Configuración → Reenvío y POP/IMAP → Agregar una dirección de reenvío y pégala. El código de confirmación aparecerá aquí.",
+      "filter": "Crea un filtro con el correo de tu banco en «De» (por ejemplo notificaciones@notificacionesbcp.com.pe) y elige «Reenviar a» tu dirección.",
+      "done": "Listo. Reconocemos {banks} y aprendemos de los demás bancos cuando aceptas sus movimientos."
+    },
+    "senders": "Remitentes",
+    "sendersHint": "Correos o dominios de tus bancos. Los que aceptas se agregan solos; los que descartas varias veces se bloquean.",
+    "senderPlaceholder": "alertas@banco.pe o @banco.pe",
+    "addSender": "Agregar remitente",
+    "senderFailed": "Ese correo o dominio no es válido.",
+    "remove": "Quitar {sender}",
+    "unblock": "Desbloquear {sender}"
+  }
+}

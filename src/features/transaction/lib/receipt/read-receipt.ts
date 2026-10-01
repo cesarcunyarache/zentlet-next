@@ -18,7 +18,7 @@ export interface ReceiptReaders {
   onStep: (step: ReceiptStep) => void;
 }
 
-export type ReceiptReading =
+type ReceiptReading =
   | { ok: true; extraction: ReceiptExtraction; method: ReceiptMethod; isCategoryAi: boolean }
   | { ok: false; error: ReceiptError };
 

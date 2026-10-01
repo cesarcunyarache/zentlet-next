@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { auth } from "@/lib/auth";
 import { generateObject } from "@/lib/ai/client";
 import { allowAiCall } from "@/lib/ai/quota";
-import { suggestTransactionCategory } from "./category-suggester";
+import { suggestTransactionCategory } from "../category-suggester";
 
 vi.mock("next/headers", () => ({ headers: vi.fn(async () => new Headers()) }));
 vi.mock("@/lib/auth", () => ({ auth: { api: { getSession: vi.fn() } } }));

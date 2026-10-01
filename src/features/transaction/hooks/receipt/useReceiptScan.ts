@@ -5,6 +5,7 @@ import { today, toISODate } from "@/lib/dates";
 import { track } from "@/lib/observability/client";
 import { suggestTransactionCategory } from "../../ai/actions/category-suggester";
 import { scanReceipt } from "../../ai/actions/receipt-scanner";
+import { toPromptCategories } from "../../ai/prompts/prompt-categories";
 import type { ReceiptExtraction } from "../../ai/schemas/receipt-ai.schema";
 import { compressImage } from "../../lib/receipt/image";
 import { readReceipt, type ReceiptMethod, type ReceiptReaders, type ReceiptStep } from "../../lib/receipt/read-receipt";
@@ -57,16 +58,17 @@ async function readImage(file: File) {
   }
 }
 
-function promptCategories(categories: CategoryLike[]) {
-  return categories.map(({ id, name }) => ({ id, name }));
-}
-
 function scanWithAi(image: Blob, categories: CategoryLike[]) {
   const formData = new FormData();
   formData.set("image", image, "receipt.jpg");
-  formData.set("categories", JSON.stringify(promptCategories(categories)));
+  formData.set("categories", JSON.stringify(toPromptCategories(categories)));
   formData.set("today", toISODate(today()));
   return scanReceipt(formData);
+}
+
+async function suggestCategoryId(description: string, categories: CategoryLike[]) {
+  const suggestion = await suggestTransactionCategory({ description, categories: toPromptCategories(categories) });
+  return suggestion?.categoryId ?? null;
 }
 
 export function useReceiptScan({ categories, currency, onSave, onEdit }: UseReceiptScanOptions) {
@@ -94,9 +96,7 @@ export function useReceiptScan({ categories, currency, onSave, onEdit }: UseRece
       decodeQr: () => decodeQrFromImage(image),
       recognizeText: (mode) => recognizeImageText(image, locale, mode),
       scanWithAi: () => scanWithAi(image, categories),
-      suggestCategory: async (description) =>
-        (await suggestTransactionCategory({ description, categories: promptCategories(categories) }))?.categoryId ??
-        null,
+      suggestCategory: (description) => suggestCategoryId(description, categories),
       isOnline: () => navigator.onLine,
       onStep: (step) => isCurrent() && setScan((current) => ({ ...current, step })),
     };

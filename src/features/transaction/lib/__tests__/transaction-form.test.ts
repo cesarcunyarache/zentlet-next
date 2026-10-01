@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { TransactionFormValues } from "../schemas/transaction.schema";
+import type { TransactionFormValues } from "../../schemas/transaction.schema";
 import {
   finalizeFormValues,
   findCreatedCategory,
@@ -13,7 +13,7 @@ import {
   transactionCreatedPayload,
   transactionUpdatedPayload,
   visibleCategoriesFor,
-} from "./transaction-form";
+} from "../transaction-form";
 
 const categories = [
   { id: "food", name: "Comida" },

@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { BAR_MIN, CHART_HEIGHT, IDLE_HEIGHT, barHeight, budgetBarHeights } from "./chart";
+import { BAR_MIN, CHART_HEIGHT, IDLE_HEIGHT, barHeight, budgetBarHeights } from "../chart";
 
 describe("barHeight", () => {
   it("el mayor importe ocupa todo el alto y la mitad, la mitad", () => {
-    expect(barHeight(-1000, 1000)).toEqual({ idle: false, height: CHART_HEIGHT });
+    expect(barHeight(-1000, 1000)).toEqual({ isIdle: false, height: CHART_HEIGHT });
     expect(barHeight(-500, 1000).height).toBe(CHART_HEIGHT / 2);
   });
 
@@ -22,13 +22,13 @@ describe("barHeight", () => {
   });
 
   it("sin movimientos (o con restos de coma flotante) es la píldora baja", () => {
-    expect(barHeight(0, 1000)).toEqual({ idle: true, height: IDLE_HEIGHT });
-    expect(barHeight(0.0000001, 1000)).toEqual({ idle: true, height: IDLE_HEIGHT });
-    expect(barHeight(-0.004, 1000).idle).toBe(true);
+    expect(barHeight(0, 1000)).toEqual({ isIdle: true, height: IDLE_HEIGHT });
+    expect(barHeight(0.0000001, 1000)).toEqual({ isIdle: true, height: IDLE_HEIGHT });
+    expect(barHeight(-0.004, 1000).isIdle).toBe(true);
   });
 
   it("sin máximo no divide por cero", () => {
-    expect(barHeight(0, 0)).toEqual({ idle: true, height: IDLE_HEIGHT });
+    expect(barHeight(0, 0)).toEqual({ isIdle: true, height: IDLE_HEIGHT });
   });
 });
 

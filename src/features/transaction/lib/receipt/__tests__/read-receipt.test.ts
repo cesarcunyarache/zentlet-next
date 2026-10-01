@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import type { ReceiptExtraction, ScanReceiptResult } from "../../ai/schemas/receipt-ai.schema";
-import { readReceipt, type ReceiptReaders } from "./read-receipt";
+import type { ReceiptExtraction, ScanReceiptResult } from "../../../ai/schemas/receipt-ai.schema";
+import { readReceipt, type ReceiptReaders } from "../read-receipt";
 
 const categories = [{ id: "transport", name: "Transporte" }];
 const QR = "20508565934|03|B105|00482211|11.43|74.90|2026-09-27|1|45678912|";

@@ -1,24 +1,12 @@
 "use client";
 
-import { createContext, useCallback, useContext, useSyncExternalStore, type ReactNode } from "react";
+import { useCallback, useContext, useSyncExternalStore } from "react";
 import { useOfflineSession } from "@/core/offline/offline-query-provider";
+import { AccountCurrencyContext } from "../lib/account-currency-context";
 import { DEFAULT_CURRENCY, currencySymbol, type CurrencyCode } from "../lib/currency";
 import { changeCurrency, getDeviceCurrency, subscribeDeviceCurrency } from "../lib/device-currency";
 
-function getServerSnapshot() {
-  return null;
-}
-
-const AccountCurrencyContext = createContext<CurrencyCode | null>(null);
-
-interface AccountCurrencyProviderProps {
-  currency: CurrencyCode | null;
-  children: ReactNode;
-}
-
-export function AccountCurrencyProvider({ currency, children }: AccountCurrencyProviderProps) {
-  return <AccountCurrencyContext value={currency}>{children}</AccountCurrencyContext>;
-}
+const getServerSnapshot = () => null;
 
 export function useCurrency() {
   const { userId } = useOfflineSession();

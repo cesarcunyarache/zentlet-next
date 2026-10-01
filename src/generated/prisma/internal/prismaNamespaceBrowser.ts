@@ -71,7 +71,11 @@ export const ModelName = {
   BillingPayment: 'BillingPayment',
   BillingEvent: 'BillingEvent',
   Feature: 'Feature',
-  UserFeature: 'UserFeature'
+  UserFeature: 'UserFeature',
+  EmailInbox: 'EmailInbox',
+  InboxSender: 'InboxSender',
+  InboxTransaction: 'InboxTransaction',
+  MerchantRule: 'MerchantRule'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -384,6 +388,80 @@ export const UserFeatureScalarFieldEnum = {
 } as const
 
 export type UserFeatureScalarFieldEnum = (typeof UserFeatureScalarFieldEnum)[keyof typeof UserFeatureScalarFieldEnum]
+
+
+export const EmailInboxScalarFieldEnum = {
+  id: 'id',
+  address: 'address',
+  userId: 'userId',
+  verificationCode: 'verificationCode',
+  verificationUrl: 'verificationUrl',
+  lastReceivedAt: 'lastReceivedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EmailInboxScalarFieldEnum = (typeof EmailInboxScalarFieldEnum)[keyof typeof EmailInboxScalarFieldEnum]
+
+
+export const InboxSenderScalarFieldEnum = {
+  id: 'id',
+  address: 'address',
+  status: 'status',
+  origin: 'origin',
+  acceptedCount: 'acceptedCount',
+  dismissedCount: 'dismissedCount',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InboxSenderScalarFieldEnum = (typeof InboxSenderScalarFieldEnum)[keyof typeof InboxSenderScalarFieldEnum]
+
+
+export const InboxTransactionScalarFieldEnum = {
+  id: 'id',
+  status: 'status',
+  externalId: 'externalId',
+  senderAddress: 'senderAddress',
+  bank: 'bank',
+  subject: 'subject',
+  parser: 'parser',
+  isVerified: 'isVerified',
+  isNewSender: 'isNewSender',
+  type: 'type',
+  amount: 'amount',
+  currency: 'currency',
+  merchant: 'merchant',
+  description: 'description',
+  categoryId: 'categoryId',
+  isLearned: 'isLearned',
+  transactionDate: 'transactionDate',
+  cardLast4: 'cardLast4',
+  reference: 'reference',
+  duplicateOfId: 'duplicateOfId',
+  transactionId: 'transactionId',
+  resolvedAt: 'resolvedAt',
+  userId: 'userId',
+  receivedAt: 'receivedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type InboxTransactionScalarFieldEnum = (typeof InboxTransactionScalarFieldEnum)[keyof typeof InboxTransactionScalarFieldEnum]
+
+
+export const MerchantRuleScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  description: 'description',
+  hits: 'hits',
+  categoryId: 'categoryId',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MerchantRuleScalarFieldEnum = (typeof MerchantRuleScalarFieldEnum)[keyof typeof MerchantRuleScalarFieldEnum]
 
 
 export const SortOrder = {

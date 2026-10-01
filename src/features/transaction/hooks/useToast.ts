@@ -2,9 +2,9 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-const DEFAULT_DURATION_MS = 1900;
+const TOAST_DURATION_MS = 1900;
 
-export function useToast(duration = DEFAULT_DURATION_MS) {
+export function useToast() {
   const [message, setMessage] = useState<string | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -16,9 +16,9 @@ export function useToast(duration = DEFAULT_DURATION_MS) {
     (next: string) => {
       setMessage(next);
       clearTimer();
-      timer.current = setTimeout(() => setMessage(null), duration);
+      timer.current = setTimeout(() => setMessage(null), TOAST_DURATION_MS);
     },
-    [duration, clearTimer],
+    [clearTimer],
   );
 
   useEffect(() => clearTimer, [clearTimer]);

@@ -9,7 +9,7 @@ import { intlLocales } from "@/i18n/routing";
 import { PillSelect } from "@/core/components/ui/pill-select";
 import { dayLabel, dayShift, toISODate } from "@/lib/dates";
 
-const CUSTOM = "custom";
+const CUSTOM_OPTION = "custom";
 const RECENT_DAYS = 7;
 
 function recentIsoDates() {
@@ -28,10 +28,10 @@ export function TransactionDateField({ value, onChange }: TransactionDateFieldPr
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   const recentDays = recentIsoDates();
-  const showCalendarField = isCustom || !recentDays.includes(value);
+  const shouldShowCalendarField = isCustom || !recentDays.includes(value);
 
   function pickRecent(next: string) {
-    if (next !== CUSTOM) return onChange(next);
+    if (next !== CUSTOM_OPTION) return onChange(next);
     setIsCustom(true);
     setIsCalendarOpen(true);
   }
@@ -41,14 +41,14 @@ export function TransactionDateField({ value, onChange }: TransactionDateFieldPr
     onChange(recentDays[0]);
   }
 
-  if (!showCalendarField) {
+  if (!shouldShowCalendarField) {
     return (
       <PillSelect
         label={t("fields.date")}
         value={value}
         options={[
           ...recentDays.map((date) => ({ value: date, label: dayLabel(date, locale) })),
-          { value: CUSTOM, label: t("date.other") },
+          { value: CUSTOM_OPTION, label: t("date.other") },
         ]}
         onChange={pickRecent}
         className="bg-app-fill min-h-9 px-3"
@@ -109,7 +109,9 @@ function PickerCalendar({ label }: { label: string }) {
         <Calendar.GridBody>{(date) => <Calendar.Cell date={date} />}</Calendar.GridBody>
       </Calendar.Grid>
       <Calendar.YearPickerGrid>
-        <Calendar.YearPickerGridBody>{({ year }) => <Calendar.YearPickerCell year={year} />}</Calendar.YearPickerGridBody>
+        <Calendar.YearPickerGridBody>
+          {({ year }) => <Calendar.YearPickerCell year={year} />}
+        </Calendar.YearPickerGridBody>
       </Calendar.YearPickerGrid>
     </Calendar>
   );

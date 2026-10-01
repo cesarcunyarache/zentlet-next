@@ -17,21 +17,6 @@ type RouteContext = { params: Promise<{ id: string }> };
 
 const notFound = () => errorResponse("Category not found", 404);
 
-export async function GET(req: Request, { params }: RouteContext) {
-  try {
-    const userId = await getSessionUserId(req);
-    if (!userId) return unauthorized();
-
-    const { id } = await params;
-    const category = await prisma.category.findFirst({ where: { id, userId } });
-    if (!category) return notFound();
-
-    return NextResponse.json(category);
-  } catch (error) {
-    return internalError(req, error, "Error fetching category");
-  }
-}
-
 export async function PATCH(req: Request, { params }: RouteContext) {
   try {
     const userId = await getSessionUserId(req);

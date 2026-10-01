@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { mergeSyncStates } from "./pending-transactions";
+import { mergeSyncStates } from "../pending-transactions";
 
 describe("mergeSyncStates", () => {
   it("agrupa por movimiento e ignora cambios sin id o sin estado offline", () => {

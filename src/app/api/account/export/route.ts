@@ -9,11 +9,11 @@ import { FEED_ORDER } from "@/features/transaction/lib/feed-query";
 import { routing, type Locale } from "@/i18n/routing";
 import en from "@/locales/en/settings.json";
 import es from "@/locales/es/settings.json";
-import { errorResponse, getSessionUserId, internalError, parseQuery, unauthorized } from "@/lib/api/route-helpers";
+import { getSessionUserId, internalError, parseQuery, tooManyRequests, unauthorized } from "@/lib/api/route-helpers";
 import { requireFeature } from "@/features/billing/server/guard";
 
 const EXPORTS_PER_MINUTE = 5;
-const RATE_WINDOW_MS = 60_000;
+const RATE_WINDOW_SECONDS = 60;
 const MAX_CURRENCY_SYMBOL_LENGTH = 4;
 const XLSX_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
@@ -39,8 +39,8 @@ export async function GET(req: Request) {
     const denied = await requireFeature(userId, "export");
     if (denied) return denied;
 
-    const { allowed } = await rateLimit(`export:${userId}`, EXPORTS_PER_MINUTE, RATE_WINDOW_MS);
-    if (!allowed) return errorResponse("Too many exports, try again in a minute", 429);
+    const { allowed } = await rateLimit(`export:${userId}`, EXPORTS_PER_MINUTE, RATE_WINDOW_SECONDS * 1000);
+    if (!allowed) return tooManyRequests("Too many exports, try again in a minute", RATE_WINDOW_SECONDS);
 
     const parsed = parseQuery(req, exportQuerySchema);
     if ("error" in parsed) return parsed.error;

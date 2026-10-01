@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import type { CategoryTotals } from "../types";
-import { buildStripData, categoryValue } from "./strip-data";
+import type { CategoryTotals } from "../../types";
+import { buildStripData, categoryValue } from "../strip-data";
 
 const food = { id: "food", name: "Comida" };
 const salary = { id: "salary", name: "Sueldo" };

@@ -1,13 +1,9 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { accountService } from "@/features/account/services/account.service";
-import { isDoneOnDevice, markDoneOnDevice } from "./lib/device-storage";
-
-interface OnboardingState {
-  open: boolean;
-  finish: () => void;
-}
+import { isDoneOnDevice, markDoneOnDevice } from "../lib/device-storage";
+import { OnboardingContext } from "../lib/onboarding-context";
 
 interface OnboardingProviderProps {
   userId: string;
@@ -18,10 +14,6 @@ interface OnboardingProviderProps {
 const noopSubscribe = () => () => {};
 
 const completeOnServer = () => accountService.completeOnboarding().catch(() => {});
-
-const OnboardingContext = createContext<OnboardingState>({ open: false, finish: () => {} });
-
-export const useOnboarding = () => useContext(OnboardingContext);
 
 export function OnboardingProvider({ userId, pending, children }: OnboardingProviderProps) {
   const isDoneHere = useSyncExternalStore(noopSubscribe, () => isDoneOnDevice(userId), () => true);

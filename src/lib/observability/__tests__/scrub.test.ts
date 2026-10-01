@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { redactSearchQuery, withoutQueryData } from "./scrub";
+import { redactSearchQuery, withoutQueryData } from "../scrub";
 
 describe("redactSearchQuery", () => {
   it("oculta el texto de búsqueda y conserva el resto de la URL", () => {

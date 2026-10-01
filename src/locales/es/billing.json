@@ -18,6 +18,7 @@
   },
   "paywall": {
     "budgets": "Los presupuestos son parte de Pro",
-    "export": "Exportar es parte de Pro"
+    "export": "Exportar es parte de Pro",
+    "email_import": "Movimientos por correo es parte de Pro"
   }
 }

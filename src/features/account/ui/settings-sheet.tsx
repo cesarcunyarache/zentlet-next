@@ -5,6 +5,7 @@ import { Sheet } from "@/core/components/ui/sheet";
 import { currencySymbol, type CurrencyCode } from "@/features/preference/lib/currency";
 import { FeedbackRow } from "@/features/feedback/ui/feedback-row";
 import { PlanRow } from "@/features/billing/ui/plan-row";
+import { EmailImportRow } from "@/features/inbox/ui/email-import-row";
 import { analyticsAvailable } from "@/lib/observability/client";
 import { AnalyticsRow } from "./analytics-row";
 import { AppearanceRow } from "./appearance-row";
@@ -39,6 +40,7 @@ export function SettingsSheet({
       <CurrencyRow currency={currency} onCurrencyChange={onCurrencyChange} />
       <LanguageRow />
       <AppearanceRow />
+      <EmailImportRow />
       <DataExportRow transactionCount={transactionCount} currencySymbol={currencySymbol(currency)} />
       {analyticsAvailable && <AnalyticsRow />}
       <FeedbackRow />

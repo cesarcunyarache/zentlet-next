@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { sentryOptions } from "./sentry";
+import { sentryOptions } from "../sentry";
 
 describe("sentryOptions", () => {
   it("añade la integración de feature flags a las de por defecto", () => {

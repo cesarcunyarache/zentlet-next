@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { fitWithin } from "./image";
+import { fitWithin } from "../image";
 
 describe("fitWithin", () => {
   it("keeps small images untouched", () => {

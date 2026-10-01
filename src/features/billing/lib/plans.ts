@@ -1,6 +1,6 @@
 import type { BillingInterval } from "../types";
 
-export const FEATURES = ["transactions", "dashboard", "categories", "ai", "budgets", "export"] as const;
+export const FEATURES = ["transactions", "dashboard", "categories", "ai", "budgets", "export", "email_import"] as const;
 export type Feature = (typeof FEATURES)[number];
 
 export const TRIAL_DAYS = 15;

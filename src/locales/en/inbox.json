@@ -1,0 +1,47 @@
+{
+  "label": "{count, plural, =0 {To review} one {# transaction to review} other {# transactions to review}}",
+  "title": "To review",
+  "intro": "Transactions that reached your email. Review and accept them to record them.",
+  "empty": "Nothing to review.",
+  "item": {
+    "card": "card •{last4}",
+    "learned": "Remembered",
+    "duplicate": "Possible duplicate",
+    "newSender": "New sender",
+    "unverified": "Unverified sender",
+    "foreignCurrency": "In {currency}",
+    "merchant": "In the email: {merchant}",
+    "accept": "Accept",
+    "pickCategory": "Pick a category",
+    "dismiss": "Dismiss",
+    "failed": "We couldn't record it. Try again."
+  },
+  "connection": {
+    "label": "Transactions by email",
+    "hint": "Record your bank alerts from your email",
+    "configure": "Set up",
+    "hide": "Hide",
+    "loading": "Loading…",
+    "unavailable": "This feature isn't available yet. Coming soon.",
+    "pitch": "We'll give you your own address. Forward your bank alerts there and they'll show up here for you to confirm.",
+    "create": "Create my address",
+    "creating": "Creating…",
+    "createFailed": "We couldn't create your address. Try again.",
+    "copy": "Copy address",
+    "gmailCode": "Gmail confirmation code: {code}",
+    "gmailLink": "Open confirmation link",
+    "steps": {
+      "copy": "Copy your address.",
+      "gmail": "In Gmail go to Settings → Forwarding and POP/IMAP → Add a forwarding address and paste it. The confirmation code will show up here.",
+      "filter": "Create a filter with your bank's address in “From” and choose “Forward it to” your address.",
+      "done": "Done. We recognize {banks} and learn other banks when you accept their transactions."
+    },
+    "senders": "Senders",
+    "sendersHint": "Your banks' addresses or domains. The ones you accept are added automatically; the ones you dismiss several times get blocked.",
+    "senderPlaceholder": "alerts@bank.com or @bank.com",
+    "addSender": "Add sender",
+    "senderFailed": "That address or domain isn't valid.",
+    "remove": "Remove {sender}",
+    "unblock": "Unblock {sender}"
+  }
+}

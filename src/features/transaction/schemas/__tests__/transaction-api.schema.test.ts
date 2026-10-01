@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createTransactionSchema, transactionListQuerySchema } from "./transaction-api.schema";
+import { createTransactionSchema, transactionListQuerySchema } from "../transaction-api.schema";
 
 const valid = {
   id: "7d3f1c2a-5b6e-4a8f-9c0d-1e2f3a4b5c6d",

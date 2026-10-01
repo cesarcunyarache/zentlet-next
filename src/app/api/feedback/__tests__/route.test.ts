@@ -73,7 +73,9 @@ describe("POST /api/feedback", () => {
 
   it("superado el cupo por hora es 429 y no se guarda", async () => {
     db.$queryRaw.mockResolvedValue([{ count: 11 }] as never);
-    expect((await post({ message: "Otro más" })).status).toBe(429);
+    const response = await post({ message: "Otro más" });
+    expect(response.status).toBe(429);
+    expect(response.headers.get("Retry-After")).toBe("3600");
     expect(db.feedback.create).not.toHaveBeenCalled();
   });
 

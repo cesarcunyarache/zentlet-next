@@ -146,3 +146,23 @@ export type Feature = Prisma.FeatureModel
  * 
  */
 export type UserFeature = Prisma.UserFeatureModel
+/**
+ * Model EmailInbox
+ * 
+ */
+export type EmailInbox = Prisma.EmailInboxModel
+/**
+ * Model InboxSender
+ * 
+ */
+export type InboxSender = Prisma.InboxSenderModel
+/**
+ * Model InboxTransaction
+ * 
+ */
+export type InboxTransaction = Prisma.InboxTransactionModel
+/**
+ * Model MerchantRule
+ * 
+ */
+export type MerchantRule = Prisma.MerchantRuleModel

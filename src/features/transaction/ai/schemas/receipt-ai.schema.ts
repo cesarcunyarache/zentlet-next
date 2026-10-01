@@ -9,8 +9,6 @@ export const scanReceiptInputSchema = z.object({
   today: z.iso.date(),
 });
 
-export type ScanReceiptInput = z.infer<typeof scanReceiptInputSchema>;
-
 export const receiptExtractionSchema = z.object({
   isReceipt: z.boolean(),
   amount: z.number().nullable(),
@@ -24,8 +22,6 @@ export const receiptExtractionSchema = z.object({
 
 export type ReceiptExtraction = z.infer<typeof receiptExtractionSchema>;
 
-export type ScanReceiptError = "not_receipt" | "invalid_image" | "limited" | "failed";
+type ScanReceiptError = "not_receipt" | "invalid_image" | "limited" | "failed";
 
-export type ScanReceiptResult =
-  | { ok: true; extraction: ReceiptExtraction }
-  | { ok: false; error: ScanReceiptError };
+export type ScanReceiptResult = { ok: true; extraction: ReceiptExtraction } | { ok: false; error: ScanReceiptError };

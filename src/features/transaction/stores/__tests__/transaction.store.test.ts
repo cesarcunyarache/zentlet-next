@@ -3,23 +3,18 @@ import { MutationObserver, QueryClient, onlineManager } from "@tanstack/react-qu
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { emitSyncError } from "@/core/offline/sync-events";
 import { reportSyncFailure } from "@/core/offline/sync-policy";
-import type { FeedData } from "../lib/feed-cache";
-import { transactionService } from "../services/transaction.service";
-import type { TTransaction, TransactionSummary } from "../types";
+import type { FeedData } from "../../lib/feed-cache";
+import { transactionService } from "../../services/transaction.service";
+import type { TTransaction, TransactionSummary } from "../../types";
 import {
   fetchSummaryWithPending,
   registerTransactionMutations,
   transactionKeys,
   transactionMutationKeys,
   withPendingInPage,
-} from "./transaction.store";
+} from "../transaction.store";
 
-/*
- * La cola offline con un QueryClient real y las mutaciones registradas
- * como en la app. Sólo se simula la capa HTTP.
- */
-
-vi.mock("../services/transaction.service", () => ({
+vi.mock("../../services/transaction.service", () => ({
   transactionService: {
     createTransaction: vi.fn(),
     updateTransaction: vi.fn(),
@@ -69,14 +64,14 @@ let queryClient: QueryClient;
 beforeEach(() => {
   queryClient = new QueryClient();
   registerTransactionMutations(queryClient);
-  queryClient.mount(); // reanuda la cola al volver la red, como en la app
+  queryClient.mount();
   const feed: FeedData = { pages: [{ items: [existing], nextCursor: null }], pageParams: [null] };
   queryClient.setQueryData(transactionKeys.list({}), feed);
   queryClient.setQueryData(transactionKeys.summary(SEPTEMBER), SUMMARY);
 });
 
 afterEach(() => {
-  // desmontar antes de volver a "online": si no, se reanudaría la cola de este test en el siguiente
+ 
   queryClient.unmount();
   queryClient.clear();
   onlineManager.setOnline(true);
@@ -86,7 +81,7 @@ afterEach(() => {
 
 function run<T>(mutationKey: readonly unknown[], variables: T) {
   const observer = new MutationObserver<unknown, unknown, T>(queryClient, { mutationKey });
-  // la UI no espera la mutación: el resultado se observa en la cache
+ 
   void observer.mutate(variables).catch(() => {});
 }
 
@@ -130,7 +125,7 @@ describe("rechazos del servidor", () => {
 
     expect(feedIds()).toEqual(["existing"]);
     expect(summary()).toMatchObject({ count: 1, expenseTotal: 10 });
-    expect(service.createTransaction).toHaveBeenCalledTimes(1); // un 4xx no se reintenta
+    expect(service.createTransaction).toHaveBeenCalledTimes(1);
     expect(emitSyncError).toHaveBeenCalledWith("createTransaction");
     expect(reportSyncFailure).toHaveBeenCalledWith("createTransaction", rejection);
   });
@@ -145,7 +140,7 @@ describe("rechazos del servidor", () => {
     await vi.advanceTimersByTimeAsync(0);
     expect(feedIds()).toEqual(["new", "existing"]);
 
-    await vi.advanceTimersByTimeAsync(2_000); // primer reintento
+    await vi.advanceTimersByTimeAsync(2_000);
     expect(service.createTransaction).toHaveBeenCalledTimes(2);
     expect(pending()).toHaveLength(0);
     expect(feedIds()).toContain("new");
@@ -232,7 +227,7 @@ describe("totales y páginas con cambios en cola", () => {
     const fromServer = { items: [existing, tx({ id: "other", transactionDate: "2026-09-01" })], nextCursor: null };
 
     expect(withPendingInPage(queryClient, fromServer, {}, true).items.map((item) => item.id)).toEqual(["new", "other"]);
-    // las altas sólo se insertan en la primera página
+   
     expect(withPendingInPage(queryClient, fromServer, {}, false).items.map((item) => item.id)).toEqual(["other"]);
   });
 });
@@ -315,7 +310,7 @@ describe("totales con ediciones en cola", () => {
 
     const result = await fetchSummaryWithPending(queryClient, SEPTEMBER);
 
-    // las ediciones no se preguntan al servidor: sólo altas y borrados
+   
     expect(service.getSummary).toHaveBeenCalledWith(SEPTEMBER, []);
     expect(result).toMatchObject({ count: 1, expenseTotal: 0, incomeTotal: 10 });
     expect(result.byCategory.salary).toEqual({ expense: 0, income: 10 });
@@ -328,7 +323,7 @@ describe("totales con ediciones en cola", () => {
     await vi.waitFor(() => expect(pending()).toHaveLength(2));
     service.getSummary.mockResolvedValue({ ...SUMMARY, presentIds: [] });
 
-    // 10 del existente + 100 del alta editada; la edición no se cuenta aparte
+   
     expect(await fetchSummaryWithPending(queryClient, SEPTEMBER)).toMatchObject({ count: 2, expenseTotal: 110 });
   });
 

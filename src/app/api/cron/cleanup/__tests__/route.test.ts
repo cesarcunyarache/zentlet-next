@@ -14,6 +14,7 @@ vi.mock("@/lib/prisma", () => ({
     session: { deleteMany: vi.fn() },
     verification: { deleteMany: vi.fn() },
     notification: { deleteMany: vi.fn() },
+    inboxTransaction: { deleteMany: vi.fn() },
     user: { count: vi.fn() },
   },
 }));
@@ -28,7 +29,7 @@ beforeEach(() => {
   vi.resetAllMocks();
   vi.useFakeTimers({ now: new Date("2026-09-29T09:00:00.000Z"), toFake: ["Date"] });
   vi.stubEnv("CRON_SECRET", SECRET);
-  for (const model of [db.usageLimit, db.rateLimit, db.session, db.verification, db.notification]) {
+  for (const model of [db.usageLimit, db.rateLimit, db.session, db.verification, db.notification, db.inboxTransaction]) {
     model.deleteMany.mockResolvedValue({ count: 2 } as never);
   }
   db.user.count.mockResolvedValue(0 as never);
@@ -53,6 +54,7 @@ describe("GET /api/cron/cleanup", () => {
       sessions: 2,
       verifications: 2,
       notifications: 2,
+      inboxItems: 2,
     });
 
     const now = new Date("2026-09-29T09:00:00.000Z");
@@ -63,6 +65,9 @@ describe("GET /api/cron/cleanup", () => {
     expect(db.verification.deleteMany).toHaveBeenCalledWith({ where: { expiresAt: { lt: now } } });
     expect(db.notification.deleteMany).toHaveBeenCalledWith({
       where: { createdAt: { lt: new Date("2026-07-01T09:00:00.000Z") } },
+    });
+    expect(db.inboxTransaction.deleteMany).toHaveBeenCalledWith({
+      where: { status: { not: "pending" }, resolvedAt: { lt: new Date("2026-08-30T09:00:00.000Z") } },
     });
   });
 });

@@ -4,6 +4,7 @@ import { AnimatePresence } from "motion/react";
 import { ScanLine, Smartphone, Sparkles } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Sheet } from "@/core/components/ui/sheet";
+import type { ReceiptMethod } from "../../lib/receipt/read-receipt";
 import type { TransactionFormValues } from "../../schemas/transaction.schema";
 import type { CategoryLike } from "../../types";
 import { useReceiptScan } from "../../hooks/receipt/useReceiptScan";
@@ -31,21 +32,14 @@ export function ReceiptScan({ categories, currency, onSave, onEdit }: ReceiptSca
   const canRetry = receipt.error !== "not_receipt" && receipt.error !== "invalid_image";
 
   function renderStage() {
-    if (stage === "scanning") return <ReceiptScanningView key="scanning" previewUrl={receipt.previewUrl} step={receipt.step} />;
+    if (stage === "scanning") {
+      return <ReceiptScanningView key="scanning" previewUrl={receipt.previewUrl} step={receipt.step} />;
+    }
     if (stage === "preview" && draft && values) {
       return (
         <div key="preview" className="flex flex-col">
-          {receipt.method ? (
-            <p className="text-app-muted m-0 mt-5 flex items-center gap-1.5 text-xs font-semibold">
-              {receipt.method === "ai" ? SPARKLES_ICON : DEVICE_ICON}
-              {t(`method.${receipt.method}`)}
-            </p>
-          ) : null}
-          {receipt.isForeignCurrency ? (
-            <p role="note" className="bg-app-expense-soft text-app-expense m-0 mt-5 rounded-2xl px-4 py-3 text-sm font-semibold">
-              {t("foreignCurrency", { currency: receipt.detectedCurrency ?? "" })}
-            </p>
-          ) : null}
+          {receipt.method ? <MethodNote method={receipt.method} /> : null}
+          {receipt.isForeignCurrency ? <ForeignCurrencyNote currency={receipt.detectedCurrency ?? ""} /> : null}
           <VoicePreviewView
             transcript={receipt.summary}
             draft={draft}
@@ -98,5 +92,26 @@ export function ReceiptScan({ categories, currency, onSave, onEdit }: ReceiptSca
         </AnimatePresence>
       </Sheet>
     </>
+  );
+}
+
+function MethodNote({ method }: { method: ReceiptMethod }) {
+  const t = useTranslations("transactions.receipt");
+
+  return (
+    <p className="text-app-muted m-0 mt-5 flex items-center gap-1.5 text-xs font-semibold">
+      {method === "ai" ? SPARKLES_ICON : DEVICE_ICON}
+      {t(`method.${method}`)}
+    </p>
+  );
+}
+
+function ForeignCurrencyNote({ currency }: { currency: string }) {
+  const t = useTranslations("transactions.receipt");
+
+  return (
+    <p role="note" className="bg-app-expense-soft text-app-expense m-0 mt-5 rounded-2xl px-4 py-3 text-sm font-semibold">
+      {t("foreignCurrency", { currency })}
+    </p>
   );
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { TTransaction, TransactionSummary } from "../types";
+import type { TTransaction, TransactionSummary } from "../../types";
 import {
   applyToSummary,
   findInFeed,
@@ -9,7 +9,7 @@ import {
   patchInFeed,
   removeFromFeed,
   type FeedData,
-} from "./feed-cache";
+} from "../feed-cache";
 
 function tx(overrides: Partial<TTransaction> = {}): TTransaction {
   return {

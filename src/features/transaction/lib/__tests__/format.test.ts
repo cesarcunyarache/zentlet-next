@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { TTransaction } from "../types";
-import { describeOrFallback, periodRange, signedAmount } from "./format";
+import type { TTransaction } from "../../types";
+import { describeOrFallback, periodRange, signedAmount } from "../format";
 
 beforeEach(() => {
   vi.useFakeTimers();

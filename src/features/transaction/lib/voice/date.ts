@@ -2,7 +2,7 @@ import { dayShift, today, toISODate } from "@/lib/dates";
 import { normalize } from "../parse-description";
 import type { VoiceLanguage } from "./language";
 
-export interface SpokenDate {
+interface SpokenDate {
   isoDate: string;
   match: string;
 }

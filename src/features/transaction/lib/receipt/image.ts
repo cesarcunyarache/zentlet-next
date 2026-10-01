@@ -1,7 +1,7 @@
-export const RECEIPT_MAX_SIDE = 1600;
+const RECEIPT_MAX_SIDE = 1600;
 const JPEG_QUALITY = 0.8;
 
-export interface Size {
+interface Size {
   width: number;
   height: number;
 }

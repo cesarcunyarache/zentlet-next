@@ -7,6 +7,7 @@ export const MOCK_URL = `http://localhost:${MOCK_PORT}`;
 export const AUTH_STATE = "e2e/.auth/user.json";
 
 const WEBHOOK_SECRET = "e2e-webhook-secret";
+export const INBOUND_EMAIL_SECRET = "e2e-inbound-secret";
 const E2E_SUFFIX = "_e2e_test";
 
 export function e2eDatabaseUrl() {
@@ -44,4 +45,6 @@ export const appEnv = {
   MERCADOPAGO_ACCESS_TOKEN: "e2e-access-token",
   MERCADOPAGO_WEBHOOK_SECRET: WEBHOOK_SECRET,
   MERCADOPAGO_TEST_PAYER_EMAIL: "",
+  INBOUND_EMAIL_DOMAIN: "in.zentlet.test",
+  INBOUND_EMAIL_SECRET,
 };

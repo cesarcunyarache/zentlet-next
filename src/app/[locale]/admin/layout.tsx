@@ -8,10 +8,10 @@ import { ThemeController } from "@/core/theme/theme-controller";
 import { AnalyticsIdentity } from "@/lib/observability/analytics-identity";
 import { logger } from "@/lib/observability/logger";
 import prisma from "@/lib/prisma";
-import { OnboardingProvider } from "@/features/onboarding/onboarding-context";
+import { OnboardingProvider } from "@/features/onboarding/ui/onboarding-provider";
 import { BillingReturn } from "@/features/billing/ui/billing-return";
 import { PreferenceSync } from "@/features/preference/ui/preference-sync";
-import { AccountCurrencyProvider } from "@/features/preference/hooks/useCurrency";
+import { AccountCurrencyProvider } from "@/features/preference/ui/account-currency-provider";
 import { preferencesSchema } from "@/features/preference/schemas/preference.schema";
 
 /**

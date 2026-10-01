@@ -9,11 +9,11 @@ export interface SunatQr {
 
 const RUC = /^\d{11}$/;
 const DOCUMENT_TYPE = /^\d{2}$/;
-const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 const LOCAL_DATE = /^(\d{2})\/(\d{2})\/(\d{4})$/;
 const MIN_FIELDS = 7;
 
-export const SUNAT_DOCUMENT_LABELS: Record<string, string> = {
+const SUNAT_DOCUMENT_LABELS: Record<string, string> = {
   "01": "Factura",
   "03": "Boleta",
   "07": "Nota de crédito",
@@ -22,8 +22,7 @@ export const SUNAT_DOCUMENT_LABELS: Record<string, string> = {
 };
 
 function toIsoDate(value: string) {
-  const iso = ISO_DATE.exec(value);
-  if (iso) return value;
+  if (ISO_DATE.test(value)) return value;
   const local = LOCAL_DATE.exec(value);
   return local ? `${local[3]}-${local[2]}-${local[1]}` : null;
 }
@@ -35,7 +34,8 @@ export function parseSunatQr(raw: string | null): SunatQr | null {
 
   const [ruc, documentType, series, number, , totalText, dateText] = fields;
   const total = Number(totalText.replace(",", "."));
-  if (!RUC.test(ruc) || !DOCUMENT_TYPE.test(documentType) || !Number.isFinite(total) || total <= 0) return null;
+  const isValid = RUC.test(ruc) && DOCUMENT_TYPE.test(documentType) && Number.isFinite(total) && total > 0;
+  if (!isValid) return null;
 
   return { ruc, documentType, series, number, total, date: toIsoDate(dateText) };
 }

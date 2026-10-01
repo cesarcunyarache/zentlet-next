@@ -1,4 +1,5 @@
 import type { Locale } from "@/i18n/routing";
+import { roundToCents } from "@/lib/money";
 import type { ReceiptExtraction } from "../../ai/schemas/receipt-ai.schema";
 import type { CategoryLike, TransactionType } from "../../types";
 import { fold, matchCategory } from "../parse-description";
@@ -10,6 +11,12 @@ export interface LocalReading {
 }
 
 type ReceiptApp = "Yape" | "Plin" | null;
+
+interface ReceiptLines {
+  rawLines: string[];
+  lines: string[];
+  text: string;
+}
 
 interface Money {
   value: number;
@@ -35,8 +42,14 @@ const MERCHANT_NOISE =
   /boleta|factura|ticket|r\.?\s?u\.?\s?c|electr|venta|fecha|direcc|\bav\b|\bav\.|\bjr\b|\bjr\.|calle|telf|tel[eé]fono|cajero|cliente|sucursal|www|http|@|niubiz|visanet|izipay|culqi|mercado ?pago|openpay|vendemas/;
 const LEGAL_SUFFIX = /\s+(?:s\.?\s?a\.?\s?c\.?|s\.?\s?a\.?\s?a\.?|s\.?\s?a\.?|e\.?\s?i\.?\s?r\.?\s?l\.?|s\.?\s?r\.?\s?l\.?)$/i;
 const MERCHANT_LINES = 6;
+const MIN_MERCHANT_LENGTH = 4;
 const MIN_LETTER_RATIO = 0.6;
-const DESCRIPTION_MAX = 40;
+const RECEIPT_DESCRIPTION_MAX_LENGTH = 40;
+const DECIMAL_SEPARATORS = /[.,]/g;
+const THOUSANDS_GROUP_DIGITS = 3;
+const TWO_DIGIT_YEAR_BASE = 2000;
+const MONTHS_IN_YEAR = 12;
+const MAX_DAY = 31;
 
 const MONTHS: Record<string, number> = {
   ene: 1, jan: 1, feb: 2, mar: 3, abr: 4, apr: 4, may: 5, jun: 6, jul: 7,
@@ -50,8 +63,8 @@ function parseNumber(token: string) {
   const lastSeparator = Math.max(token.lastIndexOf("."), token.lastIndexOf(","));
   if (lastSeparator === -1) return Number(token);
   const decimals = token.length - lastSeparator - 1;
-  if (decimals === 3) return Number(token.replace(/[.,]/g, ""));
-  const integer = token.slice(0, lastSeparator).replace(/[.,]/g, "");
+  if (decimals === THOUSANDS_GROUP_DIGITS) return Number(token.replace(DECIMAL_SEPARATORS, ""));
+  const integer = token.slice(0, lastSeparator).replace(DECIMAL_SEPARATORS, "");
   return Number(`${integer}.${token.slice(lastSeparator + 1)}`);
 }
 
@@ -97,21 +110,22 @@ function pad(value: number) {
   return String(value).padStart(2, "0");
 }
 
-function validDate(year: number, month: number, day: number) {
-  if (month < 1 || month > 12 || day < 1 || day > 31) return null;
+function toIsoDate(year: number, month: number, day: number) {
+  if (month < 1 || month > MONTHS_IN_YEAR || day < 1 || day > MAX_DAY) return null;
   return `${year}-${pad(month)}-${pad(day)}`;
+}
+
+function fullYear(year: string) {
+  return year.length === 2 ? TWO_DIGIT_YEAR_BASE + Number(year) : Number(year);
 }
 
 function findDate(text: string) {
   const iso = ISO_DATE.exec(text);
-  if (iso) return validDate(Number(iso[1]), Number(iso[2]), Number(iso[3]));
+  if (iso) return toIsoDate(Number(iso[1]), Number(iso[2]), Number(iso[3]));
   const numeric = NUMERIC_DATE.exec(text);
-  if (numeric) {
-    const year = numeric[3].length === 2 ? 2000 + Number(numeric[3]) : Number(numeric[3]);
-    return validDate(year, Number(numeric[2]), Number(numeric[1]));
-  }
+  if (numeric) return toIsoDate(fullYear(numeric[3]), Number(numeric[2]), Number(numeric[1]));
   const named = NAMED_DATE.exec(text);
-  if (named && MONTHS[named[2]]) return validDate(Number(named[3]), MONTHS[named[2]], Number(named[1]));
+  if (named && MONTHS[named[2]]) return toIsoDate(Number(named[3]), MONTHS[named[2]], Number(named[1]));
   return null;
 }
 
@@ -124,15 +138,17 @@ function letterRatio(line: string) {
   return letters / Math.max(line.replace(/\s/g, "").length, 1);
 }
 
-function findMerchant(rawLines: string[], lines: string[]) {
-  const index = lines
-    .slice(0, MERCHANT_LINES)
-    .findIndex((line) => line.length >= 4 && letterRatio(line) >= MIN_LETTER_RATIO && !MERCHANT_NOISE.test(line));
+function isMerchantLine(line: string) {
+  return line.length >= MIN_MERCHANT_LENGTH && letterRatio(line) >= MIN_LETTER_RATIO && !MERCHANT_NOISE.test(line);
+}
+
+function findMerchant({ rawLines, lines }: ReceiptLines) {
+  const index = lines.slice(0, MERCHANT_LINES).findIndex(isMerchantLine);
   if (index === -1) return "";
   return titleCase(rawLines[index].replace(LEGAL_SUFFIX, "").replace(/[^\p{L}\d&.' -]/gu, "").trim());
 }
 
-function findPayee(rawLines: string[], lines: string[], amountLine: number | undefined) {
+function findPayee({ rawLines, lines }: ReceiptLines, amountLine: number | undefined) {
   const start = amountLine === undefined ? 0 : amountLine + 1;
   for (let index = start; index < rawLines.length; index++) {
     if (NAME_LINE.test(rawLines[index]) && !APP_NOISE.test(lines[index])) return rawLines[index].trim();
@@ -157,51 +173,55 @@ function appDescription(app: string, payee: string, type: TransactionType) {
   return `${app} ${type === "income" ? "de" : "a"} ${payee}`;
 }
 
-function describe(rawLines: string[], lines: string[], text: string, app: ReceiptApp, type: TransactionType, amount: Money | null) {
+function describe(receipt: ReceiptLines, app: ReceiptApp, type: TransactionType, amount: Money | null) {
   if (app) {
-    const description = appDescription(app, findPayee(rawLines, lines, amount?.line), type);
+    const description = appDescription(app, findPayee(receipt, amount?.line), type);
     return { description, summary: description };
   }
-  if (TRANSFER.test(text)) return { description: "Transferencia", summary: "Transferencia" };
-  const merchant = findMerchant(rawLines, lines);
-  const label = documentLabel(text);
+  if (TRANSFER.test(receipt.text)) return { description: "Transferencia", summary: "Transferencia" };
+  const merchant = findMerchant(receipt);
+  const label = documentLabel(receipt.text);
   return { description: merchant, summary: [label, merchant].filter(Boolean).join(" · ") };
 }
 
-function pickAmount(lines: string[], money: Money[], app: ReceiptApp) {
+function pickAmount({ lines, text }: ReceiptLines, money: Money[], app: ReceiptApp) {
   const total = totalAmount(lines, money);
   if (total) return { amount: total, isConfident: true };
-  if (app || TRANSFER.test(lines.join("\n"))) {
-    const marked = money.find((item) => item.currency);
-    return { amount: marked ?? null, isConfident: Boolean(marked) };
-  }
-  return { amount: largestMarkedAmount(lines, money), isConfident: false };
+  if (!app && !TRANSFER.test(text)) return { amount: largestMarkedAmount(lines, money), isConfident: false };
+  const marked = money.find((item) => item.currency);
+  return { amount: marked ?? null, isConfident: Boolean(marked) };
+}
+
+function toReceiptLines(raw: string): ReceiptLines {
+  const rawLines = raw.split("\n").map((line) => line.trim()).filter(Boolean);
+  const lines = rawLines.map(fold);
+  return { rawLines, lines, text: lines.join("\n") };
+}
+
+function matchReceiptCategory(description: string, categories: CategoryLike[], locale: Locale) {
+  if (!description) return null;
+  return matchCategory(description, categories) ?? matchBySynonym(description, categories, LANGUAGES[locale]);
 }
 
 export function readReceiptText(raw: string, categories: CategoryLike[], locale: Locale): LocalReading {
-  const rawLines = raw.split("\n").map((line) => line.trim()).filter(Boolean);
-  const lines = rawLines.map(fold);
-  const text = lines.join("\n");
+  const receipt = toReceiptLines(raw);
+  const { text } = receipt;
   const app = detectApp(text);
   const type: TransactionType = INCOME.test(text) ? "income" : "expense";
-  const money = findMoney(lines);
-  const { amount, isConfident } = pickAmount(lines, money, app);
-  const { description, summary } = describe(rawLines, lines, text, app, type, amount);
-  const shortDescription = description.slice(0, DESCRIPTION_MAX).trim();
-  const categoryId = shortDescription
-    ? (matchCategory(shortDescription, categories) ?? matchBySynonym(shortDescription, categories, LANGUAGES[locale]))
-    : null;
+  const { amount, isConfident } = pickAmount(receipt, findMoney(receipt.lines), app);
+  const { description, summary } = describe(receipt, app, type, amount);
+  const shortDescription = description.slice(0, RECEIPT_DESCRIPTION_MAX_LENGTH).trim();
 
   return {
     isConfident,
     extraction: {
       isReceipt: Boolean(amount || app || documentLabel(text)),
-      amount: amount ? Math.round(amount.value * 100) / 100 : null,
+      amount: amount ? roundToCents(amount.value) : null,
       currency: amount?.currency ?? null,
       date: findDate(text),
       summary,
       description: shortDescription,
-      categoryId,
+      categoryId: matchReceiptCategory(shortDescription, categories, locale),
       type,
     },
   };

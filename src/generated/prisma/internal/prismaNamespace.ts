@@ -404,7 +404,11 @@ export const ModelName = {
   BillingPayment: 'BillingPayment',
   BillingEvent: 'BillingEvent',
   Feature: 'Feature',
-  UserFeature: 'UserFeature'
+  UserFeature: 'UserFeature',
+  EmailInbox: 'EmailInbox',
+  InboxSender: 'InboxSender',
+  InboxTransaction: 'InboxTransaction',
+  MerchantRule: 'MerchantRule'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -420,7 +424,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "userConsent" | "userPreference" | "session" | "account" | "verification" | "category" | "transaction" | "feedback" | "budget" | "budgetAlert" | "notification" | "notificationDelivery" | "budgetLimit" | "rateLimit" | "usageLimit" | "subscription" | "billingPayment" | "billingEvent" | "feature" | "userFeature"
+    modelProps: "user" | "userConsent" | "userPreference" | "session" | "account" | "verification" | "category" | "transaction" | "feedback" | "budget" | "budgetAlert" | "notification" | "notificationDelivery" | "budgetLimit" | "rateLimit" | "usageLimit" | "subscription" | "billingPayment" | "billingEvent" | "feature" | "userFeature" | "emailInbox" | "inboxSender" | "inboxTransaction" | "merchantRule"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1978,6 +1982,302 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    EmailInbox: {
+      payload: Prisma.$EmailInboxPayload<ExtArgs>
+      fields: Prisma.EmailInboxFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EmailInboxFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailInboxPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EmailInboxFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailInboxPayload>
+        }
+        findFirst: {
+          args: Prisma.EmailInboxFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailInboxPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EmailInboxFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailInboxPayload>
+        }
+        findMany: {
+          args: Prisma.EmailInboxFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailInboxPayload>[]
+        }
+        create: {
+          args: Prisma.EmailInboxCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailInboxPayload>
+        }
+        createMany: {
+          args: Prisma.EmailInboxCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EmailInboxCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailInboxPayload>[]
+        }
+        delete: {
+          args: Prisma.EmailInboxDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailInboxPayload>
+        }
+        update: {
+          args: Prisma.EmailInboxUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailInboxPayload>
+        }
+        deleteMany: {
+          args: Prisma.EmailInboxDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EmailInboxUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EmailInboxUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailInboxPayload>[]
+        }
+        upsert: {
+          args: Prisma.EmailInboxUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailInboxPayload>
+        }
+        aggregate: {
+          args: Prisma.EmailInboxAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEmailInbox>
+        }
+        groupBy: {
+          args: Prisma.EmailInboxGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmailInboxGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EmailInboxCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmailInboxCountAggregateOutputType> | number
+        }
+      }
+    }
+    InboxSender: {
+      payload: Prisma.$InboxSenderPayload<ExtArgs>
+      fields: Prisma.InboxSenderFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InboxSenderFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboxSenderPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InboxSenderFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboxSenderPayload>
+        }
+        findFirst: {
+          args: Prisma.InboxSenderFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboxSenderPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InboxSenderFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboxSenderPayload>
+        }
+        findMany: {
+          args: Prisma.InboxSenderFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboxSenderPayload>[]
+        }
+        create: {
+          args: Prisma.InboxSenderCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboxSenderPayload>
+        }
+        createMany: {
+          args: Prisma.InboxSenderCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InboxSenderCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboxSenderPayload>[]
+        }
+        delete: {
+          args: Prisma.InboxSenderDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboxSenderPayload>
+        }
+        update: {
+          args: Prisma.InboxSenderUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboxSenderPayload>
+        }
+        deleteMany: {
+          args: Prisma.InboxSenderDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InboxSenderUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InboxSenderUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboxSenderPayload>[]
+        }
+        upsert: {
+          args: Prisma.InboxSenderUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboxSenderPayload>
+        }
+        aggregate: {
+          args: Prisma.InboxSenderAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInboxSender>
+        }
+        groupBy: {
+          args: Prisma.InboxSenderGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InboxSenderGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InboxSenderCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InboxSenderCountAggregateOutputType> | number
+        }
+      }
+    }
+    InboxTransaction: {
+      payload: Prisma.$InboxTransactionPayload<ExtArgs>
+      fields: Prisma.InboxTransactionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InboxTransactionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboxTransactionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InboxTransactionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboxTransactionPayload>
+        }
+        findFirst: {
+          args: Prisma.InboxTransactionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboxTransactionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InboxTransactionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboxTransactionPayload>
+        }
+        findMany: {
+          args: Prisma.InboxTransactionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboxTransactionPayload>[]
+        }
+        create: {
+          args: Prisma.InboxTransactionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboxTransactionPayload>
+        }
+        createMany: {
+          args: Prisma.InboxTransactionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InboxTransactionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboxTransactionPayload>[]
+        }
+        delete: {
+          args: Prisma.InboxTransactionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboxTransactionPayload>
+        }
+        update: {
+          args: Prisma.InboxTransactionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboxTransactionPayload>
+        }
+        deleteMany: {
+          args: Prisma.InboxTransactionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InboxTransactionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InboxTransactionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboxTransactionPayload>[]
+        }
+        upsert: {
+          args: Prisma.InboxTransactionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InboxTransactionPayload>
+        }
+        aggregate: {
+          args: Prisma.InboxTransactionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInboxTransaction>
+        }
+        groupBy: {
+          args: Prisma.InboxTransactionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InboxTransactionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InboxTransactionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InboxTransactionCountAggregateOutputType> | number
+        }
+      }
+    }
+    MerchantRule: {
+      payload: Prisma.$MerchantRulePayload<ExtArgs>
+      fields: Prisma.MerchantRuleFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MerchantRuleFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MerchantRulePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MerchantRuleFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MerchantRulePayload>
+        }
+        findFirst: {
+          args: Prisma.MerchantRuleFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MerchantRulePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MerchantRuleFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MerchantRulePayload>
+        }
+        findMany: {
+          args: Prisma.MerchantRuleFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MerchantRulePayload>[]
+        }
+        create: {
+          args: Prisma.MerchantRuleCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MerchantRulePayload>
+        }
+        createMany: {
+          args: Prisma.MerchantRuleCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MerchantRuleCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MerchantRulePayload>[]
+        }
+        delete: {
+          args: Prisma.MerchantRuleDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MerchantRulePayload>
+        }
+        update: {
+          args: Prisma.MerchantRuleUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MerchantRulePayload>
+        }
+        deleteMany: {
+          args: Prisma.MerchantRuleDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MerchantRuleUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MerchantRuleUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MerchantRulePayload>[]
+        }
+        upsert: {
+          args: Prisma.MerchantRuleUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MerchantRulePayload>
+        }
+        aggregate: {
+          args: Prisma.MerchantRuleAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMerchantRule>
+        }
+        groupBy: {
+          args: Prisma.MerchantRuleGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MerchantRuleGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MerchantRuleCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MerchantRuleCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2313,6 +2613,80 @@ export const UserFeatureScalarFieldEnum = {
 export type UserFeatureScalarFieldEnum = (typeof UserFeatureScalarFieldEnum)[keyof typeof UserFeatureScalarFieldEnum]
 
 
+export const EmailInboxScalarFieldEnum = {
+  id: 'id',
+  address: 'address',
+  userId: 'userId',
+  verificationCode: 'verificationCode',
+  verificationUrl: 'verificationUrl',
+  lastReceivedAt: 'lastReceivedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EmailInboxScalarFieldEnum = (typeof EmailInboxScalarFieldEnum)[keyof typeof EmailInboxScalarFieldEnum]
+
+
+export const InboxSenderScalarFieldEnum = {
+  id: 'id',
+  address: 'address',
+  status: 'status',
+  origin: 'origin',
+  acceptedCount: 'acceptedCount',
+  dismissedCount: 'dismissedCount',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InboxSenderScalarFieldEnum = (typeof InboxSenderScalarFieldEnum)[keyof typeof InboxSenderScalarFieldEnum]
+
+
+export const InboxTransactionScalarFieldEnum = {
+  id: 'id',
+  status: 'status',
+  externalId: 'externalId',
+  senderAddress: 'senderAddress',
+  bank: 'bank',
+  subject: 'subject',
+  parser: 'parser',
+  isVerified: 'isVerified',
+  isNewSender: 'isNewSender',
+  type: 'type',
+  amount: 'amount',
+  currency: 'currency',
+  merchant: 'merchant',
+  description: 'description',
+  categoryId: 'categoryId',
+  isLearned: 'isLearned',
+  transactionDate: 'transactionDate',
+  cardLast4: 'cardLast4',
+  reference: 'reference',
+  duplicateOfId: 'duplicateOfId',
+  transactionId: 'transactionId',
+  resolvedAt: 'resolvedAt',
+  userId: 'userId',
+  receivedAt: 'receivedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type InboxTransactionScalarFieldEnum = (typeof InboxTransactionScalarFieldEnum)[keyof typeof InboxTransactionScalarFieldEnum]
+
+
+export const MerchantRuleScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  description: 'description',
+  hits: 'hits',
+  categoryId: 'categoryId',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MerchantRuleScalarFieldEnum = (typeof MerchantRuleScalarFieldEnum)[keyof typeof MerchantRuleScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2616,6 +2990,10 @@ export type GlobalOmitConfig = {
   billingEvent?: Prisma.BillingEventOmit
   feature?: Prisma.FeatureOmit
   userFeature?: Prisma.UserFeatureOmit
+  emailInbox?: Prisma.EmailInboxOmit
+  inboxSender?: Prisma.InboxSenderOmit
+  inboxTransaction?: Prisma.InboxTransactionOmit
+  merchantRule?: Prisma.MerchantRuleOmit
 }
 
 /* Types for Logging */

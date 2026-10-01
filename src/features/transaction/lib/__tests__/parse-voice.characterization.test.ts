@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { CategoryLike } from "../types";
-import { parseVoiceEntry } from "./parse-voice";
+import type { CategoryLike } from "../../types";
+import { parseVoiceEntry } from "../parse-voice";
 
 const categories: CategoryLike[] = [
   { id: "food", name: "Comida" },

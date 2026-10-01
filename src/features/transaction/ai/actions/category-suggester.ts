@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { generateObject } from "@/lib/ai/client";
 import { allowAiCall } from "@/lib/ai/quota";
+import { limitPromptCategories } from "../prompts/prompt-categories";
 import { buildTransactionCategoryPrompt } from "../prompts/transaction-category.prompt";
 import {
   suggestCategoryInputSchema,
@@ -15,19 +16,11 @@ import {
 const OPERATION = "transaction.suggest_category";
 const MAX_DESCRIPTION_LENGTH = 80;
 const MIN_DESCRIPTION_LENGTH = 3;
-const MAX_CATEGORIES = 60;
-const MAX_CATEGORY_NAME_LENGTH = 40;
 
 async function canSuggest() {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) return false;
   return allowAiCall(session.user.id, OPERATION);
-}
-
-function promptCategories(categories: SuggestCategoryInput["categories"]) {
-  return categories
-    .slice(0, MAX_CATEGORIES)
-    .map(({ id, name }) => ({ id, name: name.slice(0, MAX_CATEGORY_NAME_LENGTH) }));
 }
 
 export async function suggestTransactionCategory(input: SuggestCategoryInput): Promise<TransactionSuggestion | null> {
@@ -42,7 +35,7 @@ export async function suggestTransactionCategory(input: SuggestCategoryInput): P
   try {
     const result = (await generateObject({
       operation: OPERATION,
-      prompt: buildTransactionCategoryPrompt(text, promptCategories(categories)),
+      prompt: buildTransactionCategoryPrompt(text, limitPromptCategories(categories)),
       schema: transactionSuggestionSchema,
     })) as TransactionSuggestion;
 

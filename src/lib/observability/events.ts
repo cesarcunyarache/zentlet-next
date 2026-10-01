@@ -16,7 +16,7 @@ export interface AnalyticsEvents {
   user_signed_up: { method: AuthMethod };
   login_completed: { method: AuthMethod };
   transaction_created: {
-    source: "form" | "voice" | "receipt";
+    source: "form" | "voice" | "receipt" | "email";
     type: TransactionType;
     /** La categoría la eligió la app (texto o IA) y el usuario la mantuvo. */
     category_auto: boolean;
@@ -33,6 +33,9 @@ export interface AnalyticsEvents {
   receipt_scan_started: Record<string, never>;
   receipt_scan_completed: { outcome: "saved" | "edited"; method: ReceiptMethod };
   receipt_scan_failed: { reason: ReceiptError };
+  inbox_connected: Record<string, never>;
+  inbox_item_accepted: { edited: boolean; learned: boolean };
+  inbox_item_dismissed: { duplicate: boolean };
   data_exported: Record<string, never>;
   feedback_sent: { type: FeedbackType };
   onboarding_completed: { skipped: boolean; step: number; next: "categories" | "app" };

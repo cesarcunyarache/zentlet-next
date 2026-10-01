@@ -66,6 +66,12 @@ export function displayAmount(raw: string) {
   return dec !== undefined ? `${grouped}.${dec}` : grouped;
 }
 
+const CENTS_PER_UNIT = 100;
+
+export function roundToCents(value: number) {
+  return Math.round(value * CENTS_PER_UNIT) / CENTS_PER_UNIT;
+}
+
 export function parseAmount(value: string) {
-  return Math.round((Number.parseFloat(value || "0") || 0) * 100) / 100;
+  return roundToCents(Number.parseFloat(value || "0") || 0);
 }

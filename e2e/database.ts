@@ -21,3 +21,8 @@ async function run(sql: string) {
 
 export const resetBillingData = () => run(`TRUNCATE ${BILLING_TABLES} CASCADE`);
 export const resetAllData = () => run(`TRUNCATE ${BILLING_TABLES}, "user" CASCADE`);
+
+export const makePro = (email: string) =>
+  run(`INSERT INTO "subscription" ("id", "userId", "planKey", "status", "amount", "currency", "interval", "provider", "updatedAt")
+       SELECT gen_random_uuid(), "id", 'pro', 'active', 1490, 'PEN', 'month', 'mercadopago', now()
+       FROM "user" WHERE "email" = '${email.replace(/'/g, "''")}'`);

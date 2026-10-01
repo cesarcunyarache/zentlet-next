@@ -1,11 +1,11 @@
 import { timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
-import { errorResponse } from "@/lib/api/route-helpers";
+import { errorResponse, tooManyRequests } from "@/lib/api/route-helpers";
 import { runDatabaseCheck, runHealthChecks } from "@/lib/health/checks";
 import { rateLimit } from "@/lib/rate-limit";
 
 const REPORTS_PER_MINUTE = 10;
-const MINUTE_MS = 60_000;
+const MINUTE_SECONDS = 60;
 
 const noStore = { "Cache-Control": "no-store" };
 
@@ -39,8 +39,8 @@ export async function GET(req: Request) {
 
   if (!hasValidToken(req)) return errorResponse("Invalid health token", 401);
 
-  const { allowed } = await rateLimit("health:report", REPORTS_PER_MINUTE, MINUTE_MS);
-  if (!allowed) return errorResponse("Too many requests", 429);
+  const { allowed } = await rateLimit("health:report", REPORTS_PER_MINUTE, MINUTE_SECONDS * 1000);
+  if (!allowed) return tooManyRequests("Too many requests", MINUTE_SECONDS);
 
   const checks = await runHealthChecks();
   const isDatabaseUp = checks.find((check) => check.id === "database")?.status === "ok";

@@ -1,36 +1,14 @@
 import type { CategoryLike, TransactionType } from "../types";
 
-export interface DescriptionHints {
+interface DescriptionHints {
   type: TransactionType | null;
   categoryId: string | null;
 }
 
 const INCOME_WORDS = [
-  "salario",
-  "sueldo",
-  "nomina",
-  "quincena",
-  "ingreso",
-  "cobro",
-  "cobre",
-  "venta",
-  "vendi",
-  "reembolso",
-  "devolucion",
-  "me pagaron",
-  "me depositaron",
-  "bono",
-  "aguinaldo",
-  "gratificacion",
-  "freelance",
-  "salary",
-  "paycheck",
-  "payroll",
-  "income",
-  "refund",
-  "reimbursement",
-  "bonus",
-  "got paid",
+  "salario", "sueldo", "nomina", "quincena", "ingreso", "cobro", "cobre", "venta", "vendi", "reembolso",
+  "devolucion", "me pagaron", "me depositaron", "bono", "aguinaldo", "gratificacion", "freelance", "salary",
+  "paycheck", "payroll", "income", "refund", "reimbursement", "bonus", "got paid",
 ];
 
 const COMBINING_MARKS = /[̀-ͯ]/g;
@@ -84,8 +62,5 @@ export function matchCategory(text: string, categories: CategoryLike[]): string 
 }
 
 export function readDescription(text: string, categories: CategoryLike[]): DescriptionHints {
-  return {
-    type: inferType(text),
-    categoryId: matchCategory(text, categories),
-  };
+  return { type: inferType(text), categoryId: matchCategory(text, categories) };
 }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import type { ReceiptExtraction } from "../../ai/schemas/receipt-ai.schema";
-import { isForeignCurrency, toReceiptDraft } from "./receipt-draft";
+import type { ReceiptExtraction } from "../../../ai/schemas/receipt-ai.schema";
+import { isForeignCurrency, toReceiptDraft } from "../receipt-draft";
 
 const TODAY = "2026-09-30";
 const categories = [
@@ -53,6 +53,7 @@ describe("toReceiptDraft", () => {
     ["missing", null],
     ["malformed", "29/09/2026"],
     ["impossible", "2026-13-45"],
+    ["a non-existent calendar day", "2026-02-31"],
     ["in the future", "2026-10-02"],
     ["older than a year", "2024-01-01"],
   ])("falls back to today when the date is %s", (_, date) => {
@@ -73,5 +74,10 @@ describe("isForeignCurrency", () => {
   it("ignores case and a missing currency", () => {
     expect(isForeignCurrency(extractionWith({ currency: "pen" }), "PEN")).toBe(false);
     expect(isForeignCurrency(extractionWith({ currency: null }), "PEN")).toBe(false);
+  });
+
+  it("compares against the app currency symbol", () => {
+    expect(isForeignCurrency(extractionWith({ currency: "PEN" }), "S/")).toBe(false);
+    expect(isForeignCurrency(extractionWith({ currency: "USD" }), "S/")).toBe(true);
   });
 });

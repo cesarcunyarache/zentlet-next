@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { afterCursor, feedWhere, summaryWhere } from "./feed-query";
+import { afterCursor, feedWhere, summaryWhere } from "../feed-query";
 
 describe("summaryWhere", () => {
   it("sin rango no filtra por fecha", () => {

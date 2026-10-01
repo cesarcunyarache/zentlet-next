@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { decodeCursor, encodeCursor, toSummary } from "./feed-query";
-import { serializeTransaction } from "./serialize";
+import { decodeCursor, encodeCursor, toSummary } from "../feed-query";
+import { serializeTransaction } from "../serialize";
 
 describe("cursor del feed", () => {
   const row = {

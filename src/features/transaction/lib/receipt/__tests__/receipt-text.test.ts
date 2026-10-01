@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { readReceiptText } from "./receipt-text";
+import { readReceiptText } from "../receipt-text";
 
 const categories = [
   { id: "market", name: "Supermercado" },

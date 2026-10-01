@@ -1,11 +1,6 @@
-interface PromptCategory {
-  id: string;
-  name: string;
-}
+import { formatCategoryList, type PromptCategory } from "./prompt-categories";
 
 export function buildReceiptScanPrompt(categories: PromptCategory[], today: string) {
-  const list = categories.map((c) => `- ${c.id}: ${c.name}`).join("\n");
-
   return `
 Eres un experto en finanzas personales que registra movimientos a partir de una imagen.
 
@@ -15,7 +10,7 @@ o una captura de una app de pagos o de un banco (Yape, Plin, BCP, Interbank, BBV
 Hoy es ${today}.
 
 Sus categorías (id: nombre):
-${list}
+${formatCategoryList(categories)}
 
 Extrae un único movimiento:
 - isReceipt: true si la imagen muestra cualquier pago, cobro, transferencia o comprobante, incluidas las capturas de Yape, Plin o apps de banco ("¡Yapeaste!", "Te yapearon", constancias de transferencia). false solo si no hay ningún monto pagado o recibido (una selfie, un paisaje, un documento sin pago).

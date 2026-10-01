@@ -7,8 +7,8 @@ const toChartScale = (value: number, max: number) => Math.round((value / max) * 
 
 export function barHeight(total: number, max: number) {
   const isIdle = Math.abs(total) < ROUNDING_NOISE || max <= 0;
-  if (isIdle) return { idle: true, height: IDLE_HEIGHT };
-  return { idle: false, height: Math.max(BAR_MIN, toChartScale(Math.abs(total), max)) };
+  if (isIdle) return { isIdle, height: IDLE_HEIGHT };
+  return { isIdle, height: Math.max(BAR_MIN, toChartScale(Math.abs(total), max)) };
 }
 
 export function budgetBarHeights(spent: number, budget: number, max: number) {

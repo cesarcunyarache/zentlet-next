@@ -1,14 +1,6 @@
-interface PromptCategory {
-  id: string;
-  name: string;
-}
+import { formatCategoryList, type PromptCategory } from "./prompt-categories";
 
-export function buildTransactionCategoryPrompt(
-  description: string,
-  categories: PromptCategory[],
-) {
-  const list = categories.map((c) => `- ${c.id}: ${c.name}`).join("\n");
-
+export function buildTransactionCategoryPrompt(description: string, categories: PromptCategory[]) {
   return `
 Eres un experto en finanzas personales que clasifica movimientos.
 
@@ -16,7 +8,7 @@ El usuario está registrando un movimiento con esta descripción:
 "${description}"
 
 Sus categorías (id: nombre):
-${list}
+${formatCategoryList(categories)}
 
 Reglas:
 - Elige la única categoría que mejor describe el movimiento y devuelve su id exacto.
