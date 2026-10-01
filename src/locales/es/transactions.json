@@ -134,7 +134,6 @@
   "receipt": {
     "title": "Escanear comprobante",
     "reading": "Leyendo el comprobante…",
-    "readingHint": "Boletas, vouchers o capturas de Yape y Plin",
     "redo": "Volver a leer",
     "noAmount": "No pude leer el monto · toca Editar para escribirlo",
     "foreignCurrency": "El comprobante está en {currency}. Se guardará con tu moneda sin convertir; revisa el monto.",
@@ -156,9 +155,19 @@
         "body": "Algo falló al procesar la imagen. Inténtalo de nuevo o regístralo escribiendo."
       },
       "offline": {
-        "title": "Escanear necesita internet",
-        "body": "Sin conexión puedes registrarlo escribiendo; se sincroniza al volver la red."
+        "title": "No pudimos leerlo sin internet",
+        "body": "Sin conexión solo leemos en tu celular comprobantes nítidos. Prueba con una foto más clara o regístralo escribiendo; se sincroniza al volver la red."
       }
+    },
+    "steps": {
+      "qr": "Buscando el código QR…",
+      "ocr": "Leyendo el texto en tu celular…",
+      "ai": "Revisando con IA…"
+    },
+    "method": {
+      "qr": "Leído del código QR de SUNAT",
+      "ocr": "Leído en tu celular, sin IA",
+      "ai": "Leído con IA"
     }
   }
 }

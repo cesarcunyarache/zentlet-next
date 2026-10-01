@@ -7,7 +7,7 @@ import {
   sectionHref,
   sectionTitleId,
   vivid,
-} from "./format";
+} from "../format";
 
 describe("formatAmount", () => {
   it("usa dos decimales y el separador del idioma", () => {

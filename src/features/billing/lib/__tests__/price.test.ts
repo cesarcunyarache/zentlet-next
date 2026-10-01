@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatPrice } from "./price";
+import { formatPrice } from "../price";
 
 describe("formatPrice", () => {
   it("convierte céntimos a la moneda del plan con el formato del país", () => {

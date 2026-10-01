@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { getBillingProvider, isProviderName } from "./index";
+import { getBillingProvider, isProviderName } from "../index";
 
 afterEach(() => vi.unstubAllEnvs());
 

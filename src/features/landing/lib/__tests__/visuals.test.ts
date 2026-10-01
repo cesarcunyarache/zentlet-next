@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildDonutArcs, getBudgetStatus, getInitials, getTickerRange, splitInHalf } from "./visuals";
+import { buildDonutArcs, getBudgetStatus, getInitials, getTickerRange, splitInHalf } from "../visuals";
 
 describe("splitInHalf", () => {
   it("deja la mitad mayor en la primera parte", () => {

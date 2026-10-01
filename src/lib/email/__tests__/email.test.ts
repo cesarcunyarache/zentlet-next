@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { reportError } from "@/lib/observability/server";
-import { sendEmail } from "./send-email";
-import { emailLocale, resetPasswordEmail, verificationEmail } from "./templates";
+import { sendEmail } from "../send-email";
+import { emailLocale, resetPasswordEmail, verificationEmail } from "../templates";
 
 vi.mock("@/lib/observability/server", () => ({ reportError: vi.fn() }));
 

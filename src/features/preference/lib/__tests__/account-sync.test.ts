@@ -1,9 +1,9 @@
 import { AxiosError, type AxiosResponse } from "axios";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { Locale } from "@/i18n/routing";
-import type { Preferences } from "../schemas/preference.schema";
+import type { Preferences } from "../../schemas/preference.schema";
 
-vi.mock("../services/preference.service", () => ({
+vi.mock("../../services/preference.service", () => ({
   preferenceService: { getPreferences: vi.fn(), updatePreferences: vi.fn() },
 }));
 vi.mock("@/lib/observability/client", () => ({ reportClientError: vi.fn() }));
@@ -38,10 +38,10 @@ function httpError(status: number) {
 async function load() {
   vi.stubGlobal("localStorage", memoryStorage());
   vi.resetModules();
-  const sync = await import("./account-sync");
-  const device = await import("./device-currency");
-  const pending = await import("./pending");
-  const { preferenceService } = await import("../services/preference.service");
+  const sync = await import("../account-sync");
+  const device = await import("../device-currency");
+  const pending = await import("../pending");
+  const { preferenceService } = await import("../../services/preference.service");
   const { reportClientError } = await import("@/lib/observability/client");
   const getPreferences = vi.mocked(preferenceService.getPreferences);
   const updatePreferences = vi.mocked(preferenceService.updatePreferences);

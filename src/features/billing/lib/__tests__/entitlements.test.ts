@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { can, effectivePlan, grantsAccess, PAST_DUE_GRACE_DAYS } from "./entitlements";
+import { can, effectivePlan, grantsAccess, PAST_DUE_GRACE_DAYS } from "../entitlements";
 
 const NOW = new Date("2026-10-15T12:00:00Z");
 const days = (n: number) => new Date(NOW.getTime() + n * 24 * 60 * 60 * 1000);

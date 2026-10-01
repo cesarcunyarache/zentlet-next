@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { serializeJsonLd } from "./json-ld";
+import { serializeJsonLd } from "../json-ld";
 
 describe("serializeJsonLd", () => {
   it("escapa `<` para que no cierre el <script>", () => {

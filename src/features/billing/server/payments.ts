@@ -22,25 +22,12 @@ function keepLocalRefund(current: PaymentStatus | undefined, incoming: PaymentSt
 
 export async function recordPayment(providerName: string, snapshot: PaymentSnapshot) {
   const subscription = (await prisma.subscription.findUnique({
-    where: {
-      provider_externalId: {
-        provider: providerName,
-        externalId: snapshot.subscriptionExternalId,
-      },
-    },
+    where: { provider_externalId: { provider: providerName, externalId: snapshot.subscriptionExternalId } },
   })) as SubscriptionRow | null;
   if (!subscription) return null;
 
-  const key = {
-    provider_externalId: {
-      provider: providerName,
-      externalId: snapshot.externalId,
-    },
-  };
-  const existing = await prisma.billingPayment.findUnique({
-    where: key,
-    select: { status: true },
-  });
+  const key = { provider_externalId: { provider: providerName, externalId: snapshot.externalId } };
+  const existing = await prisma.billingPayment.findUnique({ where: key, select: { status: true } });
   const status = keepLocalRefund(existing?.status as PaymentStatus | undefined, snapshot.status);
 
   await prisma.billingPayment.upsert({
@@ -106,11 +93,7 @@ export async function refundPayment(
   if (count === 0) return { kind: "conflict" };
 
   if (revokeAccess) {
-    await cancelSubscription(payment.subscription as SubscriptionRow, {
-      source: "admin",
-      immediate: true,
-      now,
-    });
+    await cancelSubscription(payment.subscription as SubscriptionRow, { source: "admin", immediate: true, now });
   }
   await recordBillingEvent({
     source: "admin",

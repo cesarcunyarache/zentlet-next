@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { DELETE } from "./[id]/route";
-import { PUT } from "./[id]/limits/[effectiveFrom]/route";
-import { GET, POST } from "./route";
+import { DELETE } from "../[id]/route";
+import { PUT } from "../[id]/limits/[effectiveFrom]/route";
+import { GET, POST } from "../route";
 import { scheduleBudgetCheck } from "@/features/budget/server/check";
 
 vi.mock("@/lib/auth", () => ({ auth: { api: { getSession: vi.fn() } } }));

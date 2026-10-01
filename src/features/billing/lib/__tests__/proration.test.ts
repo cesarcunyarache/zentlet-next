@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { periodEnd, refundableAmount, refundedStatus, unusedAmount } from "./proration";
+import { periodEnd, refundableAmount, refundedStatus, unusedAmount } from "../proration";
 
 const START = new Date("2026-10-01T00:00:00Z");
 

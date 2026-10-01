@@ -15,19 +15,19 @@ interface CheckoutRequest {
 }
 
 export type CheckoutOutcome =
-  { kind: "redirect"; checkoutUrl: string } | { kind: "already_subscribed" } | { kind: "in_progress" };
+  | { kind: "redirect"; checkoutUrl: string }
+  | { kind: "already_subscribed" }
+  | { kind: "in_progress" };
 
 function paidUntil(history: SubscriptionRow[], now: Date) {
-  const canceled = history.find(
-    (subscription) => subscription.status === "canceled" && grantsAccess(subscription, now),
-  );
+  const canceled = history.find((subscription) => subscription.status === "canceled" && grantsAccess(subscription, now));
   return canceled?.currentPeriodEnd ?? null;
 }
 
 async function reuseOrAbandon(live: SubscriptionRow, now: Date): Promise<CheckoutOutcome | null> {
   if (live.status !== "pending") return { kind: "already_subscribed" };
-  if (canReuseCheckout(live, now)) return { kind: "redirect", checkoutUrl: live.checkoutUrl as string };
   if (!live.checkoutUrl) return { kind: "in_progress" };
+  if (canReuseCheckout(live, now)) return { kind: "redirect", checkoutUrl: live.checkoutUrl };
   await abandonPending(live, now);
   return null;
 }
@@ -35,11 +35,7 @@ async function reuseOrAbandon(live: SubscriptionRow, now: Date): Promise<Checkou
 async function createPendingRow(request: CheckoutRequest, history: SubscriptionRow[], now: Date) {
   const price = planPrice(request.planKey);
   const trialDays = isTrialEligible(history) ? TRIAL_DAYS : 0;
-  const firstChargeAt = firstChargeDate({
-    now,
-    trialDays,
-    paidUntil: paidUntil(history, now),
-  });
+  const firstChargeAt = firstChargeDate({ now, trialDays, paidUntil: paidUntil(history, now) });
   const row = await prisma.subscription.create({
     data: {
       userId: request.userId,
@@ -67,10 +63,7 @@ async function openProviderCheckout(request: CheckoutRequest, row: SubscriptionR
       firstChargeAt,
       returnUrl: request.returnUrl,
     });
-    await prisma.subscription.update({
-      where: { id: row.id },
-      data: { externalId, checkoutUrl },
-    });
+    await prisma.subscription.update({ where: { id: row.id }, data: { externalId, checkoutUrl } });
     return checkoutUrl;
   } catch (error) {
     await abandonPending(row);

@@ -6,15 +6,13 @@ import type { Feature } from "../lib/plans";
 import { billingService } from "../services/billing.service";
 import type { BillingSummary } from "../types";
 
-export const billingKeys = {
-  summary: ["billing", "summary"] as const,
-};
+const SUMMARY_KEY = ["billing", "summary"] as const;
 
 const SUMMARY_STALE_MS = 60_000;
 
 export function useBillingSummary() {
   const query = useQuery({
-    queryKey: billingKeys.summary,
+    queryKey: SUMMARY_KEY,
     queryFn: () => billingService.getSummary(),
     staleTime: SUMMARY_STALE_MS,
   });
@@ -25,7 +23,7 @@ export function useBillingSummary() {
 export function useSetBillingSummary() {
   const queryClient = useQueryClient();
   return useCallback(
-    (summary: BillingSummary) => queryClient.setQueryData(billingKeys.summary, summary),
+    (summary: BillingSummary) => queryClient.setQueryData(SUMMARY_KEY, summary),
     [queryClient],
   );
 }

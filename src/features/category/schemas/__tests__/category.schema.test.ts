@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { createCategorySchema } from "./category-api.schema";
-import { categorySchema } from "./category.schema";
+import { createCategorySchema } from "../category-api.schema";
+import { categorySchema } from "../category.schema";
 
 const valid = { name: "Comida", icon: "🍔", color: "#FDDCC4" };
 

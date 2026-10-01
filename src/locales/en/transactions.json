@@ -134,7 +134,6 @@
   "receipt": {
     "title": "Scan receipt",
     "reading": "Reading the receipt…",
-    "readingHint": "Receipts, card slips or payment app screenshots",
     "redo": "Read again",
     "noAmount": "Couldn't read the amount · tap Edit to type it",
     "foreignCurrency": "This receipt is in {currency}. It will be saved in your currency without conversion; check the amount.",
@@ -156,9 +155,19 @@
         "body": "Something went wrong processing the image. Try again or type it in."
       },
       "offline": {
-        "title": "Scanning needs internet",
-        "body": "Offline you can type it in; it syncs when you're back online."
+        "title": "We couldn't read it offline",
+        "body": "Offline we can only read sharp receipts on your phone. Try a clearer photo or type it in; it syncs when you're back online."
       }
+    },
+    "steps": {
+      "qr": "Looking for a QR code…",
+      "ocr": "Reading the text on your phone…",
+      "ai": "Checking with AI…"
+    },
+    "method": {
+      "qr": "Read from the SUNAT QR code",
+      "ocr": "Read on your phone, no AI",
+      "ai": "Read with AI"
     }
   }
 }

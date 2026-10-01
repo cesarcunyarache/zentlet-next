@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isSimpleEmoji, normalizeCategorySuggestions, sanitizeSuggestions, toPastel } from "./normalize-suggestions";
+import { isSimpleEmoji, normalizeCategorySuggestions, sanitizeSuggestions, toPastel } from "../normalize-suggestions";
 
 function hsl(hex: string) {
   const [r, g, b] = [1, 3, 5].map((at) => parseInt(hex.slice(at, at + 2), 16) / 255);

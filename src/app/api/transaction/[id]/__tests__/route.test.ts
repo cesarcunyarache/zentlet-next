@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { reportError } from "@/lib/observability/server";
-import { PATCH } from "./route";
+import { PATCH } from "../route";
 
 /*
  * Edición de un movimiento: una carrera con el borrado de su categoría es

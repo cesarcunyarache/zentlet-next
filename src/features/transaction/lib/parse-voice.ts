@@ -17,9 +17,9 @@ export interface VoiceDraft {
   transactionDate: string;
 }
 
-const LANGUAGES: Record<Locale, VoiceLanguage> = { es: ES, en: EN };
+export const LANGUAGES: Record<Locale, VoiceLanguage> = { es: ES, en: EN };
 
-function matchBySynonym(text: string, categories: CategoryLike[], lang: VoiceLanguage) {
+export function matchBySynonym(text: string, categories: CategoryLike[], lang: VoiceLanguage) {
   const clean = ` ${normalize(text)} `;
   const names = categories.map((category) => ({ id: category.id, name: normalize(category.name) }));
   for (const { words, categoryStems } of lang.synonyms) {

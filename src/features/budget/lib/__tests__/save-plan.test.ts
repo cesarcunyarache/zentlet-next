@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import type { TBudget } from "../types";
-import { BUDGET_PERIODS } from "./period";
-import { planBudgetSave } from "./save-plan";
+import type { TBudget } from "../../types";
+import { BUDGET_PERIODS } from "../period";
+import { planBudgetSave } from "../save-plan";
 
 const today = "2026-09-26";
 

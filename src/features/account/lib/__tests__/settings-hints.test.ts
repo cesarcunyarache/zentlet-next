@@ -5,7 +5,7 @@ import {
   exportHint,
   needsSignOutConfirmation,
   signOutHint,
-} from "./settings-hints";
+} from "../settings-hints";
 
 describe("connectionHint", () => {
   it("con conexión y sin nada enviándose está sincronizado", () => {

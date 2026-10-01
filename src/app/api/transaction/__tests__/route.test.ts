@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { DELETE, GET, PATCH } from "./[id]/route";
-import { POST } from "./route";
+import { DELETE, GET, PATCH } from "../[id]/route";
+import { POST } from "../route";
 import { scheduleBudgetCheck } from "@/features/budget/server/check";
 
 /*

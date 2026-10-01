@@ -2,8 +2,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import prisma from "@/lib/prisma";
 import { sendEmail } from "@/lib/email/send-email";
 import { isFlagEnabled } from "@/features/feature-flag/server/flags";
-import { deliverPending } from "./deliver";
-import { notify } from "./notify";
+import { deliverPending } from "../deliver";
+import { notify } from "../notify";
 
 vi.mock("@/lib/prisma", () => ({
   default: {

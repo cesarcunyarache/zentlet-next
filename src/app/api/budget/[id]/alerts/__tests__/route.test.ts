@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { scheduleBudgetCheck } from "@/features/budget/server/check";
-import { GET, PUT } from "./route";
+import { GET, PUT } from "../route";
 
 vi.mock("@/lib/auth", () => ({ auth: { api: { getSession: vi.fn() } } }));
 vi.mock("@/features/budget/server/check", () => ({ scheduleBudgetCheck: vi.fn() }));

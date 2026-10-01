@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { FEEDBACK_MAX_LENGTH } from "@/features/feedback/constants";
-import { POST } from "./route";
+import { POST } from "../route";
 
 /*
  * Comentarios desde Ajustes: sólo con sesión, con cupo propio por usuario

@@ -1,5 +1,6 @@
 import type { SpeechError } from "@/features/transaction/types";
 import type { ReceiptError } from "@/features/transaction/lib/receipt/receipt-draft";
+import type { ReceiptMethod } from "@/features/transaction/lib/receipt/read-receipt";
 import type { TransactionType } from "@/features/transaction/types";
 import type { FeedbackType } from "@/features/feedback/constants";
 import type { BudgetKind, BudgetPeriod } from "@/features/budget/types";
@@ -30,7 +31,7 @@ export interface AnalyticsEvents {
   voice_entry_completed: { outcome: "saved" | "edited" };
   voice_entry_failed: { reason: SpeechError };
   receipt_scan_started: Record<string, never>;
-  receipt_scan_completed: { outcome: "saved" | "edited" };
+  receipt_scan_completed: { outcome: "saved" | "edited"; method: ReceiptMethod };
   receipt_scan_failed: { reason: ReceiptError };
   data_exported: Record<string, never>;
   feedback_sent: { type: FeedbackType };

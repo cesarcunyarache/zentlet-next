@@ -1,6 +1,6 @@
 import { AxiosError, type AxiosResponse } from "axios";
 import { describe, expect, it } from "vitest";
-import { isNetworkError, isNotFound, mutationRetryDelay, shouldRetryMutation } from "./sync-policy";
+import { isNetworkError, isNotFound, mutationRetryDelay, shouldRetryMutation } from "../sync-policy";
 
 function httpError(status: number) {
   return new AxiosError(`Request failed with status code ${status}`, "ERR_BAD_RESPONSE", undefined, undefined, {

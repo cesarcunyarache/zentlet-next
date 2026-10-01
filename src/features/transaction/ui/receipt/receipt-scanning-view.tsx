@@ -2,13 +2,15 @@
 
 import { motion, useReducedMotion } from "motion/react";
 import { useTranslations } from "next-intl";
+import type { ReceiptStep } from "../../lib/receipt/read-receipt";
 import { VOICE_VIEW_MOTION } from "../voice/voice-view-motion";
 
 interface ReceiptScanningViewProps {
   previewUrl: string | null;
+  step: ReceiptStep;
 }
 
-export function ReceiptScanningView({ previewUrl }: ReceiptScanningViewProps) {
+export function ReceiptScanningView({ previewUrl, step }: ReceiptScanningViewProps) {
   const t = useTranslations("transactions.receipt");
   const shouldReduceMotion = Boolean(useReducedMotion());
 
@@ -33,7 +35,7 @@ export function ReceiptScanningView({ previewUrl }: ReceiptScanningViewProps) {
         <p role="status" aria-live="polite" className="font-display text-app-fg m-0 text-xl font-bold tracking-[-0.02em]">
           {t("reading")}
         </p>
-        <p className="text-app-muted m-0 text-sm">{t("readingHint")}</p>
+        <p className="text-app-muted m-0 text-sm">{t(`steps.${step}`)}</p>
       </div>
     </motion.div>
   );

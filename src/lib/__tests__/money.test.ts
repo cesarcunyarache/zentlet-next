@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { cleanAmountInput, displayAmount, formatMoney, formatNumber, formatShort, formatSigned, parseAmount } from "./money";
+import { cleanAmountInput, displayAmount, formatMoney, formatNumber, formatShort, formatSigned, parseAmount } from "../money";
 
 describe("montos", () => {
   it("formatNumber, formatMoney y formatSigned", () => {

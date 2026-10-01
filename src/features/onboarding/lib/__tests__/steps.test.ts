@@ -6,7 +6,7 @@ import {
   isValidStepIndex,
   keyboardIntent,
   swipeStepDelta,
-} from "./steps";
+} from "../steps";
 
 const drag = (offsetX: number, velocityX = 0) => ({ offset: { x: offsetX }, velocity: { x: velocityX } });
 

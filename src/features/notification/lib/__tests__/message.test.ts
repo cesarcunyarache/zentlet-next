@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { notificationMessage } from "./message";
+import { notificationMessage } from "../message";
 
 const data = {
   budgetId: "b1",

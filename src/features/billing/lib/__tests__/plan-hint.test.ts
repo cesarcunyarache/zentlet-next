@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import type { BillingSummary } from "../types";
-import { planAction, planHint } from "./plan-hint";
+import type { BillingSummary } from "../../types";
+import { planAction, planHint } from "../plan-hint";
 
 const summary = (overrides: Partial<BillingSummary> = {}): BillingSummary => ({
   plan: "free",

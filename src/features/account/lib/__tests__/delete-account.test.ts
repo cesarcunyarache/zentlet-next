@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { deleteAccountErrorKey, hasCredentialAccount } from "./delete-account";
+import { deleteAccountErrorKey, hasCredentialAccount } from "../delete-account";
 
 describe("hasCredentialAccount", () => {
   it("detecta una cuenta con contraseña", () => {

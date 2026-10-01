@@ -113,12 +113,7 @@ async function parseWebhook(req: Request): Promise<WebhookNotification | null> {
   const eventId = body.id === undefined ? requestId : `${type}:${body.id}`;
   if (!resourceId || !eventId) return null;
 
-  return {
-    eventId,
-    type,
-    resource: WEBHOOK_RESOURCES[type] ?? "ignored",
-    resourceId,
-  };
+  return { eventId, type, resource: WEBHOOK_RESOURCES[type] ?? "ignored", resourceId };
 }
 
 export function createMercadoPagoProvider(): BillingProvider {
@@ -146,10 +141,7 @@ export function createMercadoPagoProvider(): BillingProvider {
     },
 
     async cancelSubscription(externalId) {
-      await mpRequest(`/preapproval/${encodeURIComponent(externalId)}`, {
-        method: "PUT",
-        body: { status: "cancelled" },
-      });
+      await mpRequest(`/preapproval/${encodeURIComponent(externalId)}`, { method: "PUT", body: { status: "cancelled" } });
     },
 
     async refundPayment({ providerPaymentId, amount, idempotencyKey }) {

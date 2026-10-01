@@ -1,7 +1,7 @@
 import { createHmac } from "node:crypto";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { BillingProviderError } from "../types";
-import { createMercadoPagoProvider } from "./index";
+import { BillingProviderError } from "../../types";
+import { createMercadoPagoProvider } from "../index";
 
 const SECRET = "webhook-secret";
 const TOKEN = "TEST-token";

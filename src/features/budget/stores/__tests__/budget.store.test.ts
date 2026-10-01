@@ -3,11 +3,11 @@ import { MutationObserver, QueryClient, QueryObserver, onlineManager } from "@ta
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { emitSyncError } from "@/core/offline/sync-events";
 import { reportSyncFailure } from "@/core/offline/sync-policy";
-import { budgetService, type CreateBudgetPayload } from "../services/budget.service";
-import type { TBudget } from "../types";
-import { budgetKeys, budgetMutationKeys, fetchBudgetsWithPending, registerBudgetMutations } from "./budget.store";
+import { budgetService, type CreateBudgetPayload } from "../../services/budget.service";
+import type { TBudget } from "../../types";
+import { budgetKeys, budgetMutationKeys, fetchBudgetsWithPending, registerBudgetMutations } from "../budget.store";
 
-vi.mock("../services/budget.service", () => ({
+vi.mock("../../services/budget.service", () => ({
   budgetService: {
     getBudgets: vi.fn(),
     createBudget: vi.fn(),

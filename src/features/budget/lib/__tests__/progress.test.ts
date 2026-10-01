@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import type { TBudget } from "../types";
-import { BUDGET_PERIODS } from "./period";
-import { budgetMeasurements, budgetPreview, daysLeft, periodRangeLabel, spentPercent } from "./progress";
+import type { TBudget } from "../../types";
+import { BUDGET_PERIODS } from "../period";
+import { budgetMeasurements, budgetPreview, daysLeft, periodRangeLabel, spentPercent } from "../progress";
 
 const today = "2026-09-26";
 const thisMonth = { from: "2026-09-01", to: "2026-10-01" };

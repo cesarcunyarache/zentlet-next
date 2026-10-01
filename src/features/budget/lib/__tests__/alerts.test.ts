@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { alertThreshold, dueBudgetNotice, isAlertBelowLimit } from "./alerts";
-import type { BudgetAlert } from "../types";
+import { alertThreshold, dueBudgetNotice, isAlertBelowLimit } from "../alerts";
+import type { BudgetAlert } from "../../types";
 
 const PREFIX = "budget:b1:2026-09-01:";
 const percent80: BudgetAlert = { id: "a80", kind: "percent", value: 80 };

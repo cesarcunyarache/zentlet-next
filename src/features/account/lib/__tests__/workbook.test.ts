@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import writeXlsxFile from "write-excel-file/node";
 import es from "@/locales/es/settings.json";
-import { buildWorkbook, type ExportCategory, type ExportTransaction } from "./workbook";
+import { buildWorkbook, type ExportCategory, type ExportTransaction } from "../workbook";
 
 const transactions: ExportTransaction[] = [
   {

@@ -21,15 +21,9 @@ function parseHeader(header: string) {
   };
 }
 
-export function signatureManifest({
-  dataId,
-  requestId,
-  ts,
-}: {
-  dataId: string | null;
-  requestId: string | null;
-  ts: string;
-}) {
+type ManifestInput = Pick<SignatureInput, "dataId" | "requestId"> & { ts: string };
+
+export function signatureManifest({ dataId, requestId, ts }: ManifestInput) {
   const id = dataId ? `id:${dataId.toLowerCase()};` : "";
   const request = requestId ? `request-id:${requestId};` : "";
   return `${id}${request}ts:${ts};`;
@@ -50,8 +44,4 @@ export function checkSignature({ header, requestId, dataId, secret, now }: Signa
   const given = Buffer.from(v1);
   const computed = Buffer.from(expected);
   return given.length === computed.length && timingSafeEqual(given, computed) ? "valid" : "mismatch";
-}
-
-export function isValidSignature(input: SignatureInput) {
-  return checkSignature(input) === "valid";
 }

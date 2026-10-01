@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { applyPendingChanges, type PendingChange } from "./pending-changes";
+import { applyPendingChanges, type PendingChange } from "../pending-changes";
 
 interface Row {
   id: string;

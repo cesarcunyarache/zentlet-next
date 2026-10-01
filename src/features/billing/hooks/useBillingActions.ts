@@ -22,9 +22,7 @@ export function useBillingActions() {
 
   const upgrade = () =>
     run(async () => {
-      const { redirectUrl } = await billingService.startCheckout({
-        planKey: "pro",
-      });
+      const { redirectUrl } = await billingService.startCheckout({ planKey: "pro" });
       window.location.assign(redirectUrl);
     });
 

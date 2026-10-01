@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { TBudget } from "../types";
+import type { TBudget } from "../../types";
 import {
   BUDGET_PERIODS,
   activePeriod,
@@ -9,7 +9,7 @@ import {
   limitAt,
   periodContaining,
   withLimit,
-} from "./period";
+} from "../period";
 
 const { weekly, biweekly, monthly, quarterly, yearly } = BUDGET_PERIODS;
 

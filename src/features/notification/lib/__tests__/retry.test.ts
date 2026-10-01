@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { hasAttemptsLeft, MAX_ATTEMPTS, nextAttemptAt } from "./retry";
+import { hasAttemptsLeft, MAX_ATTEMPTS, nextAttemptAt } from "../retry";
 
 const now = new Date("2026-09-30T12:00:00.000Z");
 

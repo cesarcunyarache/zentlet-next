@@ -16,14 +16,7 @@ export async function recordBillingEvent({ source, type, userId, subscriptionId,
   logger.info({ source, userId, subscriptionId, ...data }, `billing.${type}`);
   try {
     await prisma.billingEvent.create({
-      data: {
-        source,
-        type,
-        userId,
-        subscriptionId,
-        data,
-        processedAt: new Date(),
-      },
+      data: { source, type, userId, subscriptionId, data, processedAt: new Date() },
     });
   } catch (error) {
     reportError(error, "billing.event_record_failed", { type, subscriptionId });

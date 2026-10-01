@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { deliverPending } from "@/features/notification/server/deliver";
-import { GET } from "./route";
+import { GET } from "../route";
 
 vi.mock("@/features/notification/server/deliver", () => ({ deliverPending: vi.fn() }));
 

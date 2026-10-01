@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { routing } from "@/i18n/routing";
-import { LEGAL_DOCUMENTS } from "./config";
-import { legalDocuments } from "./content";
+import { LEGAL_DOCUMENTS } from "../config";
+import { legalDocuments } from "../content";
 
 describe("legalDocuments", () => {
   it("tiene un texto por cada documento que se acepta al registrarse", () => {

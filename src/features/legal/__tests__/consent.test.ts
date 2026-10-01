@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import prisma from "@/lib/prisma";
-import { LEGAL_VERSION } from "./config";
-import { LEGAL_DOCUMENTS, legalDocumentSchema, recordLegalConsent, recordSignUpConsent, type LegalDocument } from "./consent";
+import { LEGAL_VERSION } from "../config";
+import { LEGAL_DOCUMENTS, legalDocumentSchema, recordLegalConsent, recordSignUpConsent, type LegalDocument } from "../consent";
 
 vi.mock("@/lib/prisma", () => ({
   default: { userConsent: { createMany: vi.fn() }, user: { delete: vi.fn() } },

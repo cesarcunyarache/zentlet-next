@@ -1,9 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { preferenceService } from "../services/preference.service";
-import { addPendingPreferences, clearPendingPreferences, readPendingPreferences } from "./pending";
-import { savePreferences } from "./save";
+import { preferenceService } from "../../services/preference.service";
+import { addPendingPreferences, clearPendingPreferences, readPendingPreferences } from "../pending";
+import { savePreferences } from "../save";
 
-vi.mock("../services/preference.service", () => ({
+vi.mock("../../services/preference.service", () => ({
   preferenceService: { updatePreferences: vi.fn() },
 }));
 

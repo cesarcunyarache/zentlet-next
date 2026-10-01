@@ -1,6 +1,6 @@
 import { createHmac } from "node:crypto";
 import { describe, expect, it } from "vitest";
-import { checkSignature, isValidSignature, signatureManifest, SIGNATURE_TOLERANCE_MS } from "./signature";
+import { checkSignature, signatureManifest, SIGNATURE_TOLERANCE_MS } from "../signature";
 
 const SECRET = "test-secret";
 const NOW = 1_790_000_000_000;
@@ -8,16 +8,7 @@ const sign = (manifest: string) => createHmac("sha256", SECRET).update(manifest)
 const header = (ts: number, v1: string) => `ts=${ts},v1=${v1}`;
 
 const base = { requestId: "req-1", dataId: "ABC123", secret: SECRET, now: NOW };
-const validHeader = header(
-  NOW,
-  sign(
-    signatureManifest({
-      dataId: "ABC123",
-      requestId: "req-1",
-      ts: String(NOW),
-    }),
-  ),
-);
+const validHeader = header(NOW, sign(signatureManifest({ dataId: "ABC123", requestId: "req-1", ts: String(NOW) })));
 
 describe("signatureManifest", () => {
   it("sigue la plantilla de Mercado Pago con el id en minúsculas", () => {
@@ -31,38 +22,24 @@ describe("signatureManifest", () => {
   });
 });
 
-describe("isValidSignature", () => {
+describe("checkSignature", () => {
   it("acepta una firma correcta", () => {
-    expect(isValidSignature({ ...base, header: validHeader })).toBe(true);
+    expect(checkSignature({ ...base, header: validHeader })).toBe("valid");
   });
 
   it("rechaza una firma alterada o de otro recurso", () => {
-    expect(isValidSignature({ ...base, header: header(NOW, "0".repeat(64)) })).toBe(false);
-    expect(isValidSignature({ ...base, dataId: "OTHER", header: validHeader })).toBe(false);
+    expect(checkSignature({ ...base, header: header(NOW, "0".repeat(64)) })).toBe("mismatch");
+    expect(checkSignature({ ...base, dataId: "OTHER", header: validHeader })).toBe("mismatch");
   });
 
   it("rechaza una notificación fuera de la ventana de tiempo", () => {
-    expect(
-      isValidSignature({
-        ...base,
-        now: NOW + SIGNATURE_TOLERANCE_MS + 1,
-        header: validHeader,
-      }),
-    ).toBe(false);
-  });
-
-  it("rechaza sin cabecera o sin secreto", () => {
-    expect(isValidSignature({ ...base, header: null })).toBe(false);
-    expect(isValidSignature({ ...base, secret: "", header: validHeader })).toBe(false);
-    expect(isValidSignature({ ...base, header: "garbage" })).toBe(false);
-  });
-});
-
-describe("checkSignature", () => {
-  it("explica por qué rechaza", () => {
-    expect(checkSignature({ ...base, header: null })).toBe("missing");
     expect(checkSignature({ ...base, now: NOW + SIGNATURE_TOLERANCE_MS + 1, header: validHeader })).toBe("stale");
-    expect(checkSignature({ ...base, dataId: "OTHER", header: validHeader })).toBe("mismatch");
+  });
+
+  it("rechaza sin cabecera, sin secreto o con cabecera inválida", () => {
+    expect(checkSignature({ ...base, header: null })).toBe("missing");
+    expect(checkSignature({ ...base, secret: "", header: validHeader })).toBe("missing");
+    expect(checkSignature({ ...base, header: "garbage" })).toBe("missing");
   });
 
   it("acepta el timestamp en segundos", () => {

@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { auth } from "@/lib/auth";
 import { generateObject } from "@/lib/ai/client";
 import { allowAiCall } from "@/lib/ai/quota";
-import { generateCategory } from "./category-generator";
+import { generateCategory } from "../category-generator";
 
 /*
  * La Server Action es un endpoint público: sin sesión no llama al modelo,

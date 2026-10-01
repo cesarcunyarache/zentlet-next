@@ -3,8 +3,8 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { GET as flagsRoute } from "@/app/api/account/features/route";
 import { createUser, resetDatabase } from "@/test/integration/database";
-import { clearUserFlag, createFlag, deleteFlag, setFlagEnabled, setFlagRollout, setUserFlag } from "./server/admin";
-import { getEnabledFlags, isFlagEnabled } from "./server/flags";
+import { clearUserFlag, createFlag, deleteFlag, setFlagEnabled, setFlagRollout, setUserFlag } from "../server/admin";
+import { getEnabledFlags, isFlagEnabled } from "../server/flags";
 
 vi.mock("@/lib/auth", () => ({ auth: { api: { getSession: vi.fn() } } }));
 

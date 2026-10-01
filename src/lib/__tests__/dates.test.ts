@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { dayLabel, dayShift, fullDate, isoDateIn, parseISODate, toISODate, today } from "./dates";
+import { dayLabel, dayShift, fullDate, isoDateIn, parseISODate, toISODate, today } from "../dates";
 
 beforeEach(() => {
   vi.useFakeTimers();

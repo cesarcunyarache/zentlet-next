@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import prisma from "@/lib/prisma";
 import { notify } from "@/features/notification/server/notify";
-import { checkBudget } from "./check";
+import { checkBudget } from "../check";
 
 vi.mock("@/lib/prisma", () => ({
   default: {

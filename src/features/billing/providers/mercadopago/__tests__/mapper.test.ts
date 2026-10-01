@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { checkoutBody, toCents, toPaymentSnapshot, toSubscriptionSnapshot } from "./mapper";
+import { checkoutBody, toCents, toPaymentSnapshot, toSubscriptionSnapshot } from "../mapper";
 
 const NOW = new Date("2026-10-15T12:00:00Z");
 const checkout = {

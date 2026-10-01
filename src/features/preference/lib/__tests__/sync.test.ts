@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { planPreferenceSync, type DevicePreferences } from "./sync";
+import { planPreferenceSync, type DevicePreferences } from "../sync";
 
 const device: DevicePreferences = { language: "en", currency: "USD", timezone: "America/Bogota" };
 const server = { language: "es", currency: "EUR", timezone: "America/Bogota", extras: {} } as const;

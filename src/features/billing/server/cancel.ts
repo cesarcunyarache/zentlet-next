@@ -2,11 +2,7 @@ import prisma from "@/lib/prisma";
 import { getBillingProvider } from "../providers";
 import type { BillingEventSource } from "../types";
 import { recordBillingEvent } from "./events";
-import {
-  abandonPending,
-  findLiveSubscription,
-  type SubscriptionRow,
-} from "./subscriptions";
+import { abandonPending, findLiveSubscription, type SubscriptionRow } from "./subscriptions";
 
 interface CancelOptions {
   source: BillingEventSource;
@@ -19,16 +15,11 @@ export async function cancelSubscription(
   { source, immediate = false, now = new Date() }: CancelOptions,
 ) {
   if (subscription.externalId && subscription.status !== "canceled") {
-    await getBillingProvider(subscription.provider).cancelSubscription(
-      subscription.externalId,
-    );
+    await getBillingProvider(subscription.provider).cancelSubscription(subscription.externalId);
   }
-  if (subscription.status === "pending")
-    return abandonPending(subscription, now);
+  if (subscription.status === "pending") return abandonPending(subscription, now);
 
-  const accessUntil = immediate
-    ? now
-    : (subscription.currentPeriodEnd ?? subscription.trialEndsAt);
+  const accessUntil = immediate ? now : (subscription.currentPeriodEnd ?? subscription.trialEndsAt);
   await prisma.subscription.update({
     where: { id: subscription.id },
     data: {
@@ -43,18 +34,11 @@ export async function cancelSubscription(
     type: "subscription.canceled",
     userId: subscription.userId,
     subscriptionId: subscription.id,
-    data: {
-      from: subscription.status,
-      immediate,
-      accessUntil: accessUntil?.toISOString() ?? null,
-    },
+    data: { from: subscription.status, immediate, accessUntil: accessUntil?.toISOString() ?? null },
   });
 }
 
-export async function cancelUserSubscription(
-  userId: string,
-  source: BillingEventSource = "user",
-) {
+export async function cancelUserSubscription(userId: string, source: BillingEventSource = "user") {
   const live = await findLiveSubscription(userId);
   if (!live) return false;
   await cancelSubscription(live, { source });

@@ -2,11 +2,11 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import prisma from "@/lib/prisma";
 import { getBillingProvider } from "@/features/billing/providers";
 import { BillingProviderError } from "@/features/billing/providers/types";
-import { subscriptionRow, type TestProvider } from "@/features/billing/server/test-provider";
-import { POST } from "./route";
+import { subscriptionRow, type TestProvider } from "@/features/billing/__tests__/test-provider";
+import { POST } from "../route";
 
 vi.mock("@/features/billing/providers", () =>
-  import("@/features/billing/server/test-provider").then((module) => module.mockedProvidersModule()),
+  import("@/features/billing/__tests__/test-provider").then((module) => module.mockedProvidersModule()),
 );
 vi.mock("@/lib/prisma", () => ({
   default: {

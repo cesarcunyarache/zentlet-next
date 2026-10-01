@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("./save", () => ({ savePreferences: vi.fn() }));
+vi.mock("../save", () => ({ savePreferences: vi.fn() }));
 
 function memoryStorage(initial: Record<string, string> = {}) {
   const data = new Map(Object.entries(initial));
@@ -26,8 +26,8 @@ async function load(initial?: Record<string, string>) {
   storage = memoryStorage(initial);
   vi.stubGlobal("localStorage", storage);
   vi.resetModules();
-  const store = await import("./device-currency");
-  const { savePreferences } = await import("./save");
+  const store = await import("../device-currency");
+  const { savePreferences } = await import("../save");
   vi.mocked(savePreferences).mockResolvedValue(undefined);
   return { ...store, savePreferences: vi.mocked(savePreferences) };
 }

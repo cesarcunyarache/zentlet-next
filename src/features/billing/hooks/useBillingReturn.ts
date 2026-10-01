@@ -26,9 +26,6 @@ export function useBillingReturn() {
     const isReturning = consumeReturnParam();
     if (!isReturning && !hasPendingCheckout) return;
     hasSynced.current = true;
-    billingService
-      .sync()
-      .then(setSummary)
-      .catch(() => undefined);
+    billingService.sync().then(setSummary).catch(() => undefined);
   }, [hasPendingCheckout, setSummary]);
 }

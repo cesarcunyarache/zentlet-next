@@ -97,12 +97,7 @@ export async function syncSubscription(subscription: SubscriptionRow) {
 export async function abandonPending(subscription: SubscriptionRow, now = new Date()) {
   await prisma.subscription.update({
     where: { id: subscription.id },
-    data: {
-      status: "canceled",
-      canceledAt: now,
-      trialEndsAt: null,
-      checkoutUrl: null,
-    },
+    data: { status: "canceled", canceledAt: now, trialEndsAt: null, checkoutUrl: null },
   });
   await recordBillingEvent({
     source: "system",

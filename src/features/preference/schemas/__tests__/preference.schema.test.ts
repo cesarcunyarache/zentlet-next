@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { preferenceUpdateSchema, preferencesSchema } from "./preference.schema";
+import { preferenceUpdateSchema, preferencesSchema } from "../preference.schema";
 
 describe("preferenceUpdateSchema", () => {
   it("acepta cambios parciales", () => {

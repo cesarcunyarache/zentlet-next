@@ -2,12 +2,7 @@ import type { PaymentStatus, SubscriptionStatus } from "../types";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
-export const LIVE_STATUSES = [
-  "pending",
-  "trialing",
-  "active",
-  "past_due",
-] as const satisfies readonly SubscriptionStatus[];
+export const LIVE_STATUSES = ["pending", "trialing", "active", "past_due"] as const satisfies readonly SubscriptionStatus[];
 export const CHECKOUT_REUSE_MS = DAY_MS;
 
 export function isLive(status: SubscriptionStatus) {
@@ -21,12 +16,7 @@ interface StatusInput {
   now: Date;
 }
 
-export function resolveStatus({
-  providerStatus,
-  lastPaymentStatus,
-  trialEndsAt,
-  now,
-}: StatusInput): SubscriptionStatus {
+export function resolveStatus({ providerStatus, lastPaymentStatus, trialEndsAt, now }: StatusInput): SubscriptionStatus {
   if (providerStatus !== "active") return providerStatus;
   if (lastPaymentStatus === "failed") return "past_due";
   if (lastPaymentStatus === null && trialEndsAt && now < trialEndsAt) return "trialing";
@@ -37,15 +27,13 @@ export function isTrialEligible(history: { status: SubscriptionStatus; trialEnds
   return history.every((subscription) => subscription.trialEndsAt === null || subscription.status === "pending");
 }
 
-export function firstChargeDate({
-  now,
-  trialDays,
-  paidUntil,
-}: {
+interface FirstChargeInput {
   now: Date;
   trialDays: number;
   paidUntil: Date | null;
-}) {
+}
+
+export function firstChargeDate({ now, trialDays, paidUntil }: FirstChargeInput) {
   const trialEnd = new Date(now.getTime() + trialDays * DAY_MS);
   return paidUntil && paidUntil > trialEnd ? paidUntil : trialEnd;
 }

@@ -6,10 +6,7 @@ import { errorResponse, hasBearerSecret, internalError, parseBody, unauthorized 
 const REFUND_ERRORS = {
   not_found: { message: "Payment not found", status: 404 },
   not_refundable: { message: "Payment is not refundable", status: 422 },
-  conflict: {
-    message: "Payment changed during the refund, retry",
-    status: 409,
-  },
+  conflict: { message: "Payment changed during the refund, retry", status: 409 },
 };
 
 export async function POST(req: Request) {

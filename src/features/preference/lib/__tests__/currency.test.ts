@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { CURRENCY_CODES, DEFAULT_CURRENCY, currencySymbol, parseStoredCurrency } from "./currency";
+import { CURRENCY_CODES, DEFAULT_CURRENCY, currencySymbol, parseStoredCurrency } from "../currency";
 
 describe("currencySymbol", () => {
   it.each([

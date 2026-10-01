@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence } from "motion/react";
-import { ScanLine } from "lucide-react";
+import { ScanLine, Smartphone, Sparkles } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Sheet } from "@/core/components/ui/sheet";
 import type { TransactionFormValues } from "../../schemas/transaction.schema";
@@ -14,6 +14,8 @@ import { ReceiptErrorView } from "./receipt-error-view";
 import { ReceiptScanningView } from "./receipt-scanning-view";
 
 const SCAN_ICON = <ScanLine className="size-4" strokeWidth={2} />;
+const SPARKLES_ICON = <Sparkles aria-hidden className="size-3.5" strokeWidth={2.2} />;
+const DEVICE_ICON = <Smartphone aria-hidden className="size-3.5" strokeWidth={2.2} />;
 
 interface ReceiptScanProps {
   categories: CategoryLike[];
@@ -29,10 +31,16 @@ export function ReceiptScan({ categories, currency, onSave, onEdit }: ReceiptSca
   const canRetry = receipt.error !== "not_receipt" && receipt.error !== "invalid_image";
 
   function renderStage() {
-    if (stage === "scanning") return <ReceiptScanningView key="scanning" previewUrl={receipt.previewUrl} />;
+    if (stage === "scanning") return <ReceiptScanningView key="scanning" previewUrl={receipt.previewUrl} step={receipt.step} />;
     if (stage === "preview" && draft && values) {
       return (
         <div key="preview" className="flex flex-col">
+          {receipt.method ? (
+            <p className="text-app-muted m-0 mt-5 flex items-center gap-1.5 text-xs font-semibold">
+              {receipt.method === "ai" ? SPARKLES_ICON : DEVICE_ICON}
+              {t(`method.${receipt.method}`)}
+            </p>
+          ) : null}
           {receipt.isForeignCurrency ? (
             <p role="note" className="bg-app-expense-soft text-app-expense m-0 mt-5 rounded-2xl px-4 py-3 text-sm font-semibold">
               {t("foreignCurrency", { currency: receipt.detectedCurrency ?? "" })}

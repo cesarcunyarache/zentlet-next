@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { FEEDBACK_MAX_LENGTH } from "../constants";
+import { FEEDBACK_MAX_LENGTH } from "../../constants";
 import {
   COUNTER_VISIBLE_FROM,
   buildFeedbackContext,
@@ -8,7 +8,7 @@ import {
   isSubmitShortcut,
   remainingCharacters,
   shouldShowCounterRow,
-} from "./feedback-form";
+} from "../feedback-form";
 
 describe("canSendFeedback", () => {
   it("con conexión, sin envío en curso y con texto se puede enviar", () => {

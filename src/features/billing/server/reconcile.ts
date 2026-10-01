@@ -18,14 +18,8 @@ async function dueSubscriptions(now: Date) {
   const rows = await prisma.subscription.findMany({
     where: {
       OR: [
-        {
-          status: "pending",
-          createdAt: { lt: new Date(now.getTime() - PENDING_SYNC_AFTER_MS) },
-        },
-        {
-          status: { in: ["trialing", "active", "past_due"] },
-          currentPeriodEnd: { lt: now },
-        },
+        { status: "pending", createdAt: { lt: new Date(now.getTime() - PENDING_SYNC_AFTER_MS) } },
+        { status: { in: ["trialing", "active"] }, currentPeriodEnd: { lt: now } },
         { status: "past_due" },
       ],
     },
@@ -51,9 +45,7 @@ export async function reconcileSubscriptions(now = new Date()): Promise<Reconcil
       }
     } catch (error) {
       result.failed += 1;
-      reportError(error, "billing.reconcile_failed", {
-        subscriptionId: subscription.id,
-      });
+      reportError(error, "billing.reconcile_failed", { subscriptionId: subscription.id });
     }
   }
   return result;

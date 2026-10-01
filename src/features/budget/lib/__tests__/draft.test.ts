@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import type { TBudget } from "../types";
-import { BUDGET_PERIODS } from "./period";
-import { currentLimit, draftFrom, draftStatus, toggledKind } from "./draft";
+import type { TBudget } from "../../types";
+import { BUDGET_PERIODS } from "../period";
+import { currentLimit, draftFrom, draftStatus, toggledKind } from "../draft";
 
 const today = "2026-09-26";
 

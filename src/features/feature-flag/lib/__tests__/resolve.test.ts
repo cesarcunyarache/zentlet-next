@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { enabledSlugs, isFlagOn, isValidRollout, rolloutBucket, usageCutoff } from "./resolve";
+import { enabledSlugs, isFlagOn, isValidRollout, rolloutBucket, usageCutoff } from "../resolve";
 
 const flag = (slug: string, enabled: boolean, { rollout = 100, userEnabled = null as boolean | null } = {}) => ({
   slug,

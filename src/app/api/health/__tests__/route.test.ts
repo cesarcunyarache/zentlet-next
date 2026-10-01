@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { runDatabaseCheck, runHealthChecks } from "@/lib/health/checks";
 import prisma from "@/lib/prisma";
-import { GET } from "./route";
+import { GET } from "../route";
 
 /*
  * Sin credencial sólo se sabe si la base de datos responde: ni la

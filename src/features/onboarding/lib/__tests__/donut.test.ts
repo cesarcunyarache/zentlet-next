@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { donutArcs } from "./donut";
+import { donutArcs } from "../donut";
 
 describe("donutArcs", () => {
   it("cada porción empieza donde terminó la anterior", () => {

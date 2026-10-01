@@ -3,16 +3,16 @@ import { MutationObserver, QueryClient, QueryObserver, onlineManager } from "@ta
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { emitSyncError } from "@/core/offline/sync-events";
 import { reportSyncFailure } from "@/core/offline/sync-policy";
-import { categoryService } from "../services/category.service";
-import type { TCategory } from "../types";
-import { categoryKeys, categoryMutationKeys, registerCategoryMutations } from "./category.store";
+import { categoryService } from "../../services/category.service";
+import type { TCategory } from "../../types";
+import { categoryKeys, categoryMutationKeys, registerCategoryMutations } from "../category.store";
 
 /*
  * La cola offline de categorías con un QueryClient real y las mutaciones
  * registradas como en la app. Sólo se simula la capa HTTP.
  */
 
-vi.mock("../services/category.service", () => ({
+vi.mock("../../services/category.service", () => ({
   categoryService: {
     createCategory: vi.fn(),
     updateCategory: vi.fn(),

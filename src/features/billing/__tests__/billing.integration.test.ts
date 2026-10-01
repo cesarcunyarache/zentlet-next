@@ -11,7 +11,7 @@ import { POST as webhookRoute } from "@/app/api/billing/webhooks/[provider]/rout
 import { GET as billingSyncCron } from "@/app/api/cron/billing-sync/route";
 import { createUser, resetDatabase } from "@/test/integration/database";
 import { gateway, SIGNATURE_HEADER, VALID_SIGNATURE } from "@/test/integration/fake-provider";
-import type { BillingSummary } from "./types";
+import type { BillingSummary } from "../types";
 
 vi.mock("@/features/billing/providers", () =>
   import("@/test/integration/fake-provider").then((module) => module.fakeProvidersModule()),

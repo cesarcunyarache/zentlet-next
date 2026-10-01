@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { isDoneOnDevice, markDoneOnDevice } from "./device-storage";
+import { isDoneOnDevice, markDoneOnDevice } from "../device-storage";
 
 function memoryStorage() {
   const items = new Map<string, string>();

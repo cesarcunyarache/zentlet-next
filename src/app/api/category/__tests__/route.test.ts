@@ -2,8 +2,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { Prisma } from "@/generated/prisma/client";
-import { DELETE, PATCH } from "./[id]/route";
-import { POST } from "./route";
+import { DELETE, PATCH } from "../[id]/route";
+import { POST } from "../route";
 
 /*
  * Categorías: alta idempotente por id (como los movimientos), tope por

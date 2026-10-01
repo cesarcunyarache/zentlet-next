@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Messages } from "next-intl";
-import { clientMessages } from "./client-messages";
+import { clientMessages } from "../client-messages";
 
 const messages = {
   common: { save: "Guardar" },

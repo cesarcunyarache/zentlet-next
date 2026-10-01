@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { elapsedSincePageFirstSeen } from "./local-data";
+import { elapsedSincePageFirstSeen } from "../local-data";
 
 const DAY = 24 * 60 * 60 * 1000;
 
