@@ -6,6 +6,8 @@ export interface KnownBank {
 
 export const KNOWN_BANKS: KnownBank[] = [{ id: "bcp", name: "BCP", domains: ["notificacionesbcp.com.pe"] }];
 
+export const KNOWN_BANK_NAMES = KNOWN_BANKS.map((bank) => bank.name).join(", ");
+
 export function senderDomain(address: string) {
   return address.slice(address.lastIndexOf("@") + 1).toLowerCase();
 }

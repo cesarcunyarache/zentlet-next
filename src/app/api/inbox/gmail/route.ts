@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { disconnectGmail } from "@/features/inbox/server/gmail";
+import { disconnectGmail } from "@/features/inbox/server/gmail-connection";
 import { getConnection } from "@/features/inbox/server/connection";
 import { getSessionUserId, internalError, unauthorized, writeLimit } from "@/lib/api/route-helpers";
 

@@ -1,4 +1,4 @@
-import { timingSafeEqual } from "node:crypto";
+import { safeEqual } from "@/lib/crypto";
 import { logger } from "@/lib/observability/logger";
 import { hasBearerSecret } from "@/lib/api/route-helpers";
 import { fromPostmark, postmarkInboundSchema } from "../lib/postmark";
@@ -20,9 +20,7 @@ function hasBasicSecret(req: Request, secret: string | undefined) {
   const given = req.headers.get("authorization");
   if (!secret || !given?.startsWith("Basic ")) return false;
   const decoded = Buffer.from(given.slice(6), "base64").toString();
-  const password = Buffer.from(decoded.slice(decoded.indexOf(":") + 1));
-  const expected = Buffer.from(secret);
-  return password.length === expected.length && timingSafeEqual(password, expected);
+  return safeEqual(secret, decoded.slice(decoded.indexOf(":") + 1));
 }
 
 async function readPayload(req: Request) {

@@ -1,27 +1,27 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useEffectEvent } from "react";
 import { track } from "@/lib/observability/client";
-import { GMAIL_CONNECT_RESULTS, type GmailConnectResult } from "../types";
+import { GMAIL_CONNECT_RESULTS, GMAIL_RESULT_PARAM, type GmailConnectResult } from "../types";
 
-const PARAM = "gmail";
-
-function isResult(value: string | null): value is GmailConnectResult {
+function isConnectResult(value: string | null): value is GmailConnectResult {
   return GMAIL_CONNECT_RESULTS.includes(value as GmailConnectResult);
 }
 
+function takeResultFromUrl() {
+  const url = new URL(window.location.href);
+  const result = url.searchParams.get(GMAIL_RESULT_PARAM);
+  if (!isConnectResult(result)) return null;
+  url.searchParams.delete(GMAIL_RESULT_PARAM);
+  window.history.replaceState(window.history.state, "", url);
+  return result;
+}
+
 export function useGmailConnectResult(onResult: (result: GmailConnectResult) => void) {
-  const handler = useRef(onResult);
+  const notify = useEffectEvent(onResult);
 
   useEffect(() => {
-    handler.current = onResult;
-  });
-
-  useEffect(() => {
-    const url = new URL(window.location.href);
-    const result = url.searchParams.get(PARAM);
-    if (!isResult(result)) return;
-    url.searchParams.delete(PARAM);
-    window.history.replaceState(window.history.state, "", url);
+    const result = takeResultFromUrl();
+    if (!result) return;
     track("inbox_gmail_result", { outcome: result });
-    handler.current(result);
+    notify(result);
   }, []);
 }

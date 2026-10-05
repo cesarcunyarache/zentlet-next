@@ -1,30 +1,17 @@
-import { NextResponse, type NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
 import { hasFeature } from "@/features/billing/server/access";
-import { GMAIL_STATE_COOKIE, startGmailConnect } from "@/features/inbox/server/gmail";
-import { siteConfig } from "@/lib/site";
+import { redirectToGoogle, redirectWithResult } from "@/features/inbox/http/gmail-oauth";
+import { startGmailConnect } from "@/features/inbox/server/gmail-connection";
 import { getSessionUserId, internalError } from "@/lib/api/route-helpers";
-
-const STATE_MAX_AGE_SECONDS = 600;
 
 export async function GET(req: NextRequest) {
   try {
     const userId = await getSessionUserId(req);
-    if (!userId || !(await hasFeature(userId, "email_import"))) {
-      return NextResponse.redirect(new URL(`${siteConfig.routes.app}?gmail=error`, req.url));
-    }
+    if (!userId || !(await hasFeature(userId, "email_import"))) return redirectWithResult(req, "error");
 
     const started = startGmailConnect();
-    if (!started) return NextResponse.redirect(new URL(`${siteConfig.routes.app}?gmail=unavailable`, req.url));
-
-    const response = NextResponse.redirect(started.url);
-    response.cookies.set(GMAIL_STATE_COOKIE, started.state, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/api/inbox/gmail",
-      maxAge: STATE_MAX_AGE_SECONDS,
-    });
-    return response;
+    if (!started) return redirectWithResult(req, "unavailable");
+    return redirectToGoogle(started.url, started.state);
   } catch (error) {
     return internalError(req, error, "Error starting Gmail connection");
   }

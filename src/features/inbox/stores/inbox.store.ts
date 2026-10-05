@@ -67,15 +67,32 @@ export function useInboxConnection(isEnabled: boolean) {
   });
 }
 
-export function useInboxConnectionActions() {
+function useSetConnection() {
   const queryClient = useQueryClient();
-  const setConnection = (connection: TInboxConnection) => queryClient.setQueryData(inboxKeys.connection, connection);
-  const refresh = () => queryClient.invalidateQueries({ queryKey: inboxKeys.connection });
+  return (connection: TInboxConnection) => queryClient.setQueryData(inboxKeys.connection, connection);
+}
 
-  const connect = useMutation({ mutationFn: () => inboxService.connect(), onSuccess: setConnection });
-  const disconnectGmail = useMutation({ mutationFn: () => inboxService.disconnectGmail(), onSuccess: setConnection });
-  const addSender = useMutation({ mutationFn: (address: string) => inboxService.addSender(address), onSuccess: refresh });
-  const removeSender = useMutation({ mutationFn: (id: string) => inboxService.removeSender(id), onSuccess: refresh });
+function useRefreshConnection() {
+  const queryClient = useQueryClient();
+  return () => queryClient.invalidateQueries({ queryKey: inboxKeys.connection });
+}
 
-  return { connect, disconnectGmail, addSender, removeSender };
+export function useCreateInboxAddress() {
+  const setConnection = useSetConnection();
+  return useMutation({ mutationFn: () => inboxService.connect(), onSuccess: setConnection });
+}
+
+export function useDisconnectGmail() {
+  const setConnection = useSetConnection();
+  return useMutation({ mutationFn: () => inboxService.disconnectGmail(), onSuccess: setConnection });
+}
+
+export function useAddInboxSender() {
+  const refresh = useRefreshConnection();
+  return useMutation({ mutationFn: (address: string) => inboxService.addSender(address), onSuccess: refresh });
+}
+
+export function useRemoveInboxSender() {
+  const refresh = useRefreshConnection();
+  return useMutation({ mutationFn: (id: string) => inboxService.removeSender(id), onSuccess: refresh });
 }

@@ -165,7 +165,10 @@ describe("vincular Gmail", () => {
     const other = await createUser();
     await makePro(other.id);
     signIn(other.id);
+    google.calls = [];
     expect(await connectGmail()).toBe("taken");
+    expect(google.calls).not.toContain("POST /revoke");
+    expect(await prisma.gmailConnection.findUniqueOrThrow({ where: { userId } })).toMatchObject({ status: "active" });
   });
 
   it("cada aviso del banco que llega queda por confirmar, sin leer los demás correos", async () => {

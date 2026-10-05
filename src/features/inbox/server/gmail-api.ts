@@ -27,13 +27,13 @@ interface OAuthClient {
   redirectUri: string;
 }
 
-export interface GmailTokens {
+interface GmailTokens {
   accessToken: string;
   refreshToken: string | null;
   scope: string;
 }
 
-export interface GmailHistoryPage {
+interface GmailHistoryPage {
   historyId?: string;
   nextPageToken?: string;
   history?: { messagesAdded?: { message: { id: string; labelIds?: string[] } }[] }[];
@@ -47,15 +47,16 @@ function parseJson(text: string): Record<string, unknown> {
   }
 }
 
+function errorReason(error: unknown) {
+  if (typeof error === "string") return error;
+  if (typeof error === "object" && error && "status" in error) return String(error.status);
+  return "";
+}
+
 async function request<T>(url: string, init: RequestInit = {}): Promise<T> {
   const response = await fetch(url, { ...init, signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) });
   const body = parseJson(await response.text());
-  if (!response.ok) {
-    const error = body.error;
-    const reason =
-      typeof error === "string" ? error : typeof error === "object" && error ? String((error as { status?: string }).status) : "";
-    throw new GmailApiError(response.status, reason || response.statusText);
-  }
+  if (!response.ok) throw new GmailApiError(response.status, errorReason(body.error) || response.statusText);
   return body as T;
 }
 
@@ -127,11 +128,15 @@ export function listHistory(accessToken: string, startHistoryId: string, pageTok
   return request<GmailHistoryPage>(`${GMAIL_URL}/history?${params}`, { headers: bearer(accessToken) });
 }
 
+function fetchMessage(accessToken: string, id: string, params: Record<string, string>) {
+  const query = new URLSearchParams(params);
+  return request<GmailMessage>(`${GMAIL_URL}/messages/${encodeURIComponent(id)}?${query}`, { headers: bearer(accessToken) });
+}
+
 export function getMessageSender(accessToken: string, id: string) {
-  const params = new URLSearchParams({ format: "metadata", metadataHeaders: "From" });
-  return request<GmailMessage>(`${GMAIL_URL}/messages/${encodeURIComponent(id)}?${params}`, { headers: bearer(accessToken) });
+  return fetchMessage(accessToken, id, { format: "metadata", metadataHeaders: "From" });
 }
 
 export function getMessage(accessToken: string, id: string) {
-  return request<GmailMessage>(`${GMAIL_URL}/messages/${encodeURIComponent(id)}?format=full`, { headers: bearer(accessToken) });
+  return fetchMessage(accessToken, id, { format: "full" });
 }

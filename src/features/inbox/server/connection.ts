@@ -5,7 +5,7 @@ import type { TInboxConnection } from "../types";
 import { generateLocalPart, inboxAddress } from "../lib/address";
 import { isTrustedRule } from "../lib/sender";
 import { serializeInboxSender } from "../lib/serialize";
-import { getGmailConnection } from "./gmail";
+import { getGmailConnection } from "./gmail-connection";
 
 const MAX_ADDRESS_ATTEMPTS = 3;
 
