@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { handleGmailPush } from "@/features/inbox/server/gmail";
+import { handleGmailPush } from "@/features/inbox/server/gmail-sync";
 import { errorResponse, internalError } from "@/lib/api/route-helpers";
 import { logger } from "@/lib/observability/logger";
 

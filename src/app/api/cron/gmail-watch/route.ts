@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { renewGmailWatches } from "@/features/inbox/server/gmail";
+import { renewGmailWatches } from "@/features/inbox/server/gmail-sync";
 import { hasBearerSecret, internalError, unauthorized } from "@/lib/api/route-helpers";
 import { logger } from "@/lib/observability/logger";
 
