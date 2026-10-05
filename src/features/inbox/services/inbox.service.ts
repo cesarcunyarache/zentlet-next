@@ -1,4 +1,4 @@
-import { APIService } from "@/core/services/api.service";
+import { API_BASE_URL, APIService } from "@/core/services/api.service";
 import type { TTransaction } from "@/features/transaction/types";
 import type { AcceptInboxItemInput } from "../schemas/inbox-api.schema";
 import type { TInboxConnection, TInboxItem, TInboxSender } from "../types";
@@ -22,6 +22,14 @@ class InboxService extends APIService {
 
   async connect(): Promise<TInboxConnection> {
     return (await this.post<TInboxConnection>("/api/inbox/connection")).data;
+  }
+
+  gmailConnectUrl(): string {
+    return `${API_BASE_URL}/api/inbox/gmail/connect`;
+  }
+
+  async disconnectGmail(): Promise<TInboxConnection> {
+    return (await this.delete<TInboxConnection>("/api/inbox/gmail")).data;
   }
 
   async addSender(address: string): Promise<TInboxSender> {

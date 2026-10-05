@@ -218,6 +218,7 @@ export type UserWhereInput = {
   features?: Prisma.UserFeatureListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   emailInbox?: Prisma.XOR<Prisma.EmailInboxNullableScalarRelationFilter, Prisma.EmailInboxWhereInput> | null
+  gmailConnection?: Prisma.XOR<Prisma.GmailConnectionNullableScalarRelationFilter, Prisma.GmailConnectionWhereInput> | null
   inboxSenders?: Prisma.InboxSenderListRelationFilter
   inboxTransactions?: Prisma.InboxTransactionListRelationFilter
   merchantRules?: Prisma.MerchantRuleListRelationFilter
@@ -244,6 +245,7 @@ export type UserOrderByWithRelationInput = {
   features?: Prisma.UserFeatureOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
   emailInbox?: Prisma.EmailInboxOrderByWithRelationInput
+  gmailConnection?: Prisma.GmailConnectionOrderByWithRelationInput
   inboxSenders?: Prisma.InboxSenderOrderByRelationAggregateInput
   inboxTransactions?: Prisma.InboxTransactionOrderByRelationAggregateInput
   merchantRules?: Prisma.MerchantRuleOrderByRelationAggregateInput
@@ -273,6 +275,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   features?: Prisma.UserFeatureListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
   emailInbox?: Prisma.XOR<Prisma.EmailInboxNullableScalarRelationFilter, Prisma.EmailInboxWhereInput> | null
+  gmailConnection?: Prisma.XOR<Prisma.GmailConnectionNullableScalarRelationFilter, Prisma.GmailConnectionWhereInput> | null
   inboxSenders?: Prisma.InboxSenderListRelationFilter
   inboxTransactions?: Prisma.InboxTransactionListRelationFilter
   merchantRules?: Prisma.MerchantRuleListRelationFilter
@@ -327,6 +330,7 @@ export type UserCreateInput = {
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
   inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
@@ -353,6 +357,7 @@ export type UserUncheckedCreateInput = {
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
   inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
@@ -379,6 +384,7 @@ export type UserUpdateInput = {
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
   inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
@@ -405,6 +411,7 @@ export type UserUncheckedUpdateInput = {
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
   inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
@@ -669,6 +676,20 @@ export type UserUpdateOneRequiredWithoutEmailInboxNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEmailInboxInput, Prisma.UserUpdateWithoutEmailInboxInput>, Prisma.UserUncheckedUpdateWithoutEmailInboxInput>
 }
 
+export type UserCreateNestedOneWithoutGmailConnectionInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutGmailConnectionInput, Prisma.UserUncheckedCreateWithoutGmailConnectionInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutGmailConnectionInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutGmailConnectionNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutGmailConnectionInput, Prisma.UserUncheckedCreateWithoutGmailConnectionInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutGmailConnectionInput
+  upsert?: Prisma.UserUpsertWithoutGmailConnectionInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutGmailConnectionInput, Prisma.UserUpdateWithoutGmailConnectionInput>, Prisma.UserUncheckedUpdateWithoutGmailConnectionInput>
+}
+
 export type UserCreateNestedOneWithoutInboxSendersInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutInboxSendersInput, Prisma.UserUncheckedCreateWithoutInboxSendersInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutInboxSendersInput
@@ -731,6 +752,7 @@ export type UserCreateWithoutConsentsInput = {
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
   inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
@@ -756,6 +778,7 @@ export type UserUncheckedCreateWithoutConsentsInput = {
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
   inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
@@ -797,6 +820,7 @@ export type UserUpdateWithoutConsentsInput = {
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
   inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
@@ -822,6 +846,7 @@ export type UserUncheckedUpdateWithoutConsentsInput = {
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
   inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
@@ -847,6 +872,7 @@ export type UserCreateWithoutPreferenceInput = {
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
   inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
@@ -872,6 +898,7 @@ export type UserUncheckedCreateWithoutPreferenceInput = {
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
   inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
@@ -913,6 +940,7 @@ export type UserUpdateWithoutPreferenceInput = {
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
   inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
@@ -938,6 +966,7 @@ export type UserUncheckedUpdateWithoutPreferenceInput = {
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
   inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
@@ -963,6 +992,7 @@ export type UserCreateWithoutSessionsInput = {
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
   inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
@@ -988,6 +1018,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
   inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
@@ -1029,6 +1060,7 @@ export type UserUpdateWithoutSessionsInput = {
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
   inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
@@ -1054,6 +1086,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
   inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
@@ -1079,6 +1112,7 @@ export type UserCreateWithoutAccountsInput = {
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
   inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
@@ -1104,6 +1138,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
   inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
@@ -1145,6 +1180,7 @@ export type UserUpdateWithoutAccountsInput = {
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
   inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
@@ -1170,6 +1206,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
   inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
@@ -1195,6 +1232,7 @@ export type UserCreateWithoutCategoriesInput = {
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
   inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
@@ -1220,6 +1258,7 @@ export type UserUncheckedCreateWithoutCategoriesInput = {
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
   inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
@@ -1261,6 +1300,7 @@ export type UserUpdateWithoutCategoriesInput = {
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
   inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
@@ -1286,6 +1326,7 @@ export type UserUncheckedUpdateWithoutCategoriesInput = {
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
   inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
@@ -1311,6 +1352,7 @@ export type UserCreateWithoutTransactionsInput = {
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
   inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
@@ -1336,6 +1378,7 @@ export type UserUncheckedCreateWithoutTransactionsInput = {
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
   inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
@@ -1377,6 +1420,7 @@ export type UserUpdateWithoutTransactionsInput = {
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
   inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
@@ -1402,6 +1446,7 @@ export type UserUncheckedUpdateWithoutTransactionsInput = {
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
   inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
@@ -1427,6 +1472,7 @@ export type UserCreateWithoutFeedbackInput = {
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
   inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
@@ -1452,6 +1498,7 @@ export type UserUncheckedCreateWithoutFeedbackInput = {
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
   inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
@@ -1493,6 +1540,7 @@ export type UserUpdateWithoutFeedbackInput = {
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
   inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
@@ -1518,6 +1566,7 @@ export type UserUncheckedUpdateWithoutFeedbackInput = {
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
   inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
@@ -1543,6 +1592,7 @@ export type UserCreateWithoutBudgetsInput = {
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
   inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
@@ -1568,6 +1618,7 @@ export type UserUncheckedCreateWithoutBudgetsInput = {
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
   inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
@@ -1609,6 +1660,7 @@ export type UserUpdateWithoutBudgetsInput = {
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
   inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
@@ -1634,6 +1686,7 @@ export type UserUncheckedUpdateWithoutBudgetsInput = {
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
   inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
@@ -1659,6 +1712,7 @@ export type UserCreateWithoutNotificationsInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
   emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
   inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
@@ -1684,6 +1738,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
   emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
   inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
@@ -1725,6 +1780,7 @@ export type UserUpdateWithoutNotificationsInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
   inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
@@ -1750,6 +1806,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
   inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
@@ -1775,6 +1832,7 @@ export type UserCreateWithoutSubscriptionsInput = {
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
   inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
@@ -1800,6 +1858,7 @@ export type UserUncheckedCreateWithoutSubscriptionsInput = {
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
   inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
@@ -1841,6 +1900,7 @@ export type UserUpdateWithoutSubscriptionsInput = {
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
   inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
@@ -1866,6 +1926,7 @@ export type UserUncheckedUpdateWithoutSubscriptionsInput = {
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
   inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
@@ -1891,6 +1952,7 @@ export type UserCreateWithoutFeaturesInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
   inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
@@ -1916,6 +1978,7 @@ export type UserUncheckedCreateWithoutFeaturesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
   inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
@@ -1957,6 +2020,7 @@ export type UserUpdateWithoutFeaturesInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
   inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
@@ -1982,6 +2046,7 @@ export type UserUncheckedUpdateWithoutFeaturesInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
   inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
@@ -2007,6 +2072,7 @@ export type UserCreateWithoutEmailInboxInput = {
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
   inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
@@ -2032,6 +2098,7 @@ export type UserUncheckedCreateWithoutEmailInboxInput = {
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
   inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
@@ -2073,6 +2140,7 @@ export type UserUpdateWithoutEmailInboxInput = {
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
   inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
@@ -2098,6 +2166,127 @@ export type UserUncheckedUpdateWithoutEmailInboxInput = {
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutGmailConnectionInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutGmailConnectionInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutGmailConnectionInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutGmailConnectionInput, Prisma.UserUncheckedCreateWithoutGmailConnectionInput>
+}
+
+export type UserUpsertWithoutGmailConnectionInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutGmailConnectionInput, Prisma.UserUncheckedUpdateWithoutGmailConnectionInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutGmailConnectionInput, Prisma.UserUncheckedCreateWithoutGmailConnectionInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutGmailConnectionInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutGmailConnectionInput, Prisma.UserUncheckedUpdateWithoutGmailConnectionInput>
+}
+
+export type UserUpdateWithoutGmailConnectionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutGmailConnectionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
   inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
@@ -2124,6 +2313,7 @@ export type UserCreateWithoutInboxSendersInput = {
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
 }
@@ -2149,6 +2339,7 @@ export type UserUncheckedCreateWithoutInboxSendersInput = {
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
 }
@@ -2190,6 +2381,7 @@ export type UserUpdateWithoutInboxSendersInput = {
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
 }
@@ -2215,6 +2407,7 @@ export type UserUncheckedUpdateWithoutInboxSendersInput = {
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -2240,6 +2433,7 @@ export type UserCreateWithoutInboxTransactionsInput = {
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
   inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
 }
@@ -2265,6 +2459,7 @@ export type UserUncheckedCreateWithoutInboxTransactionsInput = {
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
   inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
 }
@@ -2306,6 +2501,7 @@ export type UserUpdateWithoutInboxTransactionsInput = {
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
   inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
 }
@@ -2331,6 +2527,7 @@ export type UserUncheckedUpdateWithoutInboxTransactionsInput = {
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
   inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -2356,6 +2553,7 @@ export type UserCreateWithoutMerchantRulesInput = {
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
   inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
 }
@@ -2381,6 +2579,7 @@ export type UserUncheckedCreateWithoutMerchantRulesInput = {
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
   inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
 }
@@ -2422,6 +2621,7 @@ export type UserUpdateWithoutMerchantRulesInput = {
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
   inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
 }
@@ -2447,6 +2647,7 @@ export type UserUncheckedUpdateWithoutMerchantRulesInput = {
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
   inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -2611,6 +2812,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   features?: boolean | Prisma.User$featuresArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   emailInbox?: boolean | Prisma.User$emailInboxArgs<ExtArgs>
+  gmailConnection?: boolean | Prisma.User$gmailConnectionArgs<ExtArgs>
   inboxSenders?: boolean | Prisma.User$inboxSendersArgs<ExtArgs>
   inboxTransactions?: boolean | Prisma.User$inboxTransactionsArgs<ExtArgs>
   merchantRules?: boolean | Prisma.User$merchantRulesArgs<ExtArgs>
@@ -2664,6 +2866,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   features?: boolean | Prisma.User$featuresArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   emailInbox?: boolean | Prisma.User$emailInboxArgs<ExtArgs>
+  gmailConnection?: boolean | Prisma.User$gmailConnectionArgs<ExtArgs>
   inboxSenders?: boolean | Prisma.User$inboxSendersArgs<ExtArgs>
   inboxTransactions?: boolean | Prisma.User$inboxTransactionsArgs<ExtArgs>
   merchantRules?: boolean | Prisma.User$merchantRulesArgs<ExtArgs>
@@ -2687,6 +2890,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     features: Prisma.$UserFeaturePayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
     emailInbox: Prisma.$EmailInboxPayload<ExtArgs> | null
+    gmailConnection: Prisma.$GmailConnectionPayload<ExtArgs> | null
     inboxSenders: Prisma.$InboxSenderPayload<ExtArgs>[]
     inboxTransactions: Prisma.$InboxTransactionPayload<ExtArgs>[]
     merchantRules: Prisma.$MerchantRulePayload<ExtArgs>[]
@@ -3106,6 +3310,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   features<T extends Prisma.User$featuresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$featuresArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserFeaturePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   emailInbox<T extends Prisma.User$emailInboxArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$emailInboxArgs<ExtArgs>>): Prisma.Prisma__EmailInboxClient<runtime.Types.Result.GetResult<Prisma.$EmailInboxPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  gmailConnection<T extends Prisma.User$gmailConnectionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$gmailConnectionArgs<ExtArgs>>): Prisma.Prisma__GmailConnectionClient<runtime.Types.Result.GetResult<Prisma.$GmailConnectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   inboxSenders<T extends Prisma.User$inboxSendersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$inboxSendersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InboxSenderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   inboxTransactions<T extends Prisma.User$inboxTransactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$inboxTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InboxTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   merchantRules<T extends Prisma.User$merchantRulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$merchantRulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MerchantRulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3814,6 +4019,25 @@ export type User$emailInboxArgs<ExtArgs extends runtime.Types.Extensions.Interna
    */
   include?: Prisma.EmailInboxInclude<ExtArgs> | null
   where?: Prisma.EmailInboxWhereInput
+}
+
+/**
+ * User.gmailConnection
+ */
+export type User$gmailConnectionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GmailConnection
+   */
+  select?: Prisma.GmailConnectionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the GmailConnection
+   */
+  omit?: Prisma.GmailConnectionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GmailConnectionInclude<ExtArgs> | null
+  where?: Prisma.GmailConnectionWhereInput
 }
 
 /**

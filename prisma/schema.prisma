@@ -29,6 +29,7 @@ model User {
   features              UserFeature[]
   notifications         Notification[]
   emailInbox            EmailInbox?
+  gmailConnection       GmailConnection?
   inboxSenders          InboxSender[]
   inboxTransactions     InboxTransaction[]
   merchantRules         MerchantRule[]
@@ -404,6 +405,25 @@ model EmailInbox {
   updatedAt DateTime @updatedAt
 
   @@map("email_inbox")
+}
+
+model GmailConnection {
+  id    String @id @default(uuid())
+  email String @unique
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  refreshToken   String
+  status         String    @default("active")
+  historyId      BigInt?
+  watchExpiresAt DateTime?
+  lastSyncedAt   DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("gmail_connection")
 }
 
 model InboxSender {

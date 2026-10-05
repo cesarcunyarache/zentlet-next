@@ -73,8 +73,9 @@ export function useInboxConnectionActions() {
   const refresh = () => queryClient.invalidateQueries({ queryKey: inboxKeys.connection });
 
   const connect = useMutation({ mutationFn: () => inboxService.connect(), onSuccess: setConnection });
+  const disconnectGmail = useMutation({ mutationFn: () => inboxService.disconnectGmail(), onSuccess: setConnection });
   const addSender = useMutation({ mutationFn: (address: string) => inboxService.addSender(address), onSuccess: refresh });
   const removeSender = useMutation({ mutationFn: (id: string) => inboxService.removeSender(id), onSuccess: refresh });
 
-  return { connect, addSender, removeSender };
+  return { connect, disconnectGmail, addSender, removeSender };
 }

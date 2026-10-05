@@ -69,6 +69,18 @@ export interface TInboxSender {
   acceptedCount: number;
 }
 
+export type GmailConnectionStatus = "active" | "revoked";
+
+export const GMAIL_CONNECT_RESULTS = ["connected", "cancelled", "scope_denied", "taken", "unavailable", "error"] as const;
+export type GmailConnectResult = (typeof GMAIL_CONNECT_RESULTS)[number];
+
+export interface TGmailConnection {
+  isAvailable: boolean;
+  email: string | null;
+  status: GmailConnectionStatus | null;
+  lastSyncedAt: string | null;
+}
+
 export interface TInboxConnection {
   isAvailable: boolean;
   address: string | null;
@@ -76,4 +88,5 @@ export interface TInboxConnection {
   verificationUrl: string | null;
   lastReceivedAt: string | null;
   senders: TInboxSender[];
+  gmail: TGmailConnection;
 }

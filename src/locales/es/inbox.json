@@ -42,6 +42,28 @@
     "addSender": "Agregar remitente",
     "senderFailed": "Ese correo o dominio no es válido.",
     "remove": "Quitar {sender}",
-    "unblock": "Desbloquear {sender}"
+    "unblock": "Desbloquear {sender}",
+    "forwardingTitle": "Otra opción: reenviar tus correos",
+    "gmail": {
+      "pitch": "Vincula tu Gmail y, apenas llegue un aviso de tu banco, lo verás aquí listo para confirmar. Sin reenvíos ni filtros.",
+      "connect": "Conectar con Gmail",
+      "privacy": "Solo leemos los correos de {banks} y de los remitentes que agregues. Nunca enviamos ni borramos nada, y puedes desconectarlo cuando quieras.",
+      "connectedAs": "Conectado: {email}",
+      "revokedAs": "Sin acceso: {email}",
+      "listening": "Escuchando tu bandeja. Los avisos de {banks} y de tus remitentes aparecerán en «Por confirmar».",
+      "revoked": "Google ya no nos da acceso a este correo (quitaste el permiso o cambiaste la contraseña). Vuelve a conectarlo para seguir recibiendo tus movimientos.",
+      "reconnect": "Volver a conectar",
+      "disconnect": "Desconectar",
+      "disconnecting": "Desconectando…",
+      "disconnectFailed": "No pudimos desconectarlo. Inténtalo de nuevo.",
+      "result": {
+        "connected": "Gmail conectado. Tus próximos avisos aparecerán en «Por confirmar».",
+        "cancelled": "Cancelaste la conexión con Gmail.",
+        "scope_denied": "Necesitamos permiso para leer tus correos. Vuelve a intentarlo y marca la casilla de Gmail.",
+        "taken": "Ese Gmail ya está conectado a otra cuenta de Zentlet.",
+        "unavailable": "La conexión con Gmail aún no está disponible.",
+        "error": "No pudimos conectar tu Gmail. Inténtalo de nuevo."
+      }
+    }
   }
 }

@@ -406,6 +406,7 @@ export const ModelName = {
   Feature: 'Feature',
   UserFeature: 'UserFeature',
   EmailInbox: 'EmailInbox',
+  GmailConnection: 'GmailConnection',
   InboxSender: 'InboxSender',
   InboxTransaction: 'InboxTransaction',
   MerchantRule: 'MerchantRule'
@@ -424,7 +425,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "userConsent" | "userPreference" | "session" | "account" | "verification" | "category" | "transaction" | "feedback" | "budget" | "budgetAlert" | "notification" | "notificationDelivery" | "budgetLimit" | "rateLimit" | "usageLimit" | "subscription" | "billingPayment" | "billingEvent" | "feature" | "userFeature" | "emailInbox" | "inboxSender" | "inboxTransaction" | "merchantRule"
+    modelProps: "user" | "userConsent" | "userPreference" | "session" | "account" | "verification" | "category" | "transaction" | "feedback" | "budget" | "budgetAlert" | "notification" | "notificationDelivery" | "budgetLimit" | "rateLimit" | "usageLimit" | "subscription" | "billingPayment" | "billingEvent" | "feature" | "userFeature" | "emailInbox" | "gmailConnection" | "inboxSender" | "inboxTransaction" | "merchantRule"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2056,6 +2057,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    GmailConnection: {
+      payload: Prisma.$GmailConnectionPayload<ExtArgs>
+      fields: Prisma.GmailConnectionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GmailConnectionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GmailConnectionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GmailConnectionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GmailConnectionPayload>
+        }
+        findFirst: {
+          args: Prisma.GmailConnectionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GmailConnectionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GmailConnectionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GmailConnectionPayload>
+        }
+        findMany: {
+          args: Prisma.GmailConnectionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GmailConnectionPayload>[]
+        }
+        create: {
+          args: Prisma.GmailConnectionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GmailConnectionPayload>
+        }
+        createMany: {
+          args: Prisma.GmailConnectionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.GmailConnectionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GmailConnectionPayload>[]
+        }
+        delete: {
+          args: Prisma.GmailConnectionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GmailConnectionPayload>
+        }
+        update: {
+          args: Prisma.GmailConnectionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GmailConnectionPayload>
+        }
+        deleteMany: {
+          args: Prisma.GmailConnectionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GmailConnectionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.GmailConnectionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GmailConnectionPayload>[]
+        }
+        upsert: {
+          args: Prisma.GmailConnectionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GmailConnectionPayload>
+        }
+        aggregate: {
+          args: Prisma.GmailConnectionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGmailConnection>
+        }
+        groupBy: {
+          args: Prisma.GmailConnectionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GmailConnectionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GmailConnectionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GmailConnectionCountAggregateOutputType> | number
+        }
+      }
+    }
     InboxSender: {
       payload: Prisma.$InboxSenderPayload<ExtArgs>
       fields: Prisma.InboxSenderFieldRefs
@@ -2627,6 +2702,22 @@ export const EmailInboxScalarFieldEnum = {
 export type EmailInboxScalarFieldEnum = (typeof EmailInboxScalarFieldEnum)[keyof typeof EmailInboxScalarFieldEnum]
 
 
+export const GmailConnectionScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  userId: 'userId',
+  refreshToken: 'refreshToken',
+  status: 'status',
+  historyId: 'historyId',
+  watchExpiresAt: 'watchExpiresAt',
+  lastSyncedAt: 'lastSyncedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GmailConnectionScalarFieldEnum = (typeof GmailConnectionScalarFieldEnum)[keyof typeof GmailConnectionScalarFieldEnum]
+
+
 export const InboxSenderScalarFieldEnum = {
   id: 'id',
   address: 'address',
@@ -2991,6 +3082,7 @@ export type GlobalOmitConfig = {
   feature?: Prisma.FeatureOmit
   userFeature?: Prisma.UserFeatureOmit
   emailInbox?: Prisma.EmailInboxOmit
+  gmailConnection?: Prisma.GmailConnectionOmit
   inboxSender?: Prisma.InboxSenderOmit
   inboxTransaction?: Prisma.InboxTransactionOmit
   merchantRule?: Prisma.MerchantRuleOmit

@@ -152,6 +152,11 @@ export type UserFeature = Prisma.UserFeatureModel
  */
 export type EmailInbox = Prisma.EmailInboxModel
 /**
+ * Model GmailConnection
+ * 
+ */
+export type GmailConnection = Prisma.GmailConnectionModel
+/**
  * Model InboxSender
  * 
  */

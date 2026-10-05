@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { track } from "@/lib/observability/client";
+import { inboxService } from "../services/inbox.service";
 import { useInboxConnection, useInboxConnectionActions } from "../stores/inbox.store";
 
 const COPIED_MS = 2000;
 
 export function useEmailConnection(isOpen: boolean) {
   const connection = useInboxConnection(isOpen);
-  const { connect, addSender, removeSender } = useInboxConnectionActions();
+  const { connect, disconnectGmail, addSender, removeSender } = useInboxConnectionActions();
   const [senderInput, setSenderInput] = useState("");
   const [isCopied, setIsCopied] = useState(false);
 
@@ -24,6 +25,10 @@ export function useEmailConnection(isOpen: boolean) {
 
   function create() {
     connect.mutate(undefined, { onSuccess: () => track("inbox_connected", {}) });
+  }
+
+  function connectGmail() {
+    window.location.assign(inboxService.gmailConnectUrl());
   }
 
   function submitSender() {
@@ -44,6 +49,10 @@ export function useEmailConnection(isOpen: boolean) {
     isCopied,
     copyAddress,
     create,
+    connectGmail,
+    disconnectGmail: () => disconnectGmail.mutate(),
+    isDisconnectingGmail: disconnectGmail.isPending,
+    hasDisconnectGmailFailed: disconnectGmail.isError,
     submitSender,
     removeSender: (id: string) => removeSender.mutate(id),
   };

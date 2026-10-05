@@ -42,6 +42,28 @@
     "addSender": "Add sender",
     "senderFailed": "That address or domain isn't valid.",
     "remove": "Remove {sender}",
-    "unblock": "Unblock {sender}"
+    "unblock": "Unblock {sender}",
+    "forwardingTitle": "Another option: forward your emails",
+    "gmail": {
+      "pitch": "Link your Gmail and as soon as a bank alert arrives you'll see it here, ready to confirm. No forwarding or filters.",
+      "connect": "Connect with Gmail",
+      "privacy": "We only read emails from {banks} and the senders you add. We never send or delete anything, and you can disconnect anytime.",
+      "connectedAs": "Connected: {email}",
+      "revokedAs": "No access: {email}",
+      "listening": "Listening to your inbox. Alerts from {banks} and your senders will show up in “To review”.",
+      "revoked": "Google no longer gives us access to this email (you removed the permission or changed your password). Reconnect it to keep receiving your transactions.",
+      "reconnect": "Reconnect",
+      "disconnect": "Disconnect",
+      "disconnecting": "Disconnecting…",
+      "disconnectFailed": "We couldn't disconnect it. Try again.",
+      "result": {
+        "connected": "Gmail connected. Your next alerts will show up in “To review”.",
+        "cancelled": "You cancelled the Gmail connection.",
+        "scope_denied": "We need permission to read your emails. Try again and check the Gmail box.",
+        "taken": "That Gmail is already connected to another Zentlet account.",
+        "unavailable": "The Gmail connection isn't available yet.",
+        "error": "We couldn't connect your Gmail. Try again."
+      }
+    }
   }
 }

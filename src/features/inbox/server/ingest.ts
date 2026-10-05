@@ -85,7 +85,14 @@ export async function ingestEmail(email: InboundEmail): Promise<IngestOutcome> {
   });
   if (verification) return "verification";
 
-  const { userId } = inbox;
+  return ingestUserEmail(inbox.userId, email, body);
+}
+
+export async function ingestUserEmail(
+  userId: string,
+  email: InboundEmail,
+  body = emailBody(email.text, email.html),
+): Promise<IngestOutcome> {
   if (!(await hasFeature(userId, "email_import"))) return "not_allowed";
 
   const from = normalizeAddress(email.from);

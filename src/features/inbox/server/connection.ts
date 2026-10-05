@@ -5,6 +5,7 @@ import type { TInboxConnection } from "../types";
 import { generateLocalPart, inboxAddress } from "../lib/address";
 import { isTrustedRule } from "../lib/sender";
 import { serializeInboxSender } from "../lib/serialize";
+import { getGmailConnection } from "./gmail";
 
 const MAX_ADDRESS_ATTEMPTS = 3;
 
@@ -13,9 +14,10 @@ export function inboundDomain() {
 }
 
 export async function getConnection(userId: string): Promise<TInboxConnection> {
-  const [inbox, senders] = await Promise.all([
+  const [inbox, senders, gmail] = await Promise.all([
     prisma.emailInbox.findUnique({ where: { userId } }),
     prisma.inboxSender.findMany({ where: { userId }, orderBy: { createdAt: "asc" } }),
+    getGmailConnection(userId),
   ]);
   return {
     isAvailable: inboundDomain() !== null,
@@ -24,6 +26,7 @@ export async function getConnection(userId: string): Promise<TInboxConnection> {
     verificationUrl: inbox?.verificationUrl ?? null,
     lastReceivedAt: inbox?.lastReceivedAt?.toISOString() ?? null,
     senders: senders.filter((sender) => sender.status === "blocked" || isTrustedRule(sender)).map(serializeInboxSender),
+    gmail,
   };
 }
 

@@ -38,6 +38,7 @@ import { useNotifications } from "@/features/notification/stores/notification.st
 import { InboxIcon } from "@/features/inbox/ui/inbox-icon";
 import { InboxSheet } from "@/features/inbox/ui/inbox-sheet";
 import { useInboxItems } from "@/features/inbox/stores/inbox.store";
+import { useGmailConnectResult } from "@/features/inbox/hooks/useGmailConnectResult";
 import { ToastBubble } from "@/core/components/ui/toast-bubble";
 import { Onboarding } from "@/features/onboarding/ui/onboarding";
 import { periodRange } from "@/features/transaction/lib/format";
@@ -102,6 +103,11 @@ export default function HomePage() {
   const [searching, setSearching] = useState(false);
 
   const [sheet, setSheet] = useState<Sheet>(null);
+
+  useGmailConnectResult((result) => {
+    toast(tInbox(`connection.gmail.result.${result}`));
+    setSheet("settings");
+  });
   const [detail, setDetail] = useState<TTransaction | null>(null);
   const [pendingDelete, setPendingDelete] = useState<TTransaction | null>(null);
   const [formDraft, setFormDraft] = useState<Partial<TransactionFormValues>>();

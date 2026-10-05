@@ -4,6 +4,7 @@ import type { ReceiptMethod } from "@/features/transaction/lib/receipt/read-rece
 import type { TransactionType } from "@/features/transaction/types";
 import type { FeedbackType } from "@/features/feedback/constants";
 import type { BudgetKind, BudgetPeriod } from "@/features/budget/types";
+import type { GmailConnectResult } from "@/features/inbox/types";
 
 /*
  * Taxonomía de product analytics: `objeto_acción` en pasado.
@@ -34,6 +35,7 @@ export interface AnalyticsEvents {
   receipt_scan_completed: { outcome: "saved" | "edited"; method: ReceiptMethod };
   receipt_scan_failed: { reason: ReceiptError };
   inbox_connected: Record<string, never>;
+  inbox_gmail_result: { outcome: GmailConnectResult };
   inbox_item_accepted: { edited: boolean; learned: boolean };
   inbox_item_dismissed: { duplicate: boolean };
   data_exported: Record<string, never>;

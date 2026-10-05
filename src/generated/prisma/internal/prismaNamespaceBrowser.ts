@@ -73,6 +73,7 @@ export const ModelName = {
   Feature: 'Feature',
   UserFeature: 'UserFeature',
   EmailInbox: 'EmailInbox',
+  GmailConnection: 'GmailConnection',
   InboxSender: 'InboxSender',
   InboxTransaction: 'InboxTransaction',
   MerchantRule: 'MerchantRule'
@@ -402,6 +403,22 @@ export const EmailInboxScalarFieldEnum = {
 } as const
 
 export type EmailInboxScalarFieldEnum = (typeof EmailInboxScalarFieldEnum)[keyof typeof EmailInboxScalarFieldEnum]
+
+
+export const GmailConnectionScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  userId: 'userId',
+  refreshToken: 'refreshToken',
+  status: 'status',
+  historyId: 'historyId',
+  watchExpiresAt: 'watchExpiresAt',
+  lastSyncedAt: 'lastSyncedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GmailConnectionScalarFieldEnum = (typeof GmailConnectionScalarFieldEnum)[keyof typeof GmailConnectionScalarFieldEnum]
 
 
 export const InboxSenderScalarFieldEnum = {
