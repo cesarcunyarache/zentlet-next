@@ -50,9 +50,10 @@ export async function newPage(browser: Browser) {
   return context.newPage();
 }
 
-export async function freshAccount(browser: Browser) {
+export async function freshAccount(browser: Browser, options: { now?: Date } = {}) {
   const user = newUser();
   const page = await newPage(browser);
+  if (options.now) await page.clock.setFixedTime(options.now);
   await createAccount(page, user);
   expect(
     await apiStatus(page, "/api/category", { method: "POST", body: { ...SHARED_CATEGORY, id: crypto.randomUUID() } }),

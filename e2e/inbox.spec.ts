@@ -3,6 +3,7 @@ import { INBOUND_EMAIL_SECRET } from "./env";
 import { expect, freshAccount, SHARED_CATEGORY, test } from "./fixtures";
 
 const SCREENSHOTS = process.env.E2E_SCREENSHOTS_DIR;
+const EMAIL_MONTH = new Date("2026-09-30T12:00:00-05:00");
 
 const bcpEmail = (address: string) => ({
   MessageID: `bcp-${Date.now()}`,
@@ -23,7 +24,7 @@ const bcpEmail = (address: string) => ({
 
 test.describe("movimientos por correo", () => {
   test("un aviso del BCP llega por confirmar y al aceptarlo se registra", async ({ browser }) => {
-    const { page, user } = await freshAccount(browser);
+    const { page, user } = await freshAccount(browser, { now: EMAIL_MONTH });
     await makePro(user.email);
     await page.reload();
 

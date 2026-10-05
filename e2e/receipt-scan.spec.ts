@@ -2,10 +2,11 @@ import path from "node:path";
 import { expect, freshAccount, SHARED_CATEGORY, test } from "./fixtures";
 
 const YAPE_SCREENSHOT = path.join(__dirname, "assets/yape-sent.png");
+const SCREENSHOT_MONTH = new Date("2026-09-30T12:00:00-05:00");
 
 test.describe("escanear comprobante", () => {
   test("una captura de Yape se lee en el dispositivo y se guarda como gasto", async ({ browser }) => {
-    const { page } = await freshAccount(browser);
+    const { page } = await freshAccount(browser, { now: SCREENSHOT_MONTH });
 
     await page.locator('input[type="file"][accept="image/*"]').setInputFiles(YAPE_SCREENSHOT);
 
