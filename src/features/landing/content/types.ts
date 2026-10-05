@@ -1,4 +1,4 @@
-export type SectionId = "producto" | "funciones" | "como-funciona" | "testimonios" | "preguntas";
+export type SectionId = "producto" | "funciones" | "como-funciona" | "precios" | "testimonios" | "preguntas";
 
 export type FeatureId =
   | "natural-input"
@@ -38,6 +38,18 @@ export interface Testimonial {
   role: string;
   quote: string;
   avatar?: string;
+}
+
+export interface PricingPlan {
+  id: "free" | "pro";
+  name: string;
+  price: string;
+  period?: string;
+  badge?: string;
+  description: string;
+  cta: string;
+  note?: string;
+  features: string[];
 }
 
 export interface LandingContent {
@@ -138,6 +150,12 @@ export interface LandingContent {
     subtitle: string;
     items: Testimonial[];
     empty: { title: string; body: string; cta: string };
+  };
+  pricing: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    plans: PricingPlan[];
   };
   faq: {
     eyebrow: string;

@@ -1,18 +1,20 @@
+import { checkAi } from "@/lib/ai/client";
+import { checkEmail } from "@/lib/email";
+import { pingKeyValueStore } from "@/lib/kv";
 import prisma from "@/lib/prisma";
 import { logger } from "@/lib/observability/logger";
+import type { CheckOutcome, CheckStatus } from "./types";
 
 /*
  * Estado de cada servicio del que depende la app. Cada comprobación es
  * barata y sin efectos: un `SELECT 1`, o una llamada autenticada que no
  * envía nada (listar modelos, dominios…) para confirmar que la clave vale.
- * Ningún secreto ni mensaje de error crudo sale en la respuesta.
- *
- * - ok: configurado y respondiendo
- * - error: configurado pero falla (clave inválida, sin red, caído)
- * - off: sin configurar (opcional, la app funciona sin él)
+ * Ningún secreto ni mensaje de error crudo sale en la respuesta. Los
+ * servicios con proveedor intercambiable (correo) comprueban sus propias
+ * credenciales a través de su adaptador.
  */
 
-export type CheckStatus = "ok" | "error" | "off";
+export type { CheckStatus } from "./types";
 
 export interface CheckResult {
   id: string;
@@ -23,13 +25,12 @@ export interface CheckResult {
 }
 
 const TIMEOUT_MS = 5_000;
-const isProduction = process.env.NODE_ENV === "production";
 
 const ok = (detail: string) => ({ status: "ok" as const, detail });
 const fail = (detail: string) => ({ status: "error" as const, detail });
 const off = (detail = "Sin configurar") => ({ status: "off" as const, detail });
 
-type Outcome = Pick<CheckResult, "status" | "detail">;
+type Outcome = CheckOutcome;
 
 async function timed(id: string, name: string, run: () => Promise<Outcome>): Promise<CheckResult> {
   const startedAt = performance.now();
@@ -53,6 +54,11 @@ async function database(): Promise<Outcome> {
   if (!process.env.DATABASE_URL) return fail("Falta DATABASE_URL");
   await prisma.$queryRaw`SELECT 1`;
   return ok("Conectada");
+}
+
+async function redis(): Promise<Outcome> {
+  if (!(await pingKeyValueStore())) return off("Sin configurar · caché y límites en la base de datos");
+  return ok("Conectado");
 }
 
 async function sentry(): Promise<Outcome> {
@@ -100,32 +106,6 @@ async function turnstile(): Promise<Outcome> {
   return ok("Clave secreta válida");
 }
 
-async function resend(): Promise<Outcome> {
-  const key = process.env.RESEND_API_KEY;
-  if (!key) return isProduction ? fail("Falta RESEND_API_KEY") : off("Sin configurar · correos en la terminal");
-  if (!process.env.EMAIL_FROM) return fail("Falta EMAIL_FROM");
-
-  const response = await request("https://api.resend.com/domains", {
-    headers: { Authorization: `Bearer ${key}` },
-  });
-  if (response.ok) return ok("Clave válida");
-  // una clave sólo de envío no puede listar dominios, pero es válida
-  const { name } = (await response.json().catch(() => ({}))) as { name?: string };
-  if (name === "restricted_api_key") return ok("Clave válida (sólo envío)");
-  return fail(response.status < 500 ? "Clave inválida" : `Resend respondió ${response.status}`);
-}
-
-async function gemini(): Promise<Outcome> {
-  const key = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
-  if (!key) return off("Sin configurar · IA desactivada");
-
-  const response = await request("https://generativelanguage.googleapis.com/v1beta/models?pageSize=1", {
-    headers: { "x-goog-api-key": key },
-  });
-  if (response.ok) return ok("Clave válida");
-  return fail(response.status < 500 ? "Clave inválida" : `Google respondió ${response.status}`);
-}
-
 async function authSecret(): Promise<Outcome> {
   const secret = process.env.BETTER_AUTH_SECRET;
   if (!secret) return fail("Falta BETTER_AUTH_SECRET");
@@ -146,15 +126,21 @@ function oauth(idVar: string, secretVar: string) {
   };
 }
 
+/** Sólo la base de datos: barata y sin llamadas a terceros (monitores de uptime). */
+export function runDatabaseCheck(): Promise<CheckResult> {
+  return timed("database", "Base de datos", database);
+}
+
 export function runHealthChecks(): Promise<CheckResult[]> {
   return Promise.all([
     timed("database", "Base de datos", database),
     timed("auth", "Autenticación", authSecret),
+    timed("redis", "Redis", redis),
     timed("sentry", "Sentry", sentry),
     timed("posthog", "PostHog", posthog),
     timed("turnstile", "Cloudflare Turnstile", turnstile),
-    timed("resend", "Resend (correo)", resend),
-    timed("gemini", "Gemini (IA)", gemini),
+    timed("email", "Correo", checkEmail),
+    timed("ai", "IA", checkAi),
     timed("google", "Google OAuth", oauth("GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET")),
     timed("github", "GitHub OAuth", oauth("GITHUB_CLIENT_ID", "GITHUB_CLIENT_SECRET")),
   ]);

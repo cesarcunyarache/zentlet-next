@@ -1,4 +1,4 @@
-import { signedAmount } from "./format";
+import { describeOrFallback, signedAmount } from "./format";
 import type { CategoryLike, TTransaction } from "../types";
 
 const STAGGERED_ROWS = 8;
@@ -14,20 +14,13 @@ export function dayTotal(items: TTransaction[]) {
 }
 
 export function groupByDay(transactions: TTransaction[]): DayGroup[] {
-  const groups: DayGroup[] = [];
-  const indexByDate = new Map<string, number>();
-
+  const groupsByDate = new Map<string, DayGroup>();
   for (const tx of transactions) {
-    const groupIndex = indexByDate.get(tx.transactionDate);
-    if (groupIndex === undefined) {
-      indexByDate.set(tx.transactionDate, groups.length);
-      groups.push({ date: tx.transactionDate, items: [tx] });
-    } else {
-      groups[groupIndex].items.push(tx);
-    }
+    const group = groupsByDate.get(tx.transactionDate);
+    if (group) group.items.push(tx);
+    else groupsByDate.set(tx.transactionDate, { date: tx.transactionDate, items: [tx] });
   }
-
-  return groups;
+  return [...groupsByDate.values()];
 }
 
 export function groupStartIndexes(groups: DayGroup[]) {
@@ -44,5 +37,5 @@ export function rowEnterDelay(rowIndex: number) {
 }
 
 export function transactionName(tx: TTransaction, category: CategoryLike | undefined, fallbackName: string) {
-  return tx.description || category?.name || fallbackName;
+  return describeOrFallback(tx.description, category?.name, fallbackName);
 }

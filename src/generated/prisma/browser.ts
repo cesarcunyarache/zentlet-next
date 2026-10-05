@@ -68,6 +68,21 @@ export type Feedback = Prisma.FeedbackModel
  */
 export type Budget = Prisma.BudgetModel
 /**
+ * Model BudgetAlert
+ * 
+ */
+export type BudgetAlert = Prisma.BudgetAlertModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel
+/**
+ * Model NotificationDelivery
+ * 
+ */
+export type NotificationDelivery = Prisma.NotificationDeliveryModel
+/**
  * Model BudgetLimit
  * 
  */
@@ -82,3 +97,53 @@ export type RateLimit = Prisma.RateLimitModel
  * 
  */
 export type UsageLimit = Prisma.UsageLimitModel
+/**
+ * Model Subscription
+ * 
+ */
+export type Subscription = Prisma.SubscriptionModel
+/**
+ * Model BillingPayment
+ * 
+ */
+export type BillingPayment = Prisma.BillingPaymentModel
+/**
+ * Model BillingEvent
+ * 
+ */
+export type BillingEvent = Prisma.BillingEventModel
+/**
+ * Model Feature
+ * 
+ */
+export type Feature = Prisma.FeatureModel
+/**
+ * Model UserFeature
+ * 
+ */
+export type UserFeature = Prisma.UserFeatureModel
+/**
+ * Model EmailInbox
+ * 
+ */
+export type EmailInbox = Prisma.EmailInboxModel
+/**
+ * Model GmailConnection
+ * 
+ */
+export type GmailConnection = Prisma.GmailConnectionModel
+/**
+ * Model InboxSender
+ * 
+ */
+export type InboxSender = Prisma.InboxSenderModel
+/**
+ * Model InboxTransaction
+ * 
+ */
+export type InboxTransaction = Prisma.InboxTransactionModel
+/**
+ * Model MerchantRule
+ * 
+ */
+export type MerchantRule = Prisma.MerchantRuleModel

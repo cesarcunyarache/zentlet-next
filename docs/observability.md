@@ -25,9 +25,13 @@ src/instrumentation-client.ts   carga diferida de Sentry/PostHog en el navegador
 src/app/global-error.tsx        reporta errores de render no capturados
 src/lib/observability/
   events.ts                     taxonomía tipada de eventos
-  server.ts                     reportError · reportRequestError · trackServerEvent
+  types.ts                      puertos: ErrorReporter · AnalyticsTracker
+  server.ts                     fachada: reportError · trackServerEvent · recordFlag
+  next.ts                       pegamento con Next: reportRequestError (onRequestError)
+  adapters/sentry.ts            ErrorReporter con Sentry
+  adapters/posthog.ts           AnalyticsTracker con PostHog (HTTP)
   client.ts                     track · identifyUser · resetUser · reportClientError
-  logger.ts                     Pino con redact
+  logger/                       puerto Logger + adaptador Pino (con redact)
   sentry.ts                     opciones comunes de Sentry (qué datos NO recoge)
   scrub.ts                      saneado de `?q=` y de errores de Prisma
   analytics-identity.tsx        identifica la sesión en /admin
@@ -35,8 +39,8 @@ src/lib/observability/
 
 Reglas:
 
-- El código de negocio importa sólo `@/lib/observability/*`, nunca `@sentry/*` ni `posthog-*`. Cambiar de proveedor toca `server.ts`, `client.ts` y `sentry.ts`.
-- Ninguna función de observabilidad lanza excepciones ni se espera: el envío a PostHog desde el servidor va en `after()` con timeout de 2 s.
+- El código de negocio importa sólo `@/lib/observability/*`, nunca `@sentry/*`, `posthog-*` ni `pino`. Cambiar de proveedor es escribir otro adaptador y elegirlo en `server.ts` (o en `logger/index.ts`). Patrón general en [architecture.md](architecture.md).
+- Ninguna función de observabilidad lanza excepciones ni se espera: el envío a PostHog desde el servidor va en `runInBackground()` con timeout de 2 s.
 - `withSentryConfig` sólo envuelve `next.config.ts` cuando hay DSN en el build.
 
 ## Qué se instrumenta
@@ -52,7 +56,7 @@ Reglas:
 
 Cada usuario tiene 30 llamadas al modelo por minuto, compartidas entre las dos Server Actions de IA ([quota.ts](../src/lib/ai/quota.ts)). Al superarlo, la acción devuelve `null` sin llamar al modelo (sin sugerencia; en categorías, iconos de reserva) y se registra **un** `ai.rate_limited` por ventana.
 
-El contador vive en memoria de cada instancia ([rate-limit.ts](../src/lib/rate-limit.ts)): frena el abuso, pero con N instancias el tope real es N × 30. Si se necesita un tope global exacto, se cambia el almacenamiento a Postgres o Redis sin tocar las acciones.
+El contador es global para todas las instancias ([rate-limit.ts](../src/lib/rate-limit.ts)): en Redis si `REDIS_URL` está configurado, y si no (o si Redis no responde) en Postgres.
 
 ## Eventos de producto
 

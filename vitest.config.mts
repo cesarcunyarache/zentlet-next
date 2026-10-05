@@ -8,6 +8,8 @@ export default defineConfig({
   test: {
     environment: "node",
     include: ["src/**/*.test.ts"],
+    // los de integración necesitan Postgres: `pnpm test:integration`
+    exclude: ["src/**/*.integration.test.ts"],
     restoreMocks: true,
     // los 500 esperados de los tests no ensucian la salida
     env: { LOG_LEVEL: "silent" },

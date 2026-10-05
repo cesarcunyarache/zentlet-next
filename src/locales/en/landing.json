@@ -33,6 +33,7 @@
       "product": "Product",
       "features": "Features",
       "howItWorks": "How it works",
+      "pricing": "Pricing",
       "faq": "FAQ"
     },
     "signIn": "Sign in",
@@ -207,6 +208,36 @@
       "cta": "Get started"
     }
   },
+  "pricing": {
+    "eyebrow": "Pricing",
+    "title": "Start free. Go Pro when you need it",
+    "subtitle": "One paid plan, no fine print. Try it for {days} days and cancel anytime.",
+    "period": "a month",
+    "free": {
+      "name": "Free",
+      "price": "Free",
+      "description": "For tracking your day-to-day spending.",
+      "cta": "Create a free account",
+      "features": [
+        "Unlimited transactions",
+        "Categories with AI suggestions",
+        "Voice entry",
+        "Monthly balance and summary"
+      ]
+    },
+    "pro": {
+      "name": "Pro",
+      "badge": "{days} days free",
+      "description": "For capping each category and taking your data with you.",
+      "cta": "Try {days} days free",
+      "note": "Then {price} {period}. Cancel anytime.",
+      "features": [
+        "Everything in Free",
+        "Budgets per category",
+        "Excel export"
+      ]
+    }
+  },
   "faq": {
     "eyebrow": "Frequently asked questions",
     "title": "What people usually ask us",
@@ -214,6 +245,10 @@
       {
         "question": "What is Zentlet?",
         "answer": "A personal finance web app to record income and expenses in seconds and see your monthly balance, no spreadsheets."
+      },
+      {
+        "question": "How much does Zentlet cost?",
+        "answer": "Tracking transactions, categories and your balance is free. Pro costs {price} {period} and adds budgets and Excel export. You can try it for {days} days and cancel before you are charged."
       },
       {
         "question": "How does it know which category each expense belongs to?",
@@ -225,7 +260,7 @@
       },
       {
         "question": "Can I set a budget?",
-        "answer": "Yes. Press and hold a category and set its cap: weekly, biweekly, monthly, quarterly or yearly, renewing on its own or for a single period. The category's bar shows how much you've spent and how much is left."
+        "answer": "Yes, with the Pro plan. Press and hold a category and set its cap: weekly, biweekly, monthly, quarterly or yearly, renewing on its own or for a single period. The category's bar shows how much you've spent and how much is left."
       },
       {
         "question": "Do I need to install anything?",

@@ -28,3 +28,9 @@ export function sectionHref(section: SectionId) {
 export function sectionTitleId(section: SectionId) {
   return `${section}-title`;
 }
+
+export function fillTemplate(template: string, values: Record<string, string | number>) {
+  return template.replace(/\{(\w+)\}/g, (placeholder, key: string) =>
+    Object.hasOwn(values, key) ? String(values[key]) : placeholder,
+  );
+}

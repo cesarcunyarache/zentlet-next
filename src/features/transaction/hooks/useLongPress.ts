@@ -10,15 +10,15 @@ const PRIMARY_BUTTON = 0;
 const pointOf = (event: React.PointerEvent) => ({ x: event.clientX, y: event.clientY });
 
 export function useLongPress(onLongPress: () => void) {
-  const callback = useRef(onLongPress);
+  const onLongPressRef = useRef(onLongPress);
   const pressRef = useRef<LongPress | null>(null);
 
   useEffect(() => {
-    callback.current = onLongPress;
+    onLongPressRef.current = onLongPress;
   });
   useEffect(() => () => pressRef.current?.end(), []);
 
-  const press = () => (pressRef.current ??= createLongPress(() => callback.current()));
+  const press = () => (pressRef.current ??= createLongPress(() => onLongPressRef.current()));
   const end = () => press().end();
 
   return {

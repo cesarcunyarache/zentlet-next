@@ -1,0 +1,23 @@
+FROM node:24-bookworm-slim
+
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends openssl ca-certificates \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN npm install -g pnpm@12.6.0
+
+ENV NEXT_TELEMETRY_DISABLED=1 \
+    npm_config_store_dir=/pnpm/store
+
+WORKDIR /app
+
+# node_modules, .next y la store de pnpm son volúmenes: se crean aquí para que pertenezcan al usuario node
+RUN mkdir -p /app/node_modules /app/.next /pnpm/store && chown -R node:node /app /pnpm
+
+COPY --chmod=755 docker/dev-entrypoint.sh /usr/local/bin/dev-entrypoint
+
+USER node
+EXPOSE 3000
+
+ENTRYPOINT ["dev-entrypoint"]
+CMD ["pnpm", "dev"]

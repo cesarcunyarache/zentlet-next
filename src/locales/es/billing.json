@@ -1,0 +1,24 @@
+{
+  "plan": {
+    "label": "Plan",
+    "free": "Free · Pro desde {price} al mes",
+    "trial": "Prueba de Pro hasta el {date}. Cancela cuando quieras",
+    "active": "Pro · se renueva el {date}",
+    "pastDue": "No pudimos cobrar tu plan. Revisa tu medio de pago",
+    "canceled": "Pro hasta el {date}. No se renovará",
+    "pending": "Esperando la confirmación del pago",
+    "failed": "No se pudo completar. Inténtalo de nuevo"
+  },
+  "actions": {
+    "startTrial": "Probar {days} días",
+    "upgrade": "Mejorar a Pro",
+    "cancel": "Cancelar",
+    "confirmCancel": "Confirmar",
+    "working": "Un momento…"
+  },
+  "paywall": {
+    "budgets": "Los presupuestos son parte de Pro",
+    "export": "Exportar es parte de Pro",
+    "email_import": "Movimientos por correo es parte de Pro"
+  }
+}

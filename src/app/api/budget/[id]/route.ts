@@ -4,7 +4,6 @@ import { errorResponse, getSessionUserId, internalError, unauthorized, writeLimi
 
 type RouteContext = { params: Promise<{ id: string }> };
 
-/** 404 si no existe: el cliente lo trata como éxito. */
 export async function DELETE(req: Request, { params }: RouteContext) {
   try {
     const userId = await getSessionUserId(req);

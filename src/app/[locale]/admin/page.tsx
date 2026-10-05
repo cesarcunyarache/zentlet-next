@@ -26,11 +26,19 @@ import type { CategoryTotal } from "@/features/transaction/types";
 import { TransactionList } from "@/features/transaction/ui/list/transaction-list";
 import { TransactionFormSheet } from "@/features/transaction/ui/form/transaction-form-sheet";
 import { VoiceEntry } from "@/features/transaction/ui/voice/voice-entry";
+import { ReceiptScan } from "@/features/transaction/ui/receipt/receipt-scan";
 import type { TransactionFormValues } from "@/features/transaction/schemas/transaction.schema";
 import { TransactionDetailSheet } from "@/features/transaction/ui/detail/transaction-detail-sheet";
 import { DeleteTransactionDialog } from "@/features/transaction/ui/detail/delete-transaction-dialog";
 import { CategoriesSheet } from "@/features/category/ui/categories-sheet";
 import { SettingsSheet } from "@/features/account/ui/settings-sheet";
+import { NotificationBell } from "@/features/notification/ui/notification-bell";
+import { NotificationSheet } from "@/features/notification/ui/notification-sheet";
+import { useNotifications } from "@/features/notification/stores/notification.store";
+import { InboxIcon } from "@/features/inbox/ui/inbox-icon";
+import { InboxSheet } from "@/features/inbox/ui/inbox-sheet";
+import { useInboxItems } from "@/features/inbox/stores/inbox.store";
+import { useGmailConnectResult } from "@/features/inbox/hooks/useGmailConnectResult";
 import { ToastBubble } from "@/core/components/ui/toast-bubble";
 import { Onboarding } from "@/features/onboarding/ui/onboarding";
 import { periodRange } from "@/features/transaction/lib/format";
@@ -45,7 +53,7 @@ import type {
   TransactionType,
 } from "@/features/transaction/types";
 
-type Sheet = "new" | "categories" | "settings" | null;
+type Sheet = "new" | "categories" | "settings" | "notifications" | "inbox" | null;
 
 const ALL_TIME: DateRange = {};
 
@@ -53,6 +61,10 @@ export default function HomePage() {
   const t = useTranslations("transactions");
   const tSync = useTranslations("offline.syncErrors");
   const tBudget = useTranslations("budgets.toast");
+  const tNotifications = useTranslations("notifications");
+  const { unreadCount } = useNotifications();
+  const tInbox = useTranslations("inbox");
+  const { items: inboxItems } = useInboxItems();
   const { categories: rawCategories } = useCategoryStore();
 
   const categories = useMemo<CategoryLike[]>(
@@ -91,6 +103,11 @@ export default function HomePage() {
   const [searching, setSearching] = useState(false);
 
   const [sheet, setSheet] = useState<Sheet>(null);
+
+  useGmailConnectResult((result) => {
+    toast(tInbox(`connection.gmail.result.${result}`));
+    setSheet("settings");
+  });
   const [detail, setDetail] = useState<TTransaction | null>(null);
   const [pendingDelete, setPendingDelete] = useState<TTransaction | null>(null);
   const [formDraft, setFormDraft] = useState<Partial<TransactionFormValues>>();
@@ -208,9 +225,22 @@ export default function HomePage() {
       <main className="mx-auto flex max-w-xl flex-col px-5 pt-[calc(14px+env(safe-area-inset-top))] pb-36 sm:px-6">
         <div className="flex h-11 items-center justify-between">
           <SyncStatusPill />
-          <IconButton label={t("home.settings")} onClick={() => setSheet("settings")}>
-            <Settings className="size-5" strokeWidth={1.7} />
-          </IconButton>
+          <div className="flex items-center">
+            {inboxItems.length > 0 ? (
+              <IconButton label={tInbox("label", { count: inboxItems.length })} onClick={() => setSheet("inbox")}>
+                <InboxIcon count={inboxItems.length} />
+              </IconButton>
+            ) : null}
+            <IconButton
+              label={tNotifications("label", { count: unreadCount })}
+              onClick={() => setSheet("notifications")}
+            >
+              <NotificationBell hasUnread={unreadCount > 0} />
+            </IconButton>
+            <IconButton label={t("home.settings")} onClick={() => setSheet("settings")}>
+              <Settings className="size-5" strokeWidth={1.7} />
+            </IconButton>
+          </div>
         </div>
 
         <SummaryHeader
@@ -345,7 +375,13 @@ export default function HomePage() {
           </motion.div>
 
           <div className="relative">
-          <div className="absolute bottom-full left-1/2 mb-3 -translate-x-1/2">
+          <div className="absolute bottom-full left-1/2 mb-3 flex -translate-x-1/2 flex-col items-center gap-3">
+            <ReceiptScan
+              categories={categories}
+              currency={currency}
+              onSave={saveTransaction}
+              onEdit={(draft) => openForm(draft)}
+            />
             <VoiceEntry
               categories={categories}
               currency={currency}
@@ -441,6 +477,18 @@ export default function HomePage() {
         currency={currencyCode}
         transactionCount={lifetime?.count ?? 0}
         onCurrencyChange={setCurrency}
+      />
+
+      <NotificationSheet
+        isOpen={sheet === "notifications"}
+        onOpenChange={(open) => setSheet(open ? "notifications" : null)}
+      />
+
+      <InboxSheet
+        isOpen={sheet === "inbox"}
+        onOpenChange={(open) => setSheet(open ? "inbox" : null)}
+        currency={currency}
+        categories={categories}
       />
     </div>
   );

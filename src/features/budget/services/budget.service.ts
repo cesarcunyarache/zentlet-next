@@ -11,7 +11,7 @@ export interface CreateBudgetPayload {
   amount: number;
 }
 
-export class BudgetService extends APIService {
+class BudgetService extends APIService {
   async getBudgets(): Promise<TBudget[]> {
     const response = await this.get<TBudget[]>("/api/budget");
     return response.data;

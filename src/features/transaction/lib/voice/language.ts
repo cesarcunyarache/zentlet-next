@@ -1,16 +1,16 @@
-export const WORD_START = String.raw`(?<![\p{L}\d])`;
-export const WORD_END = String.raw`(?![\p{L}\d])`;
+const WORD_START = String.raw`(?<![\p{L}\d])`;
+const WORD_END = String.raw`(?![\p{L}\d])`;
 
 const SPOKEN_NUMBER = String.raw`\$?(\d{1,3}(?:[ .,]\d{3})+|\d+(?:[.,]\d{1,2})?)`;
 const SLANG_THOUSANDS = "lucas?";
 
-export interface RelativeDate {
+interface RelativeDate {
   pattern: RegExp;
   daysAgo: number;
   match: string;
 }
 
-export interface VoiceVocabulary {
+interface VoiceVocabulary {
   currency: string;
   multiplier: string;
   multipliers: Record<string, number>;

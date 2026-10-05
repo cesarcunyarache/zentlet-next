@@ -45,7 +45,9 @@ export function FeaturesSection({ features, movements, common, balance, locale }
   const visuals: Record<FeatureId, React.ReactNode> = {
     "natural-input": <NaturalInputVisual phrases={samples.phrases} />,
     "ai-category": <AiCategoryVisual from={samples.suggestionFrom} category={samples.suggestionCategory} />,
-    budgets: <BudgetsVisual budgets={samples.budgets} labels={samples.budgetLabels} currency={currency} locale={locale} />,
+    budgets: (
+      <BudgetsVisual budgets={samples.budgets} labels={samples.budgetLabels} currency={currency} locale={locale} />
+    ),
     "live-feed": <LiveFeedVisual movements={movements} currency={currency} locale={locale} />,
     balance: <BalanceVisual value={balance} currency={currency} locale={locale} />,
     categories: <CategoriesVisual ideas={samples.categoryIdeas} />,

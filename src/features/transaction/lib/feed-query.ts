@@ -74,6 +74,7 @@ export function afterCursor({ date, createdAt, id }: Cursor): Prisma.Transaction
   const day = new Date(date);
   const created = new Date(createdAt);
   return {
+    transactionDate: { lte: day },
     OR: [
       { transactionDate: { lt: day } },
       { transactionDate: day, createdAt: { lt: created } },

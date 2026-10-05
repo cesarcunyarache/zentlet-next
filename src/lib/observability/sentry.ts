@@ -1,4 +1,4 @@
-import type { init } from "@sentry/nextjs";
+import { featureFlagsIntegration, type init } from "@sentry/nextjs";
 import { redactSearchQuery } from "./scrub";
 
 type SentryOptions = NonNullable<Parameters<typeof init>[0]>;
@@ -26,6 +26,7 @@ export function sentryOptions(dsn: string): SentryOptions {
       databaseQueryData: false,
       stackFrameVariables: false,
     },
+    integrations: (defaults) => [...defaults, featureFlagsIntegration()],
     beforeSend: (event) => redactSearchQuery(event),
     beforeSendSpan: (span) => redactSearchQuery(span),
     beforeBreadcrumb: (breadcrumb) => redactSearchQuery(breadcrumb),

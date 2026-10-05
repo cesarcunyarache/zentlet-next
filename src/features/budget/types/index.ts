@@ -22,6 +22,14 @@ export interface TBudget extends BudgetRule {
   limits: TBudgetLimit[];
 }
 
+export type BudgetAlertKind = "percent" | "amount";
+
+export interface BudgetAlert {
+  id: string;
+  kind: BudgetAlertKind;
+  value: number;
+}
+
 export interface PeriodRange {
   from: string;
   to: string;

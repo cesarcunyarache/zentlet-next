@@ -35,12 +35,20 @@ const PASSWORD_MIN = 8;
 function createSignUpSchema(t: ReturnType<typeof useTranslations<"auth">>) {
   return z
     .object({
-      name: z.string().trim().min(NAME_MIN, t("validation.nameTooShort", { min: NAME_MIN })),
+      name: z
+        .string()
+        .trim()
+        .min(NAME_MIN, t("validation.nameTooShort", { min: NAME_MIN })),
       email: z.email(t("validation.invalidEmail")),
       password: z
         .string()
-        .min(PASSWORD_MIN, t("validation.passwordTooShort", { min: PASSWORD_MIN })),
-      confirmPassword: z.string().min(1, t("validation.confirmPasswordRequired")),
+        .min(
+          PASSWORD_MIN,
+          t("validation.passwordTooShort", { min: PASSWORD_MIN }),
+        ),
+      confirmPassword: z
+        .string()
+        .min(1, t("validation.confirmPasswordRequired")),
     })
     .refine((data) => data.password === data.confirmPassword, {
       message: t("validation.passwordsDontMatch"),
@@ -81,9 +89,15 @@ export default function SignUp() {
         password: values.password,
         name: values.name,
         callbackURL: appPath,
-        fetchOptions: { headers: { ...captcha.headers, ...legalConsentHeaders(legalAccepted) } },
+        fetchOptions: {
+          headers: {
+            ...captcha.headers,
+            ...legalConsentHeaders(legalAccepted),
+          },
+        },
       });
       if (error) {
+        console.log(error);
         captcha.reset();
         return showAuthError(t(`errors.${authErrorKey(error)}`));
       }
@@ -98,10 +112,15 @@ export default function SignUp() {
 
   if (sentTo) {
     return (
-      <AuthNotice title={t("checkEmail.title")} action={<ResendVerification email={sentTo} />}>
+      <AuthNotice
+        title={t("checkEmail.title")}
+        action={<ResendVerification email={sentTo} />}
+      >
         {t.rich("checkEmail.body", { email: sentTo, strong })}{" "}
         {t.rich("checkEmail.back", {
-          link: (chunks) => <AuthLink href={siteConfig.routes.signIn}>{chunks}</AuthLink>,
+          link: (chunks) => (
+            <AuthLink href={siteConfig.routes.signIn}>{chunks}</AuthLink>
+          ),
         })}
       </AuthNotice>
     );
@@ -110,10 +129,16 @@ export default function SignUp() {
   return (
     <div className="w-full max-w-sm">
       <div className="flex flex-col gap-6">
-        <Form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)} validationBehavior="aria">
+        <Form
+          className="flex flex-col gap-3"
+          onSubmit={handleSubmit(onSubmit)}
+          validationBehavior="aria"
+        >
           <AuthFormHeader title={t("signUp.title")}>
             {t.rich("signUp.hasAccount", {
-              link: (chunks) => <AuthLink href={siteConfig.routes.signIn}>{chunks}</AuthLink>,
+              link: (chunks) => (
+                <AuthLink href={siteConfig.routes.signIn}>{chunks}</AuthLink>
+              ),
             })}
           </AuthFormHeader>
           <TextField>
@@ -154,7 +179,9 @@ export default function SignUp() {
             <FieldMessage>{errors.password?.message}</FieldMessage>
           </TextField>
           <TextField>
-            <Label htmlFor="confirm-password">{t("fields.confirmPassword")}</Label>
+            <Label htmlFor="confirm-password">
+              {t("fields.confirmPassword")}
+            </Label>
             <PasswordInput
               id="confirm-password"
               autoComplete="new-password"

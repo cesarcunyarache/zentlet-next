@@ -8,7 +8,7 @@ export interface BudgetDraft {
   rawAmount: string;
 }
 
-export interface BudgetDraftStatus {
+interface BudgetDraftStatus {
   amount: number;
   canSave: boolean;
 }

@@ -2,15 +2,10 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { createBudgetSchema } from "@/features/budget/schemas/budget-api.schema";
 import { BUDGET_LIMITS, serializeBudget } from "@/features/budget/lib/serialize";
-import {
-  errorResponse,
-  getSessionUserId,
-  internalError,
-  isUniqueViolation,
-  parseBody,
-  unauthorized,
-  writeLimit,
-} from "@/lib/api/route-helpers";
+import { errorResponse, getSessionUserId, internalError, parseBody, unauthorized, writeLimit } from "@/lib/api/route-helpers";
+import { isUniqueViolation } from "@/lib/db-errors";
+import { requireFeature } from "@/features/billing/http/guard";
+import { DEFAULT_ALERTS } from "@/features/budget/lib/alerts";
 
 export async function GET(req: Request) {
   try {
@@ -29,7 +24,6 @@ export async function GET(req: Request) {
   }
 }
 
-/** Idempotente por `id`. Una categoría sólo admite un presupuesto: otro distinto es 409. */
 export async function POST(req: Request) {
   try {
     const userId = await getSessionUserId(req);
@@ -37,6 +31,9 @@ export async function POST(req: Request) {
 
     const limited = await writeLimit(userId);
     if (limited) return limited;
+
+    const denied = await requireFeature(userId, "budgets");
+    if (denied) return denied;
 
     const parsed = await parseBody(req, createBudgetSchema);
     if ("error" in parsed) return parsed.error;
@@ -64,6 +61,7 @@ export async function POST(req: Request) {
           startDate: start,
           userId,
           limits: { create: { effectiveFrom: start, amount } },
+          alerts: { create: DEFAULT_ALERTS },
         },
         include: BUDGET_LIMITS,
       });

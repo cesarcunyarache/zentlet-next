@@ -1,3 +1,4 @@
+import type { FeatureFlagsIntegration } from "@sentry/nextjs";
 import type { PostHog } from "posthog-js";
 import type { AnalyticsEvent, AnalyticsEvents } from "./events";
 
@@ -97,11 +98,15 @@ function loadPosthog() {
 }
 
 function withSentry(run: (sdk: Sentry) => void) {
-  loadSentry()?.then((sdk) => sdk && run(sdk)).catch(noop);
+  loadSentry()
+    ?.then((sdk) => sdk && run(sdk))
+    .catch(noop);
 }
 
 function withPosthog(run: (client: PostHog) => void) {
-  loadPosthog()?.then((client) => client && run(client)).catch(noop);
+  loadPosthog()
+    ?.then((client) => client && run(client))
+    .catch(noop);
 }
 
 /** Desde `instrumentation-client.ts`: arranca la carga lo antes posible. */
@@ -140,4 +145,11 @@ export function reportClientError(error: unknown, context: ErrorContext = {}) {
 
 export function captureNavigation(href: string, navigationType: "push" | "replace" | "traverse") {
   withSentry((sdk) => sdk.captureRouterTransitionStart(href, navigationType));
+}
+
+/** Evaluación de un feature flag: Sentry la adjunta a los errores siguientes. */
+export function recordFlag(slug: string, isOn: boolean) {
+  withSentry((sdk) =>
+    sdk.getClient()?.getIntegrationByName<FeatureFlagsIntegration>("FeatureFlags")?.addFeatureFlag(slug, isOn),
+  );
 }

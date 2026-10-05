@@ -1,11 +1,5 @@
 import type { InfiniteData } from "@tanstack/react-query";
-import type {
-  DateRange,
-  TTransaction,
-  TransactionFilters,
-  TransactionPage,
-  TransactionSummary,
-} from "../types";
+import type { DateRange, TTransaction, TransactionFilters, TransactionPage, TransactionSummary } from "../types";
 
 export type FeedData = InfiniteData<TransactionPage, string | null>;
 
@@ -36,7 +30,7 @@ export function insertIntoFeed(data: FeedData, tx: TTransaction): FeedData {
     }
   }
 
-  const last = pages[pages.length - 1];
+  const last = pages.at(-1);
   if (last && !last.nextCursor) last.items.push(tx);
   return { ...data, pages };
 }
@@ -70,15 +64,12 @@ export function findInFeed(data: FeedData | undefined, id: string) {
   return undefined;
 }
 
-export function applyToSummary(
-  summary: TransactionSummary,
-  tx: TTransaction,
-  sign: 1 | -1,
-): TransactionSummary {
+export function applyToSummary(summary: TransactionSummary, tx: TTransaction, sign: 1 | -1): TransactionSummary {
   const amount = tx.amount * sign;
+  const isExpense = tx.type === "expense";
+  const expense = isExpense ? amount : 0;
+  const income = isExpense ? 0 : amount;
   const previous = summary.byCategory[tx.categoryId] ?? { expense: 0, income: 0 };
-  const expense = tx.type === "expense" ? amount : 0;
-  const income = tx.type === "expense" ? 0 : amount;
 
   return {
     count: summary.count + sign,
@@ -86,10 +77,7 @@ export function applyToSummary(
     incomeTotal: summary.incomeTotal + income,
     byCategory: {
       ...summary.byCategory,
-      [tx.categoryId]: {
-        expense: previous.expense + expense,
-        income: previous.income + income,
-      },
+      [tx.categoryId]: { expense: previous.expense + expense, income: previous.income + income },
     },
   };
 }

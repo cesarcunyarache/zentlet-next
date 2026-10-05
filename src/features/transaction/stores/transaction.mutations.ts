@@ -12,7 +12,7 @@ import { insertIntoFeed, matchesFilters, patchInFeed, removeFromFeed } from "../
 import type { TTransaction } from "../types";
 import { findCached, updateFeeds, updateSummaries } from "./transaction.cache";
 import { transactionKeys, transactionMutationKeys } from "./transaction.keys";
-import { deletedId, type DeleteVariables, type UpdateVariables } from "./pending-transactions";
+import { deletedId, deletedRow, type DeleteVariables, type UpdateVariables } from "./pending-transactions";
 
 type TransactionErrorKey = "createTransaction" | "updateTransaction" | "deleteTransaction";
 
@@ -36,11 +36,7 @@ async function deleteIgnoringMissing(transactionId: string) {
 }
 
 export function registerTransactionMutations(queryClient: QueryClient) {
-  const shared = {
-    scope: SYNC_SCOPE,
-    retry: shouldRetryMutation,
-    retryDelay: mutationRetryDelay,
-  };
+  const shared = { scope: SYNC_SCOPE, retry: shouldRetryMutation, retryDelay: mutationRetryDelay };
   const cancelAll = () => queryClient.cancelQueries({ queryKey: transactionKeys.all });
   const refetchAll = () => void queryClient.invalidateQueries({ queryKey: transactionKeys.all });
   const refreshWhenDrained = () => refreshWhenQueueDrains(queryClient);
@@ -65,8 +61,7 @@ export function registerTransactionMutations(queryClient: QueryClient) {
 
   queryClient.setMutationDefaults(transactionMutationKeys.update, {
     ...shared,
-    mutationFn: ({ transactionId, data }: UpdateVariables) =>
-      transactionService.updateTransaction(transactionId, data),
+    mutationFn: ({ transactionId, data }: UpdateVariables) => transactionService.updateTransaction(transactionId, data),
     onMutate: async ({ transactionId, data, previous: given }: UpdateVariables) => {
       await cancelAll();
       const previous = findCached(queryClient, transactionId) ?? given;
@@ -92,7 +87,7 @@ export function registerTransactionMutations(queryClient: QueryClient) {
     onMutate: async (variables: DeleteVariables) => {
       await cancelAll();
       const id = deletedId(variables);
-      const deleted = typeof variables === "string" ? findCached(queryClient, id) : variables;
+      const deleted = deletedRow(variables) ?? findCached(queryClient, id);
       updateFeeds(queryClient, (data) => removeFromFeed(data, id));
       if (deleted) updateSummaries(queryClient, deleted, -1);
     },

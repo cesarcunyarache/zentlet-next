@@ -8,13 +8,11 @@ import { SPRING_LAYOUT, SPRING_PRESS } from "@/lib/ease";
 import { CATEGORY_FALLBACK_ICON, CATEGORY_FALLBACK_TINT } from "../constants";
 import type { CategoryBase } from "../types";
 
-export type GridCategory = CategoryBase;
-
 interface CategoryGridProps {
-  categories: GridCategory[];
-  caption?: (category: GridCategory) => string | null;
+  categories: CategoryBase[];
+  caption?: (category: CategoryBase) => string | null;
   selectedId?: string | null;
-  onSelect?: (category: GridCategory) => void;
+  onSelect?: (category: CategoryBase) => void;
   onAdd: () => void;
   className?: string;
 }
@@ -22,14 +20,7 @@ interface CategoryGridProps {
 const MAX_STAGGERED_TILES = 12;
 const STAGGER_DELAY_S = 0.035;
 
-export function CategoryGrid({
-  categories,
-  caption,
-  selectedId,
-  onSelect,
-  onAdd,
-  className,
-}: CategoryGridProps) {
+export function CategoryGrid({ categories, caption, selectedId, onSelect, onAdd, className }: CategoryGridProps) {
   const t = useTranslations("categories");
   const reduceMotion = useReducedMotion();
 
@@ -43,35 +34,24 @@ export function CategoryGrid({
         };
 
   return (
-    <div
-      className={cn("grid grid-cols-3 gap-x-4 gap-y-5 sm:gap-x-5", className)}
-    >
+    <div className={cn("grid grid-cols-3 gap-x-4 gap-y-5 sm:gap-x-5", className)}>
       {categories.map((category, index) => {
         const isSelected = selectedId === category.id;
         const detail = caption?.(category);
         const Tile = onSelect ? motion.button : motion.div;
 
         return (
-          <motion.div
-            key={category.id}
-            {...enter(index)}
-            className="flex flex-col items-center gap-2"
-          >
+          <motion.div key={category.id} {...enter(index)} className="flex flex-col items-center gap-2">
             <Tile
-              {...(onSelect
-                ? { type: "button" as const, onClick: () => onSelect(category) }
-                : {})}
+              {...(onSelect ? { type: "button" as const, onClick: () => onSelect(category) } : {})}
               aria-label={onSelect ? category.name : undefined}
               aria-pressed={onSelect ? isSelected : undefined}
               whileHover={reduceMotion || !onSelect ? undefined : { y: -3 }}
-              whileTap={
-                onSelect ? { scale: 0.93, transition: SPRING_PRESS } : undefined
-              }
+              whileTap={onSelect ? { scale: 0.93, transition: SPRING_PRESS } : undefined}
               style={{ backgroundColor: category.color || CATEGORY_FALLBACK_TINT }}
               className={cn(
                 "group grid aspect-square w-full place-items-center rounded-[26px] transition-shadow",
-                isSelected &&
-                  "ring-app-fg ring-offset-app-bg ring-2 ring-offset-2",
+                isSelected && "ring-app-fg ring-offset-app-bg ring-2 ring-offset-2",
               )}
             >
               <span
@@ -82,31 +62,21 @@ export function CategoryGrid({
               </span>
             </Tile>
             <span className="flex min-w-0 flex-col items-center">
-              <span className="text-app-fg max-w-full truncate text-sm font-semibold">
-                {category.name}
-              </span>
-              {detail && (
-                <span className="num text-app-muted text-[11px]">{detail}</span>
-              )}
+              <span className="text-app-fg max-w-full truncate text-sm font-semibold">{category.name}</span>
+              {detail && <span className="num text-app-muted text-[11px]">{detail}</span>}
             </span>
           </motion.div>
         );
       })}
 
-      <motion.div
-        {...enter(categories.length)}
-        className="flex flex-col items-center gap-2"
-      >
+      <motion.div {...enter(categories.length)} className="flex flex-col items-center gap-2">
         <motion.button
           type="button"
           onClick={onAdd}
           whileTap={{ scale: 0.93, transition: SPRING_PRESS }}
           className="group border-app-border text-app-muted hover:border-app-muted hover:text-app-fg grid aspect-square w-full place-items-center rounded-[26px] border-2 border-dashed transition-colors"
         >
-          <Plus
-            className="size-7 transition-transform duration-300 group-hover:rotate-90"
-            strokeWidth={1.6}
-          />
+          <Plus className="size-7 transition-transform duration-300 group-hover:rotate-90" strokeWidth={1.6} />
           <span className="sr-only">{t("add")}</span>
         </motion.button>
         <span aria-hidden className="text-app-muted text-sm font-semibold">

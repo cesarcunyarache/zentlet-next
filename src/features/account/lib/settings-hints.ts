@@ -1,9 +1,13 @@
 import { toISODate } from "@/lib/dates";
 
-export interface HintMessage<Key extends string> {
+interface HintMessage<Key extends string> {
   key: Key;
   values?: { count: number };
 }
+
+type ConnectionHintKey = "syncing" | "synced" | "pending" | "noPending";
+type ExportHintKey = "exportOffline" | "exportFailed" | "count";
+type SignOutHintKey = "offline" | "confirm" | "hint";
 
 interface ConnectionState {
   isOnline: boolean;
@@ -26,20 +30,24 @@ interface SignOutState {
 const EXPORT_FILE_PREFIX = "zentlet";
 const EXPORT_FILE_EXTENSION = "xlsx";
 
-export function connectionHint({ isOnline, pendingCount, syncingCount }: ConnectionState): HintMessage<"syncing" | "synced" | "pending" | "noPending"> {
+export function connectionHint({
+  isOnline,
+  pendingCount,
+  syncingCount,
+}: ConnectionState): HintMessage<ConnectionHintKey> {
   if (isOnline) {
     return syncingCount > 0 ? { key: "syncing", values: { count: syncingCount } } : { key: "synced" };
   }
   return pendingCount > 0 ? { key: "pending", values: { count: pendingCount } } : { key: "noPending" };
 }
 
-export function exportHint({ isOnline, hasFailed, transactionCount }: ExportState): HintMessage<"exportOffline" | "exportFailed" | "count"> {
+export function exportHint({ isOnline, hasFailed, transactionCount }: ExportState): HintMessage<ExportHintKey> {
   if (!isOnline) return { key: "exportOffline" };
   if (hasFailed) return { key: "exportFailed" };
   return { key: "count", values: { count: transactionCount } };
 }
 
-export function signOutHint({ isOnline, isConfirming, pendingCount }: SignOutState): HintMessage<"offline" | "confirm" | "hint"> {
+export function signOutHint({ isOnline, isConfirming, pendingCount }: SignOutState): HintMessage<SignOutHintKey> {
   if (!isOnline) return { key: "offline" };
   if (isConfirming) return { key: "confirm", values: { count: pendingCount } };
   return { key: "hint" };

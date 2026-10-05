@@ -4,7 +4,7 @@ import { AnimatePresence, motion, useReducedMotion, type PanInfo } from "motion/
 import { useTranslations } from "next-intl";
 import { track } from "@/lib/observability/client";
 import { EASE_OUT } from "@/lib/ease";
-import { useOnboarding } from "../onboarding-context";
+import { useOnboarding } from "../hooks/useOnboarding";
 import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 import { useOnboardingSteps } from "../hooks/useOnboardingSteps";
 import { completionTarget, keyboardIntent, swipeStepDelta } from "../lib/steps";

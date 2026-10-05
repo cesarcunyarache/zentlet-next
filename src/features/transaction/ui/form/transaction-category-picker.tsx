@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { cn } from "@heroui/react";
 import { Plus, Sparkles } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { SPRING_LAYOUT, SPRING_PRESS } from "@/lib/ease";
 import { CategoryEmoji } from "@/features/category/ui/category-emoji";
+import { useScrollSelectedIntoView } from "../../hooks/form/useScrollSelectedIntoView";
 import type { CategoryLike } from "../../types";
 
 interface TransactionCategoryPickerProps {
@@ -16,21 +16,6 @@ interface TransactionCategoryPickerProps {
   canCreate: boolean;
   onCreate: () => void;
   onToggle: (categoryId: string) => void;
-}
-
-function useScrollSelectedIntoView(selectedId: string) {
-  const chipRefs = useRef(new Map<string, HTMLButtonElement>());
-
-  useEffect(() => {
-    chipRefs.current.get(selectedId)?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
-  }, [selectedId]);
-
-  return function registerChip(categoryId: string) {
-    return (node: HTMLButtonElement | null) => {
-      if (node) chipRefs.current.set(categoryId, node);
-      else chipRefs.current.delete(categoryId);
-    };
-  };
 }
 
 export function TransactionCategoryPicker({

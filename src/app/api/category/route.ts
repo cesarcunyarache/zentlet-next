@@ -3,37 +3,23 @@ import prisma from "@/lib/prisma";
 import { Prisma } from "@/generated/prisma/client";
 import { sanitizeSuggestions } from "@/features/category/ai/lib/normalize-suggestions";
 import { createCategorySchema } from "@/features/category/schemas/category-api.schema";
-import {
-  errorResponse,
-  getSessionUserId,
-  internalError,
-  isUniqueViolation,
-  parseBody,
-  unauthorized,
-  writeLimit,
-} from "@/lib/api/route-helpers";
+import { errorResponse, getSessionUserId, internalError, parseBody, unauthorized, writeLimit } from "@/lib/api/route-helpers";
+import { isUniqueViolation } from "@/lib/db-errors";
 
-/** Tope por usuario: muy por encima del uso real, evita llenar la base de datos. */
 const MAX_CATEGORIES = 200;
 
-/** Sólo las categorías del usuario de la sesión. */
 export async function GET(req: Request) {
   try {
     const userId = await getSessionUserId(req);
     if (!userId) return unauthorized();
 
-    const categories = await prisma.category.findMany({
-      where: { userId },
-      orderBy: { createdAt: "desc" },
-    });
-
+    const categories = await prisma.category.findMany({ where: { userId }, orderBy: { createdAt: "desc" } });
     return NextResponse.json(categories);
   } catch (error) {
     return internalError(req, error, "Error fetching categories");
   }
 }
 
-/** Idempotente por `id` (lo genera el cliente), igual que los movimientos. */
 export async function POST(req: Request) {
   try {
     const userId = await getSessionUserId(req);
@@ -74,9 +60,7 @@ export async function POST(req: Request) {
     } catch (error) {
       if (!isUniqueViolation(error)) throw error;
       const winner = await prisma.category.findFirst({ where: { id, userId } });
-      return winner
-        ? NextResponse.json(winner, { status: 200 })
-        : errorResponse("Category id already in use", 409);
+      return winner ? NextResponse.json(winner, { status: 200 }) : errorResponse("Category id already in use", 409);
     }
   } catch (error) {
     return internalError(req, error, "Error creating category");

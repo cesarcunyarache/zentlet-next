@@ -214,6 +214,14 @@ export type UserWhereInput = {
   budgets?: Prisma.BudgetListRelationFilter
   consents?: Prisma.UserConsentListRelationFilter
   preference?: Prisma.XOR<Prisma.UserPreferenceNullableScalarRelationFilter, Prisma.UserPreferenceWhereInput> | null
+  subscriptions?: Prisma.SubscriptionListRelationFilter
+  features?: Prisma.UserFeatureListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
+  emailInbox?: Prisma.XOR<Prisma.EmailInboxNullableScalarRelationFilter, Prisma.EmailInboxWhereInput> | null
+  gmailConnection?: Prisma.XOR<Prisma.GmailConnectionNullableScalarRelationFilter, Prisma.GmailConnectionWhereInput> | null
+  inboxSenders?: Prisma.InboxSenderListRelationFilter
+  inboxTransactions?: Prisma.InboxTransactionListRelationFilter
+  merchantRules?: Prisma.MerchantRuleListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -233,6 +241,14 @@ export type UserOrderByWithRelationInput = {
   budgets?: Prisma.BudgetOrderByRelationAggregateInput
   consents?: Prisma.UserConsentOrderByRelationAggregateInput
   preference?: Prisma.UserPreferenceOrderByWithRelationInput
+  subscriptions?: Prisma.SubscriptionOrderByRelationAggregateInput
+  features?: Prisma.UserFeatureOrderByRelationAggregateInput
+  notifications?: Prisma.NotificationOrderByRelationAggregateInput
+  emailInbox?: Prisma.EmailInboxOrderByWithRelationInput
+  gmailConnection?: Prisma.GmailConnectionOrderByWithRelationInput
+  inboxSenders?: Prisma.InboxSenderOrderByRelationAggregateInput
+  inboxTransactions?: Prisma.InboxTransactionOrderByRelationAggregateInput
+  merchantRules?: Prisma.MerchantRuleOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -255,6 +271,14 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   budgets?: Prisma.BudgetListRelationFilter
   consents?: Prisma.UserConsentListRelationFilter
   preference?: Prisma.XOR<Prisma.UserPreferenceNullableScalarRelationFilter, Prisma.UserPreferenceWhereInput> | null
+  subscriptions?: Prisma.SubscriptionListRelationFilter
+  features?: Prisma.UserFeatureListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
+  emailInbox?: Prisma.XOR<Prisma.EmailInboxNullableScalarRelationFilter, Prisma.EmailInboxWhereInput> | null
+  gmailConnection?: Prisma.XOR<Prisma.GmailConnectionNullableScalarRelationFilter, Prisma.GmailConnectionWhereInput> | null
+  inboxSenders?: Prisma.InboxSenderListRelationFilter
+  inboxTransactions?: Prisma.InboxTransactionListRelationFilter
+  merchantRules?: Prisma.MerchantRuleListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -302,6 +326,14 @@ export type UserCreateInput = {
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -321,6 +353,14 @@ export type UserUncheckedCreateInput = {
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -340,6 +380,14 @@ export type UserUpdateInput = {
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -359,6 +407,14 @@ export type UserUncheckedUpdateInput = {
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -564,6 +620,118 @@ export type UserUpdateOneRequiredWithoutBudgetsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBudgetsInput, Prisma.UserUpdateWithoutBudgetsInput>, Prisma.UserUncheckedUpdateWithoutBudgetsInput>
 }
 
+export type UserCreateNestedOneWithoutNotificationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutNotificationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationsInput
+  upsert?: Prisma.UserUpsertWithoutNotificationsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutNotificationsInput, Prisma.UserUpdateWithoutNotificationsInput>, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type UserCreateNestedOneWithoutSubscriptionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSubscriptionsInput, Prisma.UserUncheckedCreateWithoutSubscriptionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSubscriptionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSubscriptionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSubscriptionsInput, Prisma.UserUncheckedCreateWithoutSubscriptionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSubscriptionsInput
+  upsert?: Prisma.UserUpsertWithoutSubscriptionsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSubscriptionsInput, Prisma.UserUpdateWithoutSubscriptionsInput>, Prisma.UserUncheckedUpdateWithoutSubscriptionsInput>
+}
+
+export type UserCreateNestedOneWithoutFeaturesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFeaturesInput, Prisma.UserUncheckedCreateWithoutFeaturesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFeaturesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutFeaturesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFeaturesInput, Prisma.UserUncheckedCreateWithoutFeaturesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFeaturesInput
+  upsert?: Prisma.UserUpsertWithoutFeaturesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFeaturesInput, Prisma.UserUpdateWithoutFeaturesInput>, Prisma.UserUncheckedUpdateWithoutFeaturesInput>
+}
+
+export type UserCreateNestedOneWithoutEmailInboxInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutEmailInboxInput, Prisma.UserUncheckedCreateWithoutEmailInboxInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEmailInboxInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutEmailInboxNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutEmailInboxInput, Prisma.UserUncheckedCreateWithoutEmailInboxInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEmailInboxInput
+  upsert?: Prisma.UserUpsertWithoutEmailInboxInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEmailInboxInput, Prisma.UserUpdateWithoutEmailInboxInput>, Prisma.UserUncheckedUpdateWithoutEmailInboxInput>
+}
+
+export type UserCreateNestedOneWithoutGmailConnectionInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutGmailConnectionInput, Prisma.UserUncheckedCreateWithoutGmailConnectionInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutGmailConnectionInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutGmailConnectionNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutGmailConnectionInput, Prisma.UserUncheckedCreateWithoutGmailConnectionInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutGmailConnectionInput
+  upsert?: Prisma.UserUpsertWithoutGmailConnectionInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutGmailConnectionInput, Prisma.UserUpdateWithoutGmailConnectionInput>, Prisma.UserUncheckedUpdateWithoutGmailConnectionInput>
+}
+
+export type UserCreateNestedOneWithoutInboxSendersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInboxSendersInput, Prisma.UserUncheckedCreateWithoutInboxSendersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInboxSendersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutInboxSendersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInboxSendersInput, Prisma.UserUncheckedCreateWithoutInboxSendersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInboxSendersInput
+  upsert?: Prisma.UserUpsertWithoutInboxSendersInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInboxSendersInput, Prisma.UserUpdateWithoutInboxSendersInput>, Prisma.UserUncheckedUpdateWithoutInboxSendersInput>
+}
+
+export type UserCreateNestedOneWithoutInboxTransactionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInboxTransactionsInput, Prisma.UserUncheckedCreateWithoutInboxTransactionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInboxTransactionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutInboxTransactionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInboxTransactionsInput, Prisma.UserUncheckedCreateWithoutInboxTransactionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInboxTransactionsInput
+  upsert?: Prisma.UserUpsertWithoutInboxTransactionsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInboxTransactionsInput, Prisma.UserUpdateWithoutInboxTransactionsInput>, Prisma.UserUncheckedUpdateWithoutInboxTransactionsInput>
+}
+
+export type UserCreateNestedOneWithoutMerchantRulesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMerchantRulesInput, Prisma.UserUncheckedCreateWithoutMerchantRulesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMerchantRulesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutMerchantRulesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMerchantRulesInput, Prisma.UserUncheckedCreateWithoutMerchantRulesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMerchantRulesInput
+  upsert?: Prisma.UserUpsertWithoutMerchantRulesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutMerchantRulesInput, Prisma.UserUpdateWithoutMerchantRulesInput>, Prisma.UserUncheckedUpdateWithoutMerchantRulesInput>
+}
+
 export type UserCreateWithoutConsentsInput = {
   id: string
   name: string
@@ -580,6 +748,14 @@ export type UserCreateWithoutConsentsInput = {
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutConsentsInput = {
@@ -598,6 +774,14 @@ export type UserUncheckedCreateWithoutConsentsInput = {
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutConsentsInput = {
@@ -632,6 +816,14 @@ export type UserUpdateWithoutConsentsInput = {
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutConsentsInput = {
@@ -650,6 +842,14 @@ export type UserUncheckedUpdateWithoutConsentsInput = {
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPreferenceInput = {
@@ -668,6 +868,14 @@ export type UserCreateWithoutPreferenceInput = {
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPreferenceInput = {
@@ -686,6 +894,14 @@ export type UserUncheckedCreateWithoutPreferenceInput = {
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPreferenceInput = {
@@ -720,6 +936,14 @@ export type UserUpdateWithoutPreferenceInput = {
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPreferenceInput = {
@@ -738,6 +962,14 @@ export type UserUncheckedUpdateWithoutPreferenceInput = {
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -756,6 +988,14 @@ export type UserCreateWithoutSessionsInput = {
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -774,6 +1014,14 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -808,6 +1056,14 @@ export type UserUpdateWithoutSessionsInput = {
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -826,6 +1082,14 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -844,6 +1108,14 @@ export type UserCreateWithoutAccountsInput = {
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -862,6 +1134,14 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -896,6 +1176,14 @@ export type UserUpdateWithoutAccountsInput = {
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -914,6 +1202,14 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCategoriesInput = {
@@ -932,6 +1228,14 @@ export type UserCreateWithoutCategoriesInput = {
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCategoriesInput = {
@@ -950,6 +1254,14 @@ export type UserUncheckedCreateWithoutCategoriesInput = {
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCategoriesInput = {
@@ -984,6 +1296,14 @@ export type UserUpdateWithoutCategoriesInput = {
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCategoriesInput = {
@@ -1002,6 +1322,14 @@ export type UserUncheckedUpdateWithoutCategoriesInput = {
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTransactionsInput = {
@@ -1020,6 +1348,14 @@ export type UserCreateWithoutTransactionsInput = {
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTransactionsInput = {
@@ -1038,6 +1374,14 @@ export type UserUncheckedCreateWithoutTransactionsInput = {
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTransactionsInput = {
@@ -1072,6 +1416,14 @@ export type UserUpdateWithoutTransactionsInput = {
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTransactionsInput = {
@@ -1090,6 +1442,14 @@ export type UserUncheckedUpdateWithoutTransactionsInput = {
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutFeedbackInput = {
@@ -1108,6 +1468,14 @@ export type UserCreateWithoutFeedbackInput = {
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutFeedbackInput = {
@@ -1126,6 +1494,14 @@ export type UserUncheckedCreateWithoutFeedbackInput = {
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutFeedbackInput = {
@@ -1160,6 +1536,14 @@ export type UserUpdateWithoutFeedbackInput = {
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFeedbackInput = {
@@ -1178,6 +1562,14 @@ export type UserUncheckedUpdateWithoutFeedbackInput = {
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutBudgetsInput = {
@@ -1196,6 +1588,14 @@ export type UserCreateWithoutBudgetsInput = {
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBudgetsInput = {
@@ -1214,6 +1614,14 @@ export type UserUncheckedCreateWithoutBudgetsInput = {
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBudgetsInput = {
@@ -1248,6 +1656,14 @@ export type UserUpdateWithoutBudgetsInput = {
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBudgetsInput = {
@@ -1266,6 +1682,974 @@ export type UserUncheckedUpdateWithoutBudgetsInput = {
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutNotificationsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutNotificationsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutNotificationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+}
+
+export type UserUpsertWithoutNotificationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutNotificationsInput, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutNotificationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutNotificationsInput, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type UserUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutSubscriptionsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutSubscriptionsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutSubscriptionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSubscriptionsInput, Prisma.UserUncheckedCreateWithoutSubscriptionsInput>
+}
+
+export type UserUpsertWithoutSubscriptionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSubscriptionsInput, Prisma.UserUncheckedUpdateWithoutSubscriptionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSubscriptionsInput, Prisma.UserUncheckedCreateWithoutSubscriptionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSubscriptionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSubscriptionsInput, Prisma.UserUncheckedUpdateWithoutSubscriptionsInput>
+}
+
+export type UserUpdateWithoutSubscriptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSubscriptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutFeaturesInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutFeaturesInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutFeaturesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutFeaturesInput, Prisma.UserUncheckedCreateWithoutFeaturesInput>
+}
+
+export type UserUpsertWithoutFeaturesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutFeaturesInput, Prisma.UserUncheckedUpdateWithoutFeaturesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutFeaturesInput, Prisma.UserUncheckedCreateWithoutFeaturesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutFeaturesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutFeaturesInput, Prisma.UserUncheckedUpdateWithoutFeaturesInput>
+}
+
+export type UserUpdateWithoutFeaturesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutFeaturesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutEmailInboxInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutEmailInboxInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutEmailInboxInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutEmailInboxInput, Prisma.UserUncheckedCreateWithoutEmailInboxInput>
+}
+
+export type UserUpsertWithoutEmailInboxInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutEmailInboxInput, Prisma.UserUncheckedUpdateWithoutEmailInboxInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutEmailInboxInput, Prisma.UserUncheckedCreateWithoutEmailInboxInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutEmailInboxInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutEmailInboxInput, Prisma.UserUncheckedUpdateWithoutEmailInboxInput>
+}
+
+export type UserUpdateWithoutEmailInboxInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutEmailInboxInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutGmailConnectionInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutGmailConnectionInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutGmailConnectionInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutGmailConnectionInput, Prisma.UserUncheckedCreateWithoutGmailConnectionInput>
+}
+
+export type UserUpsertWithoutGmailConnectionInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutGmailConnectionInput, Prisma.UserUncheckedUpdateWithoutGmailConnectionInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutGmailConnectionInput, Prisma.UserUncheckedCreateWithoutGmailConnectionInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutGmailConnectionInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutGmailConnectionInput, Prisma.UserUncheckedUpdateWithoutGmailConnectionInput>
+}
+
+export type UserUpdateWithoutGmailConnectionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutGmailConnectionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutInboxSendersInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutInboxSendersInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutInboxSendersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutInboxSendersInput, Prisma.UserUncheckedCreateWithoutInboxSendersInput>
+}
+
+export type UserUpsertWithoutInboxSendersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutInboxSendersInput, Prisma.UserUncheckedUpdateWithoutInboxSendersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutInboxSendersInput, Prisma.UserUncheckedCreateWithoutInboxSendersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutInboxSendersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutInboxSendersInput, Prisma.UserUncheckedUpdateWithoutInboxSendersInput>
+}
+
+export type UserUpdateWithoutInboxSendersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutInboxSendersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutInboxTransactionsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutInboxTransactionsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutInboxTransactionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutInboxTransactionsInput, Prisma.UserUncheckedCreateWithoutInboxTransactionsInput>
+}
+
+export type UserUpsertWithoutInboxTransactionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutInboxTransactionsInput, Prisma.UserUncheckedUpdateWithoutInboxTransactionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutInboxTransactionsInput, Prisma.UserUncheckedCreateWithoutInboxTransactionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutInboxTransactionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutInboxTransactionsInput, Prisma.UserUncheckedUpdateWithoutInboxTransactionsInput>
+}
+
+export type UserUpdateWithoutInboxTransactionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutInboxTransactionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutMerchantRulesInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutMerchantRulesInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutMerchantRulesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutMerchantRulesInput, Prisma.UserUncheckedCreateWithoutMerchantRulesInput>
+}
+
+export type UserUpsertWithoutMerchantRulesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutMerchantRulesInput, Prisma.UserUncheckedUpdateWithoutMerchantRulesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutMerchantRulesInput, Prisma.UserUncheckedCreateWithoutMerchantRulesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutMerchantRulesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutMerchantRulesInput, Prisma.UserUncheckedUpdateWithoutMerchantRulesInput>
+}
+
+export type UserUpdateWithoutMerchantRulesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutMerchantRulesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -1281,6 +2665,12 @@ export type UserCountOutputType = {
   feedback: number
   budgets: number
   consents: number
+  subscriptions: number
+  features: number
+  notifications: number
+  inboxSenders: number
+  inboxTransactions: number
+  merchantRules: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1291,6 +2681,12 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   feedback?: boolean | UserCountOutputTypeCountFeedbackArgs
   budgets?: boolean | UserCountOutputTypeCountBudgetsArgs
   consents?: boolean | UserCountOutputTypeCountConsentsArgs
+  subscriptions?: boolean | UserCountOutputTypeCountSubscriptionsArgs
+  features?: boolean | UserCountOutputTypeCountFeaturesArgs
+  notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
+  inboxSenders?: boolean | UserCountOutputTypeCountInboxSendersArgs
+  inboxTransactions?: boolean | UserCountOutputTypeCountInboxTransactionsArgs
+  merchantRules?: boolean | UserCountOutputTypeCountMerchantRulesArgs
 }
 
 /**
@@ -1352,6 +2748,48 @@ export type UserCountOutputTypeCountConsentsArgs<ExtArgs extends runtime.Types.E
   where?: Prisma.UserConsentWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSubscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SubscriptionWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountFeaturesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserFeatureWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountInboxSendersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InboxSenderWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountInboxTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InboxTransactionWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountMerchantRulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MerchantRuleWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1370,6 +2808,14 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   budgets?: boolean | Prisma.User$budgetsArgs<ExtArgs>
   consents?: boolean | Prisma.User$consentsArgs<ExtArgs>
   preference?: boolean | Prisma.User$preferenceArgs<ExtArgs>
+  subscriptions?: boolean | Prisma.User$subscriptionsArgs<ExtArgs>
+  features?: boolean | Prisma.User$featuresArgs<ExtArgs>
+  notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
+  emailInbox?: boolean | Prisma.User$emailInboxArgs<ExtArgs>
+  gmailConnection?: boolean | Prisma.User$gmailConnectionArgs<ExtArgs>
+  inboxSenders?: boolean | Prisma.User$inboxSendersArgs<ExtArgs>
+  inboxTransactions?: boolean | Prisma.User$inboxTransactionsArgs<ExtArgs>
+  merchantRules?: boolean | Prisma.User$merchantRulesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1416,6 +2862,14 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   budgets?: boolean | Prisma.User$budgetsArgs<ExtArgs>
   consents?: boolean | Prisma.User$consentsArgs<ExtArgs>
   preference?: boolean | Prisma.User$preferenceArgs<ExtArgs>
+  subscriptions?: boolean | Prisma.User$subscriptionsArgs<ExtArgs>
+  features?: boolean | Prisma.User$featuresArgs<ExtArgs>
+  notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
+  emailInbox?: boolean | Prisma.User$emailInboxArgs<ExtArgs>
+  gmailConnection?: boolean | Prisma.User$gmailConnectionArgs<ExtArgs>
+  inboxSenders?: boolean | Prisma.User$inboxSendersArgs<ExtArgs>
+  inboxTransactions?: boolean | Prisma.User$inboxTransactionsArgs<ExtArgs>
+  merchantRules?: boolean | Prisma.User$merchantRulesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1432,6 +2886,14 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     budgets: Prisma.$BudgetPayload<ExtArgs>[]
     consents: Prisma.$UserConsentPayload<ExtArgs>[]
     preference: Prisma.$UserPreferencePayload<ExtArgs> | null
+    subscriptions: Prisma.$SubscriptionPayload<ExtArgs>[]
+    features: Prisma.$UserFeaturePayload<ExtArgs>[]
+    notifications: Prisma.$NotificationPayload<ExtArgs>[]
+    emailInbox: Prisma.$EmailInboxPayload<ExtArgs> | null
+    gmailConnection: Prisma.$GmailConnectionPayload<ExtArgs> | null
+    inboxSenders: Prisma.$InboxSenderPayload<ExtArgs>[]
+    inboxTransactions: Prisma.$InboxTransactionPayload<ExtArgs>[]
+    merchantRules: Prisma.$MerchantRulePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1844,6 +3306,14 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   budgets<T extends Prisma.User$budgetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$budgetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BudgetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   consents<T extends Prisma.User$consentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$consentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserConsentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   preference<T extends Prisma.User$preferenceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$preferenceArgs<ExtArgs>>): Prisma.Prisma__UserPreferenceClient<runtime.Types.Result.GetResult<Prisma.$UserPreferencePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  subscriptions<T extends Prisma.User$subscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$subscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  features<T extends Prisma.User$featuresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$featuresArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserFeaturePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  emailInbox<T extends Prisma.User$emailInboxArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$emailInboxArgs<ExtArgs>>): Prisma.Prisma__EmailInboxClient<runtime.Types.Result.GetResult<Prisma.$EmailInboxPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  gmailConnection<T extends Prisma.User$gmailConnectionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$gmailConnectionArgs<ExtArgs>>): Prisma.Prisma__GmailConnectionClient<runtime.Types.Result.GetResult<Prisma.$GmailConnectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  inboxSenders<T extends Prisma.User$inboxSendersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$inboxSendersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InboxSenderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  inboxTransactions<T extends Prisma.User$inboxTransactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$inboxTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InboxTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  merchantRules<T extends Prisma.User$merchantRulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$merchantRulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MerchantRulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2458,6 +3928,188 @@ export type User$preferenceArgs<ExtArgs extends runtime.Types.Extensions.Interna
    */
   include?: Prisma.UserPreferenceInclude<ExtArgs> | null
   where?: Prisma.UserPreferenceWhereInput
+}
+
+/**
+ * User.subscriptions
+ */
+export type User$subscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Subscription
+   */
+  select?: Prisma.SubscriptionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Subscription
+   */
+  omit?: Prisma.SubscriptionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubscriptionInclude<ExtArgs> | null
+  where?: Prisma.SubscriptionWhereInput
+  orderBy?: Prisma.SubscriptionOrderByWithRelationInput | Prisma.SubscriptionOrderByWithRelationInput[]
+  cursor?: Prisma.SubscriptionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SubscriptionScalarFieldEnum | Prisma.SubscriptionScalarFieldEnum[]
+}
+
+/**
+ * User.features
+ */
+export type User$featuresArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserFeature
+   */
+  select?: Prisma.UserFeatureSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserFeature
+   */
+  omit?: Prisma.UserFeatureOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserFeatureInclude<ExtArgs> | null
+  where?: Prisma.UserFeatureWhereInput
+  orderBy?: Prisma.UserFeatureOrderByWithRelationInput | Prisma.UserFeatureOrderByWithRelationInput[]
+  cursor?: Prisma.UserFeatureWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserFeatureScalarFieldEnum | Prisma.UserFeatureScalarFieldEnum[]
+}
+
+/**
+ * User.notifications
+ */
+export type User$notificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Notification
+   */
+  select?: Prisma.NotificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Notification
+   */
+  omit?: Prisma.NotificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationInclude<ExtArgs> | null
+  where?: Prisma.NotificationWhereInput
+  orderBy?: Prisma.NotificationOrderByWithRelationInput | Prisma.NotificationOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
+}
+
+/**
+ * User.emailInbox
+ */
+export type User$emailInboxArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EmailInbox
+   */
+  select?: Prisma.EmailInboxSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EmailInbox
+   */
+  omit?: Prisma.EmailInboxOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EmailInboxInclude<ExtArgs> | null
+  where?: Prisma.EmailInboxWhereInput
+}
+
+/**
+ * User.gmailConnection
+ */
+export type User$gmailConnectionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GmailConnection
+   */
+  select?: Prisma.GmailConnectionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the GmailConnection
+   */
+  omit?: Prisma.GmailConnectionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GmailConnectionInclude<ExtArgs> | null
+  where?: Prisma.GmailConnectionWhereInput
+}
+
+/**
+ * User.inboxSenders
+ */
+export type User$inboxSendersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InboxSender
+   */
+  select?: Prisma.InboxSenderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InboxSender
+   */
+  omit?: Prisma.InboxSenderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InboxSenderInclude<ExtArgs> | null
+  where?: Prisma.InboxSenderWhereInput
+  orderBy?: Prisma.InboxSenderOrderByWithRelationInput | Prisma.InboxSenderOrderByWithRelationInput[]
+  cursor?: Prisma.InboxSenderWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InboxSenderScalarFieldEnum | Prisma.InboxSenderScalarFieldEnum[]
+}
+
+/**
+ * User.inboxTransactions
+ */
+export type User$inboxTransactionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InboxTransaction
+   */
+  select?: Prisma.InboxTransactionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InboxTransaction
+   */
+  omit?: Prisma.InboxTransactionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InboxTransactionInclude<ExtArgs> | null
+  where?: Prisma.InboxTransactionWhereInput
+  orderBy?: Prisma.InboxTransactionOrderByWithRelationInput | Prisma.InboxTransactionOrderByWithRelationInput[]
+  cursor?: Prisma.InboxTransactionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InboxTransactionScalarFieldEnum | Prisma.InboxTransactionScalarFieldEnum[]
+}
+
+/**
+ * User.merchantRules
+ */
+export type User$merchantRulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MerchantRule
+   */
+  select?: Prisma.MerchantRuleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MerchantRule
+   */
+  omit?: Prisma.MerchantRuleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MerchantRuleInclude<ExtArgs> | null
+  where?: Prisma.MerchantRuleWhereInput
+  orderBy?: Prisma.MerchantRuleOrderByWithRelationInput | Prisma.MerchantRuleOrderByWithRelationInput[]
+  cursor?: Prisma.MerchantRuleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MerchantRuleScalarFieldEnum | Prisma.MerchantRuleScalarFieldEnum[]
 }
 
 /**

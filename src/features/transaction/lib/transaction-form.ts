@@ -63,21 +63,15 @@ export function finalizeFormValues(
   categories: CategoryLike[],
   defaultDescription: string,
 ): TransactionFormValues {
-  const category = categories.find((c) => c.id === values.categoryId);
-  return {
-    ...values,
-    description: describeOrFallback(values.description.trim(), category?.name, defaultDescription),
-  };
+  const category = categories.find((category) => category.id === values.categoryId);
+  return { ...values, description: describeOrFallback(values.description.trim(), category?.name, defaultDescription) };
 }
 
 export function transactionUpdatedPayload(
   values: TransactionFormValues,
   draft?: Partial<TransactionFormValues>,
 ): AnalyticsEvents["transaction_updated"] {
-  return {
-    category_changed: values.categoryId !== draft?.categoryId,
-    type_changed: values.type !== draft?.type,
-  };
+  return { category_changed: values.categoryId !== draft?.categoryId, type_changed: values.type !== draft?.type };
 }
 
 export function transactionCreatedPayload(

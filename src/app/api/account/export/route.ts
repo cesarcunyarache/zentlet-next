@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { z } from "zod";
 import writeXlsxFile from "write-excel-file/node";
 import prisma from "@/lib/prisma";
 import { logger } from "@/lib/observability/logger";
@@ -8,28 +9,24 @@ import { FEED_ORDER } from "@/features/transaction/lib/feed-query";
 import { routing, type Locale } from "@/i18n/routing";
 import en from "@/locales/en/settings.json";
 import es from "@/locales/es/settings.json";
-import { errorResponse, getSessionUserId, internalError, unauthorized } from "@/lib/api/route-helpers";
-
-/*
- * Descarga de todos los datos del usuario en Excel (.xlsx): movimientos y
- * categorías. Lee de la base de datos, no de la cache del dispositivo, así
- * que siempre es completa. Cada export recorre todo el historial: se limita
- * por usuario para que no se pueda usar para cargar la base de datos.
- */
+import { getSessionUserId, internalError, parseQuery, tooManyRequests, unauthorized } from "@/lib/api/route-helpers";
+import { requireFeature } from "@/features/billing/http/guard";
 
 const EXPORTS_PER_MINUTE = 5;
+const RATE_WINDOW_SECONDS = 60;
+const MAX_CURRENCY_SYMBOL_LENGTH = 4;
 const XLSX_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
 const LABELS: Record<Locale, WorkbookLabels> = { es: es.export, en: en.export };
 const DATE_FORMATS: Record<Locale, string> = { es: "dd/mm/yyyy", en: "mm/dd/yyyy" };
 
-function resolveLocale(value: string | null): Locale {
-  return routing.locales.find((locale) => locale === value) ?? routing.defaultLocale;
-}
+const exportQuerySchema = z.object({
+  locale: z.enum(routing.locales).catch(routing.defaultLocale),
+  currency: z.string().optional(),
+});
 
-/** `?currency=S/` → "Monto (S/)". El símbolo sólo es texto de la cabecera. */
-function withCurrency(labels: WorkbookLabels, currency: string | null): WorkbookLabels {
-  const symbol = currency?.trim().slice(0, 4);
+function withCurrency(labels: WorkbookLabels, currency: string | undefined): WorkbookLabels {
+  const symbol = currency?.trim().slice(0, MAX_CURRENCY_SYMBOL_LENGTH);
   if (!symbol) return labels;
   return { ...labels, columns: { ...labels.columns, amount: `${labels.columns.amount} (${symbol})` } };
 }
@@ -39,12 +36,15 @@ export async function GET(req: Request) {
     const userId = await getSessionUserId(req);
     if (!userId) return unauthorized();
 
-    if (!(await rateLimit(`export:${userId}`, EXPORTS_PER_MINUTE, 60_000)).allowed) {
-      return errorResponse("Too many exports, try again in a minute", 429);
-    }
+    const denied = await requireFeature(userId, "export");
+    if (denied) return denied;
 
-    const params = new URL(req.url).searchParams;
-    const locale = resolveLocale(params.get("locale"));
+    const { allowed } = await rateLimit(`export:${userId}`, EXPORTS_PER_MINUTE, RATE_WINDOW_SECONDS * 1000);
+    if (!allowed) return tooManyRequests("Too many exports, try again in a minute", RATE_WINDOW_SECONDS);
+
+    const parsed = parseQuery(req, exportQuerySchema);
+    if ("error" in parsed) return parsed.error;
+    const { locale, currency } = parsed.data;
 
     const [transactions, categories] = await Promise.all([
       prisma.transaction.findMany({
@@ -83,7 +83,7 @@ export async function GET(req: Request) {
 
     const sheets = buildWorkbook(
       { transactions, categories },
-      withCurrency(LABELS[locale], params.get("currency")),
+      withCurrency(LABELS[locale], currency),
       DATE_FORMATS[locale],
     );
     const file = await writeXlsxFile(sheets).toBuffer();

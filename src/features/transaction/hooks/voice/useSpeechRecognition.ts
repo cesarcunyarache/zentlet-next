@@ -47,11 +47,11 @@ const ERRORS = new Map<string, SpeechError>([
 
 function getRecognitionClass(): SpeechRecognitionConstructor | null {
   if (typeof window === "undefined") return null;
-  const w = window as unknown as {
+  const speechWindow = window as unknown as {
     SpeechRecognition?: SpeechRecognitionConstructor;
     webkitSpeechRecognition?: SpeechRecognitionConstructor;
   };
-  return w.SpeechRecognition ?? w.webkitSpeechRecognition ?? null;
+  return speechWindow.SpeechRecognition ?? speechWindow.webkitSpeechRecognition ?? null;
 }
 
 function recognitionLang(locale: Locale) {
@@ -153,7 +153,6 @@ export function useSpeechRecognition(locale: Locale) {
     error,
     transcript,
     isSpeaking,
-    isSupported: getRecognitionClass() !== null,
     start,
     stop,
     cancel,

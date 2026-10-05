@@ -1,17 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { cn } from "@heroui/react";
 import { Mic } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useVoiceExamples } from "../../hooks/voice/useVoiceExamples";
+import { useRotatingExample } from "../../hooks/voice/useRotatingExample";
 import { listeningStatusKey } from "../../lib/voice-entry";
 import { VOICE_VIEW_MOTION } from "./voice-view-motion";
 
 const BAR_PEAKS = [18, 30, 42, 26, 38, 22, 14];
 const RING_IDS = [0, 1, 2];
-const EXAMPLE_ROTATION_MS = 2600;
 
 interface VoiceListeningViewProps {
   isReady: boolean;
@@ -96,19 +94,6 @@ function VoiceLevelBars({ isReady, isSpeaking, shouldReduceMotion }: VoiceLevelB
       ))}
     </div>
   );
-}
-
-function useRotatingExample(isPaused: boolean) {
-  const examples = useVoiceExamples();
-  const [exampleIndex, setExampleIndex] = useState(0);
-
-  useEffect(() => {
-    if (isPaused) return;
-    const timer = setInterval(() => setExampleIndex((i) => (i + 1) % examples.length), EXAMPLE_ROTATION_MS);
-    return () => clearInterval(timer);
-  }, [isPaused, examples.length]);
-
-  return examples[exampleIndex];
 }
 
 function TranscriptOrExample({ transcript }: { transcript: string }) {

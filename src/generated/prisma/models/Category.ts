@@ -213,6 +213,7 @@ export type CategoryWhereInput = {
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   transactions?: Prisma.TransactionListRelationFilter
   budget?: Prisma.XOR<Prisma.BudgetNullableScalarRelationFilter, Prisma.BudgetWhereInput> | null
+  merchantRules?: Prisma.MerchantRuleListRelationFilter
 }
 
 export type CategoryOrderByWithRelationInput = {
@@ -228,6 +229,7 @@ export type CategoryOrderByWithRelationInput = {
   user?: Prisma.UserOrderByWithRelationInput
   transactions?: Prisma.TransactionOrderByRelationAggregateInput
   budget?: Prisma.BudgetOrderByWithRelationInput
+  merchantRules?: Prisma.MerchantRuleOrderByRelationAggregateInput
 }
 
 export type CategoryWhereUniqueInput = Prisma.AtLeast<{
@@ -246,6 +248,7 @@ export type CategoryWhereUniqueInput = Prisma.AtLeast<{
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   transactions?: Prisma.TransactionListRelationFilter
   budget?: Prisma.XOR<Prisma.BudgetNullableScalarRelationFilter, Prisma.BudgetWhereInput> | null
+  merchantRules?: Prisma.MerchantRuleListRelationFilter
 }, "id">
 
 export type CategoryOrderByWithAggregationInput = {
@@ -290,6 +293,7 @@ export type CategoryCreateInput = {
   user: Prisma.UserCreateNestedOneWithoutCategoriesInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutCategoryInput
   budget?: Prisma.BudgetCreateNestedOneWithoutCategoryInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutCategoryInput
 }
 
 export type CategoryUncheckedCreateInput = {
@@ -304,6 +308,7 @@ export type CategoryUncheckedCreateInput = {
   updatedAt?: Date | string
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutCategoryInput
   budget?: Prisma.BudgetUncheckedCreateNestedOneWithoutCategoryInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutCategoryInput
 }
 
 export type CategoryUpdateInput = {
@@ -318,6 +323,7 @@ export type CategoryUpdateInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutCategoriesNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutCategoryNestedInput
   budget?: Prisma.BudgetUpdateOneWithoutCategoryNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutCategoryNestedInput
 }
 
 export type CategoryUncheckedUpdateInput = {
@@ -332,6 +338,7 @@ export type CategoryUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutCategoryNestedInput
   budget?: Prisma.BudgetUncheckedUpdateOneWithoutCategoryNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutCategoryNestedInput
 }
 
 export type CategoryCreateManyInput = {
@@ -488,6 +495,20 @@ export type CategoryUpdateOneRequiredWithoutBudgetNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CategoryUpdateToOneWithWhereWithoutBudgetInput, Prisma.CategoryUpdateWithoutBudgetInput>, Prisma.CategoryUncheckedUpdateWithoutBudgetInput>
 }
 
+export type CategoryCreateNestedOneWithoutMerchantRulesInput = {
+  create?: Prisma.XOR<Prisma.CategoryCreateWithoutMerchantRulesInput, Prisma.CategoryUncheckedCreateWithoutMerchantRulesInput>
+  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutMerchantRulesInput
+  connect?: Prisma.CategoryWhereUniqueInput
+}
+
+export type CategoryUpdateOneRequiredWithoutMerchantRulesNestedInput = {
+  create?: Prisma.XOR<Prisma.CategoryCreateWithoutMerchantRulesInput, Prisma.CategoryUncheckedCreateWithoutMerchantRulesInput>
+  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutMerchantRulesInput
+  upsert?: Prisma.CategoryUpsertWithoutMerchantRulesInput
+  connect?: Prisma.CategoryWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CategoryUpdateToOneWithWhereWithoutMerchantRulesInput, Prisma.CategoryUpdateWithoutMerchantRulesInput>, Prisma.CategoryUncheckedUpdateWithoutMerchantRulesInput>
+}
+
 export type CategoryCreateWithoutUserInput = {
   id?: string
   name: string
@@ -499,6 +520,7 @@ export type CategoryCreateWithoutUserInput = {
   updatedAt?: Date | string
   transactions?: Prisma.TransactionCreateNestedManyWithoutCategoryInput
   budget?: Prisma.BudgetCreateNestedOneWithoutCategoryInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutCategoryInput
 }
 
 export type CategoryUncheckedCreateWithoutUserInput = {
@@ -512,6 +534,7 @@ export type CategoryUncheckedCreateWithoutUserInput = {
   updatedAt?: Date | string
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutCategoryInput
   budget?: Prisma.BudgetUncheckedCreateNestedOneWithoutCategoryInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutCategoryInput
 }
 
 export type CategoryCreateOrConnectWithoutUserInput = {
@@ -566,6 +589,7 @@ export type CategoryCreateWithoutTransactionsInput = {
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutCategoriesInput
   budget?: Prisma.BudgetCreateNestedOneWithoutCategoryInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutCategoryInput
 }
 
 export type CategoryUncheckedCreateWithoutTransactionsInput = {
@@ -579,6 +603,7 @@ export type CategoryUncheckedCreateWithoutTransactionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   budget?: Prisma.BudgetUncheckedCreateNestedOneWithoutCategoryInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutCategoryInput
 }
 
 export type CategoryCreateOrConnectWithoutTransactionsInput = {
@@ -608,6 +633,7 @@ export type CategoryUpdateWithoutTransactionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutCategoriesNestedInput
   budget?: Prisma.BudgetUpdateOneWithoutCategoryNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutCategoryNestedInput
 }
 
 export type CategoryUncheckedUpdateWithoutTransactionsInput = {
@@ -621,6 +647,7 @@ export type CategoryUncheckedUpdateWithoutTransactionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   budget?: Prisma.BudgetUncheckedUpdateOneWithoutCategoryNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutCategoryNestedInput
 }
 
 export type CategoryCreateWithoutBudgetInput = {
@@ -634,6 +661,7 @@ export type CategoryCreateWithoutBudgetInput = {
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutCategoriesInput
   transactions?: Prisma.TransactionCreateNestedManyWithoutCategoryInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutCategoryInput
 }
 
 export type CategoryUncheckedCreateWithoutBudgetInput = {
@@ -647,6 +675,7 @@ export type CategoryUncheckedCreateWithoutBudgetInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutCategoryInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutCategoryInput
 }
 
 export type CategoryCreateOrConnectWithoutBudgetInput = {
@@ -676,6 +705,7 @@ export type CategoryUpdateWithoutBudgetInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutCategoriesNestedInput
   transactions?: Prisma.TransactionUpdateManyWithoutCategoryNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutCategoryNestedInput
 }
 
 export type CategoryUncheckedUpdateWithoutBudgetInput = {
@@ -689,6 +719,79 @@ export type CategoryUncheckedUpdateWithoutBudgetInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutCategoryNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutCategoryNestedInput
+}
+
+export type CategoryCreateWithoutMerchantRulesInput = {
+  id?: string
+  name: string
+  icon: string
+  color: string
+  description?: string | null
+  aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutCategoriesInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutCategoryInput
+  budget?: Prisma.BudgetCreateNestedOneWithoutCategoryInput
+}
+
+export type CategoryUncheckedCreateWithoutMerchantRulesInput = {
+  id?: string
+  name: string
+  icon: string
+  color: string
+  description?: string | null
+  aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  userId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutCategoryInput
+  budget?: Prisma.BudgetUncheckedCreateNestedOneWithoutCategoryInput
+}
+
+export type CategoryCreateOrConnectWithoutMerchantRulesInput = {
+  where: Prisma.CategoryWhereUniqueInput
+  create: Prisma.XOR<Prisma.CategoryCreateWithoutMerchantRulesInput, Prisma.CategoryUncheckedCreateWithoutMerchantRulesInput>
+}
+
+export type CategoryUpsertWithoutMerchantRulesInput = {
+  update: Prisma.XOR<Prisma.CategoryUpdateWithoutMerchantRulesInput, Prisma.CategoryUncheckedUpdateWithoutMerchantRulesInput>
+  create: Prisma.XOR<Prisma.CategoryCreateWithoutMerchantRulesInput, Prisma.CategoryUncheckedCreateWithoutMerchantRulesInput>
+  where?: Prisma.CategoryWhereInput
+}
+
+export type CategoryUpdateToOneWithWhereWithoutMerchantRulesInput = {
+  where?: Prisma.CategoryWhereInput
+  data: Prisma.XOR<Prisma.CategoryUpdateWithoutMerchantRulesInput, Prisma.CategoryUncheckedUpdateWithoutMerchantRulesInput>
+}
+
+export type CategoryUpdateWithoutMerchantRulesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  icon?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutCategoriesNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutCategoryNestedInput
+  budget?: Prisma.BudgetUpdateOneWithoutCategoryNestedInput
+}
+
+export type CategoryUncheckedUpdateWithoutMerchantRulesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  icon?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiSuggestions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutCategoryNestedInput
+  budget?: Prisma.BudgetUncheckedUpdateOneWithoutCategoryNestedInput
 }
 
 export type CategoryCreateManyUserInput = {
@@ -713,6 +816,7 @@ export type CategoryUpdateWithoutUserInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transactions?: Prisma.TransactionUpdateManyWithoutCategoryNestedInput
   budget?: Prisma.BudgetUpdateOneWithoutCategoryNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutCategoryNestedInput
 }
 
 export type CategoryUncheckedUpdateWithoutUserInput = {
@@ -726,6 +830,7 @@ export type CategoryUncheckedUpdateWithoutUserInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutCategoryNestedInput
   budget?: Prisma.BudgetUncheckedUpdateOneWithoutCategoryNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutCategoryNestedInput
 }
 
 export type CategoryUncheckedUpdateManyWithoutUserInput = {
@@ -746,10 +851,12 @@ export type CategoryUncheckedUpdateManyWithoutUserInput = {
 
 export type CategoryCountOutputType = {
   transactions: number
+  merchantRules: number
 }
 
 export type CategoryCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   transactions?: boolean | CategoryCountOutputTypeCountTransactionsArgs
+  merchantRules?: boolean | CategoryCountOutputTypeCountMerchantRulesArgs
 }
 
 /**
@@ -769,6 +876,13 @@ export type CategoryCountOutputTypeCountTransactionsArgs<ExtArgs extends runtime
   where?: Prisma.TransactionWhereInput
 }
 
+/**
+ * CategoryCountOutputType without action
+ */
+export type CategoryCountOutputTypeCountMerchantRulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MerchantRuleWhereInput
+}
+
 
 export type CategorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -783,6 +897,7 @@ export type CategorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   transactions?: boolean | Prisma.Category$transactionsArgs<ExtArgs>
   budget?: boolean | Prisma.Category$budgetArgs<ExtArgs>
+  merchantRules?: boolean | Prisma.Category$merchantRulesArgs<ExtArgs>
   _count?: boolean | Prisma.CategoryCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["category"]>
 
@@ -829,6 +944,7 @@ export type CategoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   transactions?: boolean | Prisma.Category$transactionsArgs<ExtArgs>
   budget?: boolean | Prisma.Category$budgetArgs<ExtArgs>
+  merchantRules?: boolean | Prisma.Category$merchantRulesArgs<ExtArgs>
   _count?: boolean | Prisma.CategoryCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CategoryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -844,6 +960,7 @@ export type $CategoryPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     user: Prisma.$UserPayload<ExtArgs>
     transactions: Prisma.$TransactionPayload<ExtArgs>[]
     budget: Prisma.$BudgetPayload<ExtArgs> | null
+    merchantRules: Prisma.$MerchantRulePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1252,6 +1369,7 @@ export interface Prisma__CategoryClient<T, Null = never, ExtArgs extends runtime
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   transactions<T extends Prisma.Category$transactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Category$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   budget<T extends Prisma.Category$budgetArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Category$budgetArgs<ExtArgs>>): Prisma.Prisma__BudgetClient<runtime.Types.Result.GetResult<Prisma.$BudgetPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  merchantRules<T extends Prisma.Category$merchantRulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Category$merchantRulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MerchantRulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1731,6 +1849,30 @@ export type Category$budgetArgs<ExtArgs extends runtime.Types.Extensions.Interna
    */
   include?: Prisma.BudgetInclude<ExtArgs> | null
   where?: Prisma.BudgetWhereInput
+}
+
+/**
+ * Category.merchantRules
+ */
+export type Category$merchantRulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MerchantRule
+   */
+  select?: Prisma.MerchantRuleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MerchantRule
+   */
+  omit?: Prisma.MerchantRuleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MerchantRuleInclude<ExtArgs> | null
+  where?: Prisma.MerchantRuleWhereInput
+  orderBy?: Prisma.MerchantRuleOrderByWithRelationInput | Prisma.MerchantRuleOrderByWithRelationInput[]
+  cursor?: Prisma.MerchantRuleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MerchantRuleScalarFieldEnum | Prisma.MerchantRuleScalarFieldEnum[]
 }
 
 /**

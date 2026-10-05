@@ -25,7 +25,11 @@ export function HowItWorksSection({ steps, phrases, dashboard, common, locale }:
   ];
 
   return (
-    <section id={SECTION} aria-labelledby={titleId} className="mx-auto max-w-6xl scroll-mt-24 px-4 pt-24 sm:px-6 md:pt-32">
+    <section
+      id={SECTION}
+      aria-labelledby={titleId}
+      className="mx-auto max-w-6xl scroll-mt-24 px-4 pt-24 sm:px-6 md:pt-32"
+    >
       <SectionHeading id={titleId} eyebrow={steps.eyebrow} title={steps.title} />
       <StickyScroll
         className="mt-8"

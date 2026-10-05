@@ -58,7 +58,7 @@ export function CategoryColumn({
   const amountLabel = useAmountLabel(item, isIdle, currency);
 
   const delay = `${shouldReduceMotion ? 0 : index * COLUMN_STAGGER_MS}ms`;
-  const growth = { transitionDelay: delay, transitionTimingFunction: EASE_OUT_CSS };
+  const growthStyle = { transitionDelay: delay, transitionTimingFunction: EASE_OUT_CSS };
 
   function handleClick() {
     if (!consumeClick()) onSelect(isSelected ? null : category.id);
@@ -88,7 +88,7 @@ export function CategoryColumn({
             "--bar-height": `${height}px`,
             "--fill-height": `${fill}px`,
             "--track-height": `${track ?? 0}px`,
-            ...growth,
+            ...growthStyle,
           } as React.CSSProperties
         }
         className={cn(
@@ -113,7 +113,7 @@ export function CategoryColumn({
                 : "bg-app-fill-strong group-hover:bg-[color-mix(in_oklch,var(--app-fg)_16%,transparent)]"),
           )}
         />
-        {hasTrack ? <BudgetMarker isOverBudget={isOverBudget} growth={growth} /> : null}
+        {hasTrack ? <BudgetMarker isOverBudget={isOverBudget} growthStyle={growthStyle} /> : null}
         <motion.span
           aria-hidden
           className={cn("relative leading-none", isIdle ? "text-base" : "text-2xl")}
@@ -130,15 +130,15 @@ export function CategoryColumn({
 
 interface BudgetMarkerProps {
   isOverBudget: boolean;
-  growth: React.CSSProperties;
+  growthStyle: React.CSSProperties;
 }
 
-function BudgetMarker({ isOverBudget, growth }: BudgetMarkerProps) {
+function BudgetMarker({ isOverBudget, growthStyle }: BudgetMarkerProps) {
   if (isOverBudget) {
     return (
       <span
         aria-hidden
-        style={growth}
+        style={growthStyle}
         className="border-app-expense/60 pointer-events-none absolute inset-x-0 bottom-(--track-height) border-t-2 border-dashed transition-[bottom] duration-600 motion-reduce:transition-none"
       />
     );

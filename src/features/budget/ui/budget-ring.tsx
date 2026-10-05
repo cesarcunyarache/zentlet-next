@@ -105,10 +105,7 @@ export function BudgetRing({ spent, amount, range, today, currency }: BudgetRing
                 highlight={isOver}
               />
             )}
-            <span
-              aria-hidden
-              className="bg-app-fg absolute -bottom-1 right-4 size-2.5 rotate-45 rounded-[2px]"
-            />
+            <span aria-hidden className="bg-app-fg absolute -bottom-1 right-4 size-2.5 rotate-45 rounded-[2px]" />
           </motion.span>
         )}
       </AnimatePresence>

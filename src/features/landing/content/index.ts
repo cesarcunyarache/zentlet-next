@@ -1,5 +1,8 @@
 import { getMessages } from "next-intl/server";
 import { intlLocales, type Locale } from "@/i18n/routing";
+import { planPrice, TRIAL_DAYS } from "@/features/billing/lib/plans";
+import { formatPrice } from "@/features/billing/lib/price";
+import { fillTemplate } from "../lib/format";
 import {
   CATEGORY_STYLES,
   DASHBOARD,
@@ -17,6 +20,14 @@ import type { DemoCategory, LandingContent } from "./types";
 
 export async function getLandingContent(locale: Locale): Promise<LandingContent> {
   const { landing: copy } = await getMessages({ locale });
+
+  const proPrice = planPrice("pro");
+  const pricingValues = {
+    days: TRIAL_DAYS,
+    price: formatPrice(proPrice.amount, proPrice.currency, intlLocales[locale]),
+    period: copy.pricing.period,
+  };
+  const fill = (template: string) => fillTemplate(template, pricingValues);
 
   const toDemoCategory = (key: CategoryKey): DemoCategory => ({
     ...CATEGORY_STYLES[key],
@@ -60,7 +71,11 @@ export async function getLandingContent(locale: Locale): Promise<LandingContent>
         suggestionFrom: copy.features.samples.suggestionFrom,
         suggestionCategory: toDemoCategory(FEATURE_SAMPLES.suggestionCategory),
         categoryIdeas: FEATURE_SAMPLES.categoryIdeas.map(toDemoCategory),
-        budgets: FEATURE_SAMPLES.budgets.map((item) => ({ ...toDemoCategory(item.category), spent: item.spent, budget: item.budget })),
+        budgets: FEATURE_SAMPLES.budgets.map(({ category, spent, budget }) => ({
+          ...toDemoCategory(category),
+          spent,
+          budget,
+        })),
         budgetLabels: copy.features.samples.budgetLabels,
         currencies: FEATURE_SAMPLES.currencies.map(({ symbol, key }) => ({
           symbol,
@@ -81,7 +96,27 @@ export async function getLandingContent(locale: Locale): Promise<LandingContent>
       items: STATS.map(({ key, ...stat }) => ({ ...stat, label: copy.stats.items[key] })),
     },
     testimonials: { ...copy.testimonials, items: TESTIMONIALS },
-    faq: copy.faq,
+    pricing: {
+      eyebrow: copy.pricing.eyebrow,
+      title: copy.pricing.title,
+      subtitle: fill(copy.pricing.subtitle),
+      plans: [
+        { id: "free", ...copy.pricing.free },
+        {
+          id: "pro",
+          ...copy.pricing.pro,
+          price: pricingValues.price,
+          period: copy.pricing.period,
+          badge: fill(copy.pricing.pro.badge),
+          cta: fill(copy.pricing.pro.cta),
+          note: fill(copy.pricing.pro.note),
+        },
+      ],
+    },
+    faq: {
+      ...copy.faq,
+      items: copy.faq.items.map((item) => ({ ...item, answer: fill(item.answer) })),
+    },
     cta: copy.cta,
     footer: copy.footer,
   };

@@ -33,6 +33,7 @@
       "product": "Producto",
       "features": "Funciones",
       "howItWorks": "Cómo funciona",
+      "pricing": "Precios",
       "faq": "Preguntas"
     },
     "signIn": "Iniciar sesión",
@@ -207,6 +208,36 @@
       "cta": "Empezar ahora"
     }
   },
+  "pricing": {
+    "eyebrow": "Precios",
+    "title": "Empieza gratis. Pasa a Pro cuando lo necesites",
+    "subtitle": "Un solo plan de pago, sin letra pequeña. Pruébalo {days} días y cancela cuando quieras.",
+    "period": "al mes",
+    "free": {
+      "name": "Free",
+      "price": "Gratis",
+      "description": "Para registrar tus gastos del día a día.",
+      "cta": "Crear cuenta gratis",
+      "features": [
+        "Movimientos ilimitados",
+        "Categorías con sugerencias de IA",
+        "Registro por voz",
+        "Balance y resumen del mes"
+      ]
+    },
+    "pro": {
+      "name": "Pro",
+      "badge": "{days} días gratis",
+      "description": "Para ponerle tope a cada categoría y llevarte tus datos.",
+      "cta": "Probar {days} días gratis",
+      "note": "Después {price} {period}. Cancela cuando quieras.",
+      "features": [
+        "Todo lo de Free",
+        "Presupuestos por categoría",
+        "Exportación a Excel"
+      ]
+    }
+  },
   "faq": {
     "eyebrow": "Preguntas frecuentes",
     "title": "Lo que suelen preguntarnos",
@@ -214,6 +245,10 @@
       {
         "question": "¿Qué es Zentlet?",
         "answer": "Una app web de finanzas personales para registrar ingresos y gastos en segundos y ver tu balance del mes, sin hojas de cálculo."
+      },
+      {
+        "question": "¿Cuánto cuesta Zentlet?",
+        "answer": "Registrar movimientos, categorías y tu balance es gratis. Pro cuesta {price} {period} e incluye presupuestos y exportación a Excel. Puedes probarlo {days} días y cancelar antes de que se cobre."
       },
       {
         "question": "¿Cómo sabe en qué categoría va cada gasto?",
@@ -225,7 +260,7 @@
       },
       {
         "question": "¿Puedo ponerme un presupuesto?",
-        "answer": "Sí. Mantén pulsada una categoría y fija su tope: semanal, quincenal, mensual, trimestral o anual, que se renueva solo o vale una sola vez. La barra de la categoría muestra cuánto llevas y cuánto te queda."
+        "answer": "Sí, con el plan Pro. Mantén pulsada una categoría y fija su tope: semanal, quincenal, mensual, trimestral o anual, que se renueva solo o vale una sola vez. La barra de la categoría muestra cuánto llevas y cuánto te queda."
       },
       {
         "question": "¿Necesito instalar algo?",

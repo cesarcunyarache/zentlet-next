@@ -15,6 +15,12 @@ export function currencySymbol(code: CurrencyCode) {
   return CURRENCIES.find((currency) => currency.code === code)?.symbol ?? code;
 }
 
+export function toCurrencyCode(value: string) {
+  const trimmed = value.trim();
+  const match = CURRENCIES.find(({ code, symbol }) => trimmed.toUpperCase() === code || trimmed === symbol);
+  return match?.code ?? trimmed.toUpperCase();
+}
+
 export function parseStoredCurrency(value: string | null): CurrencyCode {
   const match = CURRENCIES.find(({ code, symbol }) => value === code || value === symbol);
   return match?.code ?? DEFAULT_CURRENCY;

@@ -5,6 +5,7 @@ const MIN_YEAR = 1900;
 const MAX_YEAR = 2100;
 const MAX_TEXT_LENGTH = 200;
 const MAX_AMOUNT = 9_999_999_999;
+const CENT = 0.01;
 const MAX_CATEGORY_ID_LENGTH = 64;
 const MAX_SUMMARY_IDS = 100;
 const MAX_SEARCH_LENGTH = 60;
@@ -19,31 +20,25 @@ function isCalendarDate(value: string) {
   return date.toISOString().startsWith(value) && year >= MIN_YEAR && year <= MAX_YEAR;
 }
 
-export const isoDate = z
-  .string()
-  .regex(ISO_DATE_PATTERN, "Formato YYYY-MM-DD")
-  .refine(isCalendarDate, "Fecha inexistente");
+export const isoDate = z.string().regex(ISO_DATE_PATTERN, "Formato YYYY-MM-DD").refine(isCalendarDate, "Fecha inexistente");
 
-const fields = {
+const transactionFields = {
   description: z.string().trim().max(MAX_TEXT_LENGTH),
-  amount: z.number().positive().max(MAX_AMOUNT),
+  amount: z.number().positive().multipleOf(CENT).max(MAX_AMOUNT),
   type: z.enum(["expense", "income"]),
   categoryId: z.string().min(1).max(MAX_CATEGORY_ID_LENGTH),
   transactionDate: isoDate,
   reference: z.string().max(MAX_TEXT_LENGTH).nullable().optional(),
 };
 
-export const createTransactionSchema = z.object({ id: z.uuid(), ...fields });
+export const createTransactionSchema = z.object({ id: z.uuid(), ...transactionFields });
 
-export const updateTransactionSchema = z.object(fields).partial();
+export const updateTransactionSchema = z.object(transactionFields).partial();
 
-const range = {
-  from: isoDate.optional(),
-  to: isoDate.optional(),
-};
+const dateRangeFields = { from: isoDate.optional(), to: isoDate.optional() };
 
 export const transactionSummaryQuerySchema = z.object({
-  ...range,
+  ...dateRangeFields,
   ids: z
     .string()
     .optional()
@@ -52,9 +47,9 @@ export const transactionSummaryQuerySchema = z.object({
 });
 
 export const transactionListQuerySchema = z.object({
-  ...range,
-  type: fields.type.optional(),
-  categoryId: fields.categoryId.optional(),
+  ...dateRangeFields,
+  type: transactionFields.type.optional(),
+  categoryId: transactionFields.categoryId.optional(),
   q: z.string().trim().max(MAX_SEARCH_LENGTH).optional(),
   cursor: z.string().max(MAX_CURSOR_LENGTH).optional(),
   limit: z.coerce.number().int().min(1).max(MAX_PAGE_SIZE).default(DEFAULT_PAGE_SIZE),

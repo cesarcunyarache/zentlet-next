@@ -15,10 +15,9 @@ export function findCached(queryClient: QueryClient, id: string) {
   return undefined;
 }
 
-export function updateFeeds(
-  queryClient: QueryClient,
-  update: (data: FeedData, filters: TransactionFilters) => FeedData,
-) {
+type FeedUpdate = (data: FeedData, filters: TransactionFilters) => FeedData;
+
+export function updateFeeds(queryClient: QueryClient, update: FeedUpdate) {
   for (const [key, data] of feeds(queryClient)) {
     if (data) queryClient.setQueryData<FeedData>(key, update(data, key[2] as TransactionFilters));
   }

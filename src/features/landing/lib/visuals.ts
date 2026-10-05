@@ -8,7 +8,7 @@ interface TickerStat {
   from?: number;
 }
 
-export interface TickerRange {
+interface TickerRange {
   value: number;
   startValue: number;
   direction: "up" | "down";
@@ -34,7 +34,7 @@ interface DonutSlice {
   total: number;
 }
 
-export interface DonutArc {
+interface DonutArc {
   key: string;
   color: string;
   length: number;

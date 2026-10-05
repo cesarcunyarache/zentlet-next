@@ -61,9 +61,22 @@ export const ModelName = {
   Transaction: 'Transaction',
   Feedback: 'Feedback',
   Budget: 'Budget',
+  BudgetAlert: 'BudgetAlert',
+  Notification: 'Notification',
+  NotificationDelivery: 'NotificationDelivery',
   BudgetLimit: 'BudgetLimit',
   RateLimit: 'RateLimit',
-  UsageLimit: 'UsageLimit'
+  UsageLimit: 'UsageLimit',
+  Subscription: 'Subscription',
+  BillingPayment: 'BillingPayment',
+  BillingEvent: 'BillingEvent',
+  Feature: 'Feature',
+  UserFeature: 'UserFeature',
+  EmailInbox: 'EmailInbox',
+  GmailConnection: 'GmailConnection',
+  InboxSender: 'InboxSender',
+  InboxTransaction: 'InboxTransaction',
+  MerchantRule: 'MerchantRule'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -226,6 +239,44 @@ export const BudgetScalarFieldEnum = {
 export type BudgetScalarFieldEnum = (typeof BudgetScalarFieldEnum)[keyof typeof BudgetScalarFieldEnum]
 
 
+export const BudgetAlertScalarFieldEnum = {
+  id: 'id',
+  budgetId: 'budgetId',
+  kind: 'kind',
+  value: 'value',
+  createdAt: 'createdAt'
+} as const
+
+export type BudgetAlertScalarFieldEnum = (typeof BudgetAlertScalarFieldEnum)[keyof typeof BudgetAlertScalarFieldEnum]
+
+
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  data: 'data',
+  dedupeKey: 'dedupeKey',
+  readAt: 'readAt',
+  createdAt: 'createdAt'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+export const NotificationDeliveryScalarFieldEnum = {
+  id: 'id',
+  notificationId: 'notificationId',
+  channel: 'channel',
+  status: 'status',
+  attempts: 'attempts',
+  nextAttemptAt: 'nextAttemptAt',
+  sentAt: 'sentAt',
+  createdAt: 'createdAt'
+} as const
+
+export type NotificationDeliveryScalarFieldEnum = (typeof NotificationDeliveryScalarFieldEnum)[keyof typeof NotificationDeliveryScalarFieldEnum]
+
+
 export const BudgetLimitScalarFieldEnum = {
   budgetId: 'budgetId',
   effectiveFrom: 'effectiveFrom',
@@ -254,6 +305,180 @@ export const UsageLimitScalarFieldEnum = {
 } as const
 
 export type UsageLimitScalarFieldEnum = (typeof UsageLimitScalarFieldEnum)[keyof typeof UsageLimitScalarFieldEnum]
+
+
+export const SubscriptionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  planKey: 'planKey',
+  status: 'status',
+  amount: 'amount',
+  currency: 'currency',
+  interval: 'interval',
+  provider: 'provider',
+  externalId: 'externalId',
+  checkoutUrl: 'checkoutUrl',
+  trialEndsAt: 'trialEndsAt',
+  currentPeriodEnd: 'currentPeriodEnd',
+  canceledAt: 'canceledAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SubscriptionScalarFieldEnum = (typeof SubscriptionScalarFieldEnum)[keyof typeof SubscriptionScalarFieldEnum]
+
+
+export const BillingPaymentScalarFieldEnum = {
+  id: 'id',
+  subscriptionId: 'subscriptionId',
+  provider: 'provider',
+  externalId: 'externalId',
+  providerPaymentId: 'providerPaymentId',
+  status: 'status',
+  amount: 'amount',
+  refundedAmount: 'refundedAmount',
+  currency: 'currency',
+  paidAt: 'paidAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BillingPaymentScalarFieldEnum = (typeof BillingPaymentScalarFieldEnum)[keyof typeof BillingPaymentScalarFieldEnum]
+
+
+export const BillingEventScalarFieldEnum = {
+  id: 'id',
+  source: 'source',
+  type: 'type',
+  provider: 'provider',
+  externalId: 'externalId',
+  resourceId: 'resourceId',
+  userId: 'userId',
+  subscriptionId: 'subscriptionId',
+  data: 'data',
+  processedAt: 'processedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type BillingEventScalarFieldEnum = (typeof BillingEventScalarFieldEnum)[keyof typeof BillingEventScalarFieldEnum]
+
+
+export const FeatureScalarFieldEnum = {
+  slug: 'slug',
+  enabled: 'enabled',
+  rollout: 'rollout',
+  description: 'description',
+  type: 'type',
+  stale: 'stale',
+  lastUsedAt: 'lastUsedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  updatedBy: 'updatedBy'
+} as const
+
+export type FeatureScalarFieldEnum = (typeof FeatureScalarFieldEnum)[keyof typeof FeatureScalarFieldEnum]
+
+
+export const UserFeatureScalarFieldEnum = {
+  userId: 'userId',
+  featureId: 'featureId',
+  enabled: 'enabled',
+  assignedAt: 'assignedAt',
+  assignedBy: 'assignedBy',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserFeatureScalarFieldEnum = (typeof UserFeatureScalarFieldEnum)[keyof typeof UserFeatureScalarFieldEnum]
+
+
+export const EmailInboxScalarFieldEnum = {
+  id: 'id',
+  address: 'address',
+  userId: 'userId',
+  verificationCode: 'verificationCode',
+  verificationUrl: 'verificationUrl',
+  lastReceivedAt: 'lastReceivedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EmailInboxScalarFieldEnum = (typeof EmailInboxScalarFieldEnum)[keyof typeof EmailInboxScalarFieldEnum]
+
+
+export const GmailConnectionScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  userId: 'userId',
+  refreshToken: 'refreshToken',
+  status: 'status',
+  historyId: 'historyId',
+  watchExpiresAt: 'watchExpiresAt',
+  lastSyncedAt: 'lastSyncedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GmailConnectionScalarFieldEnum = (typeof GmailConnectionScalarFieldEnum)[keyof typeof GmailConnectionScalarFieldEnum]
+
+
+export const InboxSenderScalarFieldEnum = {
+  id: 'id',
+  address: 'address',
+  status: 'status',
+  origin: 'origin',
+  acceptedCount: 'acceptedCount',
+  dismissedCount: 'dismissedCount',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InboxSenderScalarFieldEnum = (typeof InboxSenderScalarFieldEnum)[keyof typeof InboxSenderScalarFieldEnum]
+
+
+export const InboxTransactionScalarFieldEnum = {
+  id: 'id',
+  status: 'status',
+  externalId: 'externalId',
+  senderAddress: 'senderAddress',
+  bank: 'bank',
+  subject: 'subject',
+  parser: 'parser',
+  isVerified: 'isVerified',
+  isNewSender: 'isNewSender',
+  type: 'type',
+  amount: 'amount',
+  currency: 'currency',
+  merchant: 'merchant',
+  description: 'description',
+  categoryId: 'categoryId',
+  isLearned: 'isLearned',
+  transactionDate: 'transactionDate',
+  cardLast4: 'cardLast4',
+  reference: 'reference',
+  duplicateOfId: 'duplicateOfId',
+  transactionId: 'transactionId',
+  resolvedAt: 'resolvedAt',
+  userId: 'userId',
+  receivedAt: 'receivedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type InboxTransactionScalarFieldEnum = (typeof InboxTransactionScalarFieldEnum)[keyof typeof InboxTransactionScalarFieldEnum]
+
+
+export const MerchantRuleScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  description: 'description',
+  hits: 'hits',
+  categoryId: 'categoryId',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MerchantRuleScalarFieldEnum = (typeof MerchantRuleScalarFieldEnum)[keyof typeof MerchantRuleScalarFieldEnum]
 
 
 export const SortOrder = {

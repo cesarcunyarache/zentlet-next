@@ -50,3 +50,7 @@ export function fullDate(isoDate: string, locale: string) {
     year: "numeric",
   }).format(parseISODate(isoDate));
 }
+
+export function isoDateIn(timeZone: string, date = new Date()) {
+  return new Intl.DateTimeFormat("en-CA", { timeZone, year: "numeric", month: "2-digit", day: "2-digit" }).format(date);
+}

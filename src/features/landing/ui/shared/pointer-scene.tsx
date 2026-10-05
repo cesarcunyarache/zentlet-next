@@ -1,14 +1,7 @@
 "use client";
 
 import { createContext, useContext, useMemo } from "react";
-import {
-  motion,
-  useMotionValue,
-  useReducedMotion,
-  useSpring,
-  useTransform,
-  type MotionValue,
-} from "motion/react";
+import { motion, useMotionValue, useReducedMotion, useSpring, useTransform, type MotionValue } from "motion/react";
 import { SPRING_MOUSE } from "@/lib/ease";
 import { cn } from "@/lib/utils";
 
@@ -26,7 +19,7 @@ interface PointerValues {
 
 const PointerContext = createContext<PointerValues | null>(null);
 
-export function usePointer() {
+function usePointer() {
   const value = useContext(PointerContext);
   if (!value) throw new Error("usePointer debe usarse dentro de <PointerScene>");
   return value;

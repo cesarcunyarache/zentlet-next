@@ -10,12 +10,18 @@ const withNextIntl = createNextIntlPlugin();
  * - el navegador no adivina tipos de archivo;
  * - otras webs no reciben la URL completa de la app;
  * - el micrófono (dictado) sólo lo puede pedir la propia app; el resto de
- *   APIs sensibles quedan desactivadas.
+ *   APIs sensibles quedan desactivadas;
+ * - sin plugins (`<object>`), sin `<base>` ajeno y los formularios sólo se
+ *   envían a la propia app. Sin `script-src`: exigiría nonces y render
+ *   dinámico en todas las páginas (la landing dejaría de ser estática).
  * HSTS sólo en producción: en local se sirve por http.
  */
 const securityHeaders = [
   { key: "X-Frame-Options", value: "DENY" },
-  { key: "Content-Security-Policy", value: "frame-ancestors 'none'" },
+  {
+    key: "Content-Security-Policy",
+    value: "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'",
+  },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "Permissions-Policy", value: "microphone=(self), camera=(), geolocation=(), payment=(), usb=()" },
@@ -25,6 +31,8 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // en desarrollo, túneles HTTPS (pagos y webhooks de Mercado Pago exigen una URL pública)
+  allowedDevOrigins: ["*.ngrok-free.app", "*.trycloudflare.com"],
   async headers() {
     return [
       { source: "/:path*", headers: securityHeaders },

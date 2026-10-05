@@ -51,7 +51,7 @@ export function buildFeedbackContext({ locale, path, userAgent, isOnline }: Cont
   };
 }
 
-export type FeedbackView = "form" | "sent" | "error";
+type FeedbackView = "form" | "sent" | "error";
 
 export function feedbackViewOf(status: FeedbackDialogStatus): FeedbackView {
   if (status === "sent") return "sent";

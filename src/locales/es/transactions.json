@@ -130,5 +130,44 @@
       "salary": "Me pagaron 2500 de sueldo",
       "mouse": "Compré un mouse por 120"
     }
+  },
+  "receipt": {
+    "title": "Escanear comprobante",
+    "reading": "Leyendo el comprobante…",
+    "redo": "Volver a leer",
+    "noAmount": "No pude leer el monto · toca Editar para escribirlo",
+    "foreignCurrency": "El comprobante está en {currency}. Se guardará con tu moneda sin convertir; revisa el monto.",
+    "errors": {
+      "notReceipt": {
+        "title": "No parece un comprobante",
+        "body": "Toma una foto clara de una boleta, voucher o captura de Yape/Plin donde se vea el monto."
+      },
+      "invalidImage": {
+        "title": "No pudimos abrir la imagen",
+        "body": "Prueba con otra foto o una captura de pantalla en JPG o PNG."
+      },
+      "limited": {
+        "title": "Demasiados escaneos seguidos",
+        "body": "Espera un minuto y vuelve a intentarlo."
+      },
+      "failed": {
+        "title": "No pudimos leer el comprobante",
+        "body": "Algo falló al procesar la imagen. Inténtalo de nuevo o regístralo escribiendo."
+      },
+      "offline": {
+        "title": "No pudimos leerlo sin internet",
+        "body": "Sin conexión solo leemos en tu celular comprobantes nítidos. Prueba con una foto más clara o regístralo escribiendo; se sincroniza al volver la red."
+      }
+    },
+    "steps": {
+      "qr": "Buscando el código QR…",
+      "ocr": "Leyendo el texto en tu celular…",
+      "ai": "Revisando con IA…"
+    },
+    "method": {
+      "qr": "Leído del código QR de SUNAT",
+      "ocr": "Leído en tu celular, sin IA",
+      "ai": "Leído con IA"
+    }
   }
 }

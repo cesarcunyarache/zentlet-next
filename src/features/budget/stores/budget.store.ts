@@ -81,11 +81,7 @@ function reportError(error: unknown, key: BudgetErrorKey) {
 }
 
 export function registerBudgetMutations(queryClient: QueryClient) {
-  const shared = {
-    scope: SYNC_SCOPE,
-    retry: shouldRetryMutation,
-    retryDelay: mutationRetryDelay,
-  };
+  const shared = { scope: SYNC_SCOPE, retry: shouldRetryMutation, retryDelay: mutationRetryDelay };
   const cancelList = () => queryClient.cancelQueries({ queryKey: budgetKeys.all });
   const refetchList = () => void queryClient.invalidateQueries({ queryKey: budgetKeys.all });
 

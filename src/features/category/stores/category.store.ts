@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  useMutation,
-  useQuery,
-  useQueryClient,
-  type Mutation,
-  type QueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient, type Mutation, type QueryClient } from "@tanstack/react-query";
 import { getApiErrorStatus } from "@/core/services/api-error";
 import { emitSyncError } from "@/core/offline/sync-events";
 import {
@@ -16,17 +10,12 @@ import {
   reportSyncFailure,
   shouldRetryMutation,
 } from "@/core/offline/sync-policy";
-import {
-  applyPendingChanges,
-  pendingMutations,
-  type PendingChange,
-} from "@/core/offline/pending-changes";
+import { applyPendingChanges, pendingMutations, type PendingChange } from "@/core/offline/pending-changes";
 import { categoryService } from "../services/category.service";
 import type { TCategory, TCategoryPayload } from "../types";
 
 export const categoryKeys = {
   all: ["categories"] as const,
-  detail: (categoryId: string) => ["categories", categoryId] as const,
 };
 
 export const categoryMutationKeys = {
@@ -39,14 +28,11 @@ export const categoryMutationKeys = {
 type CreateVariables = TCategoryPayload & { id: string };
 type UpdateVariables = { categoryId: string; data: Partial<TCategoryPayload> };
 
-function localCategory({
-  id,
-  name,
-  icon,
-  color,
-  description,
-  aiSuggestions,
-}: CreateVariables): TCategory {
+type CategoryErrorKey = "createCategory" | "updateCategory" | "deleteCategory";
+
+const HTTP_CONFLICT = 409;
+
+function localCategory({ id, name, icon, color, description, aiSuggestions }: CreateVariables): TCategory {
   const now = new Date().toISOString();
   return {
     id,
@@ -61,9 +47,7 @@ function localCategory({
   };
 }
 
-function toPendingChange(
-  mutation: Mutation<unknown, unknown, unknown>,
-): PendingChange<TCategory> | null {
+function toPendingChange(mutation: Mutation<unknown, unknown, unknown>): PendingChange<TCategory> | null {
   const kind = mutation.options.mutationKey?.[2];
   const variables = mutation.state.variables;
 
@@ -88,13 +72,8 @@ function withPendingChanges(queryClient: QueryClient, rows: TCategory[]) {
   return applyPendingChanges(rows, changes);
 }
 
-function setList(
-  queryClient: QueryClient,
-  update: (rows: TCategory[]) => TCategory[],
-) {
-  queryClient.setQueryData<TCategory[]>(categoryKeys.all, (current) =>
-    update(current ?? []),
-  );
+function setList(queryClient: QueryClient, update: (rows: TCategory[]) => TCategory[]) {
+  queryClient.setQueryData<TCategory[]>(categoryKeys.all, (current) => update(current ?? []));
 }
 
 function refreshWhenQueueDrains(queryClient: QueryClient) {
@@ -103,10 +82,6 @@ function refreshWhenQueueDrains(queryClient: QueryClient) {
   }
 }
 
-const HTTP_CONFLICT = 409;
-
-type CategoryErrorKey = "createCategory" | "updateCategory" | "deleteCategory";
-
 function reportError(error: unknown, key: CategoryErrorKey) {
   const isInUse = key === "deleteCategory" && getApiErrorStatus(error) === HTTP_CONFLICT;
   emitSyncError(isInUse ? "categoryInUse" : key);
@@ -114,29 +89,19 @@ function reportError(error: unknown, key: CategoryErrorKey) {
 }
 
 export function registerCategoryMutations(queryClient: QueryClient) {
-  const shared = {
-    scope: SYNC_SCOPE,
-    retry: shouldRetryMutation,
-    retryDelay: mutationRetryDelay,
-  };
+  const shared = { scope: SYNC_SCOPE, retry: shouldRetryMutation, retryDelay: mutationRetryDelay };
   const cancelList = () => queryClient.cancelQueries({ queryKey: categoryKeys.all });
   const refetchList = () => void queryClient.invalidateQueries({ queryKey: categoryKeys.all });
 
   queryClient.setMutationDefaults(categoryMutationKeys.create, {
     ...shared,
-    mutationFn: (variables: CreateVariables) =>
-      categoryService.createCategory(variables),
+    mutationFn: (variables: CreateVariables) => categoryService.createCategory(variables),
     onMutate: async (variables: CreateVariables) => {
       await cancelList();
-      setList(queryClient, (rows) => [
-        localCategory(variables),
-        ...rows.filter((row) => row.id !== variables.id),
-      ]);
+      setList(queryClient, (rows) => [localCategory(variables), ...rows.filter((row) => row.id !== variables.id)]);
     },
     onError: (error: unknown, variables: CreateVariables) => {
-      setList(queryClient, (rows) =>
-        rows.filter((row) => row.id !== variables.id),
-      );
+      setList(queryClient, (rows) => rows.filter((row) => row.id !== variables.id));
       reportError(error, "createCategory");
     },
     onSettled: () => refreshWhenQueueDrains(queryClient),
@@ -144,16 +109,10 @@ export function registerCategoryMutations(queryClient: QueryClient) {
 
   queryClient.setMutationDefaults(categoryMutationKeys.update, {
     ...shared,
-    mutationFn: ({ categoryId, data }: UpdateVariables) =>
-      categoryService.updateCategory(categoryId, data),
+    mutationFn: ({ categoryId, data }: UpdateVariables) => categoryService.updateCategory(categoryId, data),
     onMutate: async ({ categoryId, data }: UpdateVariables) => {
       await cancelList();
-      setList(queryClient, (rows) =>
-        rows.map((row) => (row.id === categoryId ? { ...row, ...data } : row)),
-      );
-    },
-    onSuccess: (category: TCategory) => {
-      queryClient.setQueryData(categoryKeys.detail(category.id), category);
+      setList(queryClient, (rows) => rows.map((row) => (row.id === categoryId ? { ...row, ...data } : row)));
     },
     onError: (error: unknown) => {
       refetchList();
@@ -173,66 +132,29 @@ export function registerCategoryMutations(queryClient: QueryClient) {
     },
     onMutate: async (categoryId: string) => {
       await cancelList();
-      setList(queryClient, (rows) =>
-        rows.filter((row) => row.id !== categoryId),
-      );
+      setList(queryClient, (rows) => rows.filter((row) => row.id !== categoryId));
     },
     onError: (error: unknown) => {
       refetchList();
       reportError(error, "deleteCategory");
     },
-    onSettled: (_data: unknown, _error: unknown, categoryId: string) => {
-      queryClient.removeQueries({ queryKey: categoryKeys.detail(categoryId) });
-      return refreshWhenQueueDrains(queryClient);
-    },
-  });
-}
-
-export function useCategories() {
-  const queryClient = useQueryClient();
-
-  return useQuery({
-    queryKey: categoryKeys.all,
-    queryFn: async () =>
-      withPendingChanges(queryClient, await categoryService.getCategories()),
-  });
-}
-
-export function useCategory(categoryId: string | null | undefined) {
-  return useQuery({
-    queryKey: categoryKeys.detail(categoryId ?? ""),
-    queryFn: () => categoryService.getCategory(categoryId as string),
-    enabled: Boolean(categoryId),
+    onSettled: () => refreshWhenQueueDrains(queryClient),
   });
 }
 
 export function useCategoryStore() {
-  const query = useCategories();
-  const create = useMutation<TCategory, unknown, CreateVariables>({
-    mutationKey: categoryMutationKeys.create,
+  const queryClient = useQueryClient();
+  const query = useQuery({
+    queryKey: categoryKeys.all,
+    queryFn: async () => withPendingChanges(queryClient, await categoryService.getCategories()),
   });
-  const update = useMutation<TCategory, unknown, UpdateVariables>({
-    mutationKey: categoryMutationKeys.update,
-  });
-  const remove = useMutation<void, unknown, string>({
-    mutationKey: categoryMutationKeys.remove,
-  });
+  const create = useMutation<TCategory, unknown, CreateVariables>({ mutationKey: categoryMutationKeys.create });
+  const update = useMutation<TCategory, unknown, UpdateVariables>({ mutationKey: categoryMutationKeys.update });
 
   return {
     categories: query.data ?? [],
     isLoading: query.isLoading,
-    isFetching: query.isFetching,
-    isError: query.isError,
-    error: query.error,
-    refetch: query.refetch,
-
-    createCategory: (payload: TCategoryPayload): string => {
-      const id = crypto.randomUUID();
-      create.mutate({ ...payload, id });
-      return id;
-    },
-    updateCategory: (categoryId: string, data: Partial<TCategoryPayload>) =>
-      update.mutate({ categoryId, data }),
-    deleteCategory: (categoryId: string) => remove.mutate(categoryId),
+    createCategory: (payload: TCategoryPayload) => create.mutate({ ...payload, id: crypto.randomUUID() }),
+    updateCategory: (categoryId: string, data: Partial<TCategoryPayload>) => update.mutate({ categoryId, data }),
   };
 }

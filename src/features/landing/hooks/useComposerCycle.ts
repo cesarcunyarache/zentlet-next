@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-export type ComposerPhase = "typing" | "reading" | "suggested";
+type ComposerPhase = "typing" | "reading" | "suggested";
 
 export const TYPE_SPEED_MS = 65;
 const TYPING_TAIL_MS = 250;
@@ -32,7 +32,7 @@ export function useComposerCycle<Entry extends { typed: string }>(entries: Entry
       }, typingMs + READING_MS + SUGGESTED_MS),
     ];
     return () => timers.forEach(clearTimeout);
-  }, [entry.typed, entryCount, isPaused]);
+  }, [index, entry.typed, entryCount, isPaused]);
 
   return { index, entry, phase: isPaused ? "suggested" : phase };
 }

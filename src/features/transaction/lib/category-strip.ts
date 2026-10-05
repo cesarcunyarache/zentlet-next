@@ -2,7 +2,7 @@ import { barHeight, budgetBarHeights } from "./chart";
 import type { CategoryTotal } from "../types";
 import { visibleSize } from "./strip-data";
 
-export interface BarLayout {
+interface BarLayout {
   isIdle: boolean;
   height: number;
   fill: number;
@@ -15,8 +15,8 @@ export function stripScaleMax(data: CategoryTotal[]) {
 
 export function barLayout({ total, budget }: CategoryTotal, max: number): BarLayout {
   if (budget === null) {
-    const { idle, height } = barHeight(total, max);
-    return { isIdle: idle, height, fill: height, track: null };
+    const { isIdle, height } = barHeight(total, max);
+    return { isIdle, height, fill: height, track: null };
   }
   const { track, fill } = budgetBarHeights(Math.abs(total), budget, max);
   return { isIdle: false, height: Math.max(track, fill), fill, track };

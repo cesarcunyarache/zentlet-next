@@ -13,6 +13,8 @@ import type { TransactionFormValues } from "../../schemas/transaction.schema";
 import type { CategoryLike } from "../../types";
 import { VOICE_VIEW_MOTION } from "./voice-view-motion";
 
+const MIC_ICON = <Mic className="size-4" strokeWidth={2} />;
+
 interface VoicePreviewViewProps {
   transcript: string;
   draft: VoiceDraft;
@@ -22,6 +24,9 @@ interface VoicePreviewViewProps {
   isAiSuggested: boolean;
   onPickCategory: (categoryId: string) => void;
   onRetry: () => void;
+  redoLabel?: string;
+  redoIcon?: React.ReactNode;
+  noAmountLabel?: string;
 }
 
 export function VoicePreviewView({
@@ -33,6 +38,9 @@ export function VoicePreviewView({
   isAiSuggested,
   onPickCategory,
   onRetry,
+  redoLabel,
+  redoIcon = MIC_ICON,
+  noAmountLabel,
 }: VoicePreviewViewProps) {
   const t = useTranslations("transactions");
   const locale = useLocale();
@@ -50,10 +58,10 @@ export function VoicePreviewView({
         <button
           type="button"
           onClick={onRetry}
-          aria-label={t("voice.redo")}
+          aria-label={redoLabel ?? t("voice.redo")}
           className="bg-app-fill hover:bg-app-fill-strong text-app-fg grid size-9 shrink-0 place-items-center rounded-full transition-colors"
         >
-          <Mic className="size-4" strokeWidth={2} />
+          {redoIcon}
         </button>
       </div>
 
@@ -67,31 +75,17 @@ export function VoicePreviewView({
           {t(`type.${values.type}`)}
         </span>
 
-        {draft.amount ? (
-          <p className="font-display text-app-fg m-0 mt-3 flex items-baseline gap-1.5 text-[44px] leading-none font-bold tracking-[-0.04em] tabular-nums">
-            <span className="text-app-muted text-xl font-semibold">
-              {isIncome ? "+" : "−"} {currency}
-            </span>
-            {formatNumber(draft.amount)}
-          </p>
-        ) : (
-          <p className="text-app-expense m-0 mt-3 text-sm font-semibold">{t("voice.noAmount")}</p>
-        )}
+        <PreviewAmount
+          amount={draft.amount}
+          isIncome={isIncome}
+          currency={currency}
+          noAmountLabel={noAmountLabel ?? t("voice.noAmount")}
+        />
 
         <dl className="m-0 mt-5 grid grid-cols-[auto_1fr] gap-x-4 gap-y-3 text-sm">
           <dt className="text-app-muted">{t("fields.category")}</dt>
           <dd className="text-app-fg m-0 flex items-center gap-1.5 font-semibold">
-            {category ? (
-              <>
-                <CategoryEmoji category={category} className="size-6 rounded-full text-[13px]" />
-                {category.name}
-                {isAiSuggested ? (
-                  <Sparkles aria-label={t("voice.aiSuggested")} className="size-3.5" strokeWidth={2.2} />
-                ) : null}
-              </>
-            ) : (
-              <span className="text-app-expense">{t("voice.pickBelow")}</span>
-            )}
+            <PreviewCategory category={category} isAiSuggested={isAiSuggested} />
           </dd>
           <dt className="text-app-muted">{t("fields.date")}</dt>
           <dd className="text-app-fg m-0 font-semibold">{dayLabel(draft.transactionDate, locale)}</dd>
@@ -107,6 +101,45 @@ export function VoicePreviewView({
         onPick={onPickCategory}
       />
     </motion.div>
+  );
+}
+
+interface PreviewAmountProps {
+  amount: VoiceDraft["amount"];
+  isIncome: boolean;
+  currency: string;
+  noAmountLabel: string;
+}
+
+function PreviewAmount({ amount, isIncome, currency, noAmountLabel }: PreviewAmountProps) {
+  if (!amount) return <p className="text-app-expense m-0 mt-3 text-sm font-semibold">{noAmountLabel}</p>;
+
+  return (
+    <p className="font-display text-app-fg m-0 mt-3 flex items-baseline gap-1.5 text-[44px] leading-none font-bold tracking-[-0.04em] tabular-nums">
+      <span className="text-app-muted text-xl font-semibold">
+        {isIncome ? "+" : "−"} {currency}
+      </span>
+      {formatNumber(amount)}
+    </p>
+  );
+}
+
+interface PreviewCategoryProps {
+  category: CategoryLike | undefined;
+  isAiSuggested: boolean;
+}
+
+function PreviewCategory({ category, isAiSuggested }: PreviewCategoryProps) {
+  const t = useTranslations("transactions.voice");
+
+  if (!category) return <span className="text-app-expense">{t("pickBelow")}</span>;
+
+  return (
+    <>
+      <CategoryEmoji category={category} className="size-6 rounded-full text-[13px]" />
+      {category.name}
+      {isAiSuggested ? <Sparkles aria-label={t("aiSuggested")} className="size-3.5" strokeWidth={2.2} /> : null}
+    </>
   );
 }
 

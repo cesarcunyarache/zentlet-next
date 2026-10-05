@@ -16,7 +16,7 @@ function withoutEmpty(params: object) {
   return Object.fromEntries(Object.entries(params).filter(([, value]) => !isEmpty(value)));
 }
 
-export class TransactionService extends APIService {
+class TransactionService extends APIService {
   async getTransactionPage(
     params: TransactionFilters & { cursor?: string | null; limit: number },
   ): Promise<TransactionPage> {
@@ -42,10 +42,7 @@ export class TransactionService extends APIService {
     return response.data;
   }
 
-  async updateTransaction(
-    transactionId: string,
-    data: Partial<TTransactionPayload>,
-  ): Promise<TTransaction> {
+  async updateTransaction(transactionId: string, data: Partial<TTransactionPayload>): Promise<TTransaction> {
     const response = await this.patch<TTransaction>(`${BASE_URL}/${transactionId}`, data);
     return response.data;
   }

@@ -1,5 +1,6 @@
 import { useEffect, useEffectEvent, useState } from "react";
 import { suggestTransactionCategory } from "../../ai/actions/category-suggester";
+import { toPromptCategories } from "../../ai/prompts/prompt-categories";
 import type { VoiceDraft } from "../../lib/parse-voice";
 import type { CategoryLike } from "../../types";
 import { needsAiCategory, type TranscriptCategory } from "../../lib/voice-entry";
@@ -17,7 +18,7 @@ export function useAiCategoryPick({ parsed, transcript, categories }: UseAiCateg
   const requestSuggestion = useEffectEvent(() =>
     suggestTransactionCategory({
       description: parsed?.description ?? "",
-      categories: categories.map(({ id, name }) => ({ id, name })),
+      categories: toPromptCategories(categories),
     }),
   );
 

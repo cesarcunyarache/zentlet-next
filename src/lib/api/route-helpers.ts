@@ -1,3 +1,4 @@
+import { timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 import type { z } from "zod";
 import { auth } from "@/lib/auth";
@@ -19,9 +20,14 @@ const WRITES_PER_MINUTE = 120;
  * que es lo que lee `getApiErrorMessage` en el cliente.
  */
 
+/** Usuario de cada petición, para que `internalError` lo adjunte sin pasarlo a mano. */
+const requestUsers = new WeakMap<Request, string>();
+
 export async function getSessionUserId(req: Request) {
   const session = await auth.api.getSession({ headers: req.headers });
-  return session?.user.id ?? null;
+  const userId = session?.user.id ?? null;
+  if (userId) requestUsers.set(req, userId);
+  return userId;
 }
 
 export function errorResponse(message: string, status: number) {
@@ -30,18 +36,39 @@ export function errorResponse(message: string, status: number) {
 
 export const unauthorized = () => errorResponse("Unauthorized", 401);
 
+export function tooManyRequests(message: string, retryAfterSeconds: number) {
+  const response = errorResponse(message, 429);
+  response.headers.set("Retry-After", String(retryAfterSeconds));
+  return response;
+}
+
+/** `Authorization: Bearer <secreto>` en tiempo constante; sin secreto configurado, nadie pasa. */
+export function hasBearerSecret(req: Request, secret: string | undefined) {
+  const given = req.headers.get("authorization");
+  if (!secret || !given) return false;
+  const a = Buffer.from(given);
+  const b = Buffer.from(`Bearer ${secret}`);
+  return a.length === b.length && timingSafeEqual(a, b);
+}
+
 /** 429 si el usuario superó su cupo de escrituras; `null` si puede seguir. */
 export async function writeLimit(userId: string) {
   const { allowed } = await rateLimit(`writes:${userId}`, WRITES_PER_MINUTE, 60_000);
   if (allowed) return null;
-  const response = errorResponse("Too many requests", 429);
-  response.headers.set("Retry-After", "60");
-  return response;
+  return tooManyRequests("Too many requests", 60);
 }
 
-/** 500 para el cliente; el error real queda registrado (log + Sentry si está activo). */
+/**
+ * 500 para el cliente; el error real queda registrado (log + Sentry si está
+ * activo) con el usuario y el id de la petición en Vercel para cruzarlo.
+ */
 export function internalError(req: Request, error: unknown, message: string) {
-  reportError(error, message, { method: req.method, path: new URL(req.url).pathname });
+  reportError(error, message, {
+    userId: requestUsers.get(req),
+    requestId: req.headers.get("x-vercel-id") ?? undefined,
+    method: req.method,
+    path: new URL(req.url).pathname,
+  });
   return errorResponse(message, 500);
 }
 
@@ -86,18 +113,4 @@ function validate<T extends z.ZodType>(input: unknown, schema: T, fallback: stri
     return { error: errorResponse(path ? `${path}: ${issue.message}` : fallback, 422) };
   }
   return { data: result.data as z.infer<T> };
-}
-
-function hasPrismaErrorCode(error: unknown, code: string) {
-  return typeof error === "object" && error !== null && (error as { code?: string }).code === code;
-}
-
-/** Violación de clave única de Prisma (p. ej. un id que ya existe). */
-export function isUniqueViolation(error: unknown) {
-  return hasPrismaErrorCode(error, "P2002");
-}
-
-/** Violación de clave foránea de Prisma (p. ej. borrar una categoría en uso). */
-export function isForeignKeyViolation(error: unknown) {
-  return hasPrismaErrorCode(error, "P2003");
 }

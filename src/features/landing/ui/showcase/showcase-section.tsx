@@ -29,12 +29,7 @@ export function ShowcaseSection({ showcase, movements, common, locale }: Showcas
           />
         }
       >
-        <AppDashboardMock
-          dashboard={showcase.dashboard}
-          movements={movements}
-          common={common}
-          locale={locale}
-        />
+        <AppDashboardMock dashboard={showcase.dashboard} movements={movements} common={common} locale={locale} />
       </ContainerScroll>
     </section>
   );

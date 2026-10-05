@@ -21,6 +21,7 @@ export const NAV_SECTIONS: { key: keyof Copy["nav"]["links"]; section: SectionId
   { key: "product", section: "producto" },
   { key: "features", section: "funciones" },
   { key: "howItWorks", section: "como-funciona" },
+  { key: "pricing", section: "precios" },
   { key: "faq", section: "preguntas" },
 ];
 

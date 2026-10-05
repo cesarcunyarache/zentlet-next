@@ -36,10 +36,11 @@ type PendingChange =
 
 type SummaryAdjustment = { kind: "create" | "delete" | "undo" | "redo"; row: TTransaction };
 
-export const deletedId = (variables: DeleteVariables) =>
-  typeof variables === "string" ? variables : variables.id;
+export const deletedId = (variables: DeleteVariables) => (typeof variables === "string" ? variables : variables.id);
 
-export function toPendingChange(mutation: Mutation<unknown, unknown, unknown>): PendingChange | null {
+export const deletedRow = (variables: DeleteVariables) => (typeof variables === "string" ? undefined : variables);
+
+function toPendingChange(mutation: Mutation<unknown, unknown, unknown>): PendingChange | null {
   const kind = mutation.options.mutationKey?.[2];
   const variables = mutation.state.variables;
 
@@ -52,7 +53,7 @@ export function toPendingChange(mutation: Mutation<unknown, unknown, unknown>): 
     }
     case "delete": {
       const deleted = variables as DeleteVariables;
-      return { kind: "delete", id: deletedId(deleted), row: typeof deleted === "string" ? undefined : deleted };
+      return { kind: "delete", id: deletedId(deleted), row: deletedRow(deleted) };
     }
     default:
       return null;
