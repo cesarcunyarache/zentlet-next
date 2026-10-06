@@ -20,9 +20,7 @@ interface Plan {
 export const PLANS = {
   free: {
     name: "Free",
-    // TODO: restaurar el gating Pro de "export" y "email_import" antes de producción
-    // features: ["transactions", "dashboard", "categories", "ai"],
-    features: ["transactions", "dashboard", "categories", "ai", "export", "email_import"],
+    features: ["transactions", "dashboard", "categories", "ai"],
     price: null,
   },
   pro: {

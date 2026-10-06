@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useBillingSummary } from "@/features/billing/stores/billing.store";
+// import { useBillingSummary } from "@/features/billing/stores/billing.store";
 import { transactionKeys } from "@/features/transaction/stores/transaction.keys";
 import type { AcceptInboxItemInput } from "../schemas/inbox-api.schema";
 import { inboxService } from "../services/inbox.service";
@@ -16,11 +16,11 @@ const ITEMS_STALE_MS = 30_000;
 const EMPTY: TInboxItem[] = [];
 
 export function useInboxItems() {
-  const { canUse } = useBillingSummary();
+  // const { canUse } = useBillingSummary();
   const query = useQuery({
     queryKey: inboxKeys.items,
     queryFn: () => inboxService.getItems(),
-    enabled: canUse("email_import"),
+    // enabled: canUse("email_import"),
     staleTime: ITEMS_STALE_MS,
     refetchOnWindowFocus: "always",
   });

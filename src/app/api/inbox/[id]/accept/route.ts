@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { requireFeature } from "@/features/billing/http/guard";
+// import { requireFeature } from "@/features/billing/http/guard";
 import { acceptInboxItemSchema } from "@/features/inbox/schemas/inbox-api.schema";
 import { acceptInboxItem } from "@/features/inbox/server/review";
 import { serializeTransaction } from "@/features/transaction/lib/serialize";
@@ -22,8 +22,11 @@ export async function POST(req: Request, { params }: RouteContext) {
     const limited = await writeLimit(userId);
     if (limited) return limited;
 
-    const denied = await requireFeature(userId, "email_import");
-    if (denied) return denied;
+    // TODO: gating Pro desactivado temporalmente para pruebas
+
+    // const denied = await requireFeature(userId, "email_import");
+
+    // if (denied) return denied;
 
     const parsed = await parseBody(req, acceptInboxItemSchema);
     if ("error" in parsed) return parsed.error;

@@ -3,8 +3,8 @@
 import { Download } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useSyncStatus } from "@/core/offline/sync-status";
-import { useBillingSummary } from "@/features/billing/stores/billing.store";
-import { UpgradePrompt } from "@/features/billing/ui/upgrade-button";
+// import { useBillingSummary } from "@/features/billing/stores/billing.store";
+// import { UpgradePrompt } from "@/features/billing/ui/upgrade-button";
 import { useDataExport } from "../hooks/useDataExport";
 import { exportHint } from "../lib/settings-hints";
 import { SettingsRow } from "./settings-row";
@@ -16,19 +16,20 @@ interface DataExportRowProps {
 
 export function DataExportRow({ transactionCount, currencySymbol }: DataExportRowProps) {
   const t = useTranslations("settings.data");
-  const tPaywall = useTranslations("billing.paywall");
-  const { canUse } = useBillingSummary();
+  // const tPaywall = useTranslations("billing.paywall");
+  // const { canUse } = useBillingSummary();
   const { online: isOnline } = useSyncStatus();
   const { exportData, isExporting, hasFailed } = useDataExport(currencySymbol);
   const hint = exportHint({ isOnline, hasFailed, transactionCount });
 
-  if (!canUse("export")) {
-    return (
-      <SettingsRow label={t("label")} hint={tPaywall("export")}>
-        <UpgradePrompt />
-      </SettingsRow>
-    );
-  }
+  // TODO: gating Pro desactivado temporalmente para pruebas
+  // if (!canUse("export")) {
+  //   return (
+  //     <SettingsRow label={t("label")} hint={tPaywall("export")}>
+  //       <UpgradePrompt />
+  //     </SettingsRow>
+  //   );
+  // }
 
   return (
     <SettingsRow

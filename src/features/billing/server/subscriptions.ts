@@ -3,7 +3,7 @@ import { cached, invalidate } from "@/lib/cache";
 import prisma from "@/lib/prisma";
 import { effectivePlan } from "../lib/entitlements";
 import { isTrialEligible, LIVE_STATUSES, resolveStatus } from "../lib/lifecycle";
-import { PAID_PLAN_KEYS, planFeatures, planPrice } from "../lib/plans";
+import { PAID_PLAN_KEYS, planFeatures, planPrice, type PlanKey } from "../lib/plans";
 import { getBillingProvider } from "../providers";
 import type { SubscriptionSnapshot } from "../providers/types";
 import type { BillingSummary, PaymentStatus, SubscriptionStatus } from "../types";
@@ -15,6 +15,11 @@ const PLAN_CACHE_SECONDS = 60;
 const planCacheKey = (userId: string) => `billing:plan:${userId}`;
 
 export const forgetEffectivePlan = (userId: string) => invalidate(planCacheKey(userId));
+
+function withTestGrant(plan: PlanKey): PlanKey {
+  const isGranted = process.env.VERCEL_ENV !== "production" && process.env.BILLING_GRANT_PRO === "true";
+  return isGranted ? "pro" : plan;
+}
 
 export type SubscriptionRow = Subscription & { status: SubscriptionStatus };
 
@@ -36,13 +41,13 @@ export async function findLiveSubscription(userId: string) {
 
 export function getEffectivePlan(userId: string) {
   return cached(planCacheKey(userId), PLAN_CACHE_SECONDS, async () =>
-    effectivePlan(await listUserSubscriptions(userId), new Date()),
+    withTestGrant(effectivePlan(await listUserSubscriptions(userId), new Date())),
   );
 }
 
 export async function getBillingSummary(userId: string, now = new Date()): Promise<BillingSummary> {
   const history = await listUserSubscriptions(userId);
-  const plan = effectivePlan(history, now);
+  const plan = withTestGrant(effectivePlan(history, now));
   const current = history.find((subscription) => subscription.status !== "pending") ?? history[0];
   return {
     plan,
