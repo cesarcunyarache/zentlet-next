@@ -1,6 +1,5 @@
+import { toUTCISODate } from "@/lib/dates";
 import type { TTransaction, TransactionType } from "../types";
-
-const ISO_DATE_LENGTH = "YYYY-MM-DD".length;
 
 interface TransactionRow {
   id: string;
@@ -10,10 +9,7 @@ interface TransactionRow {
   categoryId: string;
   transactionDate: Date;
   reference: string | null;
-}
-
-export function toUTCISODate(date: Date) {
-  return date.toISOString().slice(0, ISO_DATE_LENGTH);
+  recurringTransactionId: string | null;
 }
 
 export function serializeTransaction(row: TransactionRow): TTransaction {
@@ -25,5 +21,6 @@ export function serializeTransaction(row: TransactionRow): TTransaction {
     categoryId: row.categoryId,
     transactionDate: toUTCISODate(row.transactionDate),
     reference: row.reference,
+    recurringTransactionId: row.recurringTransactionId,
   };
 }

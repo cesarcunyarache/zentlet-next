@@ -1,6 +1,7 @@
 import { APIService } from "@/core/services/api.service";
 import type {
   DateRange,
+  TNewTransaction,
   TTransaction,
   TTransactionPayload,
   TransactionFilters,
@@ -37,7 +38,7 @@ class TransactionService extends APIService {
     return response.data;
   }
 
-  async createTransaction(data: TTransaction): Promise<TTransaction> {
+  async createTransaction(data: TNewTransaction): Promise<TTransaction> {
     const response = await this.post<TTransaction>(BASE_URL, data);
     return response.data;
   }

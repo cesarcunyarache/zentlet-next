@@ -169,5 +169,25 @@
       "ocr": "Read on your phone, no AI",
       "ai": "Read with AI"
     }
+  },
+  "repeat": {
+    "label": "Repeat",
+    "options": {
+      "ONCE": "Just once",
+      "WEEKLY": "Every week",
+      "MONTHLY": "Every month",
+      "QUARTERLY": "Every 3 months",
+      "SEMIANNUAL": "Every 6 months",
+      "ANNUAL": "Every year"
+    },
+    "detail": {
+      "label": "Repeats",
+      "next": "{frequency} · next {date}",
+      "stop": "Stop repeating",
+      "stopping": "Stopping…",
+      "confirmStop": "Tap again to confirm",
+      "stopFailed": "We couldn't stop it. Try again.",
+      "stopped": "It won't repeat anymore. Past transactions are kept."
+    }
   }
 }

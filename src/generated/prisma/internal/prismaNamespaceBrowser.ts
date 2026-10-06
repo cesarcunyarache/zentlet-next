@@ -59,6 +59,7 @@ export const ModelName = {
   Verification: 'Verification',
   Category: 'Category',
   Transaction: 'Transaction',
+  RecurringTransaction: 'RecurringTransaction',
   Feedback: 'Feedback',
   Budget: 'Budget',
   BudgetAlert: 'BudgetAlert',
@@ -202,12 +203,30 @@ export const TransactionScalarFieldEnum = {
   description: 'description',
   reference: 'reference',
   transactionDate: 'transactionDate',
+  recurringTransactionId: 'recurringTransactionId',
   userId: 'userId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[keyof typeof TransactionScalarFieldEnum]
+
+
+export const RecurringTransactionScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  amount: 'amount',
+  description: 'description',
+  categoryId: 'categoryId',
+  frequency: 'frequency',
+  anchorDate: 'anchorDate',
+  nextDueDate: 'nextDueDate',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RecurringTransactionScalarFieldEnum = (typeof RecurringTransactionScalarFieldEnum)[keyof typeof RecurringTransactionScalarFieldEnum]
 
 
 export const FeedbackScalarFieldEnum = {

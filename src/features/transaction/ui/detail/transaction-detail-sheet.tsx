@@ -11,6 +11,7 @@ import { fullDate } from "@/lib/dates";
 import { signedAmount } from "../../lib/format";
 import type { CategoryLike, TTransaction } from "../../types";
 import { useDeleteConfirmation } from "../../hooks/useDeleteConfirmation";
+import { TransactionRecurrenceRow } from "./transaction-recurrence-row";
 
 interface TransactionDetailSheetProps {
   transaction: TTransaction | null;
@@ -131,6 +132,9 @@ function TransactionDetails({ transaction, category, currency }: TransactionDeta
         </DetailRow>
         <DetailRow label={t("fields.type")}>{t(`type.${transaction.type}`)}</DetailRow>
         <DetailRow label={t("fields.date")}>{fullDate(transaction.transactionDate, locale)}</DetailRow>
+        {transaction.recurringTransactionId ? (
+          <TransactionRecurrenceRow recurringTransactionId={transaction.recurringTransactionId} />
+        ) : null}
       </dl>
     </>
   );

@@ -82,6 +82,11 @@ export type Category = Prisma.CategoryModel
  */
 export type Transaction = Prisma.TransactionModel
 /**
+ * Model RecurringTransaction
+ * 
+ */
+export type RecurringTransaction = Prisma.RecurringTransactionModel
+/**
  * Model Feedback
  * 
  */

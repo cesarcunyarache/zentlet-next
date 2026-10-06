@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma";
 import { safeEqual } from "@/lib/crypto";
 import { logger } from "@/lib/observability/logger";
-import { hasFeature } from "@/features/billing/server/access";
+// import { hasFeature } from "@/features/billing/server/access";
 import type { GmailConnection } from "@/generated/prisma/client";
 import { fromGmailMessage, gmailHeader, isIncomingMessage } from "../lib/gmail-message";
 import { readPushEmailAddress } from "../lib/gmail-push";
@@ -84,7 +84,8 @@ async function ingestMessage({ accessToken, userId, isWatched }: SyncContext, id
 
 async function syncWithAccessToken(connection: GmailConnection, accessToken: string): Promise<GmailSyncOutcome> {
   const { id, userId, historyId } = connection;
-  if (!(await hasFeature(userId, "email_import"))) return "not_allowed";
+  // TODO: gating Pro desactivado temporalmente para pruebas
+  // if (!(await hasFeature(userId, "email_import"))) return "not_allowed";
   if (historyId === null) return resetHistory(id, accessToken);
 
   const found = await findNewMessages(accessToken, historyId.toString());

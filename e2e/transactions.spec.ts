@@ -3,7 +3,12 @@ import { expect, freshAccount, SHARED_CATEGORY, test } from "./fixtures";
 
 async function registerTransaction(
   page: Page,
-  { description, amount, type = "Gasto" }: { description: string; amount: string; type?: "Gasto" | "Ingreso" },
+  {
+    description,
+    amount,
+    type = "Gasto",
+    repeat,
+  }: { description: string; amount: string; type?: "Gasto" | "Ingreso"; repeat?: string },
 ) {
   await page.getByRole("button", { name: "Registrar movimiento" }).click();
   await page.getByLabel("Descripción").fill(description);
@@ -13,6 +18,10 @@ async function registerTransaction(
     .getByRole("group", { name: "Categoría", exact: true })
     .getByRole("button", { name: SHARED_CATEGORY.name });
   if ((await category.getAttribute("aria-pressed")) !== "true") await category.click();
+  if (repeat) {
+    await page.getByRole("button", { name: "Repetir" }).click();
+    await page.getByRole("option", { name: repeat }).click();
+  }
   await page.getByRole("button", { name: "Guardar", exact: true }).click();
 }
 
@@ -55,6 +64,21 @@ test.describe("movimientos", () => {
     await page.reload();
     await expect(page.getByRole("button", { name: "Ajustes" })).toBeVisible();
     await expect(page.getByText("Taxi")).toHaveCount(0);
+  });
+
+  test("un movimiento que se repite cada mes muestra el próximo cobro y se puede detener", async ({ browser }) => {
+    const { page } = await freshAccount(browser);
+    await registerTransaction(page, { description: "Netflix", amount: "45", repeat: "Cada mes" });
+    await expect(page.getByText("Gasto registrado")).toBeVisible();
+
+    await page.getByText("Netflix").click();
+    await expect(page.getByText(/Cada mes · próximo/)).toBeVisible();
+    await page.getByRole("button", { name: "Dejar de repetir" }).click();
+    await page.getByRole("button", { name: "Toca de nuevo para confirmar" }).click();
+    await expect(page.getByText("Ya no se repetirá. Los movimientos anteriores se mantienen.")).toBeVisible();
+
+    await page.getByRole("button", { name: "Editar", exact: true }).click();
+    await expect(page.getByRole("button", { name: "Repetir" })).toHaveCount(0);
   });
 
   test("la búsqueda filtra por nombre", async ({ browser }) => {

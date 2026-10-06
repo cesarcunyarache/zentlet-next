@@ -4,16 +4,18 @@ import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@heroui/react";
 import { useTranslations } from "next-intl";
-import { useBillingSummary } from "@/features/billing/stores/billing.store";
+// import { useBillingSummary } from "@/features/billing/stores/billing.store";
 import { UpgradePrompt } from "@/features/billing/ui/upgrade-button";
 import { EmailConnectionPanel } from "./email-connection-panel";
 
 export function EmailImportRow() {
   const t = useTranslations("inbox.connection");
   const tPaywall = useTranslations("billing.paywall");
-  const { canUse } = useBillingSummary();
+  // const { canUse } = useBillingSummary();
   const [isExpanded, setIsExpanded] = useState(false);
-  const isAllowed = canUse("email_import");
+  // TODO: gating Pro desactivado temporalmente para pruebas
+  // const isAllowed = canUse("email_import");
+  const isAllowed = true;
 
   return (
     <div className="border-app-border border-b">

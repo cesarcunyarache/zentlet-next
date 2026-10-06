@@ -9,7 +9,7 @@ import {
 } from "@/core/offline/sync-policy";
 import { transactionService } from "../services/transaction.service";
 import { insertIntoFeed, matchesFilters, patchInFeed, removeFromFeed } from "../lib/feed-cache";
-import type { TTransaction } from "../types";
+import type { TNewTransaction, TTransaction } from "../types";
 import { findCached, updateFeeds, updateSummaries } from "./transaction.cache";
 import { transactionKeys, transactionMutationKeys } from "./transaction.keys";
 import { deletedId, deletedRow, type DeleteVariables, type UpdateVariables } from "./pending-transactions";
@@ -43,15 +43,18 @@ export function registerTransactionMutations(queryClient: QueryClient) {
 
   queryClient.setMutationDefaults(transactionMutationKeys.create, {
     ...shared,
-    mutationFn: (transaction: TTransaction) => transactionService.createTransaction(transaction),
-    onMutate: async (transaction: TTransaction) => {
+    mutationFn: (transaction: TNewTransaction) => transactionService.createTransaction(transaction),
+    onMutate: async (transaction: TNewTransaction) => {
       await cancelAll();
       updateFeeds(queryClient, (data, filters) =>
         matchesFilters(transaction, filters) ? insertIntoFeed(data, transaction) : data,
       );
       updateSummaries(queryClient, transaction, 1);
     },
-    onError: (error: unknown, transaction: TTransaction) => {
+    onSuccess: (saved: TTransaction) => {
+      updateFeeds(queryClient, (data, filters) => patchInFeed(data, saved, filters));
+    },
+    onError: (error: unknown, transaction: TNewTransaction) => {
       updateFeeds(queryClient, (data) => removeFromFeed(data, transaction.id));
       updateSummaries(queryClient, transaction, -1);
       reportError(error, "createTransaction");

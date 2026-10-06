@@ -64,6 +64,7 @@ describe("serializeTransaction", () => {
         categoryId: "c1",
         transactionDate: new Date("2026-09-10T00:00:00.000Z"),
         reference: null,
+        recurringTransactionId: null,
       }),
     ).toEqual({
       id: "t1",
@@ -73,6 +74,7 @@ describe("serializeTransaction", () => {
       categoryId: "c1",
       transactionDate: "2026-09-10",
       reference: null,
+      recurringTransactionId: null,
     });
   });
 });

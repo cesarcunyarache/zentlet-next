@@ -169,5 +169,25 @@
       "ocr": "Leído en tu celular, sin IA",
       "ai": "Leído con IA"
     }
+  },
+  "repeat": {
+    "label": "Repetir",
+    "options": {
+      "ONCE": "Una sola vez",
+      "WEEKLY": "Cada semana",
+      "MONTHLY": "Cada mes",
+      "QUARTERLY": "Cada 3 meses",
+      "SEMIANNUAL": "Cada 6 meses",
+      "ANNUAL": "Cada año"
+    },
+    "detail": {
+      "label": "Se repite",
+      "next": "{frequency} · próximo {date}",
+      "stop": "Dejar de repetir",
+      "stopping": "Deteniendo…",
+      "confirmStop": "Toca de nuevo para confirmar",
+      "stopFailed": "No pudimos detenerlo. Inténtalo de nuevo.",
+      "stopped": "Ya no se repetirá. Los movimientos anteriores se mantienen."
+    }
   }
 }

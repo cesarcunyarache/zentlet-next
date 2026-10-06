@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { RECURRENCE_FREQUENCIES } from "@/features/recurring/types";
 
 const ISO_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 const MIN_YEAR = 1900;
@@ -31,7 +32,11 @@ const transactionFields = {
   reference: z.string().max(MAX_TEXT_LENGTH).nullable().optional(),
 };
 
-export const createTransactionSchema = z.object({ id: z.uuid(), ...transactionFields });
+export const createTransactionSchema = z.object({
+  id: z.uuid(),
+  ...transactionFields,
+  recurrence: z.enum(RECURRENCE_FREQUENCIES).optional(),
+});
 
 export const updateTransactionSchema = z.object(transactionFields).partial();
 

@@ -2,7 +2,7 @@ import { z } from "zod";
 import { routing } from "@/i18n/routing";
 import { CURRENCY_CODES, DEFAULT_CURRENCY } from "../lib/currency";
 
-const DEFAULT_TIMEZONE = "America/Lima";
+export const DEFAULT_TIMEZONE = "America/Lima";
 
 const TIMEZONE_MAX_LENGTH = 64;
 
