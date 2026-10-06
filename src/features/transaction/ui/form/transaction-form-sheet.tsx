@@ -5,6 +5,7 @@ import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Sheet } from "@/core/components/ui/sheet";
 import { CategoryFormSheet } from "@/features/category/ui/category-form-sheet";
+import type { RecurrenceFrequency } from "@/features/recurring/types";
 import { track } from "@/lib/observability/client";
 import type { TransactionFormValues } from "../../schemas/transaction.schema";
 import type { CategoryLike } from "../../types";
@@ -12,6 +13,7 @@ import { TransactionAmountField } from "./transaction-amount-field";
 import { TransactionCategoryPicker } from "./transaction-category-picker";
 import { TransactionDateField } from "./transaction-date-field";
 import { TransactionFormHint } from "./transaction-form-hint";
+import { TransactionRepeatField } from "./transaction-repeat-field";
 import {
   finalizeFormValues,
   firstWord,
@@ -32,7 +34,7 @@ interface TransactionFormSheetProps {
   onOpenChange: (open: boolean) => void;
   categories: CategoryLike[];
   currency: string;
-  onSubmit: (values: TransactionFormValues) => void;
+  onSubmit: (values: TransactionFormValues, recurrence: RecurrenceFrequency | null) => void;
   draft?: Partial<TransactionFormValues>;
   isEditing?: boolean;
 }
@@ -61,13 +63,14 @@ export function TransactionFormSheet({
   });
 
   function saveTransaction(submitted: TransactionFormValues) {
-    onSubmit(finalizeFormValues(submitted, categories, t("transactions.defaultDescription")));
+    onSubmit(finalizeFormValues(submitted, categories, t("transactions.defaultDescription")), transactionForm.recurrence);
     onOpenChange(false);
     if (isEditing) {
       track("transaction_updated", transactionUpdatedPayload(submitted, draft));
       return;
     }
     track("transaction_created", transactionCreatedPayload(submitted, draft, autoCategoryId));
+    if (transactionForm.recurrence) track("recurring_created", { frequency: transactionForm.recurrence });
   }
 
   return (
@@ -90,11 +93,16 @@ export function TransactionFormSheet({
         }
       >
         <div className="flex flex-col gap-4 pt-6 pb-2">
-          <TransactionDateField
-            key={isOpen ? "open" : "closed"}
-            value={values.transactionDate}
-            onChange={transactionForm.changeDate}
-          />
+          <div className="flex flex-wrap items-center gap-2">
+            <TransactionDateField
+              key={isOpen ? "open" : "closed"}
+              value={values.transactionDate}
+              onChange={transactionForm.changeDate}
+            />
+            {isEditing ? null : (
+              <TransactionRepeatField value={transactionForm.recurrence} onChange={transactionForm.changeRecurrence} />
+            )}
+          </div>
 
           <input
             value={values.description}

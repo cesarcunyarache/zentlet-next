@@ -9,6 +9,17 @@
 * 🟢 You can import this file directly.
 */
 
+export const RecurrenceFrequency = {
+  WEEKLY: 'WEEKLY',
+  MONTHLY: 'MONTHLY',
+  QUARTERLY: 'QUARTERLY',
+  SEMIANNUAL: 'SEMIANNUAL',
+  ANNUAL: 'ANNUAL'
+} as const
+
+export type RecurrenceFrequency = (typeof RecurrenceFrequency)[keyof typeof RecurrenceFrequency]
+
+
 export const FeatureType = {
   RELEASE: 'RELEASE',
   EXPERIMENT: 'EXPERIMENT',

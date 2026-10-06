@@ -73,8 +73,10 @@ function applyToPage(
   isFirstPage: boolean,
 ): FeedData {
   switch (change.kind) {
-    case "create":
-      return isFirstPage && matchesFilters(change.row, filters) ? insertIntoFeed(feed, change.row) : feed;
+    case "create": {
+      const isAlreadySaved = Boolean(findInFeed(feed, change.row.id));
+      return isFirstPage && !isAlreadySaved && matchesFilters(change.row, filters) ? insertIntoFeed(feed, change.row) : feed;
+    }
     case "delete":
       return removeFromFeed(feed, change.id);
     case "update": {

@@ -12,7 +12,7 @@ import {
 } from "@tanstack/react-query";
 import { offlineSyncState } from "@/core/offline/offline-queue";
 import { transactionService } from "../services/transaction.service";
-import type { DateRange, TTransaction, TTransactionPayload, TransactionFilters } from "../types";
+import type { DateRange, TNewTransaction, TTransaction, TTransactionPayload, TransactionFilters } from "../types";
 import { transactionKeys, transactionMutationKeys } from "./transaction.keys";
 import {
   fetchSummaryWithPending,
@@ -78,12 +78,12 @@ export function usePendingTransactions() {
 }
 
 export function useTransactionMutations() {
-  const create = useMutation<TTransaction, unknown, TTransaction>({ mutationKey: transactionMutationKeys.create });
+  const create = useMutation<TTransaction, unknown, TNewTransaction>({ mutationKey: transactionMutationKeys.create });
   const update = useMutation<TTransaction, unknown, UpdateVariables>({ mutationKey: transactionMutationKeys.update });
   const remove = useMutation<void, unknown, DeleteVariables>({ mutationKey: transactionMutationKeys.remove });
 
   return {
-    createTransaction: (payload: TTransactionPayload) => create.mutate({ ...payload, id: crypto.randomUUID() }),
+    createTransaction: (payload: Omit<TNewTransaction, "id">) => create.mutate({ ...payload, id: crypto.randomUUID() }),
     updateTransaction: (transaction: TTransaction, data: Partial<TTransactionPayload>) =>
       update.mutate({ transactionId: transaction.id, data, previous: transaction }),
     deleteTransaction: (transaction: TTransaction) => remove.mutate(transaction),

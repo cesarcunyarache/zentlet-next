@@ -1,6 +1,7 @@
 import { useEffect, useEffectEvent, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { RecurrenceFrequency } from "@/features/recurring/types";
 import type { TransactionSuggestion } from "../../ai/schemas/transaction-ai.schema";
 import { readDescription } from "../../lib/parse-description";
 import { transactionSchema, type TransactionFormValues } from "../../schemas/transaction.schema";
@@ -17,6 +18,7 @@ interface UseTransactionFormOptions {
 export function useTransactionForm({ isOpen, draft, categories }: UseTransactionFormOptions) {
   const [rawAmount, setRawAmount] = useState("");
   const [autoCategoryId, setAutoCategoryId] = useState<string | null>(null);
+  const [recurrence, setRecurrence] = useState<RecurrenceFrequency | null>(null);
   const manualChoices = useRef({ category: false, type: false });
 
   const form = useForm<TransactionFormValues>({
@@ -34,6 +36,7 @@ export function useTransactionForm({ isOpen, draft, categories }: UseTransaction
   const resetForOpening = useEffectEvent(() => {
     setRawAmount(initialRawAmount(draft));
     setAutoCategoryId(null);
+    setRecurrence(null);
     manualChoices.current = { category: Boolean(draft?.categoryId), type: Boolean(draft?.type) };
     form.reset(initialFormValues(draft));
     if (draft) void form.trigger();
@@ -106,11 +109,13 @@ export function useTransactionForm({ isOpen, draft, categories }: UseTransaction
     canSave: form.formState.isValid && amount > 0,
     rawAmount,
     autoCategoryId,
+    recurrence,
     isThinking,
     submit,
     changeDescription,
     changeAmount,
     changeDate,
+    changeRecurrence: setRecurrence,
     chooseType,
     toggleCategory,
     selectCategory,

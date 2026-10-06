@@ -8,6 +8,8 @@ import {
 import { FEED_ORDER, afterCursor, decodeCursor, encodeCursor, feedWhere } from "@/features/transaction/lib/feed-query";
 import type { TransactionPage } from "@/features/transaction/types";
 import { scheduleBudgetCheck } from "@/features/budget/server/check";
+import { createRepeatingTransaction, type TransactionSeed } from "@/features/recurring/server/recurring";
+import type { RecurrenceFrequency } from "@/features/recurring/types";
 import { errorResponse, getSessionUserId, internalError, parseBody, parseQuery, unauthorized, writeLimit } from "@/lib/api/route-helpers";
 import { isUniqueViolation } from "@/lib/db-errors";
 
@@ -41,6 +43,10 @@ export async function GET(req: Request) {
   }
 }
 
+function insertTransaction(seed: TransactionSeed, recurrence: RecurrenceFrequency | undefined) {
+  return recurrence ? createRepeatingTransaction(seed, recurrence) : prisma.transaction.create({ data: seed });
+}
+
 export async function POST(req: Request) {
   try {
     const userId = await getSessionUserId(req);
@@ -51,7 +57,7 @@ export async function POST(req: Request) {
 
     const parsed = await parseBody(req, createTransactionSchema);
     if ("error" in parsed) return parsed.error;
-    const { id, description, amount, type, categoryId, transactionDate, reference } = parsed.data;
+    const { id, description, amount, type, categoryId, transactionDate, reference, recurrence } = parsed.data;
 
     const existing = await prisma.transaction.findUnique({ where: { id } });
     if (existing) {
@@ -63,19 +69,18 @@ export async function POST(req: Request) {
     const category = await prisma.category.findFirst({ where: { id: categoryId, userId }, select: { id: true } });
     if (!category) return errorResponse("Category not found", 422);
 
+    const seed: TransactionSeed = {
+      id,
+      userId,
+      description,
+      amount,
+      type,
+      categoryId,
+      reference: reference ?? null,
+      transactionDate: new Date(transactionDate),
+    };
     try {
-      const transaction = await prisma.transaction.create({
-        data: {
-          id,
-          description,
-          amount,
-          type,
-          categoryId,
-          reference: reference ?? null,
-          transactionDate: new Date(transactionDate),
-          userId,
-        },
-      });
+      const transaction = await insertTransaction(seed, recurrence);
       if (type === "expense") scheduleBudgetCheck(userId, categoryId);
       return NextResponse.json(serializeTransaction(transaction), { status: 201 });
     } catch (error) {

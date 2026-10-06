@@ -3,6 +3,7 @@ import { capitalize } from "./utils";
 const NOON = 12;
 const MS_PER_DAY = 86_400_000;
 const DAYS_IN_WEEK = 7;
+const ISO_DATE_LENGTH = "YYYY-MM-DD".length;
 
 export function today() {
   const d = new Date();
@@ -22,6 +23,10 @@ export function toISODate(d: Date) {
     String(d.getMonth() + 1).padStart(2, "0"),
     String(d.getDate()).padStart(2, "0"),
   ].join("-");
+}
+
+export function toUTCISODate(date: Date) {
+  return date.toISOString().slice(0, ISO_DATE_LENGTH);
 }
 
 export function parseISODate(value: string) {

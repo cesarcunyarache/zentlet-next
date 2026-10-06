@@ -15,8 +15,8 @@ model User {
   image         String?
 
   onboardingCompletedAt DateTime?
-  createdAt             DateTime           @default(now())
-  updatedAt             DateTime           @updatedAt
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
   sessions              Session[]
   accounts              Account[]
   categories            Category[]
@@ -33,6 +33,7 @@ model User {
   inboxSenders          InboxSender[]
   inboxTransactions     InboxTransaction[]
   merchantRules         MerchantRule[]
+  recurringTransactions RecurringTransaction[]
 
   @@unique([email])
   @@map("user")
@@ -127,9 +128,10 @@ model Category {
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  transactions  Transaction[]
-  budget        Budget?
-  merchantRules MerchantRule[]
+  transactions          Transaction[]
+  budget                Budget?
+  merchantRules         MerchantRule[]
+  recurringTransactions RecurringTransaction[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -152,15 +154,54 @@ model Transaction {
 
   transactionDate DateTime @db.Date
 
+  recurringTransactionId String?
+  recurringTransaction   RecurringTransaction? @relation(fields: [recurringTransactionId], references: [id], onDelete: SetNull)
+
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@unique([recurringTransactionId, transactionDate])
   @@index([categoryId])
   @@index([userId, transactionDate(sort: Desc), createdAt(sort: Desc), id(sort: Desc)])
   @@map("transaction")
+}
+
+enum RecurrenceFrequency {
+  WEEKLY
+  MONTHLY
+  QUARTERLY
+  SEMIANNUAL
+  ANNUAL
+}
+
+model RecurringTransaction {
+  id          String  @id @default(uuid())
+  type        String
+  amount      Decimal @db.Decimal(12, 2)
+  description String?
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  frequency   RecurrenceFrequency
+  anchorDate  DateTime            @db.Date
+  nextDueDate DateTime            @db.Date
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  transactions Transaction[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([nextDueDate])
+  @@index([userId])
+  @@index([categoryId])
+  @@map("recurring_transaction")
 }
 
 model Feedback {

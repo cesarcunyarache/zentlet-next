@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma";
-import { isoDateIn } from "@/lib/dates";
 import { isUniqueViolation } from "@/lib/db-errors";
 import { hasFeature } from "@/features/billing/server/access";
+import { userLocalDate } from "@/features/preference/server/timezone";
 import { matchCategory } from "@/features/transaction/lib/parse-description";
 import type { EmailMovement, InboundEmail, SenderRule } from "../types";
 import { knownBankFor } from "../lib/banks";
@@ -21,7 +21,6 @@ export type IngestOutcome =
   | "duplicate"
   | "created";
 
-const DEFAULT_TIME_ZONE = "America/Lima";
 const DAY_MS = 86_400_000;
 const MAX_SUBJECT_LENGTH = 200;
 
@@ -29,11 +28,6 @@ async function findInbox(recipients: string[]) {
   const addresses = recipients.map(normalizeAddress).filter(Boolean);
   if (!addresses.length) return null;
   return prisma.emailInbox.findFirst({ where: { address: { in: addresses } } });
-}
-
-async function fallbackDate(userId: string, receivedAt: Date) {
-  const preference = await prisma.userPreference.findUnique({ where: { userId }, select: { timezone: true } });
-  return isoDateIn(preference?.timezone ?? DEFAULT_TIME_ZONE, receivedAt);
 }
 
 async function resolveCategory(userId: string, movement: EmailMovement) {
@@ -104,7 +98,7 @@ export async function ingestUserEmail(
   if (!movement) return "ignored";
   if (await isRepeatedEmail(userId, movement)) return "duplicate";
 
-  const isoDate = movement.transactionDate ?? (await fallbackDate(userId, email.receivedAt));
+  const isoDate = movement.transactionDate ?? (await userLocalDate(userId, email.receivedAt));
   const [category, duplicateOfId] = await Promise.all([
     resolveCategory(userId, movement),
     findDuplicateTransaction(userId, movement, isoDate),

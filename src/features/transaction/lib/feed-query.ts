@@ -1,6 +1,6 @@
 import type { Prisma } from "@/generated/prisma/client";
 import type { DateRange, TransactionFilters, TransactionSummary } from "../types";
-import { toUTCISODate } from "./serialize";
+import { toUTCISODate } from "@/lib/dates";
 
 export const FEED_ORDER = [
   { transactionDate: "desc" },

@@ -230,6 +230,15 @@ describe("totales y páginas con cambios en cola", () => {
    
     expect(withPendingInPage(queryClient, fromServer, {}, false).items.map((item) => item.id)).toEqual(["other"]);
   });
+
+  it("si el servidor ya devuelve un alta en cola, gana la versión del servidor", async () => {
+    await queueOffline([transactionMutationKeys.create, tx()]);
+    const saved = tx({ recurringTransactionId: "rule-1" });
+
+    const page = withPendingInPage(queryClient, { items: [saved], nextCursor: null }, {}, true);
+
+    expect(page.items).toEqual([saved]);
+  });
 });
 
 describe("edición", () => {

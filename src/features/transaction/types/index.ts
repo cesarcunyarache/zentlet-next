@@ -1,4 +1,5 @@
 import type { CategoryBase } from "@/features/category/types";
+import type { RecurrenceFrequency } from "@/features/recurring/types";
 
 export type TransactionType = "expense" | "income";
 
@@ -10,6 +11,11 @@ export interface TTransaction {
   categoryId: string;
   transactionDate: string;
   reference?: string | null;
+  recurringTransactionId?: string | null;
+}
+
+export interface TNewTransaction extends TTransaction {
+  recurrence?: RecurrenceFrequency;
 }
 
 export type Period = "month" | "previous" | "all";

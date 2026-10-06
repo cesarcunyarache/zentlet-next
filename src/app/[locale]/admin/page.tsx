@@ -28,6 +28,7 @@ import { TransactionFormSheet } from "@/features/transaction/ui/form/transaction
 import { VoiceEntry } from "@/features/transaction/ui/voice/voice-entry";
 import { ReceiptScan } from "@/features/transaction/ui/receipt/receipt-scan";
 import type { TransactionFormValues } from "@/features/transaction/schemas/transaction.schema";
+import type { RecurrenceFrequency } from "@/features/recurring/types";
 import { TransactionDetailSheet } from "@/features/transaction/ui/detail/transaction-detail-sheet";
 import { DeleteTransactionDialog } from "@/features/transaction/ui/detail/delete-transaction-dialog";
 import { CategoriesSheet } from "@/features/category/ui/categories-sheet";
@@ -108,15 +109,15 @@ export default function HomePage() {
     toast(tInbox(`connection.gmail.result.${result}`));
     setSheet("settings");
   });
-  const [detail, setDetail] = useState<TTransaction | null>(null);
+  const [detailId, setDetailId] = useState<string | null>(null);
   const [pendingDelete, setPendingDelete] = useState<TTransaction | null>(null);
   const [formDraft, setFormDraft] = useState<Partial<TransactionFormValues>>();
   const [editing, setEditing] = useState<TTransaction | null>(null);
   const [budgetCategory, setBudgetCategory] = useState<CategoryLike | null>(null);
 
   // aparece al instante; se sincroniza por detrás (o en cola sin red)
-  function saveTransaction(values: TransactionFormValues) {
-    createTransaction({ ...values, reference: null });
+  function saveTransaction(values: TransactionFormValues, recurrence: RecurrenceFrequency | null = null) {
+    createTransaction({ ...values, reference: null, recurrence: recurrence ?? undefined });
     setCategoryFilter(null);
     setKind(null);
     setPeriod("month");
@@ -155,6 +156,7 @@ export default function HomePage() {
   };
 
   const feed = useTransactionFeed(filters);
+  const detail = detailId ? (feed.transactions.find((transaction) => transaction.id === detailId) ?? null) : null;
   const { data: summary } = useTransactionSummary(range);
   const { data: lifetime } = useTransactionSummary(ALL_TIME);
 
@@ -339,7 +341,7 @@ export default function HomePage() {
                 if (feed.hasNextPage && !feed.isFetchingNextPage) void feed.fetchNextPage();
               }}
               syncStateById={syncStateById}
-              onSelect={setDetail}
+              onSelect={(transaction) => setDetailId(transaction.id)}
               onRequestEdit={editTransaction}
               onRequestDelete={setPendingDelete}
             />
@@ -421,7 +423,7 @@ export default function HomePage() {
         currency={currency}
         draft={formDraft}
         isEditing={Boolean(editing)}
-        onSubmit={(values) => (editing ? saveEdit(editing, values) : saveTransaction(values))}
+        onSubmit={(values, recurrence) => (editing ? saveEdit(editing, values) : saveTransaction(values, recurrence))}
       />
 
       <DeleteTransactionDialog
@@ -439,13 +441,13 @@ export default function HomePage() {
         transaction={detail}
         category={detail ? categoriesById.get(detail.categoryId) : undefined}
         currency={currency}
-        onOpenChange={(open) => !open && setDetail(null)}
+        onOpenChange={(open) => !open && setDetailId(null)}
         onEdit={(transaction) => {
-          setDetail(null);
+          setDetailId(null);
           editTransaction(transaction);
         }}
         onDelete={(id) => {
-          setDetail(null);
+          setDetailId(null);
           if (detail?.id === id) removeTransaction(detail);
           toast(t("toast.deleted"));
         }}

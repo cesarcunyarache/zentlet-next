@@ -277,6 +277,23 @@ export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedDecimalFilter<$PrismaModel>
 }
 
+export type EnumRecurrenceFrequencyFilter<$PrismaModel = never> = {
+  equals?: $Enums.RecurrenceFrequency | Prisma.EnumRecurrenceFrequencyFieldRefInput<$PrismaModel>
+  in?: $Enums.RecurrenceFrequency[] | Prisma.ListEnumRecurrenceFrequencyFieldRefInput<$PrismaModel>
+  notIn?: $Enums.RecurrenceFrequency[] | Prisma.ListEnumRecurrenceFrequencyFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumRecurrenceFrequencyFilter<$PrismaModel> | $Enums.RecurrenceFrequency
+}
+
+export type EnumRecurrenceFrequencyWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.RecurrenceFrequency | Prisma.EnumRecurrenceFrequencyFieldRefInput<$PrismaModel>
+  in?: $Enums.RecurrenceFrequency[] | Prisma.ListEnumRecurrenceFrequencyFieldRefInput<$PrismaModel>
+  notIn?: $Enums.RecurrenceFrequency[] | Prisma.ListEnumRecurrenceFrequencyFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumRecurrenceFrequencyWithAggregatesFilter<$PrismaModel> | $Enums.RecurrenceFrequency
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumRecurrenceFrequencyFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumRecurrenceFrequencyFilter<$PrismaModel>
+}
+
 export type IntFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
@@ -622,6 +639,23 @@ export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedDecimalFilter<$PrismaModel>
   _min?: Prisma.NestedDecimalFilter<$PrismaModel>
   _max?: Prisma.NestedDecimalFilter<$PrismaModel>
+}
+
+export type NestedEnumRecurrenceFrequencyFilter<$PrismaModel = never> = {
+  equals?: $Enums.RecurrenceFrequency | Prisma.EnumRecurrenceFrequencyFieldRefInput<$PrismaModel>
+  in?: $Enums.RecurrenceFrequency[] | Prisma.ListEnumRecurrenceFrequencyFieldRefInput<$PrismaModel>
+  notIn?: $Enums.RecurrenceFrequency[] | Prisma.ListEnumRecurrenceFrequencyFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumRecurrenceFrequencyFilter<$PrismaModel> | $Enums.RecurrenceFrequency
+}
+
+export type NestedEnumRecurrenceFrequencyWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.RecurrenceFrequency | Prisma.EnumRecurrenceFrequencyFieldRefInput<$PrismaModel>
+  in?: $Enums.RecurrenceFrequency[] | Prisma.ListEnumRecurrenceFrequencyFieldRefInput<$PrismaModel>
+  notIn?: $Enums.RecurrenceFrequency[] | Prisma.ListEnumRecurrenceFrequencyFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumRecurrenceFrequencyWithAggregatesFilter<$PrismaModel> | $Enums.RecurrenceFrequency
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumRecurrenceFrequencyFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumRecurrenceFrequencyFilter<$PrismaModel>
 }
 
 export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
