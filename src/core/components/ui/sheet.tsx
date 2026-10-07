@@ -96,11 +96,11 @@ export function Sheet({
           </div>
 
           {footer ? (
-            <div className="shrink-0 px-[22px] pt-3 pb-[calc(12px+env(safe-area-inset-bottom))] sm:px-7 sm:pb-6">
+            <div className="shrink-0 px-[22px] pt-3 pb-[calc(16px+env(safe-area-inset-bottom))] sm:px-7 sm:pb-6">
               {footer}
             </div>
           ) : (
-            <div className="h-[calc(14px+env(safe-area-inset-bottom))] shrink-0 sm:h-6" />
+            <div className="h-[calc(16px+env(safe-area-inset-bottom))] shrink-0 sm:h-6" />
           )}
         </Drawer.Dialog>
       </Drawer.Content>
