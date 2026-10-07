@@ -53,8 +53,8 @@ function Stat({ item, index, locale }: { item: StatItem; index: number; locale: 
 
   return (
     <>
-      <dt className="text-app-bg/70 min-h-[2lh] max-w-[16ch] text-sm leading-snug">{item.label}</dt>
-      <dd className="font-display text-app-bg m-0 text-5xl font-bold tracking-[-0.05em] md:text-6xl">
+      <dt className="text-app-on-panel/70 min-h-[2lh] max-w-[16ch] text-sm leading-snug">{item.label}</dt>
+      <dd className="font-display text-app-on-panel m-0 text-5xl font-bold tracking-[-0.05em] md:text-6xl">
         {item.prefix}
         <NumberTicker
           value={range.value}

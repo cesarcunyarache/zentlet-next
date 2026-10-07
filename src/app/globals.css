@@ -195,6 +195,8 @@ body {
   /* texto sobre el pastel de una categoría: oscuro en ambos temas */
   --app-on-pastel: oklch(0.215 0.014 290);
   --app-action: var(--brand-jade);
+  --brand-ink: var(--brand-jade);
+  --app-panel: oklch(0.215 0.014 290);
 }
 
 [data-theme="dark"] {
@@ -206,7 +208,9 @@ body {
   --app-expense: oklch(0.68 0.19 22);
   --app-income: oklch(0.74 0.15 148);
   --app-ink: oklch(0 0 0);
-  --app-action: oklch(0.5 0.09 163);
+  --app-action: var(--brand-jade);
+  --brand-ink: var(--brand-leaf);
+  --app-panel: oklch(0.24 0.012 290);
 }
 
 /* derivados — se recalculan en cada ámbito de tema; no editar */
@@ -219,13 +223,16 @@ body {
   --app-scrim: color-mix(in oklch, var(--app-ink) 42%, transparent);
 
   --shadow-sheet: 0 -8px 40px color-mix(in oklch, var(--app-ink) 16%, transparent);
-  --shadow-action: 0 6px 18px color-mix(in oklch, var(--app-action) 40%, transparent);
+  --shadow-action: inset 0 0 0 1px rgb(255 255 255 / 0.1), inset 0 -8px 10px rgb(255 255 255 / 0.12),
+    0 6px 18px color-mix(in oklch, var(--app-action) 40%, transparent);
 }
 
 :root {
   --brand-jade: #034a2e;
   --brand-cream: #f6f2e3;
   --brand-leaf: #60c473;
+  /* texto sobre --app-panel: claro en ambos temas */
+  --app-on-panel: oklch(0.974 0.004 300);
   --font-display: ui-rounded, "SF Pro Rounded", "Hiragino Maru Gothic ProN",
     "Varela Round", system-ui, sans-serif;
   --font-numeric: ui-monospace, "SF Mono", Menlo, monospace;
@@ -245,10 +252,13 @@ body {
   --color-app-fill-strong: var(--app-fill-strong);
   --color-app-on-pastel: var(--app-on-pastel);
   --color-app-action: var(--app-action);
+  --color-app-panel: var(--app-panel);
+  --color-app-on-panel: var(--app-on-panel);
 
   --color-brand-jade: var(--brand-jade);
   --color-brand-cream: var(--brand-cream);
   --color-brand-leaf: var(--brand-leaf);
+  --color-brand-ink: var(--brand-ink);
 
   --font-display: var(--font-display);
   --font-numeric: var(--font-numeric);

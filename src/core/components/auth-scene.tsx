@@ -70,7 +70,7 @@ export function AuthScene({ children }: { children: React.ReactNode }) {
   // brillo que sigue al puntero sobre el panel oscuro
   const glareX = useTransform(x, [-0.5, 0.5], [10, 90]);
   const glareY = useTransform(y, [-0.5, 0.5], [10, 90]);
-  const glare = useMotionTemplate`radial-gradient(420px circle at ${glareX}% ${glareY}%, color-mix(in oklch, var(--app-surface) 16%, transparent), transparent 70%)`;
+  const glare = useMotionTemplate`radial-gradient(420px circle at ${glareX}% ${glareY}%, color-mix(in oklch, var(--app-on-panel) 16%, transparent), transparent 70%)`;
 
   function handlePointerMove(event: React.PointerEvent<HTMLDivElement>) {
     // en móvil la escena es plana: sin tarjeta que inclinar
@@ -110,7 +110,7 @@ export function AuthScene({ children }: { children: React.ReactNode }) {
       <div className="relative w-full max-w-5xl [perspective:1600px]">
         <motion.div
           style={{ rotateX, rotateY }}
-          className="bg-app-surface grid min-h-svh overflow-hidden sm:min-h-0 sm:rounded-[28px] sm:shadow-[0_40px_80px_-32px_color-mix(in_oklch,var(--app-fg)_38%,transparent),0_2px_6px_color-mix(in_oklch,var(--app-fg)_6%,transparent)] lg:h-[760px] lg:grid-cols-[1.05fr_1fr]"
+          className="bg-app-surface grid min-h-svh overflow-hidden sm:min-h-0 sm:rounded-[28px] sm:shadow-[0_40px_80px_-32px_color-mix(in_oklch,var(--app-ink)_38%,transparent),0_2px_6px_color-mix(in_oklch,var(--app-ink)_6%,transparent)] lg:h-[760px] lg:grid-cols-[1.05fr_1fr]"
         >
           <Showcase x={x} y={y} glare={glare} />
 
@@ -174,7 +174,7 @@ function Showcase({
   const current = SLIDES[slide];
 
   return (
-    <div className="bg-app-fg text-app-bg relative hidden flex-col justify-between overflow-hidden p-10 lg:flex">
+    <div className="bg-app-panel text-app-on-panel relative hidden flex-col justify-between overflow-hidden p-10 lg:flex">
       <motion.div aria-hidden style={{ background: glare }} className="pointer-events-none absolute inset-0" />
 
       <Link href="/" className="font-display relative flex w-fit items-center gap-2 text-2xl font-bold tracking-[-0.03em]">
@@ -277,7 +277,7 @@ function Showcase({
             <h2 className="font-display m-0 text-[26px] leading-tight font-bold tracking-[-0.02em]">
               {t(`slides.${current}.title`)}
             </h2>
-            <p className="m-0 text-sm text-[color-mix(in_oklch,var(--app-bg)_70%,transparent)]">
+            <p className="m-0 text-sm text-app-on-panel/70">
               {t(`slides.${current}.body`)}
             </p>
           </motion.div>
@@ -297,8 +297,8 @@ function Showcase({
                 className={cn(
                   "block h-1.5 rounded-full transition-all duration-300",
                   index === slide
-                    ? "bg-app-bg w-5"
-                    : "w-1.5 bg-[color-mix(in_oklch,var(--app-bg)_35%,transparent)]",
+                    ? "bg-app-on-panel w-5"
+                    : "w-1.5 bg-app-on-panel/35",
                 )}
               />
             </button>
@@ -314,7 +314,7 @@ function MobileBrand() {
   const t = useTranslations("auth.scene");
 
   return (
-    <div className="bg-app-fg text-app-bg relative overflow-hidden rounded-b-[32px] px-6 pt-7 pb-8 sm:rounded-none lg:hidden">
+    <div className="bg-app-panel text-app-on-panel relative overflow-hidden rounded-b-[32px] px-6 pt-7 pb-8 sm:rounded-none lg:hidden">
       <div
         aria-hidden
         className="pointer-events-none absolute -top-16 -right-10 size-48 rounded-full bg-brand-leaf/40 blur-3xl"
@@ -329,7 +329,7 @@ function MobileBrand() {
           <p className="font-display m-0 text-[22px] leading-tight font-bold tracking-[-0.02em]">
             {t(`slides.${SLIDES[0]}.title`)}
           </p>
-          <p className="m-0 mt-1 text-sm text-[color-mix(in_oklch,var(--app-bg)_70%,transparent)]">
+          <p className="m-0 mt-1 text-sm text-app-on-panel/70">
             {t(`slides.${SLIDES[0]}.body`)}
           </p>
         </div>

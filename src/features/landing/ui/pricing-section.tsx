@@ -42,28 +42,28 @@ function PlanCard({ plan }: { plan: PricingPlan }) {
     <article
       className={cn(
         "flex h-full flex-col rounded-[32px] p-8",
-        isFeatured ? "bg-app-fg text-app-bg" : "bg-app-surface text-app-fg ring-1 ring-[var(--app-border)]",
+        isFeatured ? "bg-app-panel text-app-on-panel" : "bg-app-surface text-app-fg ring-1 ring-[var(--app-border)]",
       )}
     >
       <header className="flex items-center justify-between gap-3">
         <h3 className="font-display m-0 text-xl font-bold tracking-[-0.02em]">{plan.name}</h3>
         {plan.badge && (
-          <span className="bg-app-bg/10 text-app-bg rounded-full px-3 py-1 text-xs font-semibold">{plan.badge}</span>
+          <span className="bg-app-on-panel/10 text-app-on-panel rounded-full px-3 py-1 text-xs font-semibold">{plan.badge}</span>
         )}
       </header>
 
       <p className="m-0 mt-6 flex items-baseline gap-2">
         <span className="font-display text-5xl font-bold tracking-[-0.04em]">{plan.price}</span>
-        {plan.period && <span className={isFeatured ? "text-app-bg/70" : "text-app-muted"}>{plan.period}</span>}
+        {plan.period && <span className={isFeatured ? "text-app-on-panel/70" : "text-app-muted"}>{plan.period}</span>}
       </p>
-      <p className={cn("m-0 mt-3 leading-relaxed", isFeatured ? "text-app-bg/70" : "text-app-muted")}>
+      <p className={cn("m-0 mt-3 leading-relaxed", isFeatured ? "text-app-on-panel/70" : "text-app-muted")}>
         {plan.description}
       </p>
 
       <ul className="m-0 mt-8 flex list-none flex-col gap-3 p-0">
         {plan.features.map((feature) => (
           <li key={feature} className="flex items-start gap-3">
-            <Check className={cn("mt-1 size-4 shrink-0", isFeatured ? "text-brand-leaf" : "text-brand-jade")} strokeWidth={2.6} aria-hidden />
+            <Check className={cn("mt-1 size-4 shrink-0", isFeatured ? "text-brand-leaf" : "text-brand-ink")} strokeWidth={2.6} aria-hidden />
             {feature}
           </li>
         ))}
@@ -71,7 +71,7 @@ function PlanCard({ plan }: { plan: PricingPlan }) {
 
       <div className="mt-auto pt-10">
         <PlanCta label={plan.cta} isFeatured={isFeatured} />
-        {plan.note && <p className="text-app-bg/60 m-0 mt-3 text-center text-sm">{plan.note}</p>}
+        {plan.note && <p className="text-app-on-panel/60 m-0 mt-3 text-center text-sm">{plan.note}</p>}
       </div>
     </article>
   );
@@ -92,9 +92,9 @@ function PlanCta({ label, isFeatured }: { label: string; isFeatured: boolean }) 
   return (
     <ShimmerLink
       href={siteConfig.routes.signUp}
-      background="var(--app-bg)"
+      background="var(--app-on-panel)"
       shimmerColor={BRAND_ACCENT}
-      className="text-app-fg h-13 w-full gap-2 px-8 text-base font-semibold"
+      className="text-app-panel h-13 w-full gap-2 px-8 text-base font-semibold"
     >
       {label}
       <CtaArrow />

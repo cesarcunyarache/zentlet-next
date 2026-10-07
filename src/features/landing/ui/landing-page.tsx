@@ -1,3 +1,4 @@
+import { ThemeController } from "@/core/theme/theme-controller";
 import type { LandingContent } from "../content";
 import { serializeJsonLd } from "../lib/json-ld";
 import { buildLandingJsonLd } from "../lib/seo";
@@ -21,6 +22,7 @@ export function LandingPage({ content }: { content: LandingContent }) {
 
   return (
     <LandingMotion>
+      <ThemeController />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
 
       <div className="brand-scope bg-app-bg text-app-fg min-h-svh font-[family-name:var(--font-geist-sans)] antialiased">

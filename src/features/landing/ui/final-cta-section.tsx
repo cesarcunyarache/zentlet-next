@@ -19,7 +19,7 @@ export function FinalCtaSection({ cta }: { cta: LandingContent["cta"] }) {
         <DotPattern
           width={22}
           height={22}
-          className="text-app-bg/15 [mask-image:radial-gradient(ellipse_at_center,black_10%,transparent_70%)]"
+          className="text-app-on-panel/15 [mask-image:radial-gradient(ellipse_at_center,black_10%,transparent_70%)]"
         />
         <div
           aria-hidden
@@ -30,13 +30,13 @@ export function FinalCtaSection({ cta }: { cta: LandingContent["cta"] }) {
         <BlurFade inView direction="up" offset={FADE_OFFSET} className="relative">
           <h2
             id={TITLE_ID}
-            className="font-display text-app-bg m-0 max-w-3xl text-4xl leading-[1.02] font-bold tracking-[-0.045em] text-balance md:text-6xl"
+            className="font-display text-app-on-panel m-0 max-w-3xl text-4xl leading-[1.02] font-bold tracking-[-0.045em] text-balance md:text-6xl"
           >
             {cta.title}
           </h2>
         </BlurFade>
         <BlurFade inView direction="up" offset={FADE_OFFSET} delay={0.1} className="relative">
-          <p className="text-app-bg/70 m-0 mt-5 max-w-xl text-lg">{cta.subtitle}</p>
+          <p className="text-app-on-panel/70 m-0 mt-5 max-w-xl text-lg">{cta.subtitle}</p>
         </BlurFade>
         <BlurFade
           inView
@@ -47,16 +47,16 @@ export function FinalCtaSection({ cta }: { cta: LandingContent["cta"] }) {
         >
           <ShimmerLink
             href={siteConfig.routes.signUp}
-            background="var(--app-bg)"
+            background="var(--app-on-panel)"
             shimmerColor={BRAND_ACCENT}
-            className="text-app-fg h-13 w-full gap-2 px-8 text-base font-semibold sm:w-auto"
+            className="text-app-panel h-13 w-full gap-2 px-8 text-base font-semibold sm:w-auto"
           >
             {cta.primary}
             <CtaArrow />
           </ShimmerLink>
           <Link
             href={siteConfig.routes.signIn}
-            className="text-app-bg inline-flex h-13 w-full items-center justify-center rounded-full px-6 text-base font-semibold ring-1 ring-white/20 transition-colors hover:bg-white/10 sm:w-auto"
+            className="text-app-on-panel inline-flex h-13 w-full items-center justify-center rounded-full px-6 text-base font-semibold ring-1 ring-white/20 transition-colors hover:bg-white/10 sm:w-auto"
           >
             {cta.secondary}
           </Link>

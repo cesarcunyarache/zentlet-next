@@ -94,7 +94,7 @@ function FeatureCard({ item, visual }: { item: FeatureItem; visual: React.ReactN
         <h3 className="font-display text-app-fg m-0 mt-6 flex items-center gap-2 text-xl font-bold tracking-[-0.02em]">
           {item.title}
           {item.badge && (
-            <span className="bg-brand-leaf/15 text-brand-jade rounded-full px-2.5 py-0.5 font-sans text-xs font-semibold tracking-normal">
+            <span className="bg-brand-leaf/15 text-brand-ink rounded-full px-2.5 py-0.5 font-sans text-xs font-semibold tracking-normal">
               {item.badge}
             </span>
           )}
