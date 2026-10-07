@@ -7,7 +7,7 @@ import { siteConfig } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import type { LandingContent } from "../content";
 import { CtaArrow } from "./shared/cta-arrow";
-import { BRAND_ACCENT, DARK_PANEL_CLASS, GOLD_ACCENT } from "./shared/tokens";
+import { BRAND_ACCENT, DARK_PANEL_CLASS, GROWTH_ACCENT, LIGHT_ACCENT } from "./shared/tokens";
 
 const TITLE_ID = "cta-title";
 const FADE_OFFSET = 20;
@@ -23,9 +23,9 @@ export function FinalCtaSection({ cta }: { cta: LandingContent["cta"] }) {
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute -bottom-40 left-1/2 size-[40rem] -translate-x-1/2 rounded-full bg-[color-mix(in_oklch,var(--app-expense)_35%,transparent)] blur-3xl"
+          className="pointer-events-none absolute -bottom-40 left-1/2 size-[40rem] -translate-x-1/2 rounded-full bg-brand-leaf/35 blur-3xl"
         />
-        <BorderBeam size={220} duration={12} colorFrom={BRAND_ACCENT} colorTo={GOLD_ACCENT} borderWidth={2} />
+        <BorderBeam size={220} duration={12} colorFrom={GROWTH_ACCENT} colorTo={LIGHT_ACCENT} borderWidth={2} />
 
         <BlurFade inView direction="up" offset={FADE_OFFSET} className="relative">
           <h2

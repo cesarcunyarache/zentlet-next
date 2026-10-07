@@ -13,7 +13,7 @@ const STAGGER_S = 0.12;
 export function SignUpPreview({ preview }: { preview: LandingContent["steps"]["preview"] }) {
   return (
     <div aria-hidden className={cn(PREVIEW_FRAME_CLASS, "bg-app-fg text-app-bg")}>
-      <div className="pointer-events-none absolute -top-20 -right-16 size-64 rounded-full bg-[color-mix(in_oklch,var(--app-expense)_40%,transparent)] blur-3xl" />
+      <div className="pointer-events-none absolute -top-20 -right-16 size-64 rounded-full bg-brand-leaf/40 blur-3xl" />
       <p className="relative m-0 text-sm font-semibold opacity-70">{preview.signUpLabel}</p>
       <ul className="relative m-0 mt-4 flex list-none flex-col gap-3 p-0">
         {preview.signUpProviders.map((provider, index) => (

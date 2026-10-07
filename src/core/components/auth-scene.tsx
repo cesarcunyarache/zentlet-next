@@ -47,12 +47,12 @@ const BARS = [
 
 /** Confeti del fondo: color, posición y cuánto se desplaza con el puntero. */
 const PETALS = [
-  { className: "top-[9%] left-[14%] size-4 rounded-full", color: "var(--app-expense)", depth: 18 },
-  { className: "top-[14%] right-[12%] h-5 w-9 -rotate-[24deg] rounded-full", color: "var(--app-expense)", depth: 30 },
-  { className: "bottom-[12%] left-[9%] h-3 w-6 rotate-[35deg] rounded-full", color: "var(--app-income)", depth: 24 },
-  { className: "top-[48%] right-[5%] size-3 rounded-full", color: "oklch(0.62 0.16 265)", depth: 14 },
-  { className: "bottom-[8%] right-[22%] h-4 w-7 rotate-[12deg] rounded-full", color: "oklch(0.82 0.14 85)", depth: 36 },
-  { className: "top-[30%] left-[4%] size-2.5 rounded-full", color: "oklch(0.82 0.14 85)", depth: 12 },
+  { className: "top-[9%] left-[14%] size-4 rounded-full", color: "var(--brand-jade)", depth: 18 },
+  { className: "top-[14%] right-[12%] h-5 w-9 -rotate-[24deg] rounded-full", color: "var(--brand-leaf)", depth: 30 },
+  { className: "bottom-[12%] left-[9%] h-3 w-6 rotate-[35deg] rounded-full", color: "var(--brand-jade)", depth: 24 },
+  { className: "top-[48%] right-[5%] size-3 rounded-full", color: "var(--brand-leaf)", depth: 14 },
+  { className: "bottom-[8%] right-[22%] h-4 w-7 rotate-[12deg] rounded-full", color: "color-mix(in oklch, var(--brand-jade) 50%, var(--brand-leaf))", depth: 36 },
+  { className: "top-[30%] left-[4%] size-2.5 rounded-full", color: "var(--brand-leaf)", depth: 12 },
 ];
 
 export function AuthScene({ children }: { children: React.ReactNode }) {
@@ -88,7 +88,7 @@ export function AuthScene({ children }: { children: React.ReactNode }) {
     <div
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
-      className="bg-app-surface sm:bg-app-bg text-app-fg relative flex min-h-svh justify-center overflow-hidden sm:items-start sm:p-6 md:p-10 lg:items-center"
+      className="brand-scope bg-app-surface sm:bg-app-bg text-app-fg relative flex min-h-svh justify-center overflow-hidden sm:items-start sm:p-6 md:p-10 lg:items-center"
     >
       {/* halo suave detrás de la tarjeta para despegarla del fondo */}
       <div
@@ -317,7 +317,7 @@ function MobileBrand() {
     <div className="bg-app-fg text-app-bg relative overflow-hidden rounded-b-[32px] px-6 pt-7 pb-8 sm:rounded-none lg:hidden">
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-16 -right-10 size-48 rounded-full bg-[color-mix(in_oklch,var(--app-expense)_45%,transparent)] blur-3xl"
+        className="pointer-events-none absolute -top-16 -right-10 size-48 rounded-full bg-brand-leaf/40 blur-3xl"
       />
       <Link href="/" className="font-display relative flex w-fit items-center gap-2 text-xl font-bold tracking-[-0.03em]">
         <BrandMark className="size-[1.25em]" />

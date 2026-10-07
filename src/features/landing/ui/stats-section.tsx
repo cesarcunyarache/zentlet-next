@@ -24,7 +24,7 @@ export function StatsSection({ stats, locale }: StatsSectionProps) {
       <div className={cn(DARK_PANEL_CLASS, "px-6 py-20 md:px-12")}>
         <div
           aria-hidden
-          className="pointer-events-none absolute -top-32 left-1/2 size-[36rem] -translate-x-1/2 rounded-full bg-[color-mix(in_oklch,var(--app-expense)_30%,transparent)] blur-3xl"
+          className="pointer-events-none absolute -top-32 left-1/2 size-[36rem] -translate-x-1/2 rounded-full bg-brand-leaf/30 blur-3xl"
         />
 
         <SectionHeading id={TITLE_ID} eyebrow={stats.eyebrow} title={stats.title} isInverted className="relative" />

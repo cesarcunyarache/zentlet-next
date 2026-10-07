@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button, Description, InputGroup, Separator, toast } from "@heroui/react";
+import { Button, Checkbox, Description, InputGroup, Separator, toast } from "@heroui/react";
 import { Eye, EyeSlash, Lock } from "@gravity-ui/icons";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
@@ -58,7 +58,7 @@ export function AuthSubmitButton({
       type="submit"
       isPending={isPending}
       isDisabled={isDisabled}
-      className="bg-app-fg text-app-bg mt-1 h-10 w-full rounded-xl font-semibold shadow-[0_12px_24px_-10px_color-mix(in_oklch,var(--app-fg)_60%,transparent)] transition-transform hover:-translate-y-0.5 data-[pending=true]:opacity-80"
+      className="bg-brand-jade text-brand-cream mt-1 h-10 w-full rounded-xl font-semibold shadow-[0_12px_24px_-10px_color-mix(in_oklch,var(--brand-jade)_70%,transparent)] transition-transform hover:-translate-y-0.5 data-[pending=true]:opacity-80"
     >
       {isPending ? pendingLabel : children}
     </Button>
@@ -100,7 +100,7 @@ export function PasswordInput({ "aria-invalid": invalid, ...props }: Omit<InputG
           onClick={() => setVisible((value) => !value)}
           aria-label={t(visible ? "hidePassword" : "showPassword")}
           aria-pressed={visible}
-          className="text-app-muted hover:text-app-fg focus-visible:ring-app-fg -mr-1 flex size-7 items-center justify-center rounded-md outline-none focus-visible:ring-2"
+          className="text-app-muted hover:text-app-fg focus-visible:ring-brand-jade -mr-1 flex size-7 items-center justify-center rounded-md outline-none focus-visible:ring-2"
         >
           <Toggle className="size-4" />
         </button>
@@ -243,21 +243,19 @@ export function LegalConsent({ checked, onChange }: { checked: boolean; onChange
   const t = useTranslations("auth");
 
   return (
-    <label className="text-app-muted flex cursor-pointer items-start gap-2.5 text-xs leading-relaxed">
-      <input
-        type="checkbox"
-        name="legalAccepted"
-        checked={checked}
-        onChange={(event) => onChange(event.target.checked)}
-        className="accent-app-fg mt-0.5 size-4 shrink-0"
-      />
-      <span>
-        {t.rich("signUp.consent", {
-          terms: (chunks) => legalLink(siteConfig.routes.terms, chunks),
-          privacy: (chunks) => legalLink(siteConfig.routes.privacy, chunks),
-        })}
-      </span>
-    </label>
+    <Checkbox name="legalAccepted" isSelected={checked} onChange={onChange}>
+      <Checkbox.Content className="items-start gap-2.5">
+        <Checkbox.Control className="mt-0.5 shrink-0">
+          <Checkbox.Indicator />
+        </Checkbox.Control>
+        <span className="text-app-muted text-xs leading-relaxed">
+          {t.rich("signUp.consent", {
+            terms: (chunks) => legalLink(siteConfig.routes.terms, chunks),
+            privacy: (chunks) => legalLink(siteConfig.routes.privacy, chunks),
+          })}
+        </span>
+      </Checkbox.Content>
+    </Checkbox>
   );
 }
 

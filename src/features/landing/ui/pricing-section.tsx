@@ -63,7 +63,7 @@ function PlanCard({ plan }: { plan: PricingPlan }) {
       <ul className="m-0 mt-8 flex list-none flex-col gap-3 p-0">
         {plan.features.map((feature) => (
           <li key={feature} className="flex items-start gap-3">
-            <Check className="text-app-expense mt-1 size-4 shrink-0" strokeWidth={2.6} aria-hidden />
+            <Check className={cn("mt-1 size-4 shrink-0", isFeatured ? "text-brand-leaf" : "text-brand-jade")} strokeWidth={2.6} aria-hidden />
             {feature}
           </li>
         ))}

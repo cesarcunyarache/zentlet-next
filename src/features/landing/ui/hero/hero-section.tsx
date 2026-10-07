@@ -1,37 +1,37 @@
 import { cn } from "@/lib/utils";
 import type { LandingContent } from "../../content";
 import { PointerScene, Parallax } from "../shared/pointer-scene";
-import { BRAND_ACCENT, GOLD_ACCENT } from "../shared/tokens";
+import { BRAND_ACCENT, GROWTH_ACCENT } from "../shared/tokens";
 import { HERO_TITLE_ID, HeroCopy } from "./hero-copy";
 import { HeroVisual } from "./hero-visual";
 
 const PETALS = [
-  { id: "expense-dot", className: "top-[16%] left-[6%] size-4 rounded-full", color: BRAND_ACCENT, depth: 18 },
+  { id: "jade-dot", className: "top-[16%] left-[6%] size-4 rounded-full", color: BRAND_ACCENT, depth: 18 },
   {
-    id: "expense-pill",
+    id: "leaf-pill",
     className: "top-[22%] right-[8%] h-5 w-9 -rotate-[24deg] rounded-full",
-    color: BRAND_ACCENT,
+    color: GROWTH_ACCENT,
     depth: 30,
   },
   {
-    id: "income-pill",
+    id: "jade-pill",
     className: "bottom-[14%] left-[10%] h-3 w-6 rotate-[35deg] rounded-full",
-    color: "var(--app-income)",
+    color: BRAND_ACCENT,
     depth: 24,
   },
   {
-    id: "indigo-dot",
+    id: "leaf-dot",
     className: "top-[58%] right-[3%] size-3 rounded-full",
-    color: "oklch(0.62 0.16 265)",
+    color: GROWTH_ACCENT,
     depth: 14,
   },
   {
-    id: "gold-pill",
+    id: "bamboo-pill",
     className: "bottom-[8%] right-[30%] h-4 w-7 rotate-[12deg] rounded-full",
-    color: GOLD_ACCENT,
+    color: "color-mix(in oklch, var(--brand-jade) 50%, var(--brand-leaf))",
     depth: 36,
   },
-  { id: "gold-dot", className: "top-[40%] left-[46%] size-2.5 rounded-full", color: GOLD_ACCENT, depth: 12 },
+  { id: "leaf-small-dot", className: "top-[40%] left-[46%] size-2.5 rounded-full", color: GROWTH_ACCENT, depth: 12 },
 ];
 
 interface HeroSectionProps {
@@ -65,7 +65,7 @@ function HeroBackdrop() {
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute top-1/2 right-0 -z-10 size-[70vmin] -translate-y-1/2 rounded-full bg-[color-mix(in_oklch,var(--app-expense)_10%,transparent)] blur-3xl"
+        className="pointer-events-none absolute top-1/2 right-0 -z-10 size-[70vmin] -translate-y-1/2 rounded-full bg-brand-leaf/15 blur-3xl"
       />
       {PETALS.map((petal) => (
         <Parallax

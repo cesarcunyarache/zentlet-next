@@ -35,7 +35,7 @@ export function SectionHeading({
             isInverted ? "bg-app-bg/10 text-app-bg/80" : "bg-app-fill text-app-muted",
           )}
         >
-          <span aria-hidden className="bg-app-expense size-1.5 rounded-full" />
+          <span aria-hidden className={cn("size-1.5 rounded-full", isInverted ? "bg-brand-leaf" : "bg-brand-jade")} />
           {eyebrow}
         </span>
       </BlurFade>

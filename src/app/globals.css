@@ -243,8 +243,20 @@ body {
   --color-app-fill-strong: var(--app-fill-strong);
   --color-app-on-pastel: var(--app-on-pastel);
 
+  --color-brand-jade: var(--brand-jade);
+  --color-brand-cream: var(--brand-cream);
+  --color-brand-leaf: var(--brand-leaf);
+
   --font-display: var(--font-display);
   --font-numeric: var(--font-numeric);
+}
+
+/* landing y acceso: foco con el color del logo; la app no lo usa */
+.brand-scope {
+  --focus: var(--brand-jade);
+  --accent: var(--brand-jade);
+  --accent-foreground: var(--brand-cream);
+  --accent-hover: color-mix(in oklab, var(--accent) 90%, var(--accent-foreground) 10%);
 }
 
 /* ondas del micrófono al dictar; ritmo, escala e intensidad por variables */

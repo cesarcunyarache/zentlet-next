@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import type { FeatureId, LandingContent, SectionId } from "../../content";
 import { sectionTitleId } from "../../lib/format";
 import { SectionHeading } from "../shared/section-heading";
-import { BRAND_ACCENT, GOLD_ACCENT } from "../shared/tokens";
+import { BRAND_ACCENT, GROWTH_ACCENT } from "../shared/tokens";
 import { AiCategoryVisual } from "./visuals/ai-category-visual";
 import { BalanceVisual } from "./visuals/balance-visual";
 import { BudgetsVisual } from "./visuals/budgets-visual";
@@ -84,9 +84,9 @@ function FeatureCard({ item, visual }: { item: FeatureItem; visual: React.ReactN
   return (
     <MagicCard
       gradientSize={260}
-      gradientColor="color-mix(in oklch, var(--app-expense) 8%, transparent)"
+      gradientColor="color-mix(in oklch, var(--brand-leaf) 12%, transparent)"
       gradientFrom={BRAND_ACCENT}
-      gradientTo={GOLD_ACCENT}
+      gradientTo={GROWTH_ACCENT}
       className="h-full rounded-[28px] [--color-background:var(--app-surface)] [--color-border:var(--app-border)]"
     >
       <article className="flex h-full flex-col p-6">
@@ -94,7 +94,7 @@ function FeatureCard({ item, visual }: { item: FeatureItem; visual: React.ReactN
         <h3 className="font-display text-app-fg m-0 mt-6 flex items-center gap-2 text-xl font-bold tracking-[-0.02em]">
           {item.title}
           {item.badge && (
-            <span className="bg-app-expense-soft text-app-expense rounded-full px-2.5 py-0.5 font-sans text-xs font-semibold tracking-normal">
+            <span className="bg-brand-leaf/15 text-brand-jade rounded-full px-2.5 py-0.5 font-sans text-xs font-semibold tracking-normal">
               {item.badge}
             </span>
           )}
