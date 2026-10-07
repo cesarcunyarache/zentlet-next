@@ -36,6 +36,14 @@ export function errorResponse(message: string, status: number) {
 
 export const unauthorized = () => errorResponse("Unauthorized", 401);
 
+export type ErrorTable<Code extends string> = Record<Code, readonly [message: string, status: number]>;
+
+/** Traduce el código de error de un caso de uso a su respuesta HTTP. */
+export function errorFrom<Code extends string>(table: ErrorTable<Code>, code: Code) {
+  const [message, status] = table[code];
+  return errorResponse(message, status);
+}
+
 export function tooManyRequests(message: string, retryAfterSeconds: number) {
   const response = errorResponse(message, 429);
   response.headers.set("Retry-After", String(retryAfterSeconds));
