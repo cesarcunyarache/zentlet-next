@@ -21,29 +21,63 @@ async function changingFlag<T>(slug: string, write: Promise<T>) {
   return result;
 }
 
-export const createFlag = ({ slug, type, description }: FlagInput, actor: string) =>
-  changingFlag(slug, prisma.feature.create({ data: { slug, type, description, updatedBy: actor } }));
+export const createFlag = (
+  { slug, type, description }: FlagInput,
+  actor: string,
+) =>
+  changingFlag(
+    slug,
+    prisma.feature.create({
+      data: { slug, type, description, updatedBy: actor },
+    }),
+  );
 
 export const setFlagEnabled = (slug: string, enabled: boolean, actor: string) =>
-  changingFlag(slug, prisma.feature.update({ where: { slug }, data: { enabled, updatedBy: actor } }));
+  changingFlag(
+    slug,
+    prisma.feature.update({
+      where: { slug },
+      data: { enabled, updatedBy: actor },
+    }),
+  );
 
-export async function setFlagRollout(slug: string, rollout: number, actor: string) {
-  if (!isValidRollout(rollout)) throw new Error(`Rollout must be an integer from 0 to 100, got ${rollout}`);
-  return changingFlag(slug, prisma.feature.update({ where: { slug }, data: { rollout, updatedBy: actor } }));
+export async function setFlagRollout(
+  slug: string,
+  rollout: number,
+  actor: string,
+) {
+  if (!isValidRollout(rollout))
+    throw new Error(`Rollout must be an integer from 0 to 100, got ${rollout}`);
+  return changingFlag(
+    slug,
+    prisma.feature.update({
+      where: { slug },
+      data: { rollout, updatedBy: actor },
+    }),
+  );
 }
 
 export const setFlagStale = (slug: string, stale: boolean, actor: string) =>
   prisma.feature.update({ where: { slug }, data: { stale, updatedBy: actor } });
 
-export const deleteFlag = (slug: string) => changingFlag(slug, prisma.feature.delete({ where: { slug } }));
+export const deleteFlag = (slug: string) =>
+  changingFlag(slug, prisma.feature.delete({ where: { slug } }));
 
 async function userIdByEmail(email: string) {
-  const user = await prisma.user.findUnique({ where: { email: email.toLowerCase() }, select: { id: true } });
+  const user = await prisma.user.findUnique({
+    where: { email: email.toLowerCase() },
+    select: { id: true },
+  });
   if (!user) throw new Error(`No user with email ${email}`);
   return user.id;
 }
 
-export async function setUserFlag(email: string, slug: string, enabled: boolean, actor: string) {
+export async function setUserFlag(
+  email: string,
+  slug: string,
+  enabled: boolean,
+  actor: string,
+) {
   const userId = await userIdByEmail(email);
   const assignment = await prisma.userFeature.upsert({
     where: { userId_featureId: { userId, featureId: slug } },
