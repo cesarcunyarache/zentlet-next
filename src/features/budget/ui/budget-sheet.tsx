@@ -33,6 +33,7 @@ export function BudgetSheet({ category, currency, onClose, onSaved, onRemoved }:
       onOpenChange={(open) => !open && onClose()}
       title={shown ? t("title", { name: shown.name }) : ""}
       hideTitle
+      bodyClassName="flex flex-col"
       footer={
         <BudgetSheetFooter
           hasBudget={sheet.hasBudget}
@@ -45,7 +46,7 @@ export function BudgetSheet({ category, currency, onClose, onSaved, onRemoved }:
     >
       {shown && (
         <form
-          className="flex flex-col gap-5 pt-2 pb-2"
+          className="my-auto flex flex-col gap-5 pt-6 pb-2"
           onSubmit={(event) => {
             event.preventDefault();
             sheet.save();
