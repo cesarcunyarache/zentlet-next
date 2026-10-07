@@ -66,9 +66,7 @@
     "editTitle": "Editar movimiento",
     "descriptionPlaceholder": "¿En qué fue?",
     "typeGroup": "Gasto o ingreso",
-    "newCategory": "Nueva categoría",
-    "autoCategoryHint": "Categoría detectada del texto · tócala para ver todas",
-    "noCategoryHint": "Ninguna categoría encaja · elige una o crea otra con +"
+    "newCategory": "Nueva categoría"
   },
   "date": {
     "other": "Otra fecha…",

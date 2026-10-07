@@ -32,24 +32,6 @@ export function normalizeSuggestionText(text: string) {
   return text.trim().toLowerCase();
 }
 
-export function isAutoSelectedCategory(autoCategoryId: string | null, categoryId: string) {
-  return Boolean(autoCategoryId) && autoCategoryId === categoryId;
-}
-
-export function visibleCategoriesFor(categories: CategoryLike[], categoryId: string, isAutoCategory: boolean) {
-  return isAutoCategory ? categories.filter((category) => category.id === categoryId) : categories;
-}
-
-interface MissingCategoryHintInput {
-  categoryId: string;
-  description: string;
-  isThinking: boolean;
-}
-
-export function shouldHintMissingCategory({ categoryId, description, isThinking }: MissingCategoryHintInput) {
-  return !categoryId && description.trim().length >= MIN_SUGGESTION_LENGTH && !isThinking;
-}
-
 export function firstWord(text: string) {
   return text.trim().split(/\s+/)[0] ?? "";
 }

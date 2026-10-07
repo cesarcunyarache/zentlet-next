@@ -6,13 +6,10 @@ import {
   firstWord,
   initialFormValues,
   initialRawAmount,
-  isAutoSelectedCategory,
   normalizeSuggestionText,
   readAmountInput,
-  shouldHintMissingCategory,
   transactionCreatedPayload,
   transactionUpdatedPayload,
-  visibleCategoriesFor,
 } from "../transaction-form";
 
 const categories = [
@@ -71,29 +68,6 @@ describe("readAmountInput", () => {
 describe("normalizeSuggestionText", () => {
   it("recorta y pasa a minúsculas", () => {
     expect(normalizeSuggestionText("  Café ")).toBe("café");
-  });
-});
-
-describe("categoría automática", () => {
-  it("sólo cuenta si coincide con la elegida", () => {
-    expect(isAutoSelectedCategory(null, "")).toBe(false);
-    expect(isAutoSelectedCategory("", "")).toBe(false);
-    expect(isAutoSelectedCategory("car", "food")).toBe(false);
-    expect(isAutoSelectedCategory("car", "car")).toBe(true);
-  });
-
-  it("con categoría automática sólo se ve esa", () => {
-    expect(visibleCategoriesFor(categories, "car", true)).toEqual([categories[1]]);
-    expect(visibleCategoriesFor(categories, "car", false)).toBe(categories);
-  });
-});
-
-describe("shouldHintMissingCategory", () => {
-  it("avisa con texto suficiente, sin categoría y sin consulta en curso", () => {
-    expect(shouldHintMissingCategory({ categoryId: "", description: " tax ", isThinking: false })).toBe(true);
-    expect(shouldHintMissingCategory({ categoryId: "", description: "ta ", isThinking: false })).toBe(false);
-    expect(shouldHintMissingCategory({ categoryId: "car", description: "taxi", isThinking: false })).toBe(false);
-    expect(shouldHintMissingCategory({ categoryId: "", description: "taxi", isThinking: true })).toBe(false);
   });
 });
 

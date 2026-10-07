@@ -66,9 +66,7 @@
     "editTitle": "Edit transaction",
     "descriptionPlaceholder": "What was it for?",
     "typeGroup": "Expense or income",
-    "newCategory": "New category",
-    "autoCategoryHint": "Category detected from the text · tap it to see all",
-    "noCategoryHint": "No category fits · pick one or create one with +"
+    "newCategory": "New category"
   },
   "date": {
     "other": "Another date…",

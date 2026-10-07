@@ -12,16 +12,12 @@ import type { CategoryLike } from "../../types";
 import { TransactionAmountField } from "./transaction-amount-field";
 import { TransactionCategoryPicker } from "./transaction-category-picker";
 import { TransactionDateField } from "./transaction-date-field";
-import { TransactionFormHint } from "./transaction-form-hint";
 import { TransactionRepeatField } from "./transaction-repeat-field";
 import {
   finalizeFormValues,
   firstWord,
-  isAutoSelectedCategory,
-  shouldHintMissingCategory,
   transactionCreatedPayload,
   transactionUpdatedPayload,
-  visibleCategoriesFor,
 } from "../../lib/transaction-form";
 import { TransactionTypeToggle } from "./transaction-type-toggle";
 import { useCategoryCreation } from "../../hooks/form/useCategoryCreation";
@@ -55,12 +51,6 @@ export function TransactionFormSheet({
     transactionForm.selectCategory(created.id),
   );
 
-  const isAutoCategory = isAutoSelectedCategory(autoCategoryId, values.categoryId);
-  const isCategoryMissing = shouldHintMissingCategory({
-    categoryId: values.categoryId,
-    description: values.description,
-    isThinking: transactionForm.isThinking,
-  });
 
   function saveTransaction(submitted: TransactionFormValues) {
     onSubmit(finalizeFormValues(submitted, categories, t("transactions.defaultDescription")), transactionForm.recurrence);
@@ -127,15 +117,11 @@ export function TransactionFormSheet({
           </div>
 
           <TransactionCategoryPicker
-            categories={visibleCategoriesFor(categories, values.categoryId, isAutoCategory)}
+            categories={categories}
             selectedId={values.categoryId}
-            autoCategoryId={autoCategoryId}
-            canCreate={!isAutoCategory}
             onCreate={startCreating}
             onToggle={transactionForm.toggleCategory}
           />
-
-          <TransactionFormHint isAutoCategory={isAutoCategory} isCategoryMissing={isCategoryMissing} />
         </div>
       </Sheet>
 
