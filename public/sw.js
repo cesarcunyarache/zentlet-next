@@ -14,7 +14,7 @@
  * Al cambiar la estrategia, sube VERSION: la activación borra lo anterior.
  */
 
-const VERSION = "v1";
+const VERSION = "v2";
 const STATIC_CACHE = `zentlet-static-${VERSION}`;
 // el prefijo "zentlet-pages" lo borra también el cierre de sesión
 const PAGES_CACHE = `zentlet-pages-${VERSION}`;

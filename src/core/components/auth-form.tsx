@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Button, Description, InputGroup, Separator, toast } from "@heroui/react";
-import { ChartBar, Eye, EyeSlash, Lock } from "@gravity-ui/icons";
+import { Eye, EyeSlash, Lock } from "@gravity-ui/icons";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { authClient } from "@/lib/auth-client";
@@ -10,6 +10,7 @@ import { authErrorKey, oauthErrorKey } from "@/lib/auth-errors";
 import { siteConfig } from "@/lib/site";
 import { Link, getPathname } from "@/i18n/navigation";
 import { LEGAL_CONSENT_HEADER, LEGAL_VERSION } from "@/features/legal/config";
+import { BrandMark } from "@/core/components/brand-mark";
 import { useTurnstile } from "@/core/components/turnstile";
 
 /** Cabecera de consentimiento para las altas; sin la casilla marcada, ninguna. */
@@ -32,9 +33,7 @@ export function AuthFormHeader({
         href="/"
         className="hidden flex-col items-center gap-2 font-medium lg:flex"
       >
-        <div className="bg-app-fg text-app-bg flex size-10 items-center justify-center rounded-2xl shadow-[0_10px_24px_-8px_color-mix(in_oklch,var(--app-fg)_55%,transparent)]">
-          <ChartBar className="size-5" />
-        </div>
+        <BrandMark className="size-12 drop-shadow-[0_10px_14px_color-mix(in_oklch,var(--brand-jade)_35%,transparent)]" />
         <span className="sr-only">Zentlet</span>
       </Link>
       <h1 className="font-display m-0 lg:mt-2 text-2xl leading-tight font-bold tracking-[-0.03em]">{title}</h1>

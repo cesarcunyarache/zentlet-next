@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { BRAND_LEAVES, BRAND_STALK } from "@/core/components/brand-mark";
 import { getLandingContent } from "@/features/landing/content";
 import { routing, type Locale } from "@/i18n/routing";
 
@@ -36,8 +37,13 @@ export default async function OpengraphImage({ params }: { params: Promise<{ loc
         }}
       >
         <div style={{ display: "flex", flexDirection: "column", maxWidth: 620 }}>
-          <div style={{ display: "flex", fontSize: 40, fontWeight: 800, letterSpacing: -1 }}>
-            Zentlet<span style={{ color: "#dd3b3b" }}>.</span>
+          <div style={{ display: "flex", alignItems: "center", fontSize: 40, fontWeight: 800, letterSpacing: -1 }}>
+            <svg width="52" height="52" viewBox="20 20 216 216" style={{ marginRight: 14 }}>
+              <rect x="20" y="20" width="216" height="216" rx="56" fill="#034a2e" />
+              <path d={BRAND_STALK} fill="#f6f2e3" />
+              <path d={BRAND_LEAVES} fill="#60c473" />
+            </svg>
+            Zentlet
           </div>
           <div style={{ display: "flex", flexDirection: "column", marginTop: 48, fontSize: 76, fontWeight: 800, lineHeight: 1, letterSpacing: -3 }}>
             <span>{hero.titleLead}</span>

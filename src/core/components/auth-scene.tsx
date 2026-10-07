@@ -14,6 +14,7 @@ import {
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { AuthTransition } from "@/core/components/auth-transition";
+import { BrandMark } from "@/core/components/brand-mark";
 import { cn } from "@heroui/react";
 import { CategoryEmoji } from "@/features/category/ui/category-emoji";
 import { formatNumber } from "@/lib/money";
@@ -176,8 +177,9 @@ function Showcase({
     <div className="bg-app-fg text-app-bg relative hidden flex-col justify-between overflow-hidden p-10 lg:flex">
       <motion.div aria-hidden style={{ background: glare }} className="pointer-events-none absolute inset-0" />
 
-      <Link href="/" className="font-display relative w-fit text-2xl font-bold tracking-[-0.03em]">
-        Zentlet<span className="text-app-expense">.</span>
+      <Link href="/" className="font-display relative flex w-fit items-center gap-2 text-2xl font-bold tracking-[-0.03em]">
+        <BrandMark className="size-[1.25em]" />
+        Zentlet
       </Link>
 
       <div className="relative mx-auto h-[330px] w-full max-w-[380px]">
@@ -317,8 +319,9 @@ function MobileBrand() {
         aria-hidden
         className="pointer-events-none absolute -top-16 -right-10 size-48 rounded-full bg-[color-mix(in_oklch,var(--app-expense)_45%,transparent)] blur-3xl"
       />
-      <Link href="/" className="font-display relative text-xl font-bold tracking-[-0.03em]">
-        Zentlet<span className="text-app-expense">.</span>
+      <Link href="/" className="font-display relative flex w-fit items-center gap-2 text-xl font-bold tracking-[-0.03em]">
+        <BrandMark className="size-[1.25em]" />
+        Zentlet
       </Link>
 
       <div className="relative mt-6 flex items-end justify-between gap-4">

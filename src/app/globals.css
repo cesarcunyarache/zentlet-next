@@ -221,6 +221,9 @@ body {
 }
 
 :root {
+  --brand-jade: #034a2e;
+  --brand-cream: #f6f2e3;
+  --brand-leaf: #60c473;
   --font-display: ui-rounded, "SF Pro Rounded", "Hiragino Maru Gothic ProN",
     "Varela Round", system-ui, sans-serif;
   --font-numeric: ui-monospace, "SF Mono", Menlo, monospace;
