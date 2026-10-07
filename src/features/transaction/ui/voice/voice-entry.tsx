@@ -64,7 +64,6 @@ export function VoiceEntry({ categories, currency, onSave, onEdit }: VoiceEntryP
         onOpenChange={(isNextOpen) => !isNextOpen && voice.close()}
         title={t("title")}
         hideTitle
-        className="min-h-[62dvh]"
         bodyClassName="flex flex-col"
         footer={
           hasFooterActions(stage) ? (

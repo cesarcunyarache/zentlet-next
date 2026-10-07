@@ -31,7 +31,6 @@ export function CategoriesSheet({ isOpen, onOpenChange, categories }: Categories
         onOpenChange={onOpenChange}
         title={t("title")}
         hideTitle
-        className="min-h-[85dvh]"
       >
         <h2 className="font-display text-app-fg mt-2 mb-6 text-[28px] font-bold tracking-[-0.03em]">
           {t("title")}

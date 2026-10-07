@@ -54,7 +54,7 @@ export function Sheet({
       >
         <Drawer.Dialog
           className={cn(
-            "bg-app-bg flex max-h-[90dvh] w-full flex-col p-0",
+            "bg-app-bg flex min-h-[85dvh] max-h-[90dvh] w-full flex-col p-0",
             "rounded-t-[34px] shadow-[var(--shadow-sheet)]",
             "sm:max-w-[520px] sm:rounded-[28px]",
             className,
