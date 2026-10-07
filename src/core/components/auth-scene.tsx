@@ -258,7 +258,7 @@ function Showcase({
 
         {/* el botón flotante de la app */}
         <Parallax x={x} y={y} depth={38} className="absolute bottom-0 left-8">
-          <span className="bg-app-expense text-app-surface grid size-12 place-items-center rounded-full text-2xl font-light shadow-[var(--shadow-fab)]">
+          <span className="bg-app-action text-brand-cream grid size-12 place-items-center rounded-full text-2xl font-light shadow-[var(--shadow-action)]">
             +
           </span>
         </Parallax>

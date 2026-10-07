@@ -49,7 +49,7 @@ export function HeroVisual({ demo, common, balance, locale }: HeroVisualProps) {
       </Parallax>
 
       <Parallax isDecorative depth={40} className="absolute bottom-10 -left-2 sm:-left-8">
-        <span className="bg-app-expense text-app-surface grid size-12 place-items-center rounded-full text-2xl font-light shadow-[var(--shadow-fab)]">
+        <span className="bg-app-action text-brand-cream grid size-12 place-items-center rounded-full text-2xl font-light shadow-[var(--shadow-action)]">
           +
         </span>
       </Parallax>

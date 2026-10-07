@@ -194,6 +194,7 @@ body {
   --app-ink: var(--app-fg);
   /* texto sobre el pastel de una categoría: oscuro en ambos temas */
   --app-on-pastel: oklch(0.215 0.014 290);
+  --app-action: var(--brand-jade);
 }
 
 [data-theme="dark"] {
@@ -205,6 +206,7 @@ body {
   --app-expense: oklch(0.68 0.19 22);
   --app-income: oklch(0.74 0.15 148);
   --app-ink: oklch(0 0 0);
+  --app-action: oklch(0.5 0.09 163);
 }
 
 /* derivados — se recalculan en cada ámbito de tema; no editar */
@@ -218,6 +220,7 @@ body {
 
   --shadow-sheet: 0 -8px 40px color-mix(in oklch, var(--app-ink) 16%, transparent);
   --shadow-fab: 0 6px 18px color-mix(in oklch, var(--app-expense) 34%, transparent);
+  --shadow-action: 0 6px 18px color-mix(in oklch, var(--app-action) 40%, transparent);
 }
 
 :root {
@@ -242,6 +245,7 @@ body {
   --color-app-fill: var(--app-fill);
   --color-app-fill-strong: var(--app-fill-strong);
   --color-app-on-pastel: var(--app-on-pastel);
+  --color-app-action: var(--app-action);
 
   --color-brand-jade: var(--brand-jade);
   --color-brand-cream: var(--brand-cream);

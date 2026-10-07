@@ -400,7 +400,7 @@ export default function HomePage() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.88 }}
             transition={SPRING_PRESS}
-            className="bg-app-expense text-app-surface pointer-events-auto grid size-16 place-items-center rounded-full shadow-[var(--shadow-fab)]"
+            className="bg-app-action text-brand-cream pointer-events-auto grid size-16 place-items-center rounded-full shadow-[var(--shadow-action)]"
           >
             <Plus className="size-7" strokeWidth={2.4} />
           </motion.button>
