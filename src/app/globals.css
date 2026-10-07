@@ -219,7 +219,6 @@ body {
   --app-scrim: color-mix(in oklch, var(--app-ink) 42%, transparent);
 
   --shadow-sheet: 0 -8px 40px color-mix(in oklch, var(--app-ink) 16%, transparent);
-  --shadow-fab: 0 6px 18px color-mix(in oklch, var(--app-expense) 34%, transparent);
   --shadow-action: 0 6px 18px color-mix(in oklch, var(--app-action) 40%, transparent);
 }
 

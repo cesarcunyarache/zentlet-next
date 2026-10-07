@@ -19,7 +19,7 @@ export function VoiceVisual({ transcript }: { transcript: string }) {
           <motion.span
             animate={PULSE}
             transition={PULSE_TRANSITION}
-            className="bg-app-expense absolute inset-0 rounded-full"
+            className="bg-app-action absolute inset-0 rounded-full"
           />
         )}
         <span className="bg-app-fg text-app-bg relative grid size-14 place-items-center rounded-full">

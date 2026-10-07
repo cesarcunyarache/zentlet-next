@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import type { PointerEvent, ReactNode } from "react";
 import { Drawer, cn } from "@heroui/react";
 import { X } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -16,6 +16,15 @@ interface SheetProps {
   hideTitle?: boolean;
   /** Clases extra para el cuerpo scrollable. */
   bodyClassName?: string;
+}
+
+/**
+ * Los diálogos anidados (feedback, confirmaciones) viven en un portal, pero
+ * sus eventos suben por el árbol de React hasta el arrastre para cerrar del
+ * Drawer: un roce sobre ellos cerraba también esta hoja.
+ */
+function stopPortalPointer(event: PointerEvent<HTMLDivElement>) {
+  if (!event.currentTarget.contains(event.target as Node)) event.stopPropagation();
 }
 
 /**
@@ -54,7 +63,8 @@ export function Sheet({
       >
         <Drawer.Dialog
           className={cn(
-            "bg-app-bg flex min-h-[85dvh] max-h-[90dvh] w-full flex-col p-0",
+            "[--sheet-visible-height:calc(var(--visual-viewport-height,100dvh)_-_env(safe-area-inset-top)_-_8px)]",
+            "bg-app-bg flex min-h-[min(85dvh,var(--sheet-visible-height))] max-h-[min(90dvh,var(--sheet-visible-height))] w-full flex-col p-0",
             "rounded-t-[34px] shadow-[var(--shadow-sheet)]",
             "sm:max-w-[520px] sm:rounded-[28px]",
             className,
@@ -87,6 +97,8 @@ export function Sheet({
           </div>
 
           <div
+            data-slot="drawer-body"
+            onPointerDown={stopPortalPointer}
             className={cn(
               "scroll-clean min-h-0 flex-1 overflow-y-auto px-[22px] pt-2.5 sm:px-7",
               bodyClassName,
@@ -96,7 +108,10 @@ export function Sheet({
           </div>
 
           {footer ? (
-            <div className="shrink-0 px-[22px] pt-3 pb-[calc(16px+env(safe-area-inset-bottom))] sm:px-7 sm:pb-6">
+            <div
+              onPointerDown={stopPortalPointer}
+              className="shrink-0 px-[22px] pt-3 pb-[calc(16px+env(safe-area-inset-bottom))] sm:px-7 sm:pb-6"
+            >
               {footer}
             </div>
           ) : (
