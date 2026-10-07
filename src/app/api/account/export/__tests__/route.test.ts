@@ -16,7 +16,6 @@ vi.mock("@/lib/prisma", () => ({
 const db = vi.mocked(prisma, { deep: true });
 const getSession = vi.mocked(auth.api.getSession);
 
-// el cupo vive en la base de datos: aquí, un contador por clave en memoria
 const usage = new Map<string, number>();
 function countUsage(_sql: TemplateStringsArray, key: string) {
   usage.set(key, (usage.get(key) ?? 0) + 1);
@@ -97,7 +96,6 @@ describe("GET /api/account/export", () => {
   });
 });
 
-// TODO: gating Pro desactivado temporalmente para pruebas; volver a `it` al restaurarlo
 describe("GET /api/account/export sin plan PRO", () => {
   it.skip("el plan free recibe 403 con la feature que falta y no lee datos", async () => {
     signIn();

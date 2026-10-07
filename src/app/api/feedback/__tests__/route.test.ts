@@ -4,11 +4,6 @@ import prisma from "@/lib/prisma";
 import { FEEDBACK_MAX_LENGTH } from "@/features/feedback/constants";
 import { POST } from "../route";
 
-/*
- * Comentarios desde Ajustes: sólo con sesión, con cupo propio por usuario
- * y sin guardar nada del contexto que no sea técnico.
- */
-
 vi.mock("@/lib/auth", () => ({ auth: { api: { getSession: vi.fn() } } }));
 vi.mock("@/lib/prisma", () => ({
   default: {

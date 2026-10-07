@@ -4,12 +4,6 @@ import prisma from "@/lib/prisma";
 import { reportError } from "@/lib/observability/server";
 import { PATCH } from "../route";
 
-/*
- * Edición de un movimiento: una carrera con el borrado de su categoría es
- * un rechazo del dato (422), no un 500; un error real llega a los logs con
- * el usuario y el id de la petición.
- */
-
 vi.mock("@/lib/auth", () => ({ auth: { api: { getSession: vi.fn() } } }));
 vi.mock("@/lib/observability/server", () => ({ reportError: vi.fn() }));
 vi.mock("@/lib/prisma", () => ({

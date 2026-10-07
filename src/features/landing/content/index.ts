@@ -81,6 +81,23 @@ export async function getLandingContent(locale: Locale): Promise<LandingContent>
           symbol,
           label: copy.features.samples.currencies[key],
         })),
+        voiceTranscript: copy.features.samples.voiceTranscript,
+        receipt: {
+          ...copy.features.samples.receipt,
+          lines: copy.features.samples.receipt.lines.map((label, index) => ({
+            label,
+            amount: FEATURE_SAMPLES.receipt.lineAmounts[index] ?? 0,
+          })),
+          amount: FEATURE_SAMPLES.receipt.lineAmounts.reduce((sum, amount) => sum + amount, 0),
+          category: toDemoCategory(FEATURE_SAMPLES.receipt.category),
+        },
+        recurring: FEATURE_SAMPLES.recurring.map(({ key, frequency, ...item }, index) => ({
+          ...item,
+          id: `recurring-${index + 1}`,
+          description: copy.features.samples.recurring[key],
+          when: copy.features.samples.recurring[frequency],
+          category: toDemoCategory(item.category),
+        })),
       },
     },
     movements: MOVEMENTS.map((movement, index) => ({

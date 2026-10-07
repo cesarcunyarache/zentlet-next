@@ -1,5 +1,4 @@
 import type { NextRequest } from "next/server";
-// import { hasFeature } from "@/features/billing/server/access";
 import { redirectToGoogle, redirectWithResult } from "@/features/inbox/http/gmail-oauth";
 import { startGmailConnect } from "@/features/inbox/server/gmail-connection";
 import { getSessionUserId, internalError } from "@/lib/api/route-helpers";
@@ -7,8 +6,6 @@ import { getSessionUserId, internalError } from "@/lib/api/route-helpers";
 export async function GET(req: NextRequest) {
   try {
     const userId = await getSessionUserId(req);
-    // TODO: gating Pro desactivado temporalmente para pruebas
-    // if (!userId || !(await hasFeature(userId, "email_import"))) return redirectWithResult(req, "error");
     if (!userId) return redirectWithResult(req, "error");
 
     const started = startGmailConnect();

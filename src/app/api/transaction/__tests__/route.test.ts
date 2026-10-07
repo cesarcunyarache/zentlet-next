@@ -5,12 +5,6 @@ import { DELETE, GET, PATCH } from "../[id]/route";
 import { POST } from "../route";
 import { scheduleBudgetCheck } from "@/features/budget/server/check";
 
-/*
- * Idempotencia del alta: el id lo genera el cliente y la cola offline puede
- * reenviar la misma alta (respuesta perdida, dos pestañas). Nunca debe
- * duplicarse ni pisar un movimiento de otro usuario.
- */
-
 vi.mock("@/lib/auth", () => ({ auth: { api: { getSession: vi.fn() } } }));
 vi.mock("@/features/budget/server/check", () => ({ scheduleBudgetCheck: vi.fn() }));
 vi.mock("@/lib/prisma", () => ({

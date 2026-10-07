@@ -54,12 +54,19 @@ export const DASHBOARD = {
 export const FEATURES: { id: FeatureId; key: keyof Copy["features"]["items"] }[] = [
   { id: "natural-input", key: "naturalInput" },
   { id: "ai-category", key: "aiCategory" },
+  { id: "voice", key: "voice" },
+  { id: "receipt", key: "receipt" },
   { id: "budgets", key: "budgets" },
+  { id: "recurring", key: "recurring" },
   { id: "live-feed", key: "liveFeed" },
   { id: "balance", key: "balance" },
   { id: "categories", key: "categories" },
   { id: "currency", key: "currency" },
 ];
+
+type RecurringCopy = Copy["features"]["samples"]["recurring"];
+type RecurringFrequency = Extract<keyof RecurringCopy, "monthly">;
+type RecurringKey = Exclude<keyof RecurringCopy, RecurringFrequency>;
 
 export const FEATURE_SAMPLES = {
   suggestionCategory: "transport",
@@ -74,11 +81,19 @@ export const FEATURE_SAMPLES = {
     { symbol: "$", key: "dollar" },
     { symbol: "€", key: "euro" },
   ],
+  receipt: { lineAmounts: [32.9, 18.5, 32.9], category: "market" },
+  recurring: [
+    { key: "rent", amount: 650, type: "expense", category: "home", frequency: "monthly" },
+    { key: "salary", amount: 3000, type: "income", category: "salary", frequency: "monthly" },
+    { key: "streaming", amount: 44.9, type: "expense", category: "fun", frequency: "monthly" },
+  ],
 } satisfies {
   suggestionCategory: CategoryKey;
   categoryIdeas: CategoryKey[];
   budgets: { category: CategoryKey; spent: number; budget: number }[];
   currencies: { symbol: string; key: keyof Copy["features"]["samples"]["currencies"] }[];
+  receipt: { lineAmounts: number[]; category: CategoryKey };
+  recurring: (SampleTransaction<RecurringKey> & { frequency: RecurringFrequency })[];
 };
 
 export const MOVEMENTS: SampleTransaction<keyof Copy["movements"]>[] = [

@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-// import { requireFeature } from "@/features/billing/http/guard";
 import { dismissInboxItem } from "@/features/inbox/server/review";
 import { errorResponse, getSessionUserId, internalError, unauthorized, writeLimit } from "@/lib/api/route-helpers";
 
@@ -12,12 +11,6 @@ export async function POST(req: Request, { params }: RouteContext) {
 
     const limited = await writeLimit(userId);
     if (limited) return limited;
-
-    // TODO: gating Pro desactivado temporalmente para pruebas
-
-    // const denied = await requireFeature(userId, "email_import");
-
-    // if (denied) return denied;
 
     const { id } = await params;
     const result = await dismissInboxItem(userId, id);
