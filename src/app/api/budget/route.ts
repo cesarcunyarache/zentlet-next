@@ -4,7 +4,6 @@ import { createBudgetSchema } from "@/features/budget/schemas/budget-api.schema"
 import { BUDGET_LIMITS, serializeBudget } from "@/features/budget/lib/serialize";
 import { errorResponse, getSessionUserId, internalError, parseBody, unauthorized, writeLimit } from "@/lib/api/route-helpers";
 import { isUniqueViolation } from "@/lib/db-errors";
-import { requireFeature } from "@/features/billing/http/guard";
 import { DEFAULT_ALERTS } from "@/features/budget/lib/alerts";
 
 export async function GET(req: Request) {
@@ -31,9 +30,6 @@ export async function POST(req: Request) {
 
     const limited = await writeLimit(userId);
     if (limited) return limited;
-
-    const denied = await requireFeature(userId, "budgets");
-    if (denied) return denied;
 
     const parsed = await parseBody(req, createBudgetSchema);
     if ("error" in parsed) return parsed.error;
