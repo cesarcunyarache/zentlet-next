@@ -4,12 +4,6 @@ import { generateObject } from "@/lib/ai/client";
 import { allowAiCall } from "@/lib/ai/quota";
 import { generateCategory } from "../category-generator";
 
-/*
- * La Server Action es un endpoint público: sin sesión no llama al modelo,
- * respeta el cupo de IA y nunca devuelve al cliente lo que el modelo
- * inventó fuera de las reglas.
- */
-
 vi.mock("next/headers", () => ({ headers: vi.fn(async () => new Headers()) }));
 vi.mock("@/lib/auth", () => ({ auth: { api: { getSession: vi.fn() } } }));
 vi.mock("@/lib/ai/client", () => ({ generateObject: vi.fn() }));

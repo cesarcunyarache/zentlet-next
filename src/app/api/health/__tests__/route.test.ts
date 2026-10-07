@@ -3,11 +3,6 @@ import { runDatabaseCheck, runHealthChecks } from "@/lib/health/checks";
 import prisma from "@/lib/prisma";
 import { GET } from "../route";
 
-/*
- * Sin credencial sólo se sabe si la base de datos responde: ni la
- * configuración de los servicios ni llamadas a terceros.
- */
-
 vi.mock("@/lib/health/checks", () => ({ runDatabaseCheck: vi.fn(), runHealthChecks: vi.fn() }));
 vi.mock("@/lib/prisma", () => ({ default: { $queryRaw: vi.fn() } }));
 

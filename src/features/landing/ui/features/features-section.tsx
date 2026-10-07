@@ -12,6 +12,9 @@ import { CategoriesVisual } from "./visuals/categories-visual";
 import { CurrencyVisual } from "./visuals/currency-visual";
 import { LiveFeedVisual } from "./visuals/live-feed-visual";
 import { NaturalInputVisual } from "./visuals/natural-input-visual";
+import { ReceiptVisual } from "./visuals/receipt-visual";
+import { RecurringVisual } from "./visuals/recurring-visual";
+import { VoiceVisual } from "./visuals/voice-visual";
 
 const SECTION: SectionId = "funciones";
 const FADE_STAGGER_S = 0.06;
@@ -20,7 +23,10 @@ const TALL_FEATURE: FeatureId = "live-feed";
 const GRID_PLACEMENT: Record<FeatureId, string> = {
   "natural-input": "md:col-span-2",
   "ai-category": "",
-  budgets: "md:col-span-3",
+  voice: "",
+  receipt: "md:col-span-2",
+  budgets: "md:col-span-2",
+  recurring: "",
   "live-feed": "md:row-span-2",
   balance: "",
   categories: "",
@@ -45,9 +51,12 @@ export function FeaturesSection({ features, movements, common, balance, locale }
   const visuals: Record<FeatureId, React.ReactNode> = {
     "natural-input": <NaturalInputVisual phrases={samples.phrases} />,
     "ai-category": <AiCategoryVisual from={samples.suggestionFrom} category={samples.suggestionCategory} />,
+    voice: <VoiceVisual transcript={samples.voiceTranscript} />,
+    receipt: <ReceiptVisual receipt={samples.receipt} currency={currency} locale={locale} />,
     budgets: (
       <BudgetsVisual budgets={samples.budgets} labels={samples.budgetLabels} currency={currency} locale={locale} />
     ),
+    recurring: <RecurringVisual movements={samples.recurring} currency={currency} locale={locale} />,
     "live-feed": <LiveFeedVisual movements={movements} currency={currency} locale={locale} />,
     balance: <BalanceVisual value={balance} currency={currency} locale={locale} />,
     categories: <CategoriesVisual ideas={samples.categoryIdeas} />,

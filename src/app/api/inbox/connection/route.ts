@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-// import { requireFeature } from "@/features/billing/http/guard";
 import { createConnection, getConnection, inboundDomain } from "@/features/inbox/server/connection";
 import { errorResponse, getSessionUserId, internalError, unauthorized, writeLimit } from "@/lib/api/route-helpers";
 
@@ -7,12 +6,6 @@ export async function GET(req: Request) {
   try {
     const userId = await getSessionUserId(req);
     if (!userId) return unauthorized();
-
-    // TODO: gating Pro desactivado temporalmente para pruebas
-
-    // const denied = await requireFeature(userId, "email_import");
-
-    // if (denied) return denied;
 
     return NextResponse.json(await getConnection(userId));
   } catch (error) {
@@ -27,12 +20,6 @@ export async function POST(req: Request) {
 
     const limited = await writeLimit(userId);
     if (limited) return limited;
-
-    // TODO: gating Pro desactivado temporalmente para pruebas
-
-    // const denied = await requireFeature(userId, "email_import");
-
-    // if (denied) return denied;
 
     const domain = inboundDomain();
     if (!domain) return errorResponse("Email import is not configured", 503);

@@ -1,10 +1,10 @@
-export interface KnownBank {
+interface KnownBank {
   id: string;
   name: string;
   domains: string[];
 }
 
-export const KNOWN_BANKS: KnownBank[] = [{ id: "bcp", name: "BCP", domains: ["notificacionesbcp.com.pe"] }];
+const KNOWN_BANKS: KnownBank[] = [{ id: "bcp", name: "BCP", domains: ["notificacionesbcp.com.pe"] }];
 
 export const KNOWN_BANK_NAMES = KNOWN_BANKS.map((bank) => bank.name).join(", ");
 

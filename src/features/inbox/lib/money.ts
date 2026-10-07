@@ -1,4 +1,4 @@
-export interface ParsedMoney {
+interface ParsedMoney {
   value: number;
   currency: string | null;
 }

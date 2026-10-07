@@ -26,7 +26,12 @@ export function CategoriesSheet({ isOpen, onOpenChange, categories }: Categories
 
   return (
     <>
-      <Sheet isOpen={isOpen && !isFormOpen} onOpenChange={onOpenChange} title={t("title")} hideTitle>
+      <Sheet
+        isOpen={isOpen && !isFormOpen}
+        onOpenChange={onOpenChange}
+        title={t("title")}
+        hideTitle
+      >
         <h2 className="font-display text-app-fg mt-2 mb-6 text-[28px] font-bold tracking-[-0.03em]">
           {t("title")}
         </h2>

@@ -19,13 +19,13 @@ export interface ReceiptImage {
   mediaType: string;
 }
 
-export interface ReceiptScanRequest {
+interface ReceiptScanRequest {
   image: ReceiptImage | null;
   categories: unknown;
   today: unknown;
 }
 
-export const isValidReceiptImage = (image: ReceiptImage | null): image is ReceiptImage =>
+const isValidReceiptImage = (image: ReceiptImage | null): image is ReceiptImage =>
   image !== null &&
   image.data.byteLength > 0 &&
   image.data.byteLength <= RECEIPT_IMAGE_MAX_BYTES &&

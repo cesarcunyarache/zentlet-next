@@ -4,8 +4,6 @@ import type { AcceptInboxItemInput } from "../schemas/inbox-api.schema";
 import { merchantKey } from "../lib/merchant";
 import { shouldAutoBlock } from "../lib/sender";
 
-export type ReviewError = "not_found" | "category_not_found";
-
 async function pendingItem(userId: string, id: string) {
   return prisma.inboxTransaction.findFirst({ where: { id, userId, status: "pending" } });
 }

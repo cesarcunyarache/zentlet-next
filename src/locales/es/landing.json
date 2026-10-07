@@ -8,7 +8,9 @@
       "app de gastos",
       "presupuesto personal",
       "registro de ingresos y gastos",
-      "gastos con IA"
+      "gastos con IA",
+      "escanear boletas",
+      "gastos por voz"
     ],
     "ogImageAlt": "Zentlet: registra tus gastos en segundos",
     "ogSubtitle": "Escribe «taxi al trabajo» y Zentlet hace el resto."
@@ -94,9 +96,23 @@
         "title": "La IA elige la categoría",
         "description": "Cuando el texto no basta, una IA propone la categoría entre las tuyas. Es una ayuda: tú decides y nunca bloquea el registro."
       },
+      "voice": {
+        "title": "Díctalo en voz alta",
+        "description": "Toca el micrófono y di «gasté 35 soles en almuerzo». Zentlet saca el monto, la fecha y la categoría; tú solo confirmas.",
+        "badge": "Nuevo"
+      },
+      "receipt": {
+        "title": "Escanea tu comprobante",
+        "description": "Toma una foto de la boleta, el voucher o la captura de Yape o Plin. Leemos el QR de SUNAT o el texto en tu celular, y la IA ayuda solo cuando hace falta.",
+        "badge": "Nuevo"
+      },
       "budgets": {
         "title": "Presupuestos por categoría",
-        "description": "Ponle un tope a comida, transporte o lo que quieras, por semana, mes o el periodo que elijas. Ves cuánto te queda y te avisa en cuanto te pasas.",
+        "description": "Ponle un tope a comida, transporte o lo que quieras, por semana, mes o el periodo que elijas. Ves cuánto te queda y te avisa en cuanto te pasas."
+      },
+      "recurring": {
+        "title": "Pagos recurrentes",
+        "description": "Alquiler, sueldo o Netflix: elige cada semana, mes, trimestre o año y Zentlet lo registra en su fecha.",
         "badge": "Nuevo"
       },
       "liveFeed": {
@@ -132,6 +148,23 @@
       "budgetLabels": {
         "left": "Quedan",
         "over": "Te pasaste"
+      },
+      "voiceTranscript": "gasté 35 soles en almuerzo",
+      "receipt": {
+        "merchant": "Minimarket Lucía",
+        "lines": [
+          "Arroz 5 kg",
+          "Aceite 1 L",
+          "Huevos x15"
+        ],
+        "total": "Total",
+        "method": "Leído del QR de SUNAT"
+      },
+      "recurring": {
+        "rent": "Departamento",
+        "salary": "Nómina",
+        "streaming": "Netflix",
+        "monthly": "Cada mes"
       }
     }
   },
@@ -221,7 +254,8 @@
       "features": [
         "Movimientos ilimitados",
         "Categorías con sugerencias de IA",
-        "Registro por voz",
+        "Registro por voz y escaneo de comprobantes",
+        "Movimientos recurrentes",
         "Balance y resumen del mes"
       ]
     },
@@ -255,6 +289,14 @@
         "answer": "Mientras escribes, Zentlet reconoce el tipo y las categorías cuyo nombre aparece en el texto. Si no alcanza, una IA sugiere la categoría entre las que tú creaste. Siempre puedes cambiarla."
       },
       {
+        "question": "¿Puedo registrar un gasto sin escribir?",
+        "answer": "Sí. Puedes dictarlo con el micrófono o tomar una foto del comprobante (boleta, voucher o captura de Yape o Plin). Zentlet completa el monto y la categoría, y tú revisas antes de guardar."
+      },
+      {
+        "question": "¿Puedo registrar pagos que se repiten?",
+        "answer": "Sí. Al crear un movimiento elige «Repetir»: cada semana, mes, trimestre, semestre o año. Se registra solo en cada fecha y puedes dejar de repetirlo desde su detalle."
+      },
+      {
         "question": "¿Puedo usar mi moneda?",
         "answer": "Sí. Puedes elegir soles (S/), dólares ($) o euros (€) desde los ajustes, y toda la app mostrará ese símbolo."
       },
@@ -265,6 +307,10 @@
       {
         "question": "¿Necesito instalar algo?",
         "answer": "No. Zentlet funciona en el navegador del móvil o del ordenador; sólo necesitas iniciar sesión."
+      },
+      {
+        "question": "¿Funciona sin internet?",
+        "answer": "Sí. Lo que anotas sin conexión se guarda en tu dispositivo y se sincroniza al volver la red."
       },
       {
         "question": "¿Quién puede ver mis movimientos?",

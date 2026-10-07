@@ -8,7 +8,9 @@
       "expense app",
       "personal budget",
       "income and expense tracking",
-      "AI expense tracking"
+      "AI expense tracking",
+      "receipt scanner",
+      "voice expense tracking"
     ],
     "ogImageAlt": "Zentlet: track your expenses in seconds",
     "ogSubtitle": "Type “taxi to work” and Zentlet does the rest."
@@ -94,9 +96,23 @@
         "title": "AI picks the category",
         "description": "When the text isn't enough, AI suggests a category from your own. It's just a helper: you decide, and it never blocks saving."
       },
+      "voice": {
+        "title": "Just say it",
+        "description": "Tap the mic and say “I spent 35 on lunch”. Zentlet picks out the amount, date and category; you just confirm.",
+        "badge": "New"
+      },
+      "receipt": {
+        "title": "Scan your receipt",
+        "description": "Snap a receipt, card slip or a Yape or Plin screenshot. We read the SUNAT QR code or the text on your phone, and AI only steps in when needed.",
+        "badge": "New"
+      },
       "budgets": {
         "title": "Budgets per category",
-        "description": "Put a cap on food, transport or anything you like, per week, month or whatever period you choose. See what's left and know the moment you go over.",
+        "description": "Put a cap on food, transport or anything you like, per week, month or whatever period you choose. See what's left and know the moment you go over."
+      },
+      "recurring": {
+        "title": "Recurring payments",
+        "description": "Rent, salary or Netflix: choose every week, month, quarter or year and Zentlet records it on the right day.",
         "badge": "New"
       },
       "liveFeed": {
@@ -132,6 +148,23 @@
       "budgetLabels": {
         "left": "Left",
         "over": "Over by"
+      },
+      "voiceTranscript": "I spent 35 on lunch",
+      "receipt": {
+        "merchant": "Lucía Minimarket",
+        "lines": [
+          "Rice 5 kg",
+          "Oil 1 L",
+          "Eggs x15"
+        ],
+        "total": "Total",
+        "method": "Read from the SUNAT QR code"
+      },
+      "recurring": {
+        "rent": "Apartment",
+        "salary": "Payroll",
+        "streaming": "Netflix",
+        "monthly": "Every month"
       }
     }
   },
@@ -221,7 +254,8 @@
       "features": [
         "Unlimited transactions",
         "Categories with AI suggestions",
-        "Voice entry",
+        "Voice entry and receipt scanning",
+        "Recurring transactions",
         "Monthly balance and summary"
       ]
     },
@@ -255,6 +289,14 @@
         "answer": "As you type, Zentlet recognizes the type and any categories whose name appears in the text. If that's not enough, AI suggests a category from the ones you created. You can always change it."
       },
       {
+        "question": "Can I log an expense without typing?",
+        "answer": "Yes. You can dictate it with the mic or take a photo of the receipt (receipt, card slip or a Yape or Plin screenshot). Zentlet fills in the amount and category, and you review it before saving."
+      },
+      {
+        "question": "Can I track payments that repeat?",
+        "answer": "Yes. When creating a transaction, choose “Repeat”: every week, month, quarter, six months or year. It's recorded automatically on each date, and you can stop it from its detail view."
+      },
+      {
         "question": "Can I use my currency?",
         "answer": "Yes. You can choose soles (S/), dollars ($) or euros (€) in the settings, and the whole app will show that symbol."
       },
@@ -265,6 +307,10 @@
       {
         "question": "Do I need to install anything?",
         "answer": "No. Zentlet works in your phone or computer browser; you just need to sign in."
+      },
+      {
+        "question": "Does it work offline?",
+        "answer": "Yes. Anything you log offline is saved on your device and syncs when you're back online."
       },
       {
         "question": "Who can see my transactions?",

@@ -34,7 +34,6 @@ function httpError(status: number) {
   return new AxiosError("Request failed", "ERR_BAD_RESPONSE", undefined, undefined, { status } as AxiosResponse);
 }
 
-// los módulos guardan estado de la visita: cada test los carga de nuevo
 async function load() {
   vi.stubGlobal("localStorage", memoryStorage());
   vi.resetModules();
@@ -136,7 +135,6 @@ describe("sincronizar al abrir la app", () => {
     t.getPreferences.mockReturnValue(response.promise);
 
     const sync = t.syncPreferences(t.options());
-    // el cambio ya se confirmó: no queda como pendiente
     t.setDeviceCurrency(USER, "USD");
     response.resolve(serverRow({ currency: "EUR" }));
     await sync;

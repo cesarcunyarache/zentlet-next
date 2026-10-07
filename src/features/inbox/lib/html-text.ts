@@ -26,7 +26,7 @@ function decodeEntities(text: string) {
     .replace(/&([a-z]+);/gi, (match, name: string) => ENTITIES[name] ?? match);
 }
 
-export function htmlToText(html: string) {
+function htmlToText(html: string) {
   return decodeEntities(
     html
       .replace(/<(script|style|head)[\s\S]*?<\/\1>/gi, "")
@@ -37,7 +37,7 @@ export function htmlToText(html: string) {
   );
 }
 
-export function normalizeText(text: string) {
+function normalizeText(text: string) {
   return text
     .replace(/\r/g, "")
     .split("\n")

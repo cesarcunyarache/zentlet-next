@@ -7,11 +7,6 @@ import { categoryService } from "../../services/category.service";
 import type { TCategory } from "../../types";
 import { categoryKeys, categoryMutationKeys, registerCategoryMutations } from "../category.store";
 
-/*
- * La cola offline de categorías con un QueryClient real y las mutaciones
- * registradas como en la app. Sólo se simula la capa HTTP.
- */
-
 vi.mock("../../services/category.service", () => ({
   categoryService: {
     createCategory: vi.fn(),
@@ -58,7 +53,6 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  // desmontar antes de volver a "online": si no, se reanudaría la cola de este test en el siguiente
   queryClient.unmount();
   queryClient.clear();
   onlineManager.setOnline(true);
@@ -154,7 +148,6 @@ describe("borrado de categoría", () => {
   it("con movimientos (409): vuelve a la lista, avisa «en uso» y NO lo reporta como fallo", async () => {
     service.deleteCategory.mockRejectedValue(httpError(409));
     service.getCategories.mockResolvedValue([food]);
-    // como en la app: la lista está en pantalla, así que al invalidarse se vuelve a pedir
     const unsubscribe = new QueryObserver(queryClient, {
       queryKey: categoryKeys.all,
       queryFn: () => categoryService.getCategories(),

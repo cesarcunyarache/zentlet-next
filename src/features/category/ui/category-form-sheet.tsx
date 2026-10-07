@@ -21,7 +21,6 @@ export function CategoryFormSheet({ isOpen, category, initialName, onClose }: Ca
       onOpenChange={(open) => !open && onClose()}
       title={t(category ? "edit" : "new")}
       hideTitle
-      className="min-h-[70dvh]"
       bodyClassName="flex flex-col"
     >
       <div className="flex flex-1 flex-col pb-4">

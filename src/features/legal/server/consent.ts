@@ -1,6 +1,6 @@
 import { z } from "zod";
 import prisma from "@/lib/prisma";
-import { LEGAL_DOCUMENTS, LEGAL_VERSION } from "./config";
+import { LEGAL_DOCUMENTS, LEGAL_VERSION } from "../config";
 
 export const legalDocumentSchema = z.enum(LEGAL_DOCUMENTS);
 

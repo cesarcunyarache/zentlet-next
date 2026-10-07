@@ -1,6 +1,6 @@
 import type { EmailHeader, InboundEmail } from "../types";
 
-export interface GmailMessagePart {
+interface GmailMessagePart {
   mimeType?: string;
   headers?: EmailHeader[];
   body?: { data?: string; size?: number };

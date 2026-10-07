@@ -3,7 +3,10 @@ export type SectionId = "producto" | "funciones" | "como-funciona" | "precios" |
 export type FeatureId =
   | "natural-input"
   | "ai-category"
+  | "voice"
+  | "receipt"
   | "budgets"
+  | "recurring"
   | "live-feed"
   | "balance"
   | "categories"
@@ -27,6 +30,15 @@ export interface DemoMovement extends DemoTransaction {
   id: string;
   description: string;
   when: string;
+}
+
+export interface DemoReceipt {
+  merchant: string;
+  lines: { label: string; amount: number }[];
+  total: string;
+  amount: number;
+  method: string;
+  category: DemoCategory;
 }
 
 export interface DemoEntry extends DemoTransaction {
@@ -120,6 +132,9 @@ export interface LandingContent {
       budgets: (DemoCategory & { spent: number; budget: number })[];
       budgetLabels: { left: string; over: string };
       currencies: { symbol: string; label: string }[];
+      voiceTranscript: string;
+      receipt: DemoReceipt;
+      recurring: DemoMovement[];
     };
   };
   movements: DemoMovement[];

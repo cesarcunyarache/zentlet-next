@@ -20,7 +20,6 @@ describe("swipeSideOnRelease", () => {
   });
 
   it("un gesto rápido de vuelta desde un lado abierto lo cierra, no abre el contrario", () => {
-    // editar abierto (+82), se arrastra hacia la izquierda rápido pero la fila sigue a la derecha
     expect(swipeSideOnRelease({ offset: 30, velocity: -900, ...both })).toBeNull();
   });
 

@@ -80,6 +80,7 @@ export function TransactionFormSheet({
         onOpenChange={onOpenChange}
         title={t(isEditing ? "transactions.form.editTitle" : "transactions.form.title")}
         hideTitle
+        bodyClassName="flex flex-col"
         footer={
           <Button
             type="button"
@@ -92,7 +93,7 @@ export function TransactionFormSheet({
           </Button>
         }
       >
-        <div className="flex flex-col gap-4 pt-6 pb-2">
+        <div className="my-auto flex flex-col gap-4 pt-6 pb-2">
           <div className="flex flex-wrap items-center gap-2">
             <TransactionDateField
               key={isOpen ? "open" : "closed"}

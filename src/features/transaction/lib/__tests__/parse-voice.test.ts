@@ -10,7 +10,6 @@ const categories: CategoryLike[] = [
   { id: "salary", name: "Sueldo" },
 ];
 
-// jueves 24 de septiembre de 2026, mediodía local
 beforeEach(() => {
   vi.useFakeTimers();
   vi.setSystemTime(new Date(2026, 8, 24, 12));

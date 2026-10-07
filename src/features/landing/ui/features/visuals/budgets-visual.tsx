@@ -19,7 +19,7 @@ interface BudgetsVisualProps {
 
 export function BudgetsVisual({ budgets, labels, currency, locale }: BudgetsVisualProps) {
   return (
-    <ul aria-hidden className="m-0 grid h-full list-none content-center gap-4 p-0 md:grid-cols-3 md:gap-6">
+    <ul aria-hidden className="m-0 grid h-full list-none content-center gap-3 p-0">
       {budgets.map((item, index) => (
         <BudgetCard key={item.name} item={item} index={index} labels={labels} currency={currency} locale={locale} />
       ))}

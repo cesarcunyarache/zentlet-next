@@ -17,7 +17,7 @@ export const postmarkInboundSchema = z.object({
   Headers: z.array(z.object({ Name: z.string(), Value: z.string() })).default([]),
 });
 
-export type PostmarkInbound = z.infer<typeof postmarkInboundSchema>;
+type PostmarkInbound = z.infer<typeof postmarkInboundSchema>;
 
 function receivedAt(value: string | undefined, now: Date) {
   const parsed = value ? new Date(value) : now;

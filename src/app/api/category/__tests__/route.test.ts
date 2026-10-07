@@ -5,11 +5,6 @@ import { Prisma } from "@/generated/prisma/client";
 import { DELETE, PATCH } from "../[id]/route";
 import { POST } from "../route";
 
-/*
- * Categorías: alta idempotente por id (como los movimientos), tope por
- * usuario y borrado protegido cuando la categoría tiene movimientos.
- */
-
 vi.mock("@/lib/auth", () => ({ auth: { api: { getSession: vi.fn() } } }));
 vi.mock("@/lib/prisma", () => ({
   default: {

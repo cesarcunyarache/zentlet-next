@@ -2,11 +2,6 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import prisma from "@/lib/prisma";
 import { GET } from "../route";
 
-/*
- * Limpieza diaria: sólo la ejecuta Vercel Cron con `CRON_SECRET` y sólo
- * borra lo vencido.
- */
-
 vi.mock("@/lib/prisma", () => ({
   default: {
     usageLimit: { deleteMany: vi.fn() },

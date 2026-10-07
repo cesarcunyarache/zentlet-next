@@ -95,8 +95,6 @@ describe("checkout", () => {
     expect(row).toMatchObject({ status: "pending", planKey: "pro", amount: 1490, currency: "PEN", interval: "month" });
     expect(row.trialEndsAt!.getTime() - Date.now()).toBeGreaterThan(14 * DAY_MS);
     expect(await summary()).toMatchObject({ plan: "free", hasPendingCheckout: true, isTrialEligible: true });
-    // TODO: gating Pro desactivado temporalmente para pruebas
-    // expect(await exportStatus()).toBe(403);
   });
 
   it("dos clics simultáneos dejan una sola suscripción viva y un solo checkout en la pasarela", async () => {
@@ -339,8 +337,6 @@ describe("reembolsos", () => {
 
     expect(gateway.subscriptions()[0].status).toBe("canceled");
     expect((await summary()).plan).toBe("free");
-    // TODO: gating Pro desactivado temporalmente para pruebas
-    // expect(await exportStatus()).toBe(403);
   });
 
   it("sin el secreto de administración no se reembolsa", async () => {

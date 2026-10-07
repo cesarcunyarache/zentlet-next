@@ -10,7 +10,6 @@ import { routing, type Locale } from "@/i18n/routing";
 import en from "@/locales/en/settings.json";
 import es from "@/locales/es/settings.json";
 import { getSessionUserId, internalError, parseQuery, tooManyRequests, unauthorized } from "@/lib/api/route-helpers";
-// import { requireFeature } from "@/features/billing/http/guard";
 
 const EXPORTS_PER_MINUTE = 5;
 const RATE_WINDOW_SECONDS = 60;
@@ -35,12 +34,6 @@ export async function GET(req: Request) {
   try {
     const userId = await getSessionUserId(req);
     if (!userId) return unauthorized();
-
-    // TODO: gating Pro desactivado temporalmente para pruebas
-
-    // const denied = await requireFeature(userId, "export");
-
-    // if (denied) return denied;
 
     const { allowed } = await rateLimit(`export:${userId}`, EXPORTS_PER_MINUTE, RATE_WINDOW_SECONDS * 1000);
     if (!allowed) return tooManyRequests("Too many exports, try again in a minute", RATE_WINDOW_SECONDS);

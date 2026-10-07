@@ -69,7 +69,6 @@ export function ReceiptScan({ categories, currency, onSave, onEdit }: ReceiptSca
         onOpenChange={(isNextOpen) => !isNextOpen && receipt.close()}
         title={t("title")}
         hideTitle
-        className="min-h-[62dvh]"
         bodyClassName="flex flex-col"
         footer={
           stage === "scanning" ? null : (

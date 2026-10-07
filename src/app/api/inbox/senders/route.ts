@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-// import { requireFeature } from "@/features/billing/http/guard";
 import { normalizeSenderPattern } from "@/features/inbox/lib/sender";
 import { serializeInboxSender } from "@/features/inbox/lib/serialize";
 import { addInboxSenderSchema } from "@/features/inbox/schemas/inbox-api.schema";
@@ -20,12 +19,6 @@ export async function POST(req: Request) {
 
     const limited = await writeLimit(userId);
     if (limited) return limited;
-
-    // TODO: gating Pro desactivado temporalmente para pruebas
-
-    // const denied = await requireFeature(userId, "email_import");
-
-    // if (denied) return denied;
 
     const parsed = await parseBody(req, addInboxSenderSchema);
     if ("error" in parsed) return parsed.error;

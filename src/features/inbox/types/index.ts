@@ -39,8 +39,6 @@ export interface SenderRule {
   dismissedCount: number;
 }
 
-export type InboxStatus = "pending" | "accepted" | "dismissed";
-
 export interface TInboxItem {
   id: string;
   bank: string | null;
