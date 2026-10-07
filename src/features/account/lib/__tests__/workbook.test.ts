@@ -84,7 +84,7 @@ describe("buildWorkbook", () => {
   it("un texto que parece fórmula se exporta como texto, no como fórmula", () => {
     const description = cell(txSheet.data[1], 3);
     expect(description?.value).toBe("=HYPERLINK(\"http://evil\")");
-    expect(description?.type).toBeUndefined(); // sin `type: "Formula"` la librería escribe una cadena
+    expect(description?.type).toBeUndefined();
   });
 
   it("las categorías incluyen su número de movimientos y su presupuesto vigente con su periodo", () => {
@@ -114,6 +114,6 @@ describe("buildWorkbook", () => {
     const empty = buildWorkbook({ transactions: [], categories: [] }, es.export, "dd/mm/yyyy");
     const file = await writeXlsxFile(empty).toBuffer();
     expect(file.subarray(0, 2).toString()).toBe("PK");
-    expect(empty[0].data).toHaveLength(1); // sólo cabeceras
+    expect(empty[0].data).toHaveLength(1);
   });
 });

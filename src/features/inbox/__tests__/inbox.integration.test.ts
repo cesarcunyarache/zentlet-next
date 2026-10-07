@@ -84,7 +84,6 @@ afterAll(async () => {
 });
 
 describe("movimientos por correo", () => {
-  // TODO: gating Pro desactivado temporalmente para pruebas; volver a `it` al restaurarlo
   it.skip("es parte de Pro", async () => {
     const free = await createUser();
     signIn(free.id);

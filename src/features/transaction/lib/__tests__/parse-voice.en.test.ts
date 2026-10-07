@@ -6,13 +6,12 @@ import { parseVoiceEntry } from "../parse-voice";
 const categories: CategoryLike[] = [
   { id: "food", name: "Food" },
   { id: "transport", name: "Transport" },
-  { id: "health", name: "Salud" }, // nombrada en español: los sinónimos en inglés también la encuentran
+  { id: "health", name: "Salud" },
   { id: "salary", name: "Salary" },
 ];
 
 const parse = (transcript: string) => parseVoiceEntry(transcript, categories, "en");
 
-// jueves 24 de septiembre de 2026, mediodía local
 beforeEach(() => {
   vi.useFakeTimers();
   vi.setSystemTime(new Date(2026, 8, 24, 12));

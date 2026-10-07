@@ -21,7 +21,6 @@ function brokenStorage() {
 
 let storage: ReturnType<typeof memoryStorage>;
 
-// el módulo guarda la moneda en memoria: cada test lo carga de nuevo
 async function load(initial?: Record<string, string>) {
   storage = memoryStorage(initial);
   vi.stubGlobal("localStorage", storage);

@@ -1,6 +1,5 @@
 import prisma from "@/lib/prisma";
 import { isUniqueViolation } from "@/lib/db-errors";
-// import { hasFeature } from "@/features/billing/server/access";
 import { userLocalDate } from "@/features/preference/server/timezone";
 import { matchCategory } from "@/features/transaction/lib/parse-description";
 import type { EmailMovement, InboundEmail, SenderRule } from "../types";
@@ -87,9 +86,6 @@ export async function ingestUserEmail(
   email: InboundEmail,
   body = emailBody(email.text, email.html),
 ): Promise<IngestOutcome> {
-  // TODO: gating Pro desactivado temporalmente para pruebas
-  // if (!(await hasFeature(userId, "email_import"))) return "not_allowed";
-
   const from = normalizeAddress(email.from);
   const rules: SenderRule[] = await prisma.inboxSender.findMany({ where: { userId } });
   const verdict = senderVerdict(from, rules);

@@ -4,7 +4,7 @@ import { APIError, createAuthMiddleware } from "better-auth/api";
 import { captcha } from "better-auth/plugins";
 import { cancelUserSubscription } from "@/features/billing/server/cancel";
 import { LEGAL_CONSENT_HEADER, LEGAL_VERSION } from "@/features/legal/config";
-import { recordSignUpConsent } from "@/features/legal/consent";
+import { recordSignUpConsent } from "@/features/legal/server/consent";
 import prisma from "./prisma";
 import { rateLimit } from "./rate-limit";
 import { isEmailConfigured, sendEmail } from "./email";

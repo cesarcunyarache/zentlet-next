@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import prisma from "@/lib/prisma";
-import { LEGAL_DOCUMENTS, LEGAL_VERSION } from "../config";
+import { LEGAL_DOCUMENTS, LEGAL_VERSION } from "../../config";
 import { legalDocumentSchema, recordLegalConsent, recordSignUpConsent, type LegalDocument } from "../consent";
 
 vi.mock("@/lib/prisma", () => ({

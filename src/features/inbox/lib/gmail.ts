@@ -4,7 +4,7 @@ const GMAIL_FORWARDING = "forwarding-noreply@google.com";
 const CODE = /#?(\d{6,12})/;
 const CONFIRM_URL = /https:\/\/(?:mail-settings\.google\.com|mail\.google\.com)\/\S+/;
 
-export interface GmailVerification {
+interface GmailVerification {
   code: string | null;
   url: string | null;
 }

@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-export interface OnboardingState {
+interface OnboardingState {
   open: boolean;
   finish: () => void;
 }

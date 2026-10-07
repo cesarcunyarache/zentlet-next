@@ -16,7 +16,7 @@ export function normalizeSenderPattern(value: string) {
   return normalizeAddress(trimmed);
 }
 
-export function ruleMatches(rule: Pick<SenderRule, "address">, address: string) {
+function ruleMatches(rule: Pick<SenderRule, "address">, address: string) {
   if (rule.address.startsWith("@")) {
     const domain = senderDomain(address);
     const pattern = rule.address.slice(1);
@@ -25,7 +25,7 @@ export function ruleMatches(rule: Pick<SenderRule, "address">, address: string) 
   return rule.address === address;
 }
 
-export function findSenderRule<T extends Pick<SenderRule, "address">>(rules: T[], address: string) {
+function findSenderRule<T extends Pick<SenderRule, "address">>(rules: T[], address: string) {
   return rules.find((rule) => rule.address === address) ?? rules.find((rule) => ruleMatches(rule, address)) ?? null;
 }
 

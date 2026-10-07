@@ -3,7 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { recurringService } from "../services/recurring.service";
 
-export const recurringKeys = {
+const recurringKeys = {
   detail: (id: string) => ["recurring", id] as const,
 };
 
