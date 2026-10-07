@@ -1,5 +1,5 @@
 import type { ErrorTable } from "@/lib/api/route-helpers";
-import type { TransactionError } from "../server/transactions";
+import type { TransactionError } from "../domain/transaction.errors";
 
 export const TRANSACTION_ERRORS: ErrorTable<TransactionError> = {
   not_found: ["Transaction not found", 404],
