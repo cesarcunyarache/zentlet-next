@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { cn } from "@heroui/react";
-import { Plus, Sparkles } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { SPRING_LAYOUT, SPRING_PRESS } from "@/lib/ease";
 import { CategoryEmoji } from "@/features/category/ui/category-emoji";
@@ -12,8 +12,6 @@ import type { CategoryLike } from "../../types";
 interface TransactionCategoryPickerProps {
   categories: CategoryLike[];
   selectedId: string;
-  autoCategoryId: string | null;
-  canCreate: boolean;
   onCreate: () => void;
   onToggle: (categoryId: string) => void;
 }
@@ -21,8 +19,6 @@ interface TransactionCategoryPickerProps {
 export function TransactionCategoryPicker({
   categories,
   selectedId,
-  autoCategoryId,
-  canCreate,
   onCreate,
   onToggle,
 }: TransactionCategoryPickerProps) {
@@ -36,8 +32,7 @@ export function TransactionCategoryPicker({
       aria-label={t("fields.category")}
       className="scroll-clean -mx-[22px] flex gap-2 overflow-x-auto px-[22px] py-1 sm:-mx-7 sm:px-7"
     >
-      {canCreate ? (
-        <motion.button
+      <motion.button
           type="button"
           aria-label={t("form.newCategory")}
           whileTap={{ scale: 0.9 }}
@@ -47,7 +42,6 @@ export function TransactionCategoryPicker({
         >
           <Plus className="size-[18px]" strokeWidth={2} />
         </motion.button>
-      ) : null}
 
       <AnimatePresence initial={false} mode="popLayout">
         {categories.map((category) => {
@@ -58,7 +52,6 @@ export function TransactionCategoryPicker({
               ref={registerChip(category.id)}
               category={category}
               isActive={isActive}
-              isSuggested={isActive && autoCategoryId === category.id}
               shouldReduceMotion={shouldReduceMotion}
               onClick={() => onToggle(category.id)}
             />
@@ -73,12 +66,11 @@ interface CategoryChipProps {
   ref: React.Ref<HTMLButtonElement>;
   category: CategoryLike;
   isActive: boolean;
-  isSuggested: boolean;
   shouldReduceMotion: boolean;
   onClick: () => void;
 }
 
-function CategoryChip({ ref, category, isActive, isSuggested, shouldReduceMotion, onClick }: CategoryChipProps) {
+function CategoryChip({ ref, category, isActive, shouldReduceMotion, onClick }: CategoryChipProps) {
   return (
     <motion.button
       ref={ref}
@@ -111,7 +103,6 @@ function CategoryChip({ ref, category, isActive, isSuggested, shouldReduceMotion
         <CategoryEmoji category={category} className="size-7 rounded-full text-[15px]" />
       </motion.span>
       <span className="relative">{category.name}</span>
-      {isSuggested ? <Sparkles aria-hidden className="relative size-3.5" strokeWidth={2.2} /> : null}
     </motion.button>
   );
 }

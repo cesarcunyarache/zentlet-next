@@ -4,8 +4,6 @@ import { useTranslations } from "next-intl";
 import { Sheet } from "@/core/components/ui/sheet";
 import { PillSelect } from "@/core/components/ui/pill-select";
 import { CategoryEmoji } from "@/features/category/ui/category-emoji";
-import { useBillingSummary } from "@/features/billing/stores/billing.store";
-import { UpgradePrompt } from "@/features/billing/ui/upgrade-button";
 import type { CategoryBase } from "@/features/category/types";
 import { BUDGET_PERIOD_OPTIONS } from "../lib/period";
 import { useBudgetSheet } from "../hooks/useBudgetSheet";
@@ -25,7 +23,6 @@ interface BudgetSheetProps {
 export function BudgetSheet({ category, currency, onClose, onSaved, onRemoved }: BudgetSheetProps) {
   const t = useTranslations("budgets.sheet");
   const sheet = useBudgetSheet({ category, onSaved, onRemoved });
-  const { canUse } = useBillingSummary();
   const { shown, draft } = sheet;
 
   const periodOptions = BUDGET_PERIOD_OPTIONS.map((value) => ({ value, label: t(`periods.${value}`) }));
@@ -36,6 +33,7 @@ export function BudgetSheet({ category, currency, onClose, onSaved, onRemoved }:
       onOpenChange={(open) => !open && onClose()}
       title={shown ? t("title", { name: shown.name }) : ""}
       hideTitle
+      bodyClassName="flex flex-col"
       footer={
         <BudgetSheetFooter
           hasBudget={sheet.hasBudget}
@@ -43,15 +41,12 @@ export function BudgetSheet({ category, currency, onClose, onSaved, onRemoved }:
           canSave={sheet.canSave}
           onRemove={sheet.remove}
           onSave={sheet.save}
-          upgrade={
-            canUse("budgets") ? undefined : <UpgradePrompt className="min-h-[54px] flex-[2] rounded-2xl text-base" />
-          }
         />
       }
     >
       {shown && (
         <form
-          className="flex flex-col gap-5 pt-2 pb-2"
+          className="my-auto flex flex-col gap-5 pt-6 pb-2"
           onSubmit={(event) => {
             event.preventDefault();
             sheet.save();

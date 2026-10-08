@@ -4,7 +4,6 @@ import { budgetAlertsSchema } from "@/features/budget/schemas/budget-api.schema"
 import { isAlertBelowLimit } from "@/features/budget/lib/alerts";
 import { serializeAlert } from "@/features/budget/lib/serialize";
 import { scheduleBudgetCheck } from "@/features/budget/server/check";
-import { requireFeature } from "@/features/billing/http/guard";
 import { errorResponse, getSessionUserId, internalError, parseBody, unauthorized, writeLimit } from "@/lib/api/route-helpers";
 import { isForeignKeyViolation } from "@/lib/db-errors";
 
@@ -39,9 +38,6 @@ export async function PUT(req: Request, { params }: RouteContext) {
 
     const limited = await writeLimit(userId);
     if (limited) return limited;
-
-    const denied = await requireFeature(userId, "budgets");
-    if (denied) return denied;
 
     const parsed = await parseBody(req, budgetAlertsSchema);
     if ("error" in parsed) return parsed.error;

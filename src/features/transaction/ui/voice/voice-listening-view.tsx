@@ -27,7 +27,7 @@ export function VoiceListeningView({ isReady, isSpeaking, transcript }: VoiceLis
         {shouldReduceMotion ? null : <ListeningRings isSpeaking={isSpeaking} />}
         <motion.span
           aria-hidden
-          className="bg-app-expense text-app-surface relative grid size-24 place-items-center rounded-full shadow-[var(--shadow-fab)]"
+          className="bg-app-action text-brand-cream relative grid size-24 place-items-center rounded-full shadow-[var(--shadow-action)]"
           animate={isSpeaking && !shouldReduceMotion ? { scale: [1, 1.07, 1] } : { scale: 1 }}
           transition={{ duration: 0.7, repeat: isSpeaking ? Infinity : 0, ease: "easeInOut" }}
         >
@@ -52,7 +52,7 @@ function ListeningRings({ isSpeaking }: { isSpeaking: boolean }) {
     <span
       key={ring}
       aria-hidden
-      className="bg-app-expense voice-ring absolute inset-4 rounded-full opacity-0"
+      className="bg-app-action voice-ring absolute inset-4 rounded-full opacity-0"
       style={
         {
           "--ring-scale": isSpeaking ? 1.45 : 1.25,
@@ -82,7 +82,7 @@ function VoiceLevelBars({ isReady, isSpeaking, shouldReduceMotion }: VoiceLevelB
       {BAR_PEAKS.map((peak, index) => (
         <motion.span
           key={peak}
-          className={cn("w-1.5 rounded-full", isSpeaking ? "bg-app-expense" : "bg-app-fill-strong")}
+          className={cn("w-1.5 rounded-full", isSpeaking ? "bg-app-action" : "bg-app-fill-strong")}
           animate={barHeights(peak)}
           transition={{
             duration: isSpeaking ? 0.9 + (index % 3) * 0.15 : 1.6,

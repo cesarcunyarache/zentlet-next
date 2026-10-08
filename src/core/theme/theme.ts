@@ -5,10 +5,11 @@ export type ThemePreference = "system" | "light" | "dark";
 export const THEME_STORAGE_KEY = "zentlet.theme.v1";
 
 /**
- * Sólo la app privada tiene tema oscuro; la landing y el acceso siguen en
- * claro. Con o sin prefijo de idioma: `/admin`, `/en/admin`.
+ * La landing, el acceso y la app privada tienen tema oscuro; las páginas
+ * legales siguen en claro. Con o sin prefijo de idioma: `/`, `/en`,
+ * `/auth/sign-in`, `/en/admin`.
  */
-export const THEME_SCOPE = `^(/(${routing.locales.join("|")}))?/admin(/|$)`;
+export const THEME_SCOPE = `^(/(${routing.locales.join("|")}))?(/?$|/(admin|auth)(/|$))`;
 
 export function isThemePreference(value: unknown): value is ThemePreference {
   return value === "system" || value === "light" || value === "dark";

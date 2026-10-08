@@ -1,6 +1,8 @@
 <div align="center">
 
-# Zentlet<span>.</span>
+<img src="docs/brand/logo/svg/zentlet-symbol.svg" alt="Símbolo de Zentlet: un tallo de bambú crema sobre un recuadro jade" width="96"/>
+
+# Zentlet
 
 ### Tus gastos, claros en segundos.
 

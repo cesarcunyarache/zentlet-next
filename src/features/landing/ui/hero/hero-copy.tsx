@@ -21,7 +21,7 @@ export function HeroCopy({ hero }: { hero: LandingContent["hero"] }) {
         style={riseInDelay(0)}
         className="animate-rise-in bg-app-surface text-app-fg inline-flex items-center gap-2 rounded-full py-1.5 pr-4 pl-1.5 text-sm font-medium shadow-[0_4px_16px_-8px_color-mix(in_oklch,var(--app-fg)_30%,transparent)] ring-1 ring-[var(--app-border)]"
       >
-        <span className="bg-app-fg text-app-bg grid size-6 place-items-center rounded-full">
+        <span className="bg-brand-jade text-brand-cream grid size-6 place-items-center rounded-full">
           <Sparkles className="size-3.5" aria-hidden />
         </span>
         {hero.badge}
@@ -49,9 +49,9 @@ export function HeroCopy({ hero }: { hero: LandingContent["hero"] }) {
       >
         <ShimmerLink
           href={siteConfig.routes.signUp}
-          background="var(--app-fg)"
-          shimmerColor="oklch(0.85 0.12 30)"
-          className="h-13 w-full gap-2 px-7 text-base font-semibold sm:w-auto"
+          background="var(--brand-jade)"
+          shimmerColor="var(--brand-leaf)"
+          className="text-brand-cream h-13 w-full gap-2 px-7 text-base font-semibold sm:w-auto"
         >
           {hero.primaryCta}
           <CtaArrow />

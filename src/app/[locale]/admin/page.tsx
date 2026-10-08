@@ -43,7 +43,10 @@ import { useGmailConnectResult } from "@/features/inbox/hooks/useGmailConnectRes
 import { ToastBubble } from "@/core/components/ui/toast-bubble";
 import { Onboarding } from "@/features/onboarding/ui/onboarding";
 import { periodRange } from "@/features/transaction/lib/format";
-import { buildStripData, categoryValue } from "@/features/transaction/lib/strip-data";
+import {
+  buildStripData,
+  categoryValue,
+} from "@/features/transaction/lib/strip-data";
 import { track } from "@/lib/observability/client";
 import type {
   CategoryLike,
@@ -54,7 +57,13 @@ import type {
   TransactionType,
 } from "@/features/transaction/types";
 
-type Sheet = "new" | "categories" | "settings" | "notifications" | "inbox" | null;
+type Sheet =
+  | "new"
+  | "categories"
+  | "settings"
+  | "notifications"
+  | "inbox"
+  | null;
 
 const ALL_TIME: DateRange = {};
 
@@ -88,7 +97,8 @@ export default function HomePage() {
 
   const { budgets } = useBudgetStore();
 
-  const { createTransaction, updateTransaction, deleteTransaction } = useTransactionMutations();
+  const { createTransaction, updateTransaction, deleteTransaction } =
+    useTransactionMutations();
   const syncStateById = usePendingTransactions();
   const { currency, currencyCode, setCurrency } = useCurrency();
 
@@ -113,26 +123,44 @@ export default function HomePage() {
   const [pendingDelete, setPendingDelete] = useState<TTransaction | null>(null);
   const [formDraft, setFormDraft] = useState<Partial<TransactionFormValues>>();
   const [editing, setEditing] = useState<TTransaction | null>(null);
-  const [budgetCategory, setBudgetCategory] = useState<CategoryLike | null>(null);
+  const [budgetCategory, setBudgetCategory] = useState<CategoryLike | null>(
+    null,
+  );
 
   // aparece al instante; se sincroniza por detrás (o en cola sin red)
-  function saveTransaction(values: TransactionFormValues, recurrence: RecurrenceFrequency | null = null) {
-    createTransaction({ ...values, reference: null, recurrence: recurrence ?? undefined });
+  function saveTransaction(
+    values: TransactionFormValues,
+    recurrence: RecurrenceFrequency | null = null,
+  ) {
+    createTransaction({
+      ...values,
+      reference: null,
+      recurrence: recurrence ?? undefined,
+    });
     setCategoryFilter(null);
     setKind(null);
     setPeriod("month");
-    toast(t(values.type === "expense" ? "toast.expenseSaved" : "toast.incomeSaved"));
+    toast(
+      t(values.type === "expense" ? "toast.expenseSaved" : "toast.incomeSaved"),
+    );
   }
 
-  function openForm(draft?: Partial<TransactionFormValues>, transaction: TTransaction | null = null) {
+  function openForm(
+    draft?: Partial<TransactionFormValues>,
+    transaction: TTransaction | null = null,
+  ) {
     setFormDraft(draft);
     setEditing(transaction);
     setSheet("new");
   }
 
   function editTransaction(transaction: TTransaction) {
-    const { description, amount, type, categoryId, transactionDate } = transaction;
-    openForm({ description, amount, type, categoryId, transactionDate }, transaction);
+    const { description, amount, type, categoryId, transactionDate } =
+      transaction;
+    openForm(
+      { description, amount, type, categoryId, transactionDate },
+      transaction,
+    );
   }
 
   // los filtros se respetan: si deja de cumplirlos, el movimiento sale de la lista
@@ -156,7 +184,10 @@ export default function HomePage() {
   };
 
   const feed = useTransactionFeed(filters);
-  const detail = detailId ? (feed.transactions.find((transaction) => transaction.id === detailId) ?? null) : null;
+  const detail = detailId
+    ? (feed.transactions.find((transaction) => transaction.id === detailId) ??
+      null)
+    : null;
   const { data: summary } = useTransactionSummary(range);
   const { data: lifetime } = useTransactionSummary(ALL_TIME);
 
@@ -191,15 +222,24 @@ export default function HomePage() {
       const value = valueOfCategory(categoryFilter);
       return {
         value,
-        label: categoriesById.get(categoryFilter)?.name ?? t("headline.category"),
+        label:
+          categoriesById.get(categoryFilter)?.name ?? t("headline.category"),
         tone: value > 0 ? ("income" as const) : ("expense" as const),
       };
     }
     if (kind === "expense") {
-      return { value: -expenseTotal, label: t("headline.expenses"), tone: "expense" as const };
+      return {
+        value: -expenseTotal,
+        label: t("headline.expenses"),
+        tone: "expense" as const,
+      };
     }
     if (kind === "income") {
-      return { value: incomeTotal, label: t("headline.income"), tone: "income" as const };
+      return {
+        value: incomeTotal,
+        label: t("headline.income"),
+        tone: "income" as const,
+      };
     }
 
     const net = incomeTotal - expenseTotal;
@@ -229,7 +269,10 @@ export default function HomePage() {
           <SyncStatusPill />
           <div className="flex items-center">
             {inboxItems.length > 0 ? (
-              <IconButton label={tInbox("label", { count: inboxItems.length })} onClick={() => setSheet("inbox")}>
+              <IconButton
+                label={tInbox("label", { count: inboxItems.length })}
+                onClick={() => setSheet("inbox")}
+              >
                 <InboxIcon count={inboxItems.length} />
               </IconButton>
             ) : null}
@@ -239,7 +282,10 @@ export default function HomePage() {
             >
               <NotificationBell hasUnread={unreadCount > 0} />
             </IconButton>
-            <IconButton label={t("home.settings")} onClick={() => setSheet("settings")}>
+            <IconButton
+              label={t("home.settings")}
+              onClick={() => setSheet("settings")}
+            >
               <Settings className="size-5" strokeWidth={1.7} />
             </IconButton>
           </div>
@@ -334,11 +380,14 @@ export default function HomePage() {
               transactions={feed.transactions}
               categoriesById={categoriesById}
               currency={currency}
-              hasAnyTransaction={(lifetime?.count ?? 0) > 0 || feed.transactions.length > 0}
+              hasAnyTransaction={
+                (lifetime?.count ?? 0) > 0 || feed.transactions.length > 0
+              }
               hasMore={feed.hasNextPage}
               isLoadingMore={feed.isFetchingNextPage}
               onEndReached={() => {
-                if (feed.hasNextPage && !feed.isFetchingNextPage) void feed.fetchNextPage();
+                if (feed.hasNextPage && !feed.isFetchingNextPage)
+                  void feed.fetchNextPage();
               }}
               syncStateById={syncStateById}
               onSelect={(transaction) => setDetailId(transaction.id)}
@@ -357,7 +406,10 @@ export default function HomePage() {
             transition={SPRING_LAYOUT}
             className="bg-app-surface/90 pointer-events-auto flex items-center gap-1 rounded-full p-1.5 shadow-[0_8px_28px_-10px_color-mix(in_oklch,var(--app-fg)_30%,transparent)] backdrop-blur-xl"
           >
-            <IconButton label={t("home.categories")} onClick={() => setSheet("categories")}>
+            <IconButton
+              label={t("home.categories")}
+              onClick={() => setSheet("categories")}
+            >
               <LayoutGrid className="size-5" strokeWidth={1.7} />
             </IconButton>
             <IconButton
@@ -377,33 +429,33 @@ export default function HomePage() {
           </motion.div>
 
           <div className="relative">
-          <div className="absolute bottom-full left-1/2 mb-3 flex -translate-x-1/2 flex-col items-center gap-3">
-            <ReceiptScan
-              categories={categories}
-              currency={currency}
-              onSave={saveTransaction}
-              onEdit={(draft) => openForm(draft)}
-            />
-            <VoiceEntry
-              categories={categories}
-              currency={currency}
-              onSave={saveTransaction}
-              onEdit={(draft) => openForm(draft)}
-            />
-          </div>
-          <motion.button
-            type="button"
-            aria-label={t("home.create")}
-            onClick={() => openForm()}
-            initial={{ scale: 0, rotate: -90 }}
-            animate={{ scale: 1, rotate: 0 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.88 }}
-            transition={SPRING_PRESS}
-            className="bg-app-expense text-app-surface pointer-events-auto grid size-16 place-items-center rounded-full shadow-[var(--shadow-fab)]"
-          >
-            <Plus className="size-7" strokeWidth={2.4} />
-          </motion.button>
+            <div className="absolute bottom-full left-1/2 mb-3 flex -translate-x-1/2 flex-col items-center gap-3">
+              <ReceiptScan
+                categories={categories}
+                currency={currency}
+                onSave={saveTransaction}
+                onEdit={(draft) => openForm(draft)}
+              />
+              <VoiceEntry
+                categories={categories}
+                currency={currency}
+                onSave={saveTransaction}
+                onEdit={(draft) => openForm(draft)}
+              />
+            </div>
+            <motion.button
+              type="button"
+              aria-label={t("home.create")}
+              onClick={() => openForm()}
+              initial={{ scale: 0, rotate: -90 }}
+              animate={{ scale: 1, rotate: 0 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.88 }}
+              transition={SPRING_PRESS}
+              className="action-glass pointer-events-auto text-white grid size-16 place-items-center rounded-full"
+            >
+              <Plus className="size-7" strokeWidth={2.4} />
+            </motion.button>
           </div>
         </div>
       </div>
@@ -423,7 +475,11 @@ export default function HomePage() {
         currency={currency}
         draft={formDraft}
         isEditing={Boolean(editing)}
-        onSubmit={(values, recurrence) => (editing ? saveEdit(editing, values) : saveTransaction(values, recurrence))}
+        onSubmit={(values, recurrence) =>
+          editing
+            ? saveEdit(editing, values)
+            : saveTransaction(values, recurrence)
+        }
       />
 
       <DeleteTransactionDialog
@@ -502,7 +558,10 @@ function ListSkeleton() {
     <div aria-hidden className="flex flex-col gap-1">
       <span className="bg-app-fill mb-2 ml-1 h-3 w-16 animate-pulse rounded-full" />
       {Array.from({ length: 5 }, (_, index) => (
-        <div key={index} className="flex min-h-[64px] items-center gap-3.5 px-1 py-2">
+        <div
+          key={index}
+          className="flex min-h-[64px] items-center gap-3.5 px-1 py-2"
+        >
           <span className="bg-app-fill size-12 shrink-0 animate-pulse rounded-full" />
           <span className="flex flex-1 flex-col gap-2">
             <span className="bg-app-fill h-2.5 w-20 animate-pulse rounded-full" />

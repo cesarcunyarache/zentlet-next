@@ -11,7 +11,7 @@ import type { DemoEntry, LandingContent } from "../../content";
 import { amountSign, formatAmount } from "../../lib/format";
 import { TYPE_SPEED_MS, useComposerCycle } from "../../hooks/useComposerCycle";
 import { DemoTypingField } from "../shared/demo-typing-field";
-import { BRAND_ACCENT, GOLD_ACCENT, TYPED_TEXT_CLASS } from "../shared/tokens";
+import { BRAND_ACCENT, GROWTH_ACCENT, TYPED_TEXT_CLASS } from "../shared/tokens";
 
 const READING_FADE = {
   initial: { opacity: 0 },
@@ -45,7 +45,7 @@ export function ExpenseComposerDemo({ demo, common, locale }: ExpenseComposerDem
       aria-hidden
       className="bg-app-surface relative w-full overflow-hidden rounded-[28px] p-5 shadow-[0_40px_80px_-32px_color-mix(in_oklch,var(--app-fg)_45%,transparent),0_2px_6px_color-mix(in_oklch,var(--app-fg)_6%,transparent)] sm:p-6"
     >
-      <BorderBeam size={120} duration={8} colorFrom={BRAND_ACCENT} colorTo={GOLD_ACCENT} borderWidth={1.5} />
+      <BorderBeam size={120} duration={8} colorFrom={BRAND_ACCENT} colorTo={GROWTH_ACCENT} borderWidth={1.5} />
 
       <div className="flex items-center justify-between">
         <p className="text-app-muted m-0 text-xs font-semibold tracking-wide uppercase">{demo.label}</p>

@@ -59,3 +59,8 @@ export const transactionListQuerySchema = z.object({
   cursor: z.string().max(MAX_CURSOR_LENGTH).optional(),
   limit: z.coerce.number().int().min(1).max(MAX_PAGE_SIZE).default(DEFAULT_PAGE_SIZE),
 });
+
+export type CreateTransactionInput = z.infer<typeof createTransactionSchema>;
+export type UpdateTransactionInput = z.infer<typeof updateTransactionSchema>;
+export type TransactionListQuery = z.infer<typeof transactionListQuerySchema>;
+export type TransactionSummaryQuery = z.infer<typeof transactionSummaryQuerySchema>;

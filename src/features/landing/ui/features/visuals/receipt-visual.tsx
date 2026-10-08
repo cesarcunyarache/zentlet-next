@@ -44,7 +44,7 @@ export function ReceiptVisual({ receipt, currency, locale }: ReceiptVisualProps)
           <motion.span
             animate={SCAN}
             transition={SCAN_TRANSITION}
-            className="bg-app-expense absolute inset-x-2 h-0.5 rounded-full shadow-[0_0_12px_2px_color-mix(in_oklch,var(--app-expense)_60%,transparent)]"
+            className="bg-brand-leaf absolute inset-x-2 h-0.5 rounded-full shadow-[0_0_12px_2px_color-mix(in_oklch,var(--brand-leaf)_60%,transparent)]"
           />
         )}
       </div>

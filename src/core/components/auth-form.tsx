@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button, Description, InputGroup, Separator, toast } from "@heroui/react";
-import { ChartBar, Eye, EyeSlash, Lock } from "@gravity-ui/icons";
+import { Button, Checkbox, Description, InputGroup, Separator, toast } from "@heroui/react";
+import { Eye, EyeSlash, Lock } from "@gravity-ui/icons";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { authClient } from "@/lib/auth-client";
@@ -10,6 +10,8 @@ import { authErrorKey, oauthErrorKey } from "@/lib/auth-errors";
 import { siteConfig } from "@/lib/site";
 import { Link, getPathname } from "@/i18n/navigation";
 import { LEGAL_CONSENT_HEADER, LEGAL_VERSION } from "@/features/legal/config";
+import { BrandMark } from "@/core/components/brand-mark";
+import { GoogleIcon } from "@/core/components/google-icon";
 import { useTurnstile } from "@/core/components/turnstile";
 
 /** Cabecera de consentimiento para las altas; sin la casilla marcada, ninguna. */
@@ -32,9 +34,7 @@ export function AuthFormHeader({
         href="/"
         className="hidden flex-col items-center gap-2 font-medium lg:flex"
       >
-        <div className="bg-app-fg text-app-bg flex size-10 items-center justify-center rounded-2xl shadow-[0_10px_24px_-8px_color-mix(in_oklch,var(--app-fg)_55%,transparent)]">
-          <ChartBar className="size-5" />
-        </div>
+        <BrandMark className="size-12 drop-shadow-[0_10px_14px_color-mix(in_oklch,var(--brand-jade)_35%,transparent)]" />
         <span className="sr-only">Zentlet</span>
       </Link>
       <h1 className="font-display m-0 lg:mt-2 text-2xl leading-tight font-bold tracking-[-0.03em]">{title}</h1>
@@ -59,7 +59,7 @@ export function AuthSubmitButton({
       type="submit"
       isPending={isPending}
       isDisabled={isDisabled}
-      className="bg-app-fg text-app-bg mt-1 h-10 w-full rounded-xl font-semibold shadow-[0_12px_24px_-10px_color-mix(in_oklch,var(--app-fg)_60%,transparent)] transition-transform hover:-translate-y-0.5 data-[pending=true]:opacity-80"
+      className="bg-brand-jade text-brand-cream mt-1 h-10 w-full rounded-xl font-semibold shadow-[0_12px_24px_-10px_color-mix(in_oklch,var(--brand-jade)_70%,transparent)] transition-transform hover:-translate-y-0.5 data-[pending=true]:opacity-80"
     >
       {isPending ? pendingLabel : children}
     </Button>
@@ -101,7 +101,7 @@ export function PasswordInput({ "aria-invalid": invalid, ...props }: Omit<InputG
           onClick={() => setVisible((value) => !value)}
           aria-label={t(visible ? "hidePassword" : "showPassword")}
           aria-pressed={visible}
-          className="text-app-muted hover:text-app-fg focus-visible:ring-app-fg -mr-1 flex size-7 items-center justify-center rounded-md outline-none focus-visible:ring-2"
+          className="text-app-muted hover:text-app-fg focus-visible:ring-brand-jade -mr-1 flex size-7 items-center justify-center rounded-md outline-none focus-visible:ring-2"
         >
           <Toggle className="size-4" />
         </button>
@@ -175,9 +175,9 @@ export function SocialSignInButtons({
           isDisabled={isDisabled || pending !== null}
           onPress={() => signIn("github")}
         >
-          <svg viewBox="0 0 1024 1024" fill="none">
+          <svg viewBox="0 0 1024 1024" fill="none" className="text-[#1b1f23] dark:text-white">
             <path
-              fill="#1b1f23"
+              fill="currentColor"
               fillRule="evenodd"
               d="M512 0C229.12 0 0 229.12 0 512c0 226.56 146.56 417.92 350.08 485.76 25.6 4.48 35.2-10.88 35.2-24.32 0-12.16-.64-52.48-.64-95.36-128.64 23.68-161.92-31.36-172.16-60.16-5.76-14.72-30.72-60.16-52.48-72.32-17.92-9.6-43.52-33.28-.64-33.92 40.32-.64 69.12 37.12 78.72 52.48 46.08 77.44 119.68 55.68 149.12 42.24 4.48-33.28 17.92-55.68 32.64-68.48-113.92-12.8-232.96-56.96-232.96-252.8 0-55.68 19.84-101.76 52.48-137.6-5.12-12.8-23.04-65.28 5.12-135.68 0 0 42.88-13.44 140.8 52.48 40.96-11.52 84.48-17.28 128-17.28s87.04 5.76 128 17.28c97.92-66.56 140.8-52.48 140.8-52.48 28.16 70.4 10.24 122.88 5.12 135.68 32.64 35.84 52.48 81.28 52.48 137.6 0 196.48-119.68 240-233.6 252.8 18.56 16 34.56 46.72 34.56 94.72 0 68.48-.64 123.52-.64 140.8 0 13.44 9.6 29.44 35.2 24.32C877.44 929.92 1024 737.92 1024 512 1024 229.12 794.88 0 512 0"
               clipRule="evenodd"
@@ -193,12 +193,7 @@ export function SocialSignInButtons({
           isDisabled={isDisabled || pending !== null}
           onPress={() => signIn("google")}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path
-              d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"
-              fill="currentColor"
-            />
-          </svg>
+          <GoogleIcon />
           {t("social.google")}
         </Button>
       </div>
@@ -244,21 +239,19 @@ export function LegalConsent({ checked, onChange }: { checked: boolean; onChange
   const t = useTranslations("auth");
 
   return (
-    <label className="text-app-muted flex cursor-pointer items-start gap-2.5 text-xs leading-relaxed">
-      <input
-        type="checkbox"
-        name="legalAccepted"
-        checked={checked}
-        onChange={(event) => onChange(event.target.checked)}
-        className="accent-app-fg mt-0.5 size-4 shrink-0"
-      />
-      <span>
-        {t.rich("signUp.consent", {
-          terms: (chunks) => legalLink(siteConfig.routes.terms, chunks),
-          privacy: (chunks) => legalLink(siteConfig.routes.privacy, chunks),
-        })}
-      </span>
-    </label>
+    <Checkbox name="legalAccepted" isSelected={checked} onChange={onChange}>
+      <Checkbox.Content className="items-start gap-2.5">
+        <Checkbox.Control className="mt-0.5 shrink-0">
+          <Checkbox.Indicator />
+        </Checkbox.Control>
+        <span className="text-app-muted text-xs leading-relaxed">
+          {t.rich("signUp.consent", {
+            terms: (chunks) => legalLink(siteConfig.routes.terms, chunks),
+            privacy: (chunks) => legalLink(siteConfig.routes.privacy, chunks),
+          })}
+        </span>
+      </Checkbox.Content>
+    </Checkbox>
   );
 }
 

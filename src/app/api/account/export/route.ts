@@ -21,13 +21,53 @@ const DATE_FORMATS: Record<Locale, string> = { es: "dd/mm/yyyy", en: "mm/dd/yyyy
 
 const exportQuerySchema = z.object({
   locale: z.enum(routing.locales).catch(routing.defaultLocale),
-  currency: z.string().optional(),
+  currency: z
+    .string()
+    .trim()
+    .transform((symbol) => symbol.slice(0, MAX_CURRENCY_SYMBOL_LENGTH))
+    .optional(),
 });
 
 function withCurrency(labels: WorkbookLabels, currency: string | undefined): WorkbookLabels {
-  const symbol = currency?.trim().slice(0, MAX_CURRENCY_SYMBOL_LENGTH);
-  if (!symbol) return labels;
-  return { ...labels, columns: { ...labels.columns, amount: `${labels.columns.amount} (${symbol})` } };
+  if (!currency) return labels;
+  return { ...labels, columns: { ...labels.columns, amount: `${labels.columns.amount} (${currency})` } };
+}
+
+function findExportData(userId: string) {
+  return Promise.all([
+    prisma.transaction.findMany({
+      where: { userId },
+      orderBy: FEED_ORDER,
+      select: {
+        transactionDate: true,
+        type: true,
+        amount: true,
+        description: true,
+        reference: true,
+        category: { select: { name: true } },
+      },
+    }),
+    prisma.category.findMany({
+      where: { userId },
+      orderBy: { name: "asc" },
+      select: {
+        name: true,
+        icon: true,
+        color: true,
+        description: true,
+        createdAt: true,
+        _count: { select: { transactions: true } },
+        budget: {
+          select: {
+            kind: true,
+            periodUnit: true,
+            periodCount: true,
+            limits: { orderBy: { effectiveFrom: "desc" }, take: 1, select: { amount: true } },
+          },
+        },
+      },
+    }),
+  ]);
 }
 
 export async function GET(req: Request) {
@@ -42,40 +82,7 @@ export async function GET(req: Request) {
     if ("error" in parsed) return parsed.error;
     const { locale, currency } = parsed.data;
 
-    const [transactions, categories] = await Promise.all([
-      prisma.transaction.findMany({
-        where: { userId },
-        orderBy: FEED_ORDER,
-        select: {
-          transactionDate: true,
-          type: true,
-          amount: true,
-          description: true,
-          reference: true,
-          category: { select: { name: true } },
-        },
-      }),
-      prisma.category.findMany({
-        where: { userId },
-        orderBy: { name: "asc" },
-        select: {
-          name: true,
-          icon: true,
-          color: true,
-          description: true,
-          createdAt: true,
-          _count: { select: { transactions: true } },
-          budget: {
-            select: {
-              kind: true,
-              periodUnit: true,
-              periodCount: true,
-              limits: { orderBy: { effectiveFrom: "desc" }, take: 1, select: { amount: true } },
-            },
-          },
-        },
-      }),
-    ]);
+    const [transactions, categories] = await findExportData(userId);
 
     const sheets = buildWorkbook(
       { transactions, categories },

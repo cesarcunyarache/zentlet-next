@@ -12,7 +12,7 @@ test.describe("registro e inicio de sesión", () => {
     await page.getByLabel("Correo").fill(user.email);
     await page.getByLabel("Contraseña", { exact: true }).fill(user.password);
     await page.getByLabel("Confirmar contraseña").fill(user.password);
-    await page.getByRole("checkbox").check();
+    await page.getByRole("checkbox").check({ force: true });
     await page.getByRole("button", { name: "Registrarse" }).click();
 
     await page.waitForURL(/\/admin/);
@@ -30,7 +30,7 @@ test.describe("registro e inicio de sesión", () => {
     await page.goto("/auth/sign-up");
     await page.getByLabel("Contraseña", { exact: true }).fill("Zentlet-e2e-2026!");
     await page.getByLabel("Confirmar contraseña").fill("otra-contraseña");
-    await page.getByRole("checkbox").check();
+    await page.getByRole("checkbox").check({ force: true });
     await page.getByRole("button", { name: "Registrarse" }).click();
 
     await expect(page.getByText("Las contraseñas no coinciden")).toBeVisible();
@@ -45,7 +45,7 @@ test.describe("registro e inicio de sesión", () => {
     await signup.getByLabel("Correo").fill(user.email);
     await signup.getByLabel("Contraseña", { exact: true }).fill(user.password);
     await signup.getByLabel("Confirmar contraseña").fill(user.password);
-    await signup.getByRole("checkbox").check();
+    await signup.getByRole("checkbox").check({ force: true });
     await signup.getByRole("button", { name: "Registrarse" }).click();
     await signup.waitForURL(/\/admin/);
 

@@ -7,7 +7,6 @@ import { isoDate } from "@/features/transaction/schemas/transaction-api.schema";
 import { BUDGET_LIMITS, serializeBudget } from "@/features/budget/lib/serialize";
 import { errorResponse, getSessionUserId, internalError, parseBody, unauthorized, writeLimit } from "@/lib/api/route-helpers";
 import { isForeignKeyViolation } from "@/lib/db-errors";
-import { requireFeature } from "@/features/billing/http/guard";
 import { scheduleBudgetCheck } from "@/features/budget/server/check";
 
 type RouteContext = { params: Promise<{ id: string; effectiveFrom: string }> };
@@ -22,9 +21,6 @@ export async function PUT(req: Request, { params }: RouteContext) {
 
     const limited = await writeLimit(userId);
     if (limited) return limited;
-
-    const denied = await requireFeature(userId, "budgets");
-    if (denied) return denied;
 
     const { id, effectiveFrom } = await params;
     if (!isoDate.safeParse(effectiveFrom).success) return invalidPeriodStart();

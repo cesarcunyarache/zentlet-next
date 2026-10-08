@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
@@ -21,6 +21,9 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+// sin "cover", iOS instalada da 0 en env(safe-area-inset-*) y los pies quedan bajo la barra de inicio
+export const viewport: Viewport = { viewportFit: "cover" };
 
 interface LocaleLayoutProps {
   children: React.ReactNode;

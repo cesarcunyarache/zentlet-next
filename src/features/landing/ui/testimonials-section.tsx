@@ -10,7 +10,7 @@ import { sectionTitleId } from "../lib/format";
 import { getInitials, splitInHalf } from "../lib/visuals";
 import { CtaArrow } from "./shared/cta-arrow";
 import { SectionHeading } from "./shared/section-heading";
-import { BRAND_ACCENT, GOLD_ACCENT } from "./shared/tokens";
+import { BRAND_ACCENT, GROWTH_ACCENT } from "./shared/tokens";
 
 const SECTION: SectionId = "testimonios";
 const MAX_SINGLE_ROW_ITEMS = 3;
@@ -69,7 +69,7 @@ function TestimonialsInvite({ empty }: { empty: TestimonialsContent["empty"] }) 
   return (
     <BlurFade inView direction="up" offset={20} className="mx-auto mt-14 max-w-xl px-4">
       <div className="bg-app-surface relative flex flex-col items-center overflow-hidden rounded-[28px] px-6 py-12 text-center ring-1 ring-[var(--app-border)]">
-        <BorderBeam size={140} duration={10} colorFrom={BRAND_ACCENT} colorTo={GOLD_ACCENT} />
+        <BorderBeam size={140} duration={10} colorFrom={BRAND_ACCENT} colorTo={GROWTH_ACCENT} />
         <span className="bg-app-fill text-app-fg grid size-12 place-items-center rounded-2xl">
           <Quote className="size-5" aria-hidden />
         </span>
@@ -77,7 +77,7 @@ function TestimonialsInvite({ empty }: { empty: TestimonialsContent["empty"] }) 
         <p className="text-app-muted m-0 mt-3 max-w-sm leading-relaxed">{empty.body}</p>
         <Link
           href={siteConfig.routes.signUp}
-          className="bg-app-fg text-app-bg group mt-7 inline-flex h-11 items-center gap-2 rounded-full px-5 text-sm font-semibold transition-transform hover:-translate-y-0.5"
+          className="bg-brand-jade text-brand-cream group mt-7 inline-flex h-11 items-center gap-2 rounded-full px-5 text-sm font-semibold transition-transform hover:-translate-y-0.5"
         >
           {empty.cta}
           <CtaArrow />

@@ -31,7 +31,7 @@ export function SiteHeader({ nav }: { nav: LandingContent["nav"] }) {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
-      <ScrollProgress className="from-app-expense via-[oklch(0.82_0.14_85)] to-app-income h-0.5" />
+      <ScrollProgress className="from-brand-jade via-brand-jade to-brand-leaf h-0.5" />
 
       <div
         className={cn(

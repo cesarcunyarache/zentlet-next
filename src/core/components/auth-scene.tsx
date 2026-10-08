@@ -14,6 +14,7 @@ import {
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { AuthTransition } from "@/core/components/auth-transition";
+import { BrandMark } from "@/core/components/brand-mark";
 import { cn } from "@heroui/react";
 import { CategoryEmoji } from "@/features/category/ui/category-emoji";
 import { formatNumber } from "@/lib/money";
@@ -46,12 +47,12 @@ const BARS = [
 
 /** Confeti del fondo: color, posición y cuánto se desplaza con el puntero. */
 const PETALS = [
-  { className: "top-[9%] left-[14%] size-4 rounded-full", color: "var(--app-expense)", depth: 18 },
-  { className: "top-[14%] right-[12%] h-5 w-9 -rotate-[24deg] rounded-full", color: "var(--app-expense)", depth: 30 },
-  { className: "bottom-[12%] left-[9%] h-3 w-6 rotate-[35deg] rounded-full", color: "var(--app-income)", depth: 24 },
-  { className: "top-[48%] right-[5%] size-3 rounded-full", color: "oklch(0.62 0.16 265)", depth: 14 },
-  { className: "bottom-[8%] right-[22%] h-4 w-7 rotate-[12deg] rounded-full", color: "oklch(0.82 0.14 85)", depth: 36 },
-  { className: "top-[30%] left-[4%] size-2.5 rounded-full", color: "oklch(0.82 0.14 85)", depth: 12 },
+  { className: "top-[9%] left-[14%] size-4 rounded-full", color: "var(--brand-jade)", depth: 18 },
+  { className: "top-[14%] right-[12%] h-5 w-9 -rotate-[24deg] rounded-full", color: "var(--brand-leaf)", depth: 30 },
+  { className: "bottom-[12%] left-[9%] h-3 w-6 rotate-[35deg] rounded-full", color: "var(--brand-jade)", depth: 24 },
+  { className: "top-[48%] right-[5%] size-3 rounded-full", color: "var(--brand-leaf)", depth: 14 },
+  { className: "bottom-[8%] right-[22%] h-4 w-7 rotate-[12deg] rounded-full", color: "color-mix(in oklch, var(--brand-jade) 50%, var(--brand-leaf))", depth: 36 },
+  { className: "top-[30%] left-[4%] size-2.5 rounded-full", color: "var(--brand-leaf)", depth: 12 },
 ];
 
 export function AuthScene({ children }: { children: React.ReactNode }) {
@@ -69,7 +70,7 @@ export function AuthScene({ children }: { children: React.ReactNode }) {
   // brillo que sigue al puntero sobre el panel oscuro
   const glareX = useTransform(x, [-0.5, 0.5], [10, 90]);
   const glareY = useTransform(y, [-0.5, 0.5], [10, 90]);
-  const glare = useMotionTemplate`radial-gradient(420px circle at ${glareX}% ${glareY}%, color-mix(in oklch, var(--app-surface) 16%, transparent), transparent 70%)`;
+  const glare = useMotionTemplate`radial-gradient(420px circle at ${glareX}% ${glareY}%, color-mix(in oklch, var(--app-on-panel) 16%, transparent), transparent 70%)`;
 
   function handlePointerMove(event: React.PointerEvent<HTMLDivElement>) {
     // en móvil la escena es plana: sin tarjeta que inclinar
@@ -87,7 +88,7 @@ export function AuthScene({ children }: { children: React.ReactNode }) {
     <div
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
-      className="bg-app-surface sm:bg-app-bg text-app-fg relative flex min-h-svh justify-center overflow-hidden sm:items-start sm:p-6 md:p-10 lg:items-center"
+      className="brand-scope bg-app-surface-brand sm:bg-app-bg text-app-fg relative flex min-h-svh justify-center overflow-hidden sm:items-start sm:p-6 md:p-10 lg:items-center"
     >
       {/* halo suave detrás de la tarjeta para despegarla del fondo */}
       <div
@@ -109,7 +110,7 @@ export function AuthScene({ children }: { children: React.ReactNode }) {
       <div className="relative w-full max-w-5xl [perspective:1600px]">
         <motion.div
           style={{ rotateX, rotateY }}
-          className="bg-app-surface grid min-h-svh overflow-hidden sm:min-h-0 sm:rounded-[28px] sm:shadow-[0_40px_80px_-32px_color-mix(in_oklch,var(--app-fg)_38%,transparent),0_2px_6px_color-mix(in_oklch,var(--app-fg)_6%,transparent)] lg:h-[760px] lg:grid-cols-[1.05fr_1fr]"
+          className="bg-app-surface-brand grid min-h-svh overflow-hidden sm:min-h-0 sm:rounded-[28px] sm:shadow-[0_40px_80px_-32px_color-mix(in_oklch,var(--app-ink)_38%,transparent),0_2px_6px_color-mix(in_oklch,var(--app-ink)_6%,transparent)] lg:h-[760px] lg:grid-cols-[1.05fr_1fr]"
         >
           <Showcase x={x} y={y} glare={glare} />
 
@@ -173,11 +174,12 @@ function Showcase({
   const current = SLIDES[slide];
 
   return (
-    <div className="bg-app-fg text-app-bg relative hidden flex-col justify-between overflow-hidden p-10 lg:flex">
+    <div className="bg-app-panel text-app-on-panel relative hidden flex-col justify-between overflow-hidden p-10 lg:flex">
       <motion.div aria-hidden style={{ background: glare }} className="pointer-events-none absolute inset-0" />
 
-      <Link href="/" className="font-display relative w-fit text-2xl font-bold tracking-[-0.03em]">
-        Zentlet<span className="text-app-expense">.</span>
+      <Link href="/" className="font-display relative flex w-fit items-center gap-2 text-2xl font-bold tracking-[-0.03em]">
+        <BrandMark className="size-[1.25em]" />
+        Zentlet
       </Link>
 
       <div className="relative mx-auto h-[330px] w-full max-w-[380px]">
@@ -256,7 +258,7 @@ function Showcase({
 
         {/* el botón flotante de la app */}
         <Parallax x={x} y={y} depth={38} className="absolute bottom-0 left-8">
-          <span className="bg-app-expense text-app-surface grid size-12 place-items-center rounded-full text-2xl font-light shadow-[var(--shadow-fab)]">
+          <span className="bg-app-action text-brand-cream grid size-12 place-items-center rounded-full text-2xl font-light shadow-[var(--shadow-action)]">
             +
           </span>
         </Parallax>
@@ -275,7 +277,7 @@ function Showcase({
             <h2 className="font-display m-0 text-[26px] leading-tight font-bold tracking-[-0.02em]">
               {t(`slides.${current}.title`)}
             </h2>
-            <p className="m-0 text-sm text-[color-mix(in_oklch,var(--app-bg)_70%,transparent)]">
+            <p className="m-0 text-sm text-app-on-panel/70">
               {t(`slides.${current}.body`)}
             </p>
           </motion.div>
@@ -295,8 +297,8 @@ function Showcase({
                 className={cn(
                   "block h-1.5 rounded-full transition-all duration-300",
                   index === slide
-                    ? "bg-app-bg w-5"
-                    : "w-1.5 bg-[color-mix(in_oklch,var(--app-bg)_35%,transparent)]",
+                    ? "bg-app-on-panel w-5"
+                    : "w-1.5 bg-app-on-panel/35",
                 )}
               />
             </button>
@@ -312,13 +314,14 @@ function MobileBrand() {
   const t = useTranslations("auth.scene");
 
   return (
-    <div className="bg-app-fg text-app-bg relative overflow-hidden rounded-b-[32px] px-6 pt-7 pb-8 sm:rounded-none lg:hidden">
+    <div className="bg-app-panel text-app-on-panel relative overflow-hidden rounded-b-[32px] px-6 pt-7 pb-8 sm:rounded-none lg:hidden">
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-16 -right-10 size-48 rounded-full bg-[color-mix(in_oklch,var(--app-expense)_45%,transparent)] blur-3xl"
+        className="pointer-events-none absolute -top-16 -right-10 size-48 rounded-full bg-brand-leaf/40 blur-3xl"
       />
-      <Link href="/" className="font-display relative text-xl font-bold tracking-[-0.03em]">
-        Zentlet<span className="text-app-expense">.</span>
+      <Link href="/" className="font-display relative flex w-fit items-center gap-2 text-xl font-bold tracking-[-0.03em]">
+        <BrandMark className="size-[1.25em]" />
+        Zentlet
       </Link>
 
       <div className="relative mt-6 flex items-end justify-between gap-4">
@@ -326,7 +329,7 @@ function MobileBrand() {
           <p className="font-display m-0 text-[22px] leading-tight font-bold tracking-[-0.02em]">
             {t(`slides.${SLIDES[0]}.title`)}
           </p>
-          <p className="m-0 mt-1 text-sm text-[color-mix(in_oklch,var(--app-bg)_70%,transparent)]">
+          <p className="m-0 mt-1 text-sm text-app-on-panel/70">
             {t(`slides.${SLIDES[0]}.body`)}
           </p>
         </div>

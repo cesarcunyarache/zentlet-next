@@ -1,0 +1,7 @@
+ink #191820
+green #118737
+greenL #60c473
+red #e23041
+bg #f7f6f9
+jade #034a2e
+cream #f6f2e3

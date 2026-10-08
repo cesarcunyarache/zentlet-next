@@ -48,13 +48,13 @@ export function VoiceScene({ currency }: VoiceSceneProps) {
           PULSE_RINGS.map((ring) => (
             <motion.span
               key={ring}
-              className="bg-app-expense absolute inset-0 rounded-full"
+              className="bg-app-action absolute inset-0 rounded-full"
               initial={PULSE_HIDDEN}
               animate={PULSE_EXPANDED}
               transition={{ duration: 2.4, repeat: Infinity, delay: ring * PULSE_STAGGER, ease: EASE_OUT }}
             />
           ))}
-        <span className="bg-app-expense text-app-surface relative grid size-16 place-items-center rounded-full shadow-[var(--shadow-fab)]">
+        <span className="bg-app-action text-brand-cream relative grid size-16 place-items-center rounded-full shadow-[var(--shadow-action)]">
           <Mic className="size-7" strokeWidth={2.2} />
         </span>
       </div>
