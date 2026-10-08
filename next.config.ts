@@ -20,19 +20,36 @@ const securityHeaders = [
   { key: "X-Frame-Options", value: "DENY" },
   {
     key: "Content-Security-Policy",
-    value: "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'",
+    value:
+      "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'",
   },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-  { key: "Permissions-Policy", value: "microphone=(self), camera=(), geolocation=(), payment=(), usb=()" },
+  {
+    key: "Permissions-Policy",
+    value: "microphone=(self), camera=(), geolocation=(), payment=(), usb=()",
+  },
   ...(process.env.NODE_ENV === "production"
-    ? [{ key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" }]
+    ? [
+        {
+          key: "Strict-Transport-Security",
+          value: "max-age=63072000; includeSubDomains",
+        },
+      ]
     : []),
 ];
 
 const nextConfig: NextConfig = {
   // en desarrollo, túneles HTTPS (pagos y webhooks de Mercado Pago exigen una URL pública)
   allowedDevOrigins: ["*.ngrok-free.app", "*.trycloudflare.com"],
+  /*
+   * Sin caché persistente de Turbopack en `next build`: Vercel la restaura
+   * entre despliegues y reutilizaba un `globals.css` viejo (producción salía
+   * sin los tokens nuevos aunque el HTML sí estaba al día).
+   */
+  experimental: {
+    turbopackFileSystemCacheForBuild: false,
+  },
   async headers() {
     return [
       { source: "/:path*", headers: securityHeaders },
@@ -43,9 +60,18 @@ const nextConfig: NextConfig = {
       {
         source: "/sw.js",
         headers: [
-          { key: "Content-Type", value: "application/javascript; charset=utf-8" },
-          { key: "Cache-Control", value: "no-cache, no-store, must-revalidate" },
-          { key: "Content-Security-Policy", value: "default-src 'self'; script-src 'self'" },
+          {
+            key: "Content-Type",
+            value: "application/javascript; charset=utf-8",
+          },
+          {
+            key: "Cache-Control",
+            value: "no-cache, no-store, must-revalidate",
+          },
+          {
+            key: "Content-Security-Policy",
+            value: "default-src 'self'; script-src 'self'",
+          },
         ],
       },
     ];
@@ -58,7 +84,9 @@ const nextConfig: NextConfig = {
  * y token se leen de `SENTRY_ORG`, `SENTRY_PROJECT` y `SENTRY_AUTH_TOKEN`).
  * Sin DSN la configuración es exactamente la de siempre.
  */
-const sentryEnabled = Boolean(process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN);
+const sentryEnabled = Boolean(
+  process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN,
+);
 
 const config = withNextIntl(nextConfig);
 
