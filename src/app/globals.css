@@ -273,18 +273,6 @@ body {
   --accent: var(--brand-jade);
   --accent-foreground: var(--brand-cream);
   --accent-hover: color-mix(in oklab, var(--accent) 90%, var(--accent-foreground) 10%);
-
-  /* campos con borde tenue; los alias de HeroUI se resuelven en :root, por eso se repiten */
-  --field-border: color-mix(in oklch, var(--app-fg) 12%, transparent);
-  --field-border-hover: color-mix(in oklch, var(--app-fg) 22%, transparent);
-  --field-border-focus: var(--brand-ink);
-  --color-field-border: var(--field-border);
-  --color-field-border-hover: var(--field-border-hover);
-  --color-field-border-focus: var(--field-border-focus);
-}
-
-.brand-scope .input-group {
-  border-width: 1px;
 }
 
 [data-theme="dark"] .brand-scope {
