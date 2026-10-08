@@ -197,6 +197,7 @@ body {
   --app-action: var(--brand-jade);
   --brand-ink: var(--brand-jade);
   --app-panel: oklch(0.215 0.014 290);
+  --app-surface-brand: var(--app-surface);
 }
 
 [data-theme="dark"] {
@@ -210,7 +211,8 @@ body {
   --app-ink: oklch(0 0 0);
   --app-action: var(--brand-jade);
   --brand-ink: var(--brand-leaf);
-  --app-panel: oklch(0.24 0.012 290);
+  --app-panel: oklch(0.22 0.04 163);
+  --app-surface-brand: oklch(0.18 0.018 165);
 }
 
 /* derivados — se recalculan en cada ámbito de tema; no editar */
@@ -254,6 +256,7 @@ body {
   --color-app-action: var(--app-action);
   --color-app-panel: var(--app-panel);
   --color-app-on-panel: var(--app-on-panel);
+  --color-app-surface-brand: var(--app-surface-brand);
 
   --color-brand-jade: var(--brand-jade);
   --color-brand-cream: var(--brand-cream);
@@ -270,6 +273,27 @@ body {
   --accent: var(--brand-jade);
   --accent-foreground: var(--brand-cream);
   --accent-hover: color-mix(in oklab, var(--accent) 90%, var(--accent-foreground) 10%);
+
+  /* campos con borde tenue; los alias de HeroUI se resuelven en :root, por eso se repiten */
+  --field-border: color-mix(in oklch, var(--app-fg) 12%, transparent);
+  --field-border-hover: color-mix(in oklch, var(--app-fg) 22%, transparent);
+  --field-border-focus: var(--brand-ink);
+  --color-field-border: var(--field-border);
+  --color-field-border-hover: var(--field-border-hover);
+  --color-field-border-focus: var(--field-border-focus);
+}
+
+.brand-scope .input-group {
+  border-width: 1px;
+}
+
+[data-theme="dark"] .brand-scope {
+  --field-background: oklch(0.215 0.018 165);
+  --field-hover: oklch(0.235 0.02 165);
+  --field-focus: oklch(0.235 0.02 165);
+  --color-field: var(--field-background);
+  --color-field-hover: var(--field-hover);
+  --color-field-focus: var(--field-focus);
 }
 
 /* ondas del micrófono al dictar; ritmo, escala e intensidad por variables */
