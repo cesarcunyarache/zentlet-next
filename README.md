@@ -46,6 +46,7 @@ Las hojas de cálculo se abandonan en la segunda semana. Anotar un gasto exige a
 <td width="50%" valign="top">
 
 ### ⌨️ Escribe como hablas
+
 `almuerzo con amigos` · `sueldo de septiembre` · `taxi al trabajo`
 
 Mientras escribes, Zentlet reconoce **si es gasto o ingreso y la categoría**, al instante y sin llamar a ningún servidor. El monto va en su propio campo.
@@ -54,7 +55,8 @@ Mientras escribes, Zentlet reconoce **si es gasto o ingreso y la categoría**, a
 <td width="50%" valign="top">
 
 ### 🎙️ O díctalo
-*«Ayer gasté 35 soles en almuerzo»* · *«Spent 12.50 on lunch yesterday»*
+
+_«Ayer gasté 35 soles en almuerzo»_ · _«Spent 12.50 on lunch yesterday»_
 
 Toca el micrófono y Zentlet extrae **monto, fecha y categoría** del dictado. Entiende español e inglés, cifras como «2.500», «3 mil» o «35 con 50», y fechas como «ayer» o «el lunes».
 
@@ -64,12 +66,14 @@ Toca el micrófono y Zentlet extrae **monto, fecha y categoría** del dictado. E
 <td valign="top">
 
 ### ✨ La IA pone la categoría
+
 Cuando el texto no basta, **Gemini propone la categoría** entre las que tú creaste. Es una ayuda: tú decides y nunca bloquea el registro.
 
 </td>
 <td valign="top">
 
 ### 📊 Tu mes, de un vistazo
+
 Balance, ingresos, gastos y **reparto por categoría** en una sola pantalla. Toca una categoría y filtra al instante; mantenla pulsada para fijarle un **presupuesto mensual** y su barra mostrará cuánto llevas del tope.
 
 </td>
@@ -78,12 +82,14 @@ Balance, ingresos, gastos y **reparto por categoría** en una sola pantalla. Toc
 <td valign="top">
 
 ### 📴 Funciona sin conexión
+
 Registra, edita y borra aunque no tengas internet. Los cambios se guardan en el dispositivo y **se sincronizan solos** al volver la red, aunque hayas cerrado la app. Se instala como app (PWA).
 
 </td>
 <td valign="top">
 
 ### 🎨 Categorías con cara propia
+
 Cada categoría tiene **su emoji y su color**. Escribe el nombre y la IA te propone cuatro combinaciones.
 
 </td>
@@ -92,12 +98,14 @@ Cada categoría tiene **su emoji y su color**. Escribe el nombre y la IA te prop
 <td valign="top">
 
 ### 💱 En tu moneda y tu idioma
+
 Soles (`S/`), dólares (`$`), euros (`€`) o pesos (`$`). La app, los correos y el dictado, **en español o inglés**.
 
 </td>
 <td valign="top">
 
 ### 📤 Tus datos son tuyos
+
 **Exporta** todos tus movimientos y categorías a **Excel** cuando quieras, o **elimina tu cuenta** y todo lo que contiene desde Ajustes.
 
 </td>
@@ -106,12 +114,14 @@ Soles (`S/`), dólares (`$`), euros (`€`) o pesos (`$`). La app, los correos y
 <td valign="top">
 
 ### 👋 Bienvenida en 3 pasos
+
 Las cuentas nuevas ven un recorrido animado que enseña a escribir, dictar y leer el mes, y termina creando su primera categoría. Se muestra **una sola vez**.
 
 </td>
 <td valign="top">
 
 ### 🔐 Acceso seguro
+
 Correo (con verificación y recuperación de contraseña), **Google o GitHub**. CAPTCHA contra bots y cada consulta devuelve solo tus datos.
 
 </td>
@@ -131,6 +141,8 @@ Correo (con verificación y recuperación de contraseña), **Google o GitHub**. 
 <br/><br/>
 
 <img src="docs/images/features.png" alt="Rejilla de funciones: frases en lenguaje natural, sugerencia de categoría por IA, historial, balance, categorías y moneda" width="100%"/>
+
+<img src="docs/images/features-2.png" alt="Rejilla de funciones: frases en lenguaje natural, sugerencia de categoría por IA, historial, balance, categorías y moneda" width="100%"/>
 
 <sub><b>Cada función, animada.</b> La landing muestra el producto en acción, no en capturas estáticas.</sub>
 
@@ -166,27 +178,27 @@ flowchart LR
 ```
 
 1. **Lectura local, instantánea.** Los parsers del cliente ([`parse-description.ts`](src/features/transaction/lib/parse-description.ts) al escribir y [`parse-voice.ts`](src/features/transaction/lib/parse-voice.ts) al dictar) extraen tipo, monto, fecha y categoría sin esperar a la red. Cada idioma aporta sus palabras; el procedimiento es el mismo.
-2. **La IA afina lo que falta.** Una *server action* pide a Gemini la categoría más probable entre las tuyas, con salida validada por Zod. Si el modelo falla o se agota el cupo, el alta sigue igual.
+2. **La IA afina lo que falta.** Una _server action_ pide a Gemini la categoría más probable entre las tuyas, con salida validada por Zod. Si el modelo falla o se agota el cupo, el alta sigue igual.
 3. **Todo aparece al instante y se sincroniza por detrás.** Las escrituras son optimistas y viajan por una cola persistida en IndexedDB ([TanStack Query](https://tanstack.com/query) + service worker). Sin conexión quedan en pausa y se reanudan solas. El servidor es **idempotente por id**, así que reenviar un cambio nunca lo duplica.
 
 <br/>
 
 ## 🛠️ Stack
 
-| Capa | Tecnología |
-|---|---|
-| **Framework** | Next.js 16 (App Router, Turbopack) · React 19 · Node.js 24 |
-| **Estilos** | Tailwind CSS v4 · tokens `oklch` propios · HeroUI v3 |
-| **Animación** | Motion (Framer Motion) · componentes de [Magic UI](https://magicui.design) y [Aceternity UI](https://ui.aceternity.com) |
-| **Datos** | PostgreSQL · Prisma 7 · TanStack Query (persistido en IndexedDB) |
-| **Auth** | Better Auth: correo y contraseña con verificación, Google, GitHub |
-| **IA** | Vercel AI SDK · Google Gemini 2.5 Flash |
-| **Validación** | Zod 4 · React Hook Form |
-| **Correo** | Resend (verificación y recuperación de contraseña) |
-| **Anti-bots** | Cloudflare Turnstile |
-| **Exportación** | `write-excel-file` (.xlsx) |
-| **Observabilidad** | Sentry · PostHog · Pino — todo opcional, ver [docs/observability.md](docs/observability.md) |
-| **Calidad** | Vitest · ESLint · GitHub Actions |
+| Capa               | Tecnología                                                                                                              |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| **Framework**      | Next.js 16 (App Router, Turbopack) · React 19 · Node.js 24                                                              |
+| **Estilos**        | Tailwind CSS v4 · tokens `oklch` propios · HeroUI v3                                                                    |
+| **Animación**      | Motion (Framer Motion) · componentes de [Magic UI](https://magicui.design) y [Aceternity UI](https://ui.aceternity.com) |
+| **Datos**          | PostgreSQL · Prisma 7 · TanStack Query (persistido en IndexedDB)                                                        |
+| **Auth**           | Better Auth: correo y contraseña con verificación, Google, GitHub                                                       |
+| **IA**             | Vercel AI SDK · Google Gemini 2.5 Flash                                                                                 |
+| **Validación**     | Zod 4 · React Hook Form                                                                                                 |
+| **Correo**         | Resend (verificación y recuperación de contraseña)                                                                      |
+| **Anti-bots**      | Cloudflare Turnstile                                                                                                    |
+| **Exportación**    | `write-excel-file` (.xlsx)                                                                                              |
+| **Observabilidad** | Sentry · PostHog · Pino — todo opcional, ver [docs/observability.md](docs/observability.md)                             |
+| **Calidad**        | Vitest · ESLint · GitHub Actions                                                                                        |
 
 <br/>
 
@@ -228,37 +240,37 @@ Abre **[localhost:3000](http://localhost:3000)**: verás la landing. Crea tu cue
 
 Sólo las cinco primeras son necesarias para desarrollar. El resto activa funciones opcionales; **sin ellas la app funciona igual**.
 
-| Variable | Para qué sirve | Obligatoria |
-|---|---|:---:|
-| `DATABASE_URL` | Conexión a PostgreSQL | ✅ |
-| `DIRECT_URL` | Conexión directa (sin pooler) para `prisma migrate deploy` | En producción con pooler |
-| `BETTER_AUTH_SECRET` | Firma de sesiones (≥ 32 caracteres). Genera una con `openssl rand -base64 32` | ✅ |
-| `BETTER_AUTH_URL` | URL base de la app (servidor) | ✅ |
-| `NEXT_PUBLIC_BETTER_AUTH_URL` | La misma URL, para el cliente de auth (se fija en el build) | ✅ |
-| `GOOGLE_GENERATIVE_AI_API_KEY` | Clave de Gemini para las sugerencias de IA | ✅ |
-| `NEXT_PUBLIC_SITE_URL` | URL pública: canonical, sitemap y Open Graph | En producción |
-| `RESEND_API_KEY` / `EMAIL_FROM` | Correos de verificación y de recuperación de contraseña. Sin ellos no se exige verificar el correo; en desarrollo, los correos se escriben en la terminal | No |
-| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` / `TURNSTILE_SECRET_KEY` | CAPTCHA de Cloudflare Turnstile en registro, login, recuperación y reenvío del correo. Se activa sólo con las dos | Recomendado en producción |
-| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Acceso con Google | Opcional |
-| `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` | Acceso con GitHub | Opcional |
-| `NEXT_PUBLIC_API_URL` | Backend separado; vacío = mismo origen | Opcional |
-| `SENTRY_DSN` / `NEXT_PUBLIC_SENTRY_DSN` | Errores y trazas en servidor / navegador (Sentry) | Opcional |
-| `SENTRY_AUTH_TOKEN` / `SENTRY_ORG` / `SENTRY_PROJECT` | Subida de source maps en el build (el token es secreto) | Opcional |
-| `NEXT_PUBLIC_POSTHOG_KEY` / `NEXT_PUBLIC_POSTHOG_HOST` | Estadísticas de uso (PostHog), sólo con el consentimiento del usuario | Opcional |
-| `LOG_LEVEL` | Nivel de los logs del servidor (`debug`, `info`, `warn`…) | Opcional |
-| `HEALTH_TOKEN` | Da acceso al informe detallado de `/health` (sin él sólo responde si la base de datos está arriba) | Opcional |
-| `CRON_SECRET` | Protege el cron diario de limpieza (`/api/cron/cleanup`, programado en `vercel.json`) | En producción |
+| Variable                                                  | Para qué sirve                                                                                                                                            |        Obligatoria        |
+| --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | :-----------------------: |
+| `DATABASE_URL`                                            | Conexión a PostgreSQL                                                                                                                                     |            ✅             |
+| `DIRECT_URL`                                              | Conexión directa (sin pooler) para `prisma migrate deploy`                                                                                                | En producción con pooler  |
+| `BETTER_AUTH_SECRET`                                      | Firma de sesiones (≥ 32 caracteres). Genera una con `openssl rand -base64 32`                                                                             |            ✅             |
+| `BETTER_AUTH_URL`                                         | URL base de la app (servidor)                                                                                                                             |            ✅             |
+| `NEXT_PUBLIC_BETTER_AUTH_URL`                             | La misma URL, para el cliente de auth (se fija en el build)                                                                                               |            ✅             |
+| `GOOGLE_GENERATIVE_AI_API_KEY`                            | Clave de Gemini para las sugerencias de IA                                                                                                                |            ✅             |
+| `NEXT_PUBLIC_SITE_URL`                                    | URL pública: canonical, sitemap y Open Graph                                                                                                              |       En producción       |
+| `RESEND_API_KEY` / `EMAIL_FROM`                           | Correos de verificación y de recuperación de contraseña. Sin ellos no se exige verificar el correo; en desarrollo, los correos se escriben en la terminal |            No             |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` / `TURNSTILE_SECRET_KEY` | CAPTCHA de Cloudflare Turnstile en registro, login, recuperación y reenvío del correo. Se activa sólo con las dos                                         | Recomendado en producción |
+| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET`               | Acceso con Google                                                                                                                                         |         Opcional          |
+| `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET`               | Acceso con GitHub                                                                                                                                         |         Opcional          |
+| `NEXT_PUBLIC_API_URL`                                     | Backend separado; vacío = mismo origen                                                                                                                    |         Opcional          |
+| `SENTRY_DSN` / `NEXT_PUBLIC_SENTRY_DSN`                   | Errores y trazas en servidor / navegador (Sentry)                                                                                                         |         Opcional          |
+| `SENTRY_AUTH_TOKEN` / `SENTRY_ORG` / `SENTRY_PROJECT`     | Subida de source maps en el build (el token es secreto)                                                                                                   |         Opcional          |
+| `NEXT_PUBLIC_POSTHOG_KEY` / `NEXT_PUBLIC_POSTHOG_HOST`    | Estadísticas de uso (PostHog), sólo con el consentimiento del usuario                                                                                     |         Opcional          |
+| `LOG_LEVEL`                                               | Nivel de los logs del servidor (`debug`, `info`, `warn`…)                                                                                                 |         Opcional          |
+| `HEALTH_TOKEN`                                            | Da acceso al informe detallado de `/health` (sin él sólo responde si la base de datos está arriba)                                                        |         Opcional          |
+| `CRON_SECRET`                                             | Protege el cron diario de limpieza (`/api/cron/cleanup`, programado en `vercel.json`)                                                                     |       En producción       |
 
 ### Scripts
 
-| Comando | Qué hace |
-|---|---|
-| `pnpm dev` | Servidor de desarrollo |
-| `pnpm build` | Build de producción (landing, acceso y páginas legales se generan estáticas) |
-| `pnpm start` | Sirve el build |
-| `pnpm lint` | ESLint |
-| `pnpm typecheck` | Genera los tipos de rutas de Next y ejecuta `tsc` |
-| `pnpm test` | Tests (Vitest); `pnpm test:watch` en modo watch |
+| Comando          | Qué hace                                                                     |
+| ---------------- | ---------------------------------------------------------------------------- |
+| `pnpm dev`       | Servidor de desarrollo                                                       |
+| `pnpm build`     | Build de producción (landing, acceso y páginas legales se generan estáticas) |
+| `pnpm start`     | Sirve el build                                                               |
+| `pnpm lint`      | ESLint                                                                       |
+| `pnpm typecheck` | Genera los tipos de rutas de Next y ejecuta `tsc`                            |
+| `pnpm test`      | Tests (Vitest); `pnpm test:watch` en modo watch                              |
 
 Cada push a `master` y cada pull request pasan por el [CI](.github/workflows/ci.yml): lint, typecheck, tests y build, con la misma versión de Node que en local (`.nvmrc`).
 
@@ -325,16 +337,16 @@ src/
 
 Zentlet trata datos financieros personales, así que la seguridad es parte del producto:
 
-| Área | Qué hace |
-|---|---|
-| **Cuentas** | Verificación de correo obligatoria (con reenvío y espera de 60 s), recuperación de contraseña de un solo uso que cierra las demás sesiones, y Google/GitHub sólo se vinculan a cuentas con el correo verificado |
-| **Sesión** | Caduca tras **7 días sin uso**; usar la app al menos una vez al día la prorroga. Sin conexión, los datos locales dejan de abrirse cuando la sesión habría caducado |
-| **Anti-abuso** | CAPTCHA (Turnstile), límites de intentos de login/registro/correos, cupo de 120 escrituras por minuto, 30 llamadas a la IA por minuto y cuerpos de hasta 16 KB — todo contado en la base de datos, compartido entre instancias |
-| **Cabeceras** | HSTS, protección contra clickjacking, `nosniff`, `Referrer-Policy` y `Permissions-Policy` (el micrófono, sólo para la propia app) |
-| **Dispositivo compartido** | Al cerrar sesión se borran los datos locales; al entrar otra cuenta, los de las anteriores; las páginas privadas guardadas no se abren sin pasar por el servidor |
-| **Consentimiento** | Ingresos y gastos son datos sensibles (Ley 29733): el registro exige una casilla expresa, el servidor la comprueba y guarda fecha y versión aceptadas. Las estadísticas de uso sólo se activan si el usuario las acepta |
-| **Derechos del usuario** | Exportar todo a Excel (acceso y portabilidad) y eliminar la cuenta con borrado en cascada (cancelación) |
-| **Terceros** | Sentry y PostHog no reciben montos, descripciones, correos ni el texto de búsqueda; a Gemini sólo viajan la descripción y los nombres de categoría, nunca los montos |
+| Área                       | Qué hace                                                                                                                                                                                                                       |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Cuentas**                | Verificación de correo obligatoria (con reenvío y espera de 60 s), recuperación de contraseña de un solo uso que cierra las demás sesiones, y Google/GitHub sólo se vinculan a cuentas con el correo verificado                |
+| **Sesión**                 | Caduca tras **7 días sin uso**; usar la app al menos una vez al día la prorroga. Sin conexión, los datos locales dejan de abrirse cuando la sesión habría caducado                                                             |
+| **Anti-abuso**             | CAPTCHA (Turnstile), límites de intentos de login/registro/correos, cupo de 120 escrituras por minuto, 30 llamadas a la IA por minuto y cuerpos de hasta 16 KB — todo contado en la base de datos, compartido entre instancias |
+| **Cabeceras**              | HSTS, protección contra clickjacking, `nosniff`, `Referrer-Policy` y `Permissions-Policy` (el micrófono, sólo para la propia app)                                                                                              |
+| **Dispositivo compartido** | Al cerrar sesión se borran los datos locales; al entrar otra cuenta, los de las anteriores; las páginas privadas guardadas no se abren sin pasar por el servidor                                                               |
+| **Consentimiento**         | Ingresos y gastos son datos sensibles (Ley 29733): el registro exige una casilla expresa, el servidor la comprueba y guarda fecha y versión aceptadas. Las estadísticas de uso sólo se activan si el usuario las acepta        |
+| **Derechos del usuario**   | Exportar todo a Excel (acceso y portabilidad) y eliminar la cuenta con borrado en cascada (cancelación)                                                                                                                        |
+| **Terceros**               | Sentry y PostHog no reciben montos, descripciones, correos ni el texto de búsqueda; a Gemini sólo viajan la descripción y los nombres de categoría, nunca los montos                                                           |
 
 La [Política de privacidad](src/features/legal/content.ts) y los Términos siguen la normativa peruana (Ley 29733 y su Reglamento, Código del Consumidor) con cobertura para usuarios de la UE y EE. UU. **Antes de lanzar**, revisa [docs/legal.md](docs/legal.md): hay datos del responsable por completar y obligaciones que no son código.
 
@@ -380,7 +392,7 @@ También siguen el idioma de la URL: el **dictado por voz** (reconocimiento y pa
 // Client Component
 const t = useTranslations("transactions");
 t("form.title");
-t("list.deleteItem", { name });              // interpolación
+t("list.deleteItem", { name }); // interpolación
 t.rich("signIn.noAccount", { link: (c) => <AuthLink href="…">{c}</AuthLink> });
 
 // Server Component (async)
