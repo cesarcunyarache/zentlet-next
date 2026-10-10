@@ -130,36 +130,22 @@ Correo (con verificación y recuperación de contraseña), **Google o GitHub**. 
 
 <br/>
 
-## 📸 Así se ve
+## Capturas
 
 <div align="center">
 
 <img src="docs/images/dashboard.png" alt="Panel del mes: balance, ingresos y gastos, barras por categoría y últimos movimientos" width="100%"/>
 
-<sub><b>Tu mes completo:</b> balance, reparto por categoría y últimos movimientos.</sub>
-
-<br/><br/>
-
 <img src="docs/images/features.png" alt="Rejilla de funciones: frases en lenguaje natural, sugerencia de categoría por IA, historial, balance, categorías y moneda" width="100%"/>
 
 <img src="docs/images/features-2.png" alt="Rejilla de funciones: frases en lenguaje natural, sugerencia de categoría por IA, historial, balance, categorías y moneda" width="100%"/>
 
-<sub><b>Cada función, animada.</b> La landing muestra el producto en acción, no en capturas estáticas.</sub>
-
-<br/><br/>
-
 <img src="docs/images/auth.png" alt="Pantalla de inicio de sesión: a la izquierda piezas de la app flotando; a la derecha el formulario" width="100%"/>
-
-<sub><b>Acceso con carácter:</b> la tarjeta se inclina siguiendo al puntero y el cambio entre login y registro es una transición animada, sin recargar la página.</sub>
-
-<br/><br/>
-
 <img src="docs/images/mobile-home.png" alt="Landing en móvil" width="32%"/>
 &nbsp;&nbsp;
 <img src="docs/images/mobile-auth.png" alt="Registro en móvil con banda de marca" width="32%"/>
 
-<sub><b>Móvil primero.</b> En pantallas pequeñas la escena se aplana: pantalla completa, sin tarjetas que estorben.</sub>
-
+<img src="docs/images/store/banner.png">
 </div>
 
 <br/>
