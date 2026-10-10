@@ -15,7 +15,8 @@
     "test:watch": "vitest",
     "test:integration": "vitest run --config vitest.integration.config.mts",
     "test:e2e": "playwright test",
-    "flags": "tsx scripts/feature-flags.ts"
+    "flags": "tsx scripts/feature-flags.ts",
+    "splash": "tsx scripts/splash-screens.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "^4.0.24",
@@ -66,6 +67,7 @@
     "eslint-config-next": "16.3.6",
     "prisma": "^7.8.0",
     "shadcn": "^4.21.0",
+    "sharp": "0.35.5",
     "tailwindcss": "^4",
     "tsx": "^4.23.0",
     "typescript": "^5",
