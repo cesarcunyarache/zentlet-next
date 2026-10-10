@@ -35,7 +35,7 @@ Tu balance del mes se actualiza al momento, también sin conexión. Sin hojas de
 
 <br/>
 
-<img src="docs/images/hero.png" alt="Landing de Zentlet: a la izquierda el titular «Tus gastos, claros sin fórmulas»; a la derecha, la demo escribe «taxi al trabajo 12.50» y Zentlet propone − S/ 12.50, Gasto, Transporte" width="100%"/>
+<img src="docs/images/store/banner.png" alt="Landing de Zentlet: a la izquierda el titular «Tus gastos, claros sin fórmulas»; a la derecha, la demo escribe «taxi al trabajo 12.50» y Zentlet propone − S/ 12.50, Gasto, Transporte" width="100%"/>
 
 <br/>
 
@@ -76,6 +76,8 @@ Las hojas de cálculo se abandonan en la segunda semana. Anotar un gasto exige a
 
 <div align="center">
 
+<img src="docs/images/hero.png" alt="Landing de Zentlet: a la izquierda el titular «Tus gastos, claros sin fórmulas»; a la derecha, la demo escribe «taxi al trabajo 12.50» y Zentlet propone − S/ 12.50, Gasto, Transporte" width="100%"/>
+
 <img src="docs/images/dashboard.png" alt="Panel del mes: balance, ingresos y gastos, barras por categoría y últimos movimientos" width="100%"/>
 
 <img src="docs/images/features.png" alt="Rejilla de funciones: frases en lenguaje natural, sugerencia de categoría por IA, historial, balance, categorías y moneda" width="100%"/>
@@ -84,7 +86,6 @@ Las hojas de cálculo se abandonan en la segunda semana. Anotar un gasto exige a
 
 <img src="docs/images/auth.png" alt="Pantalla de inicio de sesión: a la izquierda piezas de la app flotando; a la derecha el formulario" width="100%"/>
 
-<img src="docs/images/store/banner.png">
 </div>
 
 <br/>
