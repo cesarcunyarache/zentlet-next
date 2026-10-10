@@ -10,6 +10,7 @@ import { siteConfig } from "@/lib/site";
 import { ServiceWorkerRegister } from "@/core/offline/service-worker-register";
 import { AnalyticsConsentBanner } from "@/core/components/analytics-consent-banner";
 import { themeInitScript } from "@/core/theme/theme";
+import { splashStartupImages } from "@/core/pwa/splash-screens";
 import { routing } from "@/i18n/routing";
 
 const geistSans = Geist({
@@ -45,7 +46,7 @@ export async function generateMetadata({ params }: LocaleLayoutProps): Promise<M
     title: "Zentlet",
     description: t("metadata.description"),
     // instalada en iOS: pantalla completa y su propio icono
-    appleWebApp: { capable: true, title: "Zentlet", statusBarStyle: "default" },
+    appleWebApp: { capable: true, title: "Zentlet", statusBarStyle: "default", startupImage: splashStartupImages() },
     icons: { apple: "/icons/apple-touch-icon.png" },
     manifest: locale === routing.defaultLocale ? "/manifest.webmanifest" : `/manifest.webmanifest?lang=${locale}`,
   };
