@@ -1,5 +1,15 @@
 @import "tailwindcss";
-@import "@heroui/styles";
+/*
+ * HeroUI por partes (mismo orden que `@heroui/styles`) sin los estilos de
+ * componentes: esos van en `heroui-components.css` y sólo los cargan las
+ * rutas que usan HeroUI. La landing se ahorra ~350 KB de CSS bloqueante.
+ */
+@import "tw-animate-css";
+@import "@heroui/styles/base/base.css" layer(base);
+@import "@heroui/styles/base/scrollbar.css" layer(base);
+@import "@heroui/styles/themes/default" layer(theme);
+@import "@heroui/styles/utilities";
+@import "@heroui/styles/variants";
 
 /* `dark:` sigue a la clase `.dark` (HeroUI), no a la preferencia del sistema */
 @custom-variant dark (&:is(.dark *));
@@ -187,10 +197,11 @@ body {
   --app-bg: oklch(0.974 0.004 300);
   --app-surface: oklch(0.995 0.003 300);
   --app-fg: oklch(0.215 0.014 290);
-  --app-muted: oklch(0.545 0.016 290);
+  /* texto atenuado, gasto e ingreso cumplen AA (4.5:1) sobre fondo, relleno y su versión suave */
+  --app-muted: oklch(0.51 0.016 290);
   --app-border: oklch(0.895 0.011 300);
-  --app-expense: oklch(0.598 0.212 22);
-  --app-income: oklch(0.545 0.152 148);
+  --app-expense: oklch(0.54 0.212 22);
+  --app-income: oklch(0.5 0.152 148);
   --app-ink: var(--app-fg);
   /* texto sobre el pastel de una categoría: oscuro en ambos temas */
   --app-on-pastel: oklch(0.215 0.014 290);

@@ -1,0 +1,3 @@
+/* Estilos de componentes HeroUI: sólo en las rutas que los usan (auth y admin). */
+@reference "./globals.css";
+@import "@heroui/styles/components/index.css" layer(components);

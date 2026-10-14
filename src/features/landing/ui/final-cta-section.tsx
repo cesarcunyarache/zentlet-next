@@ -1,7 +1,6 @@
 import { Link } from "@/i18n/navigation";
 import { BlurFade } from "@/core/components/ui/blur-fade";
 import { BorderBeam } from "@/core/components/ui/border-beam";
-import { DotPattern } from "@/core/components/ui/dot-pattern";
 import { ShimmerLink } from "@/core/components/ui/shimmer-button";
 import { siteConfig } from "@/lib/site";
 import { cn } from "@/lib/utils";
@@ -16,10 +15,9 @@ export function FinalCtaSection({ cta }: { cta: LandingContent["cta"] }) {
   return (
     <section aria-labelledby={TITLE_ID} className="px-3 pb-24 sm:px-6">
       <div className={cn(DARK_PANEL_CLASS, "flex flex-col items-center px-6 py-24 text-center md:py-32")}>
-        <DotPattern
-          width={22}
-          height={22}
-          className="text-app-on-panel/15 [mask-image:radial-gradient(ellipse_at_center,black_10%,transparent_70%)]"
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 [background-image:radial-gradient(color-mix(in_oklch,var(--app-on-panel)_15%,transparent)_1px,transparent_1px)] [background-size:22px_22px] [mask-image:radial-gradient(ellipse_at_center,black_10%,transparent_70%)]"
         />
         <div
           aria-hidden

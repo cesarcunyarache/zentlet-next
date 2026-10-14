@@ -9,6 +9,7 @@ import { clientMessages } from "@/i18n/client-messages";
 import { siteConfig } from "@/lib/site";
 import { ServiceWorkerRegister } from "@/core/offline/service-worker-register";
 import { AnalyticsConsentBanner } from "@/core/components/analytics-consent-banner";
+import { consentInitScript } from "@/lib/observability/client";
 import { themeInitScript } from "@/core/theme/theme";
 import { splashStartupImages } from "@/core/pwa/splash-screens";
 import { routing } from "@/i18n/routing";
@@ -70,6 +71,7 @@ export default async function RootLayout({ children, params }: Readonly<LocaleLa
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        <script dangerouslySetInnerHTML={{ __html: consentInitScript }} />
       </head>
       <body className="min-h-full flex flex-col">
         <NextIntlClientProvider messages={messages}>

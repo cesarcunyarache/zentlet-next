@@ -21,8 +21,12 @@ const subscribe = (onChange: () => void) => {
   return () => window.removeEventListener("storage", onChange);
 };
 const hasAnswered = () => getAnalyticsConsent() !== null;
-// en el servidor no hay almacenamiento: se asume respondido y no se pinta
-const answeredOnServer = () => true;
+/*
+ * El aviso llega en el HTML y se pinta junto al resto de la página (si
+ * apareciera al hidratar sería el LCP). Con respuesta guardada, `consentInitScript`
+ * lo oculta antes del primer pintado y al hidratar se desmonta.
+ */
+const answeredOnServer = () => false;
 
 export function AnalyticsConsentBanner() {
   const t = useTranslations("common.analyticsConsent");
@@ -41,7 +45,7 @@ export function AnalyticsConsentBanner() {
       role="dialog"
       aria-live="polite"
       aria-label={t("message")}
-      className="bg-app-surface text-app-fg fixed inset-x-3 bottom-[calc(12px+env(safe-area-inset-bottom))] z-50 mx-auto max-w-lg rounded-2xl p-4 shadow-[var(--shadow-sheet)]"
+      className="bg-app-surface text-app-fg fixed [:root[data-consent-answered]_&]:hidden inset-x-3 bottom-[calc(12px+env(safe-area-inset-bottom))] z-50 mx-auto max-w-lg rounded-2xl p-4 shadow-[var(--shadow-sheet)]"
     >
       <p className="text-app-muted m-0 text-[13px] leading-relaxed">
         {t("message")}{" "}
