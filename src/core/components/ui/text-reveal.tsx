@@ -4,7 +4,6 @@ import {
   useRef,
   type ComponentPropsWithoutRef,
   type FC,
-  type ReactNode,
 } from "react"
 import { motion, MotionValue, useScroll, useTransform } from "motion/react"
 
@@ -54,7 +53,7 @@ export const TextReveal: FC<TextRevealProps> = ({ children, className }) => {
 }
 
 interface WordProps {
-  children: ReactNode
+  children: string
   progress: MotionValue<number>
   range: [number, number]
 }
@@ -63,7 +62,8 @@ const Word: FC<WordProps> = ({ children, progress, range }) => {
   const opacity = useTransform(progress, range, [0, 1])
   return (
     <span className="relative mx-1 lg:mx-1.5">
-      <span className="absolute">{children}</span>
+      {/* la capa tenue va como pseudo-elemento: es decorativa y no cuenta para el contraste */}
+      <span data-word={children} className="absolute before:content-[attr(data-word)]" />
       <motion.span
         style={{ opacity: opacity }}
         className="text-app-fg"

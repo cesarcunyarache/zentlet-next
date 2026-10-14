@@ -3,12 +3,14 @@
  * manifest: sólo muestra la imagen cuyo tamaño coincide exacto con el de la
  * pantalla, y si no hay ninguna, pinta blanco mientras carga.
  *
+ * Sin variante oscura: iOS no evalúa prefers-color-scheme en estos media
+ * y con él no coincide ninguna imagen.
+ *
  * Las imágenes las genera `pnpm splash` en /public/splash.
  */
 
-export const SPLASH_BACKGROUND = { light: "#f6f4f9", dark: "#060608" } as const;
-
-export type SplashScheme = keyof typeof SPLASH_BACKGROUND;
+// el background_color del manifest
+export const SPLASH_BACKGROUND = "#f6f4f9";
 
 interface SplashDevice {
   width: number;
@@ -42,15 +44,13 @@ export const SPLASH_DEVICES: SplashDevice[] = [
   { width: 744, height: 1133, ratio: 2 },
 ];
 
-export function splashFileName(device: SplashDevice, scheme: SplashScheme) {
-  return `${device.width * device.ratio}x${device.height * device.ratio}-${scheme}.png`;
+export function splashFileName(device: SplashDevice) {
+  return `${device.width * device.ratio}x${device.height * device.ratio}.png`;
 }
 
 export function splashStartupImages() {
-  return SPLASH_DEVICES.flatMap((device) =>
-    (Object.keys(SPLASH_BACKGROUND) as SplashScheme[]).map((scheme) => ({
-      url: `/splash/${splashFileName(device, scheme)}`,
-      media: `(device-width: ${device.width}px) and (device-height: ${device.height}px) and (-webkit-device-pixel-ratio: ${device.ratio}) and (orientation: portrait) and (prefers-color-scheme: ${scheme})`,
-    })),
-  );
+  return SPLASH_DEVICES.map((device) => ({
+    url: `/splash/${splashFileName(device)}`,
+    media: `(device-width: ${device.width}px) and (device-height: ${device.height}px) and (-webkit-device-pixel-ratio: ${device.ratio}) and (orientation: portrait)`,
+  }));
 }

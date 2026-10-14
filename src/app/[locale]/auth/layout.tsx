@@ -1,3 +1,4 @@
+import "../../heroui-components.css";
 import { Suspense } from "react";
 import { Toast } from "@heroui/react";
 import { AuthScene } from "@/core/components/auth-scene";

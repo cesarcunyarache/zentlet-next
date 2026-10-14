@@ -29,8 +29,7 @@ export function HeroCopy({ hero }: { hero: LandingContent["hero"] }) {
 
       <h1
         id={HERO_TITLE_ID}
-        style={riseInDelay(1)}
-        className="animate-rise-in font-display text-app-fg mt-6 mb-0 text-5xl leading-[0.95] font-bold tracking-[-0.05em] sm:text-6xl lg:text-7xl"
+        className="font-display text-app-fg mt-6 mb-0 text-5xl leading-[0.95] font-bold tracking-[-0.05em] sm:text-6xl lg:text-7xl"
       >
         <span className="block">{hero.titleLead}</span>{" "}
         <HeroTitleWords words={hero.titleWords} />

@@ -24,7 +24,8 @@ interface StickyScrollProps {
 }
 
 export function StickyScroll({ content, className, contentClassName }: StickyScrollProps) {
-  const [activeCard, setActiveCard] = useState(0);
+  // null hasta llegar a la sección: fuera de ella ningún paso se atenúa
+  const [activeCard, setActiveCard] = useState<number | null>(null);
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -32,6 +33,7 @@ export function StickyScroll({ content, className, contentClassName }: StickyScr
   });
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (latest <= 0) return setActiveCard(null);
     const index = Math.min(content.length - 1, Math.max(0, Math.floor(latest * content.length)));
     setActiveCard(index);
   });
@@ -42,7 +44,7 @@ export function StickyScroll({ content, className, contentClassName }: StickyScr
         {content.map((item, index) => (
           <li key={item.title} className="flex min-h-[55vh] flex-col justify-center py-10 lg:min-h-[70vh]">
             <motion.div
-              animate={{ opacity: activeCard === index ? 1 : 0.3 }}
+              animate={{ opacity: activeCard === null || activeCard === index ? 1 : 0.3 }}
               transition={{ duration: 0.3 }}
             >
               <span className="num text-app-muted text-sm font-semibold">
@@ -69,14 +71,14 @@ export function StickyScroll({ content, className, contentClassName }: StickyScr
         >
           <AnimatePresence mode="wait">
             <motion.div
-              key={activeCard}
+              key={activeCard ?? 0}
               initial={{ opacity: 0, y: 16, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -16, scale: 0.98 }}
               transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
               className="h-full w-full"
             >
-              {content[activeCard]?.content}
+              {content[activeCard ?? 0]?.content}
             </motion.div>
           </AnimatePresence>
         </div>

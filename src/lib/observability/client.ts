@@ -28,6 +28,9 @@ let posthog: Promise<PostHog | null> | null = null;
  */
 const CONSENT_KEY = "zentlet-analytics-consent";
 
+/** Para <head>: marca el documento si ya hay respuesta, antes del primer pintado. */
+export const consentInitScript = `try{var v=localStorage.getItem(${JSON.stringify(CONSENT_KEY)});if(v==="granted"||v==="denied")document.documentElement.dataset.consentAnswered=""}catch(e){}`;
+
 export type AnalyticsConsent = "granted" | "denied";
 
 /** Hay analítica configurada: sólo entonces tiene sentido preguntar. */
@@ -109,9 +112,25 @@ function withPosthog(run: (client: PostHog) => void) {
     .catch(noop);
 }
 
-/** Desde `instrumentation-client.ts`: arranca la carga lo antes posible. */
+const IDLE_FALLBACK_MS = 2000;
+
+/*
+ * Tras el evento `load` y en un momento ocioso: el SDK no compite con la
+ * hidratación. Un error anterior lo carga al momento vía `withSentry`.
+ */
+function afterPageLoad(run: () => void) {
+  const schedule = () =>
+    "requestIdleCallback" in window
+      ? window.requestIdleCallback(run, { timeout: IDLE_FALLBACK_MS })
+      : setTimeout(run, IDLE_FALLBACK_MS);
+  if (document.readyState === "complete") schedule();
+  else window.addEventListener("load", schedule, { once: true });
+}
+
+/** Desde `instrumentation-client.ts`. */
 export function initClientObservability() {
-  loadSentry();
+  if (!isBrowser) return;
+  afterPageLoad(loadSentry);
   loadPosthog();
 }
 

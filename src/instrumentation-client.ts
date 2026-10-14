@@ -1,6 +1,6 @@
 import { captureNavigation, initClientObservability } from "@/lib/observability/client";
 
-// antes de hidratar; los SDK se descargan en paralelo y sin bloquear
+// Sentry espera a que la página cargue; PostHog sólo con consentimiento
 initClientObservability();
 
 export const onRouterTransitionStart = captureNavigation;
