@@ -524,6 +524,20 @@ export type TransactionListUncheckedUpdateManyWithoutOwnerNestedInput = {
   deleteMany?: Prisma.TransactionListScalarWhereInput | Prisma.TransactionListScalarWhereInput[]
 }
 
+export type TransactionListCreateNestedOneWithoutBudgetsInput = {
+  create?: Prisma.XOR<Prisma.TransactionListCreateWithoutBudgetsInput, Prisma.TransactionListUncheckedCreateWithoutBudgetsInput>
+  connectOrCreate?: Prisma.TransactionListCreateOrConnectWithoutBudgetsInput
+  connect?: Prisma.TransactionListWhereUniqueInput
+}
+
+export type TransactionListUpdateOneRequiredWithoutBudgetsNestedInput = {
+  create?: Prisma.XOR<Prisma.TransactionListCreateWithoutBudgetsInput, Prisma.TransactionListUncheckedCreateWithoutBudgetsInput>
+  connectOrCreate?: Prisma.TransactionListCreateOrConnectWithoutBudgetsInput
+  upsert?: Prisma.TransactionListUpsertWithoutBudgetsInput
+  connect?: Prisma.TransactionListWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TransactionListUpdateToOneWithWhereWithoutBudgetsInput, Prisma.TransactionListUpdateWithoutBudgetsInput>, Prisma.TransactionListUncheckedUpdateWithoutBudgetsInput>
+}
+
 export type TransactionListCreateNestedOneWithoutTransactionsInput = {
   create?: Prisma.XOR<Prisma.TransactionListCreateWithoutTransactionsInput, Prisma.TransactionListUncheckedCreateWithoutTransactionsInput>
   connectOrCreate?: Prisma.TransactionListCreateOrConnectWithoutTransactionsInput
@@ -564,20 +578,6 @@ export type TransactionListUpdateOneRequiredWithoutInvitesNestedInput = {
   upsert?: Prisma.TransactionListUpsertWithoutInvitesInput
   connect?: Prisma.TransactionListWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.TransactionListUpdateToOneWithWhereWithoutInvitesInput, Prisma.TransactionListUpdateWithoutInvitesInput>, Prisma.TransactionListUncheckedUpdateWithoutInvitesInput>
-}
-
-export type TransactionListCreateNestedOneWithoutBudgetsInput = {
-  create?: Prisma.XOR<Prisma.TransactionListCreateWithoutBudgetsInput, Prisma.TransactionListUncheckedCreateWithoutBudgetsInput>
-  connectOrCreate?: Prisma.TransactionListCreateOrConnectWithoutBudgetsInput
-  connect?: Prisma.TransactionListWhereUniqueInput
-}
-
-export type TransactionListUpdateOneRequiredWithoutBudgetsNestedInput = {
-  create?: Prisma.XOR<Prisma.TransactionListCreateWithoutBudgetsInput, Prisma.TransactionListUncheckedCreateWithoutBudgetsInput>
-  connectOrCreate?: Prisma.TransactionListCreateOrConnectWithoutBudgetsInput
-  upsert?: Prisma.TransactionListUpsertWithoutBudgetsInput
-  connect?: Prisma.TransactionListWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.TransactionListUpdateToOneWithWhereWithoutBudgetsInput, Prisma.TransactionListUpdateWithoutBudgetsInput>, Prisma.TransactionListUncheckedUpdateWithoutBudgetsInput>
 }
 
 export type TransactionListCreateWithoutOwnerInput = {
@@ -655,6 +655,90 @@ export type TransactionListScalarWhereInput = {
   archivedAt?: Prisma.DateTimeNullableFilter<"TransactionList"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"TransactionList"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TransactionList"> | Date | string
+}
+
+export type TransactionListCreateWithoutBudgetsInput = {
+  id?: string
+  name: string
+  icon: string
+  color: string
+  description?: string | null
+  currency: string
+  privateOwnerId?: string | null
+  archivedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutOwnedTransactionListsInput
+  members?: Prisma.TransactionListMemberCreateNestedManyWithoutListInput
+  invites?: Prisma.TransactionListInviteCreateNestedManyWithoutListInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutListInput
+}
+
+export type TransactionListUncheckedCreateWithoutBudgetsInput = {
+  id?: string
+  name: string
+  icon: string
+  color: string
+  description?: string | null
+  currency: string
+  ownerId: string
+  privateOwnerId?: string | null
+  archivedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutListInput
+  invites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutListInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutListInput
+}
+
+export type TransactionListCreateOrConnectWithoutBudgetsInput = {
+  where: Prisma.TransactionListWhereUniqueInput
+  create: Prisma.XOR<Prisma.TransactionListCreateWithoutBudgetsInput, Prisma.TransactionListUncheckedCreateWithoutBudgetsInput>
+}
+
+export type TransactionListUpsertWithoutBudgetsInput = {
+  update: Prisma.XOR<Prisma.TransactionListUpdateWithoutBudgetsInput, Prisma.TransactionListUncheckedUpdateWithoutBudgetsInput>
+  create: Prisma.XOR<Prisma.TransactionListCreateWithoutBudgetsInput, Prisma.TransactionListUncheckedCreateWithoutBudgetsInput>
+  where?: Prisma.TransactionListWhereInput
+}
+
+export type TransactionListUpdateToOneWithWhereWithoutBudgetsInput = {
+  where?: Prisma.TransactionListWhereInput
+  data: Prisma.XOR<Prisma.TransactionListUpdateWithoutBudgetsInput, Prisma.TransactionListUncheckedUpdateWithoutBudgetsInput>
+}
+
+export type TransactionListUpdateWithoutBudgetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  icon?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  privateOwnerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedTransactionListsNestedInput
+  members?: Prisma.TransactionListMemberUpdateManyWithoutListNestedInput
+  invites?: Prisma.TransactionListInviteUpdateManyWithoutListNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutListNestedInput
+}
+
+export type TransactionListUncheckedUpdateWithoutBudgetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  icon?: Prisma.StringFieldUpdateOperationsInput | string
+  color?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  privateOwnerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutListNestedInput
+  invites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutListNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutListNestedInput
 }
 
 export type TransactionListCreateWithoutTransactionsInput = {
@@ -907,90 +991,6 @@ export type TransactionListUncheckedUpdateWithoutInvitesInput = {
   members?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutListNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutListNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutListNestedInput
-}
-
-export type TransactionListCreateWithoutBudgetsInput = {
-  id?: string
-  name: string
-  icon: string
-  color: string
-  description?: string | null
-  currency: string
-  privateOwnerId?: string | null
-  archivedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  owner: Prisma.UserCreateNestedOneWithoutOwnedTransactionListsInput
-  members?: Prisma.TransactionListMemberCreateNestedManyWithoutListInput
-  invites?: Prisma.TransactionListInviteCreateNestedManyWithoutListInput
-  transactions?: Prisma.TransactionCreateNestedManyWithoutListInput
-}
-
-export type TransactionListUncheckedCreateWithoutBudgetsInput = {
-  id?: string
-  name: string
-  icon: string
-  color: string
-  description?: string | null
-  currency: string
-  ownerId: string
-  privateOwnerId?: string | null
-  archivedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  members?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutListInput
-  invites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutListInput
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutListInput
-}
-
-export type TransactionListCreateOrConnectWithoutBudgetsInput = {
-  where: Prisma.TransactionListWhereUniqueInput
-  create: Prisma.XOR<Prisma.TransactionListCreateWithoutBudgetsInput, Prisma.TransactionListUncheckedCreateWithoutBudgetsInput>
-}
-
-export type TransactionListUpsertWithoutBudgetsInput = {
-  update: Prisma.XOR<Prisma.TransactionListUpdateWithoutBudgetsInput, Prisma.TransactionListUncheckedUpdateWithoutBudgetsInput>
-  create: Prisma.XOR<Prisma.TransactionListCreateWithoutBudgetsInput, Prisma.TransactionListUncheckedCreateWithoutBudgetsInput>
-  where?: Prisma.TransactionListWhereInput
-}
-
-export type TransactionListUpdateToOneWithWhereWithoutBudgetsInput = {
-  where?: Prisma.TransactionListWhereInput
-  data: Prisma.XOR<Prisma.TransactionListUpdateWithoutBudgetsInput, Prisma.TransactionListUncheckedUpdateWithoutBudgetsInput>
-}
-
-export type TransactionListUpdateWithoutBudgetsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  icon?: Prisma.StringFieldUpdateOperationsInput | string
-  color?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  privateOwnerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedTransactionListsNestedInput
-  members?: Prisma.TransactionListMemberUpdateManyWithoutListNestedInput
-  invites?: Prisma.TransactionListInviteUpdateManyWithoutListNestedInput
-  transactions?: Prisma.TransactionUpdateManyWithoutListNestedInput
-}
-
-export type TransactionListUncheckedUpdateWithoutBudgetsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  icon?: Prisma.StringFieldUpdateOperationsInput | string
-  color?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
-  privateOwnerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  members?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutListNestedInput
-  invites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutListNestedInput
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutListNestedInput
 }
 
 export type TransactionListCreateManyOwnerInput = {

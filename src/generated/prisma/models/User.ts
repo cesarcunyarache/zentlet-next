@@ -606,6 +606,146 @@ export type UserUpdateOneRequiredWithoutAccountsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAccountsInput, Prisma.UserUpdateWithoutAccountsInput>, Prisma.UserUncheckedUpdateWithoutAccountsInput>
 }
 
+export type UserCreateNestedOneWithoutSubscriptionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSubscriptionsInput, Prisma.UserUncheckedCreateWithoutSubscriptionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSubscriptionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSubscriptionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSubscriptionsInput, Prisma.UserUncheckedCreateWithoutSubscriptionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSubscriptionsInput
+  upsert?: Prisma.UserUpsertWithoutSubscriptionsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSubscriptionsInput, Prisma.UserUpdateWithoutSubscriptionsInput>, Prisma.UserUncheckedUpdateWithoutSubscriptionsInput>
+}
+
+export type UserCreateNestedOneWithoutBudgetsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBudgetsInput, Prisma.UserUncheckedCreateWithoutBudgetsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBudgetsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutBudgetsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBudgetsInput, Prisma.UserUncheckedCreateWithoutBudgetsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBudgetsInput
+  upsert?: Prisma.UserUpsertWithoutBudgetsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBudgetsInput, Prisma.UserUpdateWithoutBudgetsInput>, Prisma.UserUncheckedUpdateWithoutBudgetsInput>
+}
+
+export type UserCreateNestedOneWithoutEmailInboxInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutEmailInboxInput, Prisma.UserUncheckedCreateWithoutEmailInboxInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEmailInboxInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutEmailInboxNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutEmailInboxInput, Prisma.UserUncheckedCreateWithoutEmailInboxInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEmailInboxInput
+  upsert?: Prisma.UserUpsertWithoutEmailInboxInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEmailInboxInput, Prisma.UserUpdateWithoutEmailInboxInput>, Prisma.UserUncheckedUpdateWithoutEmailInboxInput>
+}
+
+export type UserCreateNestedOneWithoutGmailConnectionInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutGmailConnectionInput, Prisma.UserUncheckedCreateWithoutGmailConnectionInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutGmailConnectionInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutGmailConnectionNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutGmailConnectionInput, Prisma.UserUncheckedCreateWithoutGmailConnectionInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutGmailConnectionInput
+  upsert?: Prisma.UserUpsertWithoutGmailConnectionInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutGmailConnectionInput, Prisma.UserUpdateWithoutGmailConnectionInput>, Prisma.UserUncheckedUpdateWithoutGmailConnectionInput>
+}
+
+export type UserCreateNestedOneWithoutInboxSendersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInboxSendersInput, Prisma.UserUncheckedCreateWithoutInboxSendersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInboxSendersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutInboxSendersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInboxSendersInput, Prisma.UserUncheckedCreateWithoutInboxSendersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInboxSendersInput
+  upsert?: Prisma.UserUpsertWithoutInboxSendersInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInboxSendersInput, Prisma.UserUpdateWithoutInboxSendersInput>, Prisma.UserUncheckedUpdateWithoutInboxSendersInput>
+}
+
+export type UserCreateNestedOneWithoutInboxTransactionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInboxTransactionsInput, Prisma.UserUncheckedCreateWithoutInboxTransactionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInboxTransactionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutInboxTransactionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInboxTransactionsInput, Prisma.UserUncheckedCreateWithoutInboxTransactionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInboxTransactionsInput
+  upsert?: Prisma.UserUpsertWithoutInboxTransactionsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInboxTransactionsInput, Prisma.UserUpdateWithoutInboxTransactionsInput>, Prisma.UserUncheckedUpdateWithoutInboxTransactionsInput>
+}
+
+export type UserCreateNestedOneWithoutMerchantRulesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMerchantRulesInput, Prisma.UserUncheckedCreateWithoutMerchantRulesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMerchantRulesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutMerchantRulesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMerchantRulesInput, Prisma.UserUncheckedCreateWithoutMerchantRulesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMerchantRulesInput
+  upsert?: Prisma.UserUpsertWithoutMerchantRulesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutMerchantRulesInput, Prisma.UserUpdateWithoutMerchantRulesInput>, Prisma.UserUncheckedUpdateWithoutMerchantRulesInput>
+}
+
+export type UserCreateNestedOneWithoutNotificationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutNotificationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationsInput
+  upsert?: Prisma.UserUpsertWithoutNotificationsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutNotificationsInput, Prisma.UserUpdateWithoutNotificationsInput>, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type UserCreateNestedOneWithoutFeedbackInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFeedbackInput, Prisma.UserUncheckedCreateWithoutFeedbackInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFeedbackInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutFeedbackNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFeedbackInput, Prisma.UserUncheckedCreateWithoutFeedbackInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFeedbackInput
+  upsert?: Prisma.UserUpsertWithoutFeedbackInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFeedbackInput, Prisma.UserUpdateWithoutFeedbackInput>, Prisma.UserUncheckedUpdateWithoutFeedbackInput>
+}
+
+export type UserCreateNestedOneWithoutFeaturesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFeaturesInput, Prisma.UserUncheckedCreateWithoutFeaturesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFeaturesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutFeaturesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFeaturesInput, Prisma.UserUncheckedCreateWithoutFeaturesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFeaturesInput
+  upsert?: Prisma.UserUpsertWithoutFeaturesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFeaturesInput, Prisma.UserUpdateWithoutFeaturesInput>, Prisma.UserUncheckedUpdateWithoutFeaturesInput>
+}
+
 export type UserCreateNestedOneWithoutCategoriesInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutCategoriesInput, Prisma.UserUncheckedCreateWithoutCategoriesInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutCategoriesInput
@@ -688,146 +828,6 @@ export type UserUpdateOneRequiredWithoutRecurringTransactionsNestedInput = {
   upsert?: Prisma.UserUpsertWithoutRecurringTransactionsInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRecurringTransactionsInput, Prisma.UserUpdateWithoutRecurringTransactionsInput>, Prisma.UserUncheckedUpdateWithoutRecurringTransactionsInput>
-}
-
-export type UserCreateNestedOneWithoutFeedbackInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutFeedbackInput, Prisma.UserUncheckedCreateWithoutFeedbackInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFeedbackInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutFeedbackNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutFeedbackInput, Prisma.UserUncheckedCreateWithoutFeedbackInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFeedbackInput
-  upsert?: Prisma.UserUpsertWithoutFeedbackInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFeedbackInput, Prisma.UserUpdateWithoutFeedbackInput>, Prisma.UserUncheckedUpdateWithoutFeedbackInput>
-}
-
-export type UserCreateNestedOneWithoutBudgetsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutBudgetsInput, Prisma.UserUncheckedCreateWithoutBudgetsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBudgetsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutBudgetsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutBudgetsInput, Prisma.UserUncheckedCreateWithoutBudgetsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBudgetsInput
-  upsert?: Prisma.UserUpsertWithoutBudgetsInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBudgetsInput, Prisma.UserUpdateWithoutBudgetsInput>, Prisma.UserUncheckedUpdateWithoutBudgetsInput>
-}
-
-export type UserCreateNestedOneWithoutNotificationsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutNotificationsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationsInput
-  upsert?: Prisma.UserUpsertWithoutNotificationsInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutNotificationsInput, Prisma.UserUpdateWithoutNotificationsInput>, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
-}
-
-export type UserCreateNestedOneWithoutSubscriptionsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutSubscriptionsInput, Prisma.UserUncheckedCreateWithoutSubscriptionsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSubscriptionsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutSubscriptionsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutSubscriptionsInput, Prisma.UserUncheckedCreateWithoutSubscriptionsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSubscriptionsInput
-  upsert?: Prisma.UserUpsertWithoutSubscriptionsInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSubscriptionsInput, Prisma.UserUpdateWithoutSubscriptionsInput>, Prisma.UserUncheckedUpdateWithoutSubscriptionsInput>
-}
-
-export type UserCreateNestedOneWithoutFeaturesInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutFeaturesInput, Prisma.UserUncheckedCreateWithoutFeaturesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFeaturesInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutFeaturesNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutFeaturesInput, Prisma.UserUncheckedCreateWithoutFeaturesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFeaturesInput
-  upsert?: Prisma.UserUpsertWithoutFeaturesInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFeaturesInput, Prisma.UserUpdateWithoutFeaturesInput>, Prisma.UserUncheckedUpdateWithoutFeaturesInput>
-}
-
-export type UserCreateNestedOneWithoutEmailInboxInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutEmailInboxInput, Prisma.UserUncheckedCreateWithoutEmailInboxInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEmailInboxInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutEmailInboxNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutEmailInboxInput, Prisma.UserUncheckedCreateWithoutEmailInboxInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEmailInboxInput
-  upsert?: Prisma.UserUpsertWithoutEmailInboxInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEmailInboxInput, Prisma.UserUpdateWithoutEmailInboxInput>, Prisma.UserUncheckedUpdateWithoutEmailInboxInput>
-}
-
-export type UserCreateNestedOneWithoutGmailConnectionInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutGmailConnectionInput, Prisma.UserUncheckedCreateWithoutGmailConnectionInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutGmailConnectionInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutGmailConnectionNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutGmailConnectionInput, Prisma.UserUncheckedCreateWithoutGmailConnectionInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutGmailConnectionInput
-  upsert?: Prisma.UserUpsertWithoutGmailConnectionInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutGmailConnectionInput, Prisma.UserUpdateWithoutGmailConnectionInput>, Prisma.UserUncheckedUpdateWithoutGmailConnectionInput>
-}
-
-export type UserCreateNestedOneWithoutInboxSendersInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutInboxSendersInput, Prisma.UserUncheckedCreateWithoutInboxSendersInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInboxSendersInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutInboxSendersNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutInboxSendersInput, Prisma.UserUncheckedCreateWithoutInboxSendersInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInboxSendersInput
-  upsert?: Prisma.UserUpsertWithoutInboxSendersInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInboxSendersInput, Prisma.UserUpdateWithoutInboxSendersInput>, Prisma.UserUncheckedUpdateWithoutInboxSendersInput>
-}
-
-export type UserCreateNestedOneWithoutInboxTransactionsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutInboxTransactionsInput, Prisma.UserUncheckedCreateWithoutInboxTransactionsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInboxTransactionsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutInboxTransactionsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutInboxTransactionsInput, Prisma.UserUncheckedCreateWithoutInboxTransactionsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInboxTransactionsInput
-  upsert?: Prisma.UserUpsertWithoutInboxTransactionsInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInboxTransactionsInput, Prisma.UserUpdateWithoutInboxTransactionsInput>, Prisma.UserUncheckedUpdateWithoutInboxTransactionsInput>
-}
-
-export type UserCreateNestedOneWithoutMerchantRulesInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutMerchantRulesInput, Prisma.UserUncheckedCreateWithoutMerchantRulesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMerchantRulesInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutMerchantRulesNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutMerchantRulesInput, Prisma.UserUncheckedCreateWithoutMerchantRulesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMerchantRulesInput
-  upsert?: Prisma.UserUpsertWithoutMerchantRulesInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutMerchantRulesInput, Prisma.UserUpdateWithoutMerchantRulesInput>, Prisma.UserUncheckedUpdateWithoutMerchantRulesInput>
 }
 
 export type UserCreateNestedOneWithoutWhatsappLinkInput = {
@@ -1420,6 +1420,1446 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
+  ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
+  transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
+  transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutSubscriptionsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
+  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
+  ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
+  transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
+  transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutSubscriptionsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
+  ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
+  transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
+  transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutSubscriptionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSubscriptionsInput, Prisma.UserUncheckedCreateWithoutSubscriptionsInput>
+}
+
+export type UserUpsertWithoutSubscriptionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSubscriptionsInput, Prisma.UserUncheckedUpdateWithoutSubscriptionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSubscriptionsInput, Prisma.UserUncheckedCreateWithoutSubscriptionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSubscriptionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSubscriptionsInput, Prisma.UserUncheckedUpdateWithoutSubscriptionsInput>
+}
+
+export type UserUpdateWithoutSubscriptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
+  ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
+  transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
+  transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSubscriptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
+  ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
+  transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
+  transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutBudgetsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
+  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
+  ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
+  transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
+  transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutBudgetsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
+  ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
+  transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
+  transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutBudgetsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutBudgetsInput, Prisma.UserUncheckedCreateWithoutBudgetsInput>
+}
+
+export type UserUpsertWithoutBudgetsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutBudgetsInput, Prisma.UserUncheckedUpdateWithoutBudgetsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutBudgetsInput, Prisma.UserUncheckedCreateWithoutBudgetsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutBudgetsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutBudgetsInput, Prisma.UserUncheckedUpdateWithoutBudgetsInput>
+}
+
+export type UserUpdateWithoutBudgetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
+  ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
+  transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
+  transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutBudgetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
+  ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
+  transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
+  transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutEmailInboxInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
+  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
+  ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
+  transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
+  transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutEmailInboxInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
+  ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
+  transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
+  transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutEmailInboxInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutEmailInboxInput, Prisma.UserUncheckedCreateWithoutEmailInboxInput>
+}
+
+export type UserUpsertWithoutEmailInboxInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutEmailInboxInput, Prisma.UserUncheckedUpdateWithoutEmailInboxInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutEmailInboxInput, Prisma.UserUncheckedCreateWithoutEmailInboxInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutEmailInboxInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutEmailInboxInput, Prisma.UserUncheckedUpdateWithoutEmailInboxInput>
+}
+
+export type UserUpdateWithoutEmailInboxInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
+  ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
+  transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
+  transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutEmailInboxInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
+  ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
+  transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
+  transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutGmailConnectionInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
+  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
+  ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
+  transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
+  transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutGmailConnectionInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
+  ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
+  transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
+  transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutGmailConnectionInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutGmailConnectionInput, Prisma.UserUncheckedCreateWithoutGmailConnectionInput>
+}
+
+export type UserUpsertWithoutGmailConnectionInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutGmailConnectionInput, Prisma.UserUncheckedUpdateWithoutGmailConnectionInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutGmailConnectionInput, Prisma.UserUncheckedCreateWithoutGmailConnectionInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutGmailConnectionInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutGmailConnectionInput, Prisma.UserUncheckedUpdateWithoutGmailConnectionInput>
+}
+
+export type UserUpdateWithoutGmailConnectionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
+  ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
+  transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
+  transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutGmailConnectionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
+  ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
+  transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
+  transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutInboxSendersInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
+  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
+  ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
+  transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
+  transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutInboxSendersInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
+  ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
+  transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
+  transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutInboxSendersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutInboxSendersInput, Prisma.UserUncheckedCreateWithoutInboxSendersInput>
+}
+
+export type UserUpsertWithoutInboxSendersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutInboxSendersInput, Prisma.UserUncheckedUpdateWithoutInboxSendersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutInboxSendersInput, Prisma.UserUncheckedCreateWithoutInboxSendersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutInboxSendersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutInboxSendersInput, Prisma.UserUncheckedUpdateWithoutInboxSendersInput>
+}
+
+export type UserUpdateWithoutInboxSendersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
+  ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
+  transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
+  transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutInboxSendersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
+  ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
+  transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
+  transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutInboxTransactionsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
+  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
+  ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
+  transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
+  transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutInboxTransactionsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
+  ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
+  transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
+  transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutInboxTransactionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutInboxTransactionsInput, Prisma.UserUncheckedCreateWithoutInboxTransactionsInput>
+}
+
+export type UserUpsertWithoutInboxTransactionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutInboxTransactionsInput, Prisma.UserUncheckedUpdateWithoutInboxTransactionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutInboxTransactionsInput, Prisma.UserUncheckedCreateWithoutInboxTransactionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutInboxTransactionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutInboxTransactionsInput, Prisma.UserUncheckedUpdateWithoutInboxTransactionsInput>
+}
+
+export type UserUpdateWithoutInboxTransactionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
+  ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
+  transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
+  transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutInboxTransactionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
+  ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
+  transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
+  transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutMerchantRulesInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
+  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
+  ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
+  transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
+  transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutMerchantRulesInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
+  ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
+  transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
+  transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutMerchantRulesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutMerchantRulesInput, Prisma.UserUncheckedCreateWithoutMerchantRulesInput>
+}
+
+export type UserUpsertWithoutMerchantRulesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutMerchantRulesInput, Prisma.UserUncheckedUpdateWithoutMerchantRulesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutMerchantRulesInput, Prisma.UserUncheckedCreateWithoutMerchantRulesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutMerchantRulesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutMerchantRulesInput, Prisma.UserUncheckedUpdateWithoutMerchantRulesInput>
+}
+
+export type UserUpdateWithoutMerchantRulesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
+  ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
+  transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
+  transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutMerchantRulesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
+  ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
+  transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
+  transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutNotificationsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
+  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
+  ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
+  transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
+  transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutNotificationsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
+  ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
+  transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
+  transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutNotificationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+}
+
+export type UserUpsertWithoutNotificationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutNotificationsInput, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutNotificationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutNotificationsInput, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type UserUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
+  ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
+  transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
+  transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
+  ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
+  transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
+  transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutFeedbackInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
+  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
+  ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
+  transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
+  transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutFeedbackInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
+  ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
+  transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
+  transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutFeedbackInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutFeedbackInput, Prisma.UserUncheckedCreateWithoutFeedbackInput>
+}
+
+export type UserUpsertWithoutFeedbackInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutFeedbackInput, Prisma.UserUncheckedUpdateWithoutFeedbackInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutFeedbackInput, Prisma.UserUncheckedCreateWithoutFeedbackInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutFeedbackInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutFeedbackInput, Prisma.UserUncheckedUpdateWithoutFeedbackInput>
+}
+
+export type UserUpdateWithoutFeedbackInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
+  ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
+  transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
+  transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutFeedbackInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
+  ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
+  transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
+  transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutFeaturesInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
+  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
+  ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
+  transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
+  transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutFeaturesInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
+  ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
+  transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
+  transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutFeaturesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutFeaturesInput, Prisma.UserUncheckedCreateWithoutFeaturesInput>
+}
+
+export type UserUpsertWithoutFeaturesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutFeaturesInput, Prisma.UserUncheckedUpdateWithoutFeaturesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutFeaturesInput, Prisma.UserUncheckedCreateWithoutFeaturesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutFeaturesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutFeaturesInput, Prisma.UserUncheckedUpdateWithoutFeaturesInput>
+}
+
+export type UserUpdateWithoutFeaturesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
+  ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
+  transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
+  transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutFeaturesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
   gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
@@ -2291,1446 +3731,6 @@ export type UserUncheckedUpdateWithoutRecurringTransactionsInput = {
   inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
-  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
-  ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
-  transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
-  transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
-}
-
-export type UserCreateWithoutFeedbackInput = {
-  id: string
-  name: string
-  email: string
-  emailVerified?: boolean
-  image?: string | null
-  onboardingCompletedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
-  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
-  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
-  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
-  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
-  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
-  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
-  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
-  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
-  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
-  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
-  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
-  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
-  ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
-  transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
-  transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
-}
-
-export type UserUncheckedCreateWithoutFeedbackInput = {
-  id: string
-  name: string
-  email: string
-  emailVerified?: boolean
-  image?: string | null
-  onboardingCompletedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
-  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
-  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
-  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
-  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
-  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
-  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
-  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
-  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
-  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
-  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
-  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
-  ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
-  transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
-  transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
-}
-
-export type UserCreateOrConnectWithoutFeedbackInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutFeedbackInput, Prisma.UserUncheckedCreateWithoutFeedbackInput>
-}
-
-export type UserUpsertWithoutFeedbackInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutFeedbackInput, Prisma.UserUncheckedUpdateWithoutFeedbackInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutFeedbackInput, Prisma.UserUncheckedCreateWithoutFeedbackInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutFeedbackInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutFeedbackInput, Prisma.UserUncheckedUpdateWithoutFeedbackInput>
-}
-
-export type UserUpdateWithoutFeedbackInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
-  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
-  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
-  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
-  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
-  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
-  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
-  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
-  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
-  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
-  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
-  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
-  ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
-  transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
-  transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
-}
-
-export type UserUncheckedUpdateWithoutFeedbackInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
-  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
-  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
-  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
-  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
-  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
-  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
-  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
-  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
-  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
-  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
-  ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
-  transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
-  transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
-}
-
-export type UserCreateWithoutBudgetsInput = {
-  id: string
-  name: string
-  email: string
-  emailVerified?: boolean
-  image?: string | null
-  onboardingCompletedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
-  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
-  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
-  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
-  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
-  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
-  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
-  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
-  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
-  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
-  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
-  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
-  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
-  ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
-  transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
-  transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
-}
-
-export type UserUncheckedCreateWithoutBudgetsInput = {
-  id: string
-  name: string
-  email: string
-  emailVerified?: boolean
-  image?: string | null
-  onboardingCompletedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
-  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
-  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
-  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
-  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
-  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
-  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
-  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
-  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
-  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
-  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
-  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
-  ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
-  transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
-  transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
-}
-
-export type UserCreateOrConnectWithoutBudgetsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutBudgetsInput, Prisma.UserUncheckedCreateWithoutBudgetsInput>
-}
-
-export type UserUpsertWithoutBudgetsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutBudgetsInput, Prisma.UserUncheckedUpdateWithoutBudgetsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutBudgetsInput, Prisma.UserUncheckedCreateWithoutBudgetsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutBudgetsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutBudgetsInput, Prisma.UserUncheckedUpdateWithoutBudgetsInput>
-}
-
-export type UserUpdateWithoutBudgetsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
-  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
-  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
-  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
-  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
-  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
-  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
-  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
-  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
-  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
-  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
-  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
-  ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
-  transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
-  transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
-}
-
-export type UserUncheckedUpdateWithoutBudgetsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
-  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
-  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
-  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
-  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
-  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
-  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
-  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
-  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
-  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
-  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
-  ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
-  transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
-  transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
-}
-
-export type UserCreateWithoutNotificationsInput = {
-  id: string
-  name: string
-  email: string
-  emailVerified?: boolean
-  image?: string | null
-  onboardingCompletedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
-  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
-  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
-  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
-  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
-  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
-  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
-  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
-  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
-  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
-  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
-  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
-  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
-  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
-  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
-  ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
-  transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
-  transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
-}
-
-export type UserUncheckedCreateWithoutNotificationsInput = {
-  id: string
-  name: string
-  email: string
-  emailVerified?: boolean
-  image?: string | null
-  onboardingCompletedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
-  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
-  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
-  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
-  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
-  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
-  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
-  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
-  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
-  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
-  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
-  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
-  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
-  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
-  ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
-  transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
-  transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
-}
-
-export type UserCreateOrConnectWithoutNotificationsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
-}
-
-export type UserUpsertWithoutNotificationsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutNotificationsInput, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutNotificationsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutNotificationsInput, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
-}
-
-export type UserUpdateWithoutNotificationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
-  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
-  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
-  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
-  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
-  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
-  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
-  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
-  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
-  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
-  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
-  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
-  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
-  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
-  ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
-  transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
-  transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
-}
-
-export type UserUncheckedUpdateWithoutNotificationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
-  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
-  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
-  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
-  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
-  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
-  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
-  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
-  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
-  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
-  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
-  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
-  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
-  ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
-  transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
-  transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
-}
-
-export type UserCreateWithoutSubscriptionsInput = {
-  id: string
-  name: string
-  email: string
-  emailVerified?: boolean
-  image?: string | null
-  onboardingCompletedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
-  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
-  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
-  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
-  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
-  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
-  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
-  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
-  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
-  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
-  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
-  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
-  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
-  ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
-  transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
-  transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
-}
-
-export type UserUncheckedCreateWithoutSubscriptionsInput = {
-  id: string
-  name: string
-  email: string
-  emailVerified?: boolean
-  image?: string | null
-  onboardingCompletedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
-  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
-  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
-  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
-  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
-  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
-  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
-  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
-  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
-  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
-  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
-  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
-  ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
-  transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
-  transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
-}
-
-export type UserCreateOrConnectWithoutSubscriptionsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutSubscriptionsInput, Prisma.UserUncheckedCreateWithoutSubscriptionsInput>
-}
-
-export type UserUpsertWithoutSubscriptionsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutSubscriptionsInput, Prisma.UserUncheckedUpdateWithoutSubscriptionsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutSubscriptionsInput, Prisma.UserUncheckedCreateWithoutSubscriptionsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutSubscriptionsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutSubscriptionsInput, Prisma.UserUncheckedUpdateWithoutSubscriptionsInput>
-}
-
-export type UserUpdateWithoutSubscriptionsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
-  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
-  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
-  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
-  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
-  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
-  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
-  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
-  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
-  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
-  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
-  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
-  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
-  ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
-  transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
-  transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
-}
-
-export type UserUncheckedUpdateWithoutSubscriptionsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
-  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
-  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
-  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
-  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
-  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
-  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
-  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
-  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
-  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
-  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
-  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
-  ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
-  transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
-  transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
-}
-
-export type UserCreateWithoutFeaturesInput = {
-  id: string
-  name: string
-  email: string
-  emailVerified?: boolean
-  image?: string | null
-  onboardingCompletedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
-  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
-  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
-  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
-  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
-  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
-  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
-  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
-  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
-  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
-  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
-  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
-  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
-  ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
-  transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
-  transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
-}
-
-export type UserUncheckedCreateWithoutFeaturesInput = {
-  id: string
-  name: string
-  email: string
-  emailVerified?: boolean
-  image?: string | null
-  onboardingCompletedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
-  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
-  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
-  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
-  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
-  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
-  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
-  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
-  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
-  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
-  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
-  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
-  ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
-  transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
-  transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
-}
-
-export type UserCreateOrConnectWithoutFeaturesInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutFeaturesInput, Prisma.UserUncheckedCreateWithoutFeaturesInput>
-}
-
-export type UserUpsertWithoutFeaturesInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutFeaturesInput, Prisma.UserUncheckedUpdateWithoutFeaturesInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutFeaturesInput, Prisma.UserUncheckedCreateWithoutFeaturesInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutFeaturesInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutFeaturesInput, Prisma.UserUncheckedUpdateWithoutFeaturesInput>
-}
-
-export type UserUpdateWithoutFeaturesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
-  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
-  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
-  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
-  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
-  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
-  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
-  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
-  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
-  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
-  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
-  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
-  ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
-  transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
-  transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
-}
-
-export type UserUncheckedUpdateWithoutFeaturesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
-  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
-  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
-  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
-  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
-  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
-  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
-  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
-  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
-  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
-  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
-  ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
-  transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
-  transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
-}
-
-export type UserCreateWithoutEmailInboxInput = {
-  id: string
-  name: string
-  email: string
-  emailVerified?: boolean
-  image?: string | null
-  onboardingCompletedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
-  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
-  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
-  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
-  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
-  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
-  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
-  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
-  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
-  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
-  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
-  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
-  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
-  ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
-  transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
-  transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
-}
-
-export type UserUncheckedCreateWithoutEmailInboxInput = {
-  id: string
-  name: string
-  email: string
-  emailVerified?: boolean
-  image?: string | null
-  onboardingCompletedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
-  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
-  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
-  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
-  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
-  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
-  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
-  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
-  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
-  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
-  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
-  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
-  ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
-  transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
-  transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
-}
-
-export type UserCreateOrConnectWithoutEmailInboxInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutEmailInboxInput, Prisma.UserUncheckedCreateWithoutEmailInboxInput>
-}
-
-export type UserUpsertWithoutEmailInboxInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutEmailInboxInput, Prisma.UserUncheckedUpdateWithoutEmailInboxInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutEmailInboxInput, Prisma.UserUncheckedCreateWithoutEmailInboxInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutEmailInboxInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutEmailInboxInput, Prisma.UserUncheckedUpdateWithoutEmailInboxInput>
-}
-
-export type UserUpdateWithoutEmailInboxInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
-  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
-  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
-  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
-  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
-  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
-  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
-  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
-  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
-  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
-  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
-  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
-  ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
-  transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
-  transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
-}
-
-export type UserUncheckedUpdateWithoutEmailInboxInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
-  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
-  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
-  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
-  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
-  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
-  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
-  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
-  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
-  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
-  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
-  ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
-  transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
-  transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
-}
-
-export type UserCreateWithoutGmailConnectionInput = {
-  id: string
-  name: string
-  email: string
-  emailVerified?: boolean
-  image?: string | null
-  onboardingCompletedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
-  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
-  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
-  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
-  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
-  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
-  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
-  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
-  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
-  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
-  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
-  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
-  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
-  ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
-  transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
-  transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
-}
-
-export type UserUncheckedCreateWithoutGmailConnectionInput = {
-  id: string
-  name: string
-  email: string
-  emailVerified?: boolean
-  image?: string | null
-  onboardingCompletedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
-  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
-  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
-  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
-  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
-  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
-  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
-  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
-  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
-  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
-  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
-  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
-  ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
-  transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
-  transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
-}
-
-export type UserCreateOrConnectWithoutGmailConnectionInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutGmailConnectionInput, Prisma.UserUncheckedCreateWithoutGmailConnectionInput>
-}
-
-export type UserUpsertWithoutGmailConnectionInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutGmailConnectionInput, Prisma.UserUncheckedUpdateWithoutGmailConnectionInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutGmailConnectionInput, Prisma.UserUncheckedCreateWithoutGmailConnectionInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutGmailConnectionInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutGmailConnectionInput, Prisma.UserUncheckedUpdateWithoutGmailConnectionInput>
-}
-
-export type UserUpdateWithoutGmailConnectionInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
-  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
-  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
-  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
-  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
-  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
-  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
-  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
-  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
-  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
-  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
-  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
-  ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
-  transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
-  transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
-}
-
-export type UserUncheckedUpdateWithoutGmailConnectionInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
-  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
-  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
-  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
-  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
-  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
-  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
-  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
-  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
-  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
-  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
-  ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
-  transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
-  transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
-}
-
-export type UserCreateWithoutInboxSendersInput = {
-  id: string
-  name: string
-  email: string
-  emailVerified?: boolean
-  image?: string | null
-  onboardingCompletedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
-  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
-  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
-  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
-  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
-  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
-  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
-  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
-  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
-  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
-  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
-  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
-  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
-  ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
-  transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
-  transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
-}
-
-export type UserUncheckedCreateWithoutInboxSendersInput = {
-  id: string
-  name: string
-  email: string
-  emailVerified?: boolean
-  image?: string | null
-  onboardingCompletedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
-  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
-  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
-  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
-  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
-  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
-  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
-  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
-  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
-  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
-  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
-  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
-  ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
-  transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
-  transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
-}
-
-export type UserCreateOrConnectWithoutInboxSendersInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutInboxSendersInput, Prisma.UserUncheckedCreateWithoutInboxSendersInput>
-}
-
-export type UserUpsertWithoutInboxSendersInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutInboxSendersInput, Prisma.UserUncheckedUpdateWithoutInboxSendersInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutInboxSendersInput, Prisma.UserUncheckedCreateWithoutInboxSendersInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutInboxSendersInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutInboxSendersInput, Prisma.UserUncheckedUpdateWithoutInboxSendersInput>
-}
-
-export type UserUpdateWithoutInboxSendersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
-  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
-  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
-  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
-  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
-  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
-  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
-  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
-  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
-  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
-  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
-  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
-  ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
-  transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
-  transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
-}
-
-export type UserUncheckedUpdateWithoutInboxSendersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
-  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
-  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
-  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
-  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
-  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
-  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
-  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
-  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
-  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
-  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
-  ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
-  transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
-  transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
-}
-
-export type UserCreateWithoutInboxTransactionsInput = {
-  id: string
-  name: string
-  email: string
-  emailVerified?: boolean
-  image?: string | null
-  onboardingCompletedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
-  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
-  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
-  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
-  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
-  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
-  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
-  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
-  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
-  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
-  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
-  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
-  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
-  ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
-  transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
-  transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
-}
-
-export type UserUncheckedCreateWithoutInboxTransactionsInput = {
-  id: string
-  name: string
-  email: string
-  emailVerified?: boolean
-  image?: string | null
-  onboardingCompletedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
-  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
-  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
-  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
-  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
-  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
-  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
-  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
-  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
-  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
-  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
-  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
-  ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
-  transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
-  transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
-}
-
-export type UserCreateOrConnectWithoutInboxTransactionsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutInboxTransactionsInput, Prisma.UserUncheckedCreateWithoutInboxTransactionsInput>
-}
-
-export type UserUpsertWithoutInboxTransactionsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutInboxTransactionsInput, Prisma.UserUncheckedUpdateWithoutInboxTransactionsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutInboxTransactionsInput, Prisma.UserUncheckedCreateWithoutInboxTransactionsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutInboxTransactionsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutInboxTransactionsInput, Prisma.UserUncheckedUpdateWithoutInboxTransactionsInput>
-}
-
-export type UserUpdateWithoutInboxTransactionsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
-  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
-  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
-  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
-  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
-  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
-  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
-  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
-  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
-  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
-  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
-  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
-  ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
-  transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
-  transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
-}
-
-export type UserUncheckedUpdateWithoutInboxTransactionsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
-  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
-  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
-  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
-  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
-  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
-  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
-  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
-  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
-  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
-  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
-  ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
-  transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
-  transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
-}
-
-export type UserCreateWithoutMerchantRulesInput = {
-  id: string
-  name: string
-  email: string
-  emailVerified?: boolean
-  image?: string | null
-  onboardingCompletedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
-  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
-  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
-  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
-  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
-  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
-  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
-  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
-  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
-  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
-  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
-  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
-  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
-  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
-  ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
-  transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
-  transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
-}
-
-export type UserUncheckedCreateWithoutMerchantRulesInput = {
-  id: string
-  name: string
-  email: string
-  emailVerified?: boolean
-  image?: string | null
-  onboardingCompletedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
-  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
-  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
-  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
-  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
-  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
-  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
-  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
-  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
-  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
-  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
-  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
-  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
-  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
-  ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
-  transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
-  transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
-}
-
-export type UserCreateOrConnectWithoutMerchantRulesInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutMerchantRulesInput, Prisma.UserUncheckedCreateWithoutMerchantRulesInput>
-}
-
-export type UserUpsertWithoutMerchantRulesInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutMerchantRulesInput, Prisma.UserUncheckedUpdateWithoutMerchantRulesInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutMerchantRulesInput, Prisma.UserUncheckedCreateWithoutMerchantRulesInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutMerchantRulesInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutMerchantRulesInput, Prisma.UserUncheckedUpdateWithoutMerchantRulesInput>
-}
-
-export type UserUpdateWithoutMerchantRulesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
-  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
-  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
-  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
-  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
-  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
-  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
-  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
-  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
-  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
-  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
-  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
-  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
-  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
-  ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
-  transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
-  transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
-}
-
-export type UserUncheckedUpdateWithoutMerchantRulesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
-  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
-  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
-  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
-  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
-  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
-  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
-  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
-  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
-  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
-  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
-  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
   whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
   whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput

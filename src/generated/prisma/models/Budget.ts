@@ -542,6 +542,34 @@ export type BudgetUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.BudgetScalarWhereInput | Prisma.BudgetScalarWhereInput[]
 }
 
+export type BudgetCreateNestedOneWithoutAlertsInput = {
+  create?: Prisma.XOR<Prisma.BudgetCreateWithoutAlertsInput, Prisma.BudgetUncheckedCreateWithoutAlertsInput>
+  connectOrCreate?: Prisma.BudgetCreateOrConnectWithoutAlertsInput
+  connect?: Prisma.BudgetWhereUniqueInput
+}
+
+export type BudgetUpdateOneRequiredWithoutAlertsNestedInput = {
+  create?: Prisma.XOR<Prisma.BudgetCreateWithoutAlertsInput, Prisma.BudgetUncheckedCreateWithoutAlertsInput>
+  connectOrCreate?: Prisma.BudgetCreateOrConnectWithoutAlertsInput
+  upsert?: Prisma.BudgetUpsertWithoutAlertsInput
+  connect?: Prisma.BudgetWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BudgetUpdateToOneWithWhereWithoutAlertsInput, Prisma.BudgetUpdateWithoutAlertsInput>, Prisma.BudgetUncheckedUpdateWithoutAlertsInput>
+}
+
+export type BudgetCreateNestedOneWithoutLimitsInput = {
+  create?: Prisma.XOR<Prisma.BudgetCreateWithoutLimitsInput, Prisma.BudgetUncheckedCreateWithoutLimitsInput>
+  connectOrCreate?: Prisma.BudgetCreateOrConnectWithoutLimitsInput
+  connect?: Prisma.BudgetWhereUniqueInput
+}
+
+export type BudgetUpdateOneRequiredWithoutLimitsNestedInput = {
+  create?: Prisma.XOR<Prisma.BudgetCreateWithoutLimitsInput, Prisma.BudgetUncheckedCreateWithoutLimitsInput>
+  connectOrCreate?: Prisma.BudgetCreateOrConnectWithoutLimitsInput
+  upsert?: Prisma.BudgetUpsertWithoutLimitsInput
+  connect?: Prisma.BudgetWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BudgetUpdateToOneWithWhereWithoutLimitsInput, Prisma.BudgetUpdateWithoutLimitsInput>, Prisma.BudgetUncheckedUpdateWithoutLimitsInput>
+}
+
 export type BudgetCreateNestedManyWithoutCategoryInput = {
   create?: Prisma.XOR<Prisma.BudgetCreateWithoutCategoryInput, Prisma.BudgetUncheckedCreateWithoutCategoryInput> | Prisma.BudgetCreateWithoutCategoryInput[] | Prisma.BudgetUncheckedCreateWithoutCategoryInput[]
   connectOrCreate?: Prisma.BudgetCreateOrConnectWithoutCategoryInput | Prisma.BudgetCreateOrConnectWithoutCategoryInput[]
@@ -626,42 +654,6 @@ export type BudgetUncheckedUpdateManyWithoutListNestedInput = {
   deleteMany?: Prisma.BudgetScalarWhereInput | Prisma.BudgetScalarWhereInput[]
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
-export type BudgetCreateNestedOneWithoutAlertsInput = {
-  create?: Prisma.XOR<Prisma.BudgetCreateWithoutAlertsInput, Prisma.BudgetUncheckedCreateWithoutAlertsInput>
-  connectOrCreate?: Prisma.BudgetCreateOrConnectWithoutAlertsInput
-  connect?: Prisma.BudgetWhereUniqueInput
-}
-
-export type BudgetUpdateOneRequiredWithoutAlertsNestedInput = {
-  create?: Prisma.XOR<Prisma.BudgetCreateWithoutAlertsInput, Prisma.BudgetUncheckedCreateWithoutAlertsInput>
-  connectOrCreate?: Prisma.BudgetCreateOrConnectWithoutAlertsInput
-  upsert?: Prisma.BudgetUpsertWithoutAlertsInput
-  connect?: Prisma.BudgetWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.BudgetUpdateToOneWithWhereWithoutAlertsInput, Prisma.BudgetUpdateWithoutAlertsInput>, Prisma.BudgetUncheckedUpdateWithoutAlertsInput>
-}
-
-export type BudgetCreateNestedOneWithoutLimitsInput = {
-  create?: Prisma.XOR<Prisma.BudgetCreateWithoutLimitsInput, Prisma.BudgetUncheckedCreateWithoutLimitsInput>
-  connectOrCreate?: Prisma.BudgetCreateOrConnectWithoutLimitsInput
-  connect?: Prisma.BudgetWhereUniqueInput
-}
-
-export type BudgetUpdateOneRequiredWithoutLimitsNestedInput = {
-  create?: Prisma.XOR<Prisma.BudgetCreateWithoutLimitsInput, Prisma.BudgetUncheckedCreateWithoutLimitsInput>
-  connectOrCreate?: Prisma.BudgetCreateOrConnectWithoutLimitsInput
-  upsert?: Prisma.BudgetUpsertWithoutLimitsInput
-  connect?: Prisma.BudgetWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.BudgetUpdateToOneWithWhereWithoutLimitsInput, Prisma.BudgetUpdateWithoutLimitsInput>, Prisma.BudgetUncheckedUpdateWithoutLimitsInput>
-}
-
 export type BudgetCreateWithoutUserInput = {
   id?: string
   kind?: string
@@ -730,114 +722,6 @@ export type BudgetScalarWhereInput = {
   userId?: Prisma.StringFilter<"Budget"> | string
   createdAt?: Prisma.DateTimeFilter<"Budget"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Budget"> | Date | string
-}
-
-export type BudgetCreateWithoutCategoryInput = {
-  id?: string
-  kind?: string
-  periodUnit?: string
-  periodCount?: number
-  startDate: Date | string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  list: Prisma.TransactionListCreateNestedOneWithoutBudgetsInput
-  user: Prisma.UserCreateNestedOneWithoutBudgetsInput
-  limits?: Prisma.BudgetLimitCreateNestedManyWithoutBudgetInput
-  alerts?: Prisma.BudgetAlertCreateNestedManyWithoutBudgetInput
-}
-
-export type BudgetUncheckedCreateWithoutCategoryInput = {
-  id?: string
-  listId: string
-  kind?: string
-  periodUnit?: string
-  periodCount?: number
-  startDate: Date | string
-  userId: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  limits?: Prisma.BudgetLimitUncheckedCreateNestedManyWithoutBudgetInput
-  alerts?: Prisma.BudgetAlertUncheckedCreateNestedManyWithoutBudgetInput
-}
-
-export type BudgetCreateOrConnectWithoutCategoryInput = {
-  where: Prisma.BudgetWhereUniqueInput
-  create: Prisma.XOR<Prisma.BudgetCreateWithoutCategoryInput, Prisma.BudgetUncheckedCreateWithoutCategoryInput>
-}
-
-export type BudgetCreateManyCategoryInputEnvelope = {
-  data: Prisma.BudgetCreateManyCategoryInput | Prisma.BudgetCreateManyCategoryInput[]
-  skipDuplicates?: boolean
-}
-
-export type BudgetUpsertWithWhereUniqueWithoutCategoryInput = {
-  where: Prisma.BudgetWhereUniqueInput
-  update: Prisma.XOR<Prisma.BudgetUpdateWithoutCategoryInput, Prisma.BudgetUncheckedUpdateWithoutCategoryInput>
-  create: Prisma.XOR<Prisma.BudgetCreateWithoutCategoryInput, Prisma.BudgetUncheckedCreateWithoutCategoryInput>
-}
-
-export type BudgetUpdateWithWhereUniqueWithoutCategoryInput = {
-  where: Prisma.BudgetWhereUniqueInput
-  data: Prisma.XOR<Prisma.BudgetUpdateWithoutCategoryInput, Prisma.BudgetUncheckedUpdateWithoutCategoryInput>
-}
-
-export type BudgetUpdateManyWithWhereWithoutCategoryInput = {
-  where: Prisma.BudgetScalarWhereInput
-  data: Prisma.XOR<Prisma.BudgetUpdateManyMutationInput, Prisma.BudgetUncheckedUpdateManyWithoutCategoryInput>
-}
-
-export type BudgetCreateWithoutListInput = {
-  id?: string
-  kind?: string
-  periodUnit?: string
-  periodCount?: number
-  startDate: Date | string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  category: Prisma.CategoryCreateNestedOneWithoutBudgetsInput
-  user: Prisma.UserCreateNestedOneWithoutBudgetsInput
-  limits?: Prisma.BudgetLimitCreateNestedManyWithoutBudgetInput
-  alerts?: Prisma.BudgetAlertCreateNestedManyWithoutBudgetInput
-}
-
-export type BudgetUncheckedCreateWithoutListInput = {
-  id?: string
-  categoryId: string
-  kind?: string
-  periodUnit?: string
-  periodCount?: number
-  startDate: Date | string
-  userId: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  limits?: Prisma.BudgetLimitUncheckedCreateNestedManyWithoutBudgetInput
-  alerts?: Prisma.BudgetAlertUncheckedCreateNestedManyWithoutBudgetInput
-}
-
-export type BudgetCreateOrConnectWithoutListInput = {
-  where: Prisma.BudgetWhereUniqueInput
-  create: Prisma.XOR<Prisma.BudgetCreateWithoutListInput, Prisma.BudgetUncheckedCreateWithoutListInput>
-}
-
-export type BudgetCreateManyListInputEnvelope = {
-  data: Prisma.BudgetCreateManyListInput | Prisma.BudgetCreateManyListInput[]
-  skipDuplicates?: boolean
-}
-
-export type BudgetUpsertWithWhereUniqueWithoutListInput = {
-  where: Prisma.BudgetWhereUniqueInput
-  update: Prisma.XOR<Prisma.BudgetUpdateWithoutListInput, Prisma.BudgetUncheckedUpdateWithoutListInput>
-  create: Prisma.XOR<Prisma.BudgetCreateWithoutListInput, Prisma.BudgetUncheckedCreateWithoutListInput>
-}
-
-export type BudgetUpdateWithWhereUniqueWithoutListInput = {
-  where: Prisma.BudgetWhereUniqueInput
-  data: Prisma.XOR<Prisma.BudgetUpdateWithoutListInput, Prisma.BudgetUncheckedUpdateWithoutListInput>
-}
-
-export type BudgetUpdateManyWithWhereWithoutListInput = {
-  where: Prisma.BudgetScalarWhereInput
-  data: Prisma.XOR<Prisma.BudgetUpdateManyMutationInput, Prisma.BudgetUncheckedUpdateManyWithoutListInput>
 }
 
 export type BudgetCreateWithoutAlertsInput = {
@@ -982,6 +866,114 @@ export type BudgetUncheckedUpdateWithoutLimitsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   alerts?: Prisma.BudgetAlertUncheckedUpdateManyWithoutBudgetNestedInput
+}
+
+export type BudgetCreateWithoutCategoryInput = {
+  id?: string
+  kind?: string
+  periodUnit?: string
+  periodCount?: number
+  startDate: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  list: Prisma.TransactionListCreateNestedOneWithoutBudgetsInput
+  user: Prisma.UserCreateNestedOneWithoutBudgetsInput
+  limits?: Prisma.BudgetLimitCreateNestedManyWithoutBudgetInput
+  alerts?: Prisma.BudgetAlertCreateNestedManyWithoutBudgetInput
+}
+
+export type BudgetUncheckedCreateWithoutCategoryInput = {
+  id?: string
+  listId: string
+  kind?: string
+  periodUnit?: string
+  periodCount?: number
+  startDate: Date | string
+  userId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  limits?: Prisma.BudgetLimitUncheckedCreateNestedManyWithoutBudgetInput
+  alerts?: Prisma.BudgetAlertUncheckedCreateNestedManyWithoutBudgetInput
+}
+
+export type BudgetCreateOrConnectWithoutCategoryInput = {
+  where: Prisma.BudgetWhereUniqueInput
+  create: Prisma.XOR<Prisma.BudgetCreateWithoutCategoryInput, Prisma.BudgetUncheckedCreateWithoutCategoryInput>
+}
+
+export type BudgetCreateManyCategoryInputEnvelope = {
+  data: Prisma.BudgetCreateManyCategoryInput | Prisma.BudgetCreateManyCategoryInput[]
+  skipDuplicates?: boolean
+}
+
+export type BudgetUpsertWithWhereUniqueWithoutCategoryInput = {
+  where: Prisma.BudgetWhereUniqueInput
+  update: Prisma.XOR<Prisma.BudgetUpdateWithoutCategoryInput, Prisma.BudgetUncheckedUpdateWithoutCategoryInput>
+  create: Prisma.XOR<Prisma.BudgetCreateWithoutCategoryInput, Prisma.BudgetUncheckedCreateWithoutCategoryInput>
+}
+
+export type BudgetUpdateWithWhereUniqueWithoutCategoryInput = {
+  where: Prisma.BudgetWhereUniqueInput
+  data: Prisma.XOR<Prisma.BudgetUpdateWithoutCategoryInput, Prisma.BudgetUncheckedUpdateWithoutCategoryInput>
+}
+
+export type BudgetUpdateManyWithWhereWithoutCategoryInput = {
+  where: Prisma.BudgetScalarWhereInput
+  data: Prisma.XOR<Prisma.BudgetUpdateManyMutationInput, Prisma.BudgetUncheckedUpdateManyWithoutCategoryInput>
+}
+
+export type BudgetCreateWithoutListInput = {
+  id?: string
+  kind?: string
+  periodUnit?: string
+  periodCount?: number
+  startDate: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  category: Prisma.CategoryCreateNestedOneWithoutBudgetsInput
+  user: Prisma.UserCreateNestedOneWithoutBudgetsInput
+  limits?: Prisma.BudgetLimitCreateNestedManyWithoutBudgetInput
+  alerts?: Prisma.BudgetAlertCreateNestedManyWithoutBudgetInput
+}
+
+export type BudgetUncheckedCreateWithoutListInput = {
+  id?: string
+  categoryId: string
+  kind?: string
+  periodUnit?: string
+  periodCount?: number
+  startDate: Date | string
+  userId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  limits?: Prisma.BudgetLimitUncheckedCreateNestedManyWithoutBudgetInput
+  alerts?: Prisma.BudgetAlertUncheckedCreateNestedManyWithoutBudgetInput
+}
+
+export type BudgetCreateOrConnectWithoutListInput = {
+  where: Prisma.BudgetWhereUniqueInput
+  create: Prisma.XOR<Prisma.BudgetCreateWithoutListInput, Prisma.BudgetUncheckedCreateWithoutListInput>
+}
+
+export type BudgetCreateManyListInputEnvelope = {
+  data: Prisma.BudgetCreateManyListInput | Prisma.BudgetCreateManyListInput[]
+  skipDuplicates?: boolean
+}
+
+export type BudgetUpsertWithWhereUniqueWithoutListInput = {
+  where: Prisma.BudgetWhereUniqueInput
+  update: Prisma.XOR<Prisma.BudgetUpdateWithoutListInput, Prisma.BudgetUncheckedUpdateWithoutListInput>
+  create: Prisma.XOR<Prisma.BudgetCreateWithoutListInput, Prisma.BudgetUncheckedCreateWithoutListInput>
+}
+
+export type BudgetUpdateWithWhereUniqueWithoutListInput = {
+  where: Prisma.BudgetWhereUniqueInput
+  data: Prisma.XOR<Prisma.BudgetUpdateWithoutListInput, Prisma.BudgetUncheckedUpdateWithoutListInput>
+}
+
+export type BudgetUpdateManyWithWhereWithoutListInput = {
+  where: Prisma.BudgetScalarWhereInput
+  data: Prisma.XOR<Prisma.BudgetUpdateManyMutationInput, Prisma.BudgetUncheckedUpdateManyWithoutListInput>
 }
 
 export type BudgetCreateManyUserInput = {

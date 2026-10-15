@@ -19,11 +19,14 @@ export function createReplies(t: Translate, profile: ChatProfile, categories: Ch
   const money = (amount: number) => formatMoney(amount, profile.currency);
   const categoryName = (id: string) => categories.find((category) => category.id === id)?.name ?? "—";
 
+  const shortDate = (isoDate: string) =>
+    new Intl.DateTimeFormat(intlLocale, { day: "numeric", month: "short" }).format(parseISODate(isoDate));
+
   const dayLabel = (isoDate: string) => {
     const daysAgo = Math.round((parseISODate(profile.today).getTime() - parseISODate(isoDate).getTime()) / MS_PER_DAY);
     if (daysAgo === 0) return t("today");
     if (daysAgo === 1) return t("yesterday");
-    return new Intl.DateTimeFormat(intlLocale, { day: "numeric", month: "short" }).format(parseISODate(isoDate));
+    return shortDate(isoDate);
   };
 
   const text = (key: string, values?: Record<string, string | number>): Reply => ({ kind: "text", text: t(key, values) });
@@ -81,7 +84,7 @@ export function createReplies(t: Translate, profile: ChatProfile, categories: Ch
     },
 
     summary(summary: TransactionSummary, from: string, to: string): Reply {
-      const range = { from: dayLabel(from), to: dayLabel(to) };
+      const range = { from: shortDate(from), to: shortDate(to) };
       if (summary.count === 0) return text("summaryEmpty", range);
       const top = Object.entries(summary.byCategory)
         .filter(([, totals]) => totals.expense > 0)

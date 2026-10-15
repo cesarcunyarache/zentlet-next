@@ -18,6 +18,8 @@ const USAGE_WINDOW_DAYS = 90;
 const DAY_MS = 86_400_000;
 const MESSAGES = { es, en } satisfies Record<Locale, typeof es>;
 
+const dayAfter = (isoDate: string) => new Date(Date.parse(`${isoDate}T00:00:00.000Z`) + DAY_MS).toISOString().slice(0, 10);
+
 async function categoriesByUsage(userId: string): Promise<ChatCategory[]> {
   const since = new Date(Date.now() - USAGE_WINDOW_DAYS * DAY_MS);
   const [categories, usage] = await Promise.all([
@@ -71,8 +73,8 @@ export const ledger: Ledger = {
     return results.filter((result) => !("error" in result)).length;
   },
 
-  summarize(userId, period) {
-    return transactionUseCases.summarize.execute(userId, { ...period, ids: [] });
+  summarize(userId, { from, to }) {
+    return transactionUseCases.summarize.execute(userId, { from, to: dayAfter(to), ids: [] });
   },
 };
 

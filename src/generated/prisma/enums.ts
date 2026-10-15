@@ -9,6 +9,17 @@
 * 🟢 You can import this file directly.
 */
 
+export const FeatureType = {
+  RELEASE: 'RELEASE',
+  EXPERIMENT: 'EXPERIMENT',
+  OPERATIONAL: 'OPERATIONAL',
+  KILL_SWITCH: 'KILL_SWITCH',
+  PERMISSION: 'PERMISSION'
+} as const
+
+export type FeatureType = (typeof FeatureType)[keyof typeof FeatureType]
+
+
 export const TransactionListRole = {
   owner: 'owner',
   editor: 'editor',
@@ -27,14 +38,3 @@ export const RecurrenceFrequency = {
 } as const
 
 export type RecurrenceFrequency = (typeof RecurrenceFrequency)[keyof typeof RecurrenceFrequency]
-
-
-export const FeatureType = {
-  RELEASE: 'RELEASE',
-  EXPERIMENT: 'EXPERIMENT',
-  OPERATIONAL: 'OPERATIONAL',
-  KILL_SWITCH: 'KILL_SWITCH',
-  PERMISSION: 'PERMISSION'
-} as const
-
-export type FeatureType = (typeof FeatureType)[keyof typeof FeatureType]
