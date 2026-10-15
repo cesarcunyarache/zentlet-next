@@ -2817,6 +2817,7 @@ export const TransactionListScalarFieldEnum = {
   description: 'description',
   currency: 'currency',
   ownerId: 'ownerId',
+  privateOwnerId: 'privateOwnerId',
   archivedAt: 'archivedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

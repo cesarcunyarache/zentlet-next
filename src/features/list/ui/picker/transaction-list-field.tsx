@@ -2,6 +2,7 @@
 
 import { ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useListName } from "../../hooks/useListName";
 import { useLists } from "../../stores/list.store";
 
 interface TransactionListFieldProps {
@@ -12,6 +13,7 @@ interface TransactionListFieldProps {
 export function TransactionListField({ listId, onPress }: TransactionListFieldProps) {
   const t = useTranslations("lists.picker");
   const { lists } = useLists();
+  const listName = useListName();
   const current = listId ? lists.find((list) => list.id === listId) : undefined;
 
   return (
@@ -25,7 +27,7 @@ export function TransactionListField({ listId, onPress }: TransactionListFieldPr
         >
           <span className="text-app-muted">{t("label")}</span>
           <span className="text-app-fg flex min-w-0 items-center gap-1 font-semibold">
-            <span className="truncate">{current ? `${current.icon} ${current.name}` : t("none")}</span>
+            <span className="truncate">{current ? listName(current) : t("none")}</span>
             <ChevronRight className="text-app-muted size-4 shrink-0" aria-hidden />
           </span>
         </button>

@@ -19,6 +19,7 @@ export interface TList extends ListTotals {
   currency: string;
   role: ListRole;
   memberCount: number;
+  isPrivate: boolean;
 }
 
 export interface TListCategoryTotal {

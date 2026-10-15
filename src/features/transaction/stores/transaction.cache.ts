@@ -1,6 +1,6 @@
 import type { QueryClient } from "@tanstack/react-query";
-import { applyToSummary, findInFeed, inRange, type FeedData } from "../lib/feed-cache";
-import type { DateRange, TTransaction, TransactionFilters, TransactionSummary } from "../types";
+import { applyToSummary, findInFeed, matchesSummary, type FeedData } from "../lib/feed-cache";
+import type { SummaryFilters, TTransaction, TransactionFilters, TransactionSummary } from "../types";
 import { transactionKeys } from "./transaction.keys";
 
 function feeds(queryClient: QueryClient) {
@@ -26,7 +26,7 @@ export function updateFeeds(queryClient: QueryClient, update: FeedUpdate) {
 export function updateSummaries(queryClient: QueryClient, tx: TTransaction, sign: 1 | -1) {
   const summaries = queryClient.getQueriesData<TransactionSummary>({ queryKey: transactionKeys.summaries });
   for (const [key, summary] of summaries) {
-    if (summary && inRange(tx.transactionDate, key[2] as DateRange)) {
+    if (summary && matchesSummary(tx, key[2] as SummaryFilters)) {
       queryClient.setQueryData(key, applyToSummary(summary, tx, sign));
     }
   }

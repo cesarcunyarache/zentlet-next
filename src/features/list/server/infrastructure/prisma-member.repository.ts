@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { moveToPrivateLists } from "@/lib/private-list";
 import type { ListRole } from "../../types";
 import type { MemberRepository } from "../domain/member.repository";
 
@@ -21,10 +22,10 @@ export class PrismaMemberRepository implements MemberRepository {
   }
 
   async remove(listId: string, userId: string) {
-    await prisma.$transaction([
-      prisma.transaction.updateMany({ where: { listId, userId }, data: { listId: null } }),
-      prisma.transactionListMember.deleteMany({ where: { listId, userId } }),
-    ]);
+    await prisma.$transaction(async (tx) => {
+      await moveToPrivateLists(tx, { listId, userId });
+      await tx.transactionListMember.deleteMany({ where: { listId, userId } });
+    });
   }
 
   async transferOwnership(listId: string, fromUserId: string, toUserId: string) {

@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { ensurePrivateListId } from "@/lib/private-list";
 import { GET as indexRoute, POST as createRoute } from "@/app/api/list/route";
 import { DELETE as deleteRoute, GET as detailRoute, PATCH as updateRoute } from "@/app/api/list/[id]/route";
 import { GET as entriesRoute, POST as addRoute } from "@/app/api/list/[id]/entries/route";
@@ -43,6 +44,7 @@ async function createTransaction(userId: string, amount: number, options: { type
       categoryId: options.category ?? categoryId,
       description: "Hotel",
       transactionDate: new Date("2026-10-03"),
+      listId: await ensurePrivateListId(userId),
     },
   });
   return transaction.id;
@@ -74,7 +76,7 @@ describe("listas de movimientos con Postgres", () => {
 
     expect(status).toBe(201);
     expect(list).toMatchObject({ currency: "USD", role: "owner", memberCount: 1, count: 0 });
-    expect(index.map(({ id }) => id)).toEqual([list.id]);
+    expect(index.map(({ id }) => id)).toEqual([await ensurePrivateListId(ownerId), list.id]);
   });
 
   it("suma los movimientos agregados por tipo y por categoría", async () => {
@@ -139,7 +141,9 @@ describe("listas de movimientos con Postgres", () => {
     const response = await add(list.id, [theirs]);
 
     expect(response.status).toBe(422);
-    expect(await prisma.transaction.findUnique({ where: { id: theirs } })).toMatchObject({ listId: null });
+    expect(await prisma.transaction.findUnique({ where: { id: theirs } })).toMatchObject({
+      listId: await ensurePrivateListId(stranger),
+    });
   });
 
   it("rechaza agregar si la moneda de la cuenta cambió respecto a la lista", async () => {
@@ -160,7 +164,7 @@ describe("listas de movimientos con Postgres", () => {
     expect((await deleteRoute(new Request(BASE_URL, { method: "DELETE" }), params({ id: list.id }))).status).toBe(404);
   });
 
-  it("quitar un movimiento o borrar la lista no borra el movimiento", async () => {
+  it("quitar un movimiento lo devuelve a la lista privada; borrar la lista borra los que quedan", async () => {
     const { list } = await createList();
     const hotel = await createTransaction(ownerId, 320);
     const dinner = await createTransaction(ownerId, 80);
@@ -174,10 +178,20 @@ describe("listas de movimientos con Postgres", () => {
 
     expect(removed.status).toBe(204);
     expect(deleted.status).toBe(204);
-    expect(await prisma.transaction.findMany({ where: { id: { in: [hotel, dinner] } }, select: { listId: true } })).toEqual([
-      { listId: null },
-      { listId: null },
+    expect(await prisma.transaction.findMany({ where: { id: { in: [hotel, dinner] } }, select: { id: true, listId: true } })).toEqual([
+      { id: hotel, listId: await ensurePrivateListId(ownerId) },
     ]);
+  });
+
+  it("la lista privada no se comparte, no se edita, no se borra y no se le quitan movimientos", async () => {
+    const privateList = await ensurePrivateListId(ownerId);
+    const hotel = await createTransaction(ownerId, 320);
+
+    expect((await updateRoute(json({ name: "Mía" }, "PATCH"), params({ id: privateList }))).status).toBe(403);
+    expect((await deleteRoute(new Request(BASE_URL, { method: "DELETE" }), params({ id: privateList }))).status).toBe(403);
+    expect(
+      (await removeRoute(new Request(BASE_URL, { method: "DELETE" }), params({ id: privateList, transactionId: hotel }))).status,
+    ).toBe(403);
   });
 
   it("al borrar la cuenta del dueño la lista pasa al editor y sus movimientos se van", async () => {
@@ -220,6 +234,23 @@ describe("compartir listas con Postgres", () => {
     await accept(created.token);
     return guest;
   }
+
+  it("al borrar una lista compartida se borran también los movimientos de los miembros", async () => {
+    const { list } = await createList();
+    const guest = await join(list.id);
+    const taxi = await createTransaction(guest, 40, { category: await createCategory(guest) });
+    await add(list.id, [taxi]);
+
+    signIn(ownerId);
+    const deleted = await deleteRoute(new Request(BASE_URL, { method: "DELETE" }), params({ id: list.id }));
+
+    expect(deleted.status).toBe(204);
+    expect(await prisma.transaction.findUnique({ where: { id: taxi } })).toBeNull();
+  });
+
+  it("la lista privada no se puede compartir", async () => {
+    expect((await invite(await ensurePrivateListId(ownerId))).status).toBe(403);
+  });
 
   it("el invitado ve la vista previa, se une y el dueño recibe un aviso", async () => {
     const { list } = await createList();
@@ -322,7 +353,9 @@ describe("compartir listas con Postgres", () => {
     const left = await removeMemberRoute(new Request(BASE_URL, { method: "DELETE" }), params({ id: list.id, userId: guest }));
 
     expect(left.status).toBe(204);
-    expect(await prisma.transaction.findUnique({ where: { id: taxi } })).toMatchObject({ listId: null });
+    expect(await prisma.transaction.findUnique({ where: { id: taxi } })).toMatchObject({
+      listId: await ensurePrivateListId(guest),
+    });
     expect((await detailRoute(new Request(BASE_URL), params({ id: list.id }))).status).toBe(404);
     signIn(ownerId);
     expect(await detail(list.id)).toMatchObject({ memberCount: 1, count: 0 });

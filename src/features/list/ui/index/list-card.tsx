@@ -4,6 +4,7 @@ import { ChevronRight, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { CategoryEmoji } from "@/features/category/ui/category-emoji";
 import { formatSigned } from "@/lib/money";
+import { useListName } from "../../hooks/useListName";
 import { currencyOf, netTotal } from "../../lib/entries";
 import type { TList } from "../../types";
 
@@ -14,6 +15,7 @@ interface ListCardProps {
 
 export function ListCard({ list, onPress }: ListCardProps) {
   const t = useTranslations("lists");
+  const listName = useListName();
   const isShared = list.memberCount > 1;
 
   return (
@@ -24,7 +26,7 @@ export function ListCard({ list, onPress }: ListCardProps) {
     >
       <CategoryEmoji category={list} className="size-12 rounded-2xl text-[22px]" />
       <span className="min-w-0 flex-1">
-        <span className="text-app-fg block truncate text-base font-semibold tracking-[-0.01em]">{list.name}</span>
+        <span className="text-app-fg block truncate text-base font-semibold tracking-[-0.01em]">{listName(list)}</span>
         <span className="text-app-muted flex items-center gap-1.5 text-xs">
           {t("count", { count: list.count })}
           {isShared ? (

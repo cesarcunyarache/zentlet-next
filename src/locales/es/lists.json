@@ -3,19 +3,23 @@
   "open": "Listas",
   "empty": "Agrupa movimientos de un viaje, una mudanza o un proyecto y mira cuánto suman.",
   "create": "Nueva lista",
+  "private": "Lista privada",
   "count": "{count, plural, =0 {Sin movimientos} one {# movimiento} other {# movimientos}}",
   "shared": "Compartida",
   "loadFailed": "No pudimos cargar tus listas.",
   "offline": "Las listas necesitan conexión.",
+  "filter": {
+    "label": "Lista"
+  },
   "form": {
     "new": "Nueva lista",
     "edit": "Editar lista",
     "nameLabel": "Nombre de la lista",
-    "namePlaceholder": "Viaje a Cusco",
+    "namePlaceholder": "Descripción",
     "iconLabel": "Icono",
     "delete": "Eliminar lista",
     "confirmDelete": "Toca otra vez para eliminar",
-    "deleteHint": "Los movimientos no se borran: vuelven a tu historial."
+    "deleteHint": "Se eliminarán también todos sus movimientos."
   },
   "detail": {
     "back": "Volver",
@@ -121,5 +125,16 @@
     "alreadyMember": "Ya eres parte de esta lista.",
     "invalid": "Esta invitación ya se usó, venció o fue revocada. Pide un link nuevo.",
     "home": "Ir al inicio"
+  },
+  "menu": {
+    "label": "Opciones de la lista",
+    "edit": "Editar",
+    "share": "Compartir",
+    "delete": "Eliminar"
+  },
+  "deleteDialog": {
+    "title": "¿Eliminar la lista?",
+    "body": "Se eliminará <strong>{name}</strong> con todos sus movimientos, también los de las personas con las que la compartes. No se puede deshacer.",
+    "confirm": "Eliminar lista"
   }
 }

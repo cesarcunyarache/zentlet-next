@@ -23,7 +23,7 @@ import { PrismaMemberRepository } from "./prisma-member.repository";
 const lists = new PrismaListRepository();
 const members = new PrismaMemberRepository();
 const invites = new PrismaInviteRepository();
-const createInvite = new CreateInviteUseCase(invites, members, inviteTokens);
+const createInvite = new CreateInviteUseCase(invites, lists, members, inviteTokens);
 
 export const listUseCases = {
   list: new ListListsUseCase(lists),

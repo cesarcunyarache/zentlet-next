@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { ensurePrivateListId } from "@/lib/private-list";
 import { scheduleBudgetCheck } from "@/features/budget/server/check";
 import type { AcceptInboxItemInput } from "../schemas/inbox-api.schema";
 import { merchantKey } from "../lib/merchant";
@@ -16,6 +17,7 @@ export async function acceptInboxItem(userId: string, id: string, input: AcceptI
   if (!category) return { error: "category_not_found" as const };
 
   const key = merchantKey(item.merchant ?? item.description);
+  const listId = await ensurePrivateListId(userId);
   const transaction = await prisma.$transaction(async (tx) => {
     const created = await tx.transaction.create({
       data: {
@@ -26,6 +28,7 @@ export async function acceptInboxItem(userId: string, id: string, input: AcceptI
         categoryId: input.categoryId,
         transactionDate: new Date(input.transactionDate),
         reference: item.reference,
+        listId,
       },
     });
     await tx.inboxTransaction.update({

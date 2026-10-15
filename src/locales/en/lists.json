@@ -3,19 +3,23 @@
   "open": "Lists",
   "empty": "Group the transactions of a trip, a move or a project and see what they add up to.",
   "create": "New list",
+  "private": "Private list",
   "count": "{count, plural, =0 {No transactions} one {# transaction} other {# transactions}}",
   "shared": "Shared",
   "loadFailed": "We couldn't load your lists.",
   "offline": "Lists need a connection.",
+  "filter": {
+    "label": "List"
+  },
   "form": {
     "new": "New list",
     "edit": "Edit list",
     "nameLabel": "List name",
-    "namePlaceholder": "Trip to Cusco",
+    "namePlaceholder": "Description",
     "iconLabel": "Icon",
     "delete": "Delete list",
     "confirmDelete": "Tap again to delete",
-    "deleteHint": "Transactions aren't deleted: they go back to your history."
+    "deleteHint": "All its transactions will be deleted too."
   },
   "detail": {
     "back": "Back",
@@ -121,5 +125,16 @@
     "alreadyMember": "You're already part of this list.",
     "invalid": "This invite was already used, expired or was revoked. Ask for a new link.",
     "home": "Go home"
+  },
+  "menu": {
+    "label": "List options",
+    "edit": "Edit",
+    "share": "Share",
+    "delete": "Delete"
+  },
+  "deleteDialog": {
+    "title": "Delete this list?",
+    "body": "<strong>{name}</strong> will be deleted with all its transactions, including those of the people you share it with. This can't be undone.",
+    "confirm": "Delete list"
   }
 }

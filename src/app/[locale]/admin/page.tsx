@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Layers, LayoutGrid, Plus, Search, Settings, X } from "lucide-react";
+import { LayoutGrid, Plus, Search, Settings, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useDebounce } from "use-debounce";
 import { useTranslations } from "next-intl";
@@ -40,7 +40,9 @@ import { InboxIcon } from "@/features/inbox/ui/inbox-icon";
 import { InboxSheet } from "@/features/inbox/ui/inbox-sheet";
 import { useInboxItems } from "@/features/inbox/stores/inbox.store";
 import { useGmailConnectResult } from "@/features/inbox/hooks/useGmailConnectResult";
-import { ListsSheet } from "@/features/list/ui/index/lists-sheet";
+import { ListFilterSelect } from "@/features/list/ui/filter/list-filter-select";
+import { ListActionsMenu } from "@/features/list/ui/actions/list-actions-menu";
+import { useLists } from "@/features/list/stores/list.store";
 import { ListPickerSheet } from "@/features/list/ui/picker/list-picker-sheet";
 import { TransactionListField } from "@/features/list/ui/picker/transaction-list-field";
 import { ToastBubble } from "@/core/components/ui/toast-bubble";
@@ -66,7 +68,6 @@ type Sheet =
   | "settings"
   | "notifications"
   | "inbox"
-  | "lists"
   | null;
 
 const ALL_TIME: DateRange = {};
@@ -78,7 +79,6 @@ export default function HomePage() {
   const tNotifications = useTranslations("notifications");
   const { unreadCount } = useNotifications();
   const tInbox = useTranslations("inbox");
-  const tLists = useTranslations("lists");
   const { items: inboxItems } = useInboxItems();
   const { categories: rawCategories } = useCategoryStore();
 
@@ -115,6 +115,12 @@ export default function HomePage() {
   const [period, setPeriod] = useState<Period>("month");
   const [kind, setKind] = useState<TransactionType | null>(null);
   const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
+  const [listFilter, setListFilter] = useState<string | null>(null);
+  const { lists } = useLists();
+  const selectedList =
+    lists.find((list) => list.id === listFilter) ??
+    lists.find((list) => list.isPrivate);
+  const listId = selectedList?.id ?? null;
   const [query, setQuery] = useState("");
   const [searching, setSearching] = useState(false);
 
@@ -140,6 +146,7 @@ export default function HomePage() {
   ) {
     createTransaction({
       ...values,
+      listId,
       reference: null,
       recurrence: recurrence ?? undefined,
     });
@@ -182,8 +189,9 @@ export default function HomePage() {
 
   const [debouncedQuery] = useDebounce(query.trim(), 300);
   const range = periodRange(period);
+  const summaryFilters = { ...range, listId: listId ?? undefined };
   const filters: TransactionFilters = {
-    ...range,
+    ...summaryFilters,
     type: kind ?? undefined,
     categoryId: categoryFilter ?? undefined,
     q: debouncedQuery || undefined,
@@ -194,7 +202,7 @@ export default function HomePage() {
     ? (feed.transactions.find((transaction) => transaction.id === detailId) ??
       null)
     : null;
-  const { data: summary } = useTransactionSummary(range);
+  const { data: summary } = useTransactionSummary(summaryFilters);
   const { data: lifetime } = useTransactionSummary(ALL_TIME);
 
   const expenseTotal = summary?.expenseTotal ?? 0;
@@ -311,7 +319,18 @@ export default function HomePage() {
             setCategoryFilter(null);
           }}
           onKindChange={setKind}
-        />
+        >
+          <ListFilterSelect
+            value={listId}
+            onChange={(next) => {
+              setListFilter(next);
+              setCategoryFilter(null);
+            }}
+          />
+          {selectedList && !selectedList.isPrivate ? (
+            <ListActionsMenu list={selectedList} onToast={toast} />
+          ) : null}
+        </SummaryHeader>
 
         <div className="mt-8">
           <CategoryStrip
@@ -417,9 +436,6 @@ export default function HomePage() {
               onClick={() => setSheet("categories")}
             >
               <LayoutGrid className="size-5" strokeWidth={1.7} />
-            </IconButton>
-            <IconButton label={tLists("open")} onClick={() => setSheet("lists")}>
-              <Layers className="size-5" strokeWidth={1.7} />
             </IconButton>
             <IconButton
               label={t(searching ? "home.closeSearch" : "home.search")}
@@ -533,11 +549,6 @@ export default function HomePage() {
           setListTarget(null);
           toast(text);
         }}
-      />
-
-      <ListsSheet
-        isOpen={sheet === "lists"}
-        onOpenChange={(open) => setSheet(open ? "lists" : null)}
       />
 
       <BudgetSheet

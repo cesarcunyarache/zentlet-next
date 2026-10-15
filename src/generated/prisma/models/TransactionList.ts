@@ -32,6 +32,7 @@ export type TransactionListMinAggregateOutputType = {
   description: string | null
   currency: string | null
   ownerId: string | null
+  privateOwnerId: string | null
   archivedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -45,6 +46,7 @@ export type TransactionListMaxAggregateOutputType = {
   description: string | null
   currency: string | null
   ownerId: string | null
+  privateOwnerId: string | null
   archivedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -58,6 +60,7 @@ export type TransactionListCountAggregateOutputType = {
   description: number
   currency: number
   ownerId: number
+  privateOwnerId: number
   archivedAt: number
   createdAt: number
   updatedAt: number
@@ -73,6 +76,7 @@ export type TransactionListMinAggregateInputType = {
   description?: true
   currency?: true
   ownerId?: true
+  privateOwnerId?: true
   archivedAt?: true
   createdAt?: true
   updatedAt?: true
@@ -86,6 +90,7 @@ export type TransactionListMaxAggregateInputType = {
   description?: true
   currency?: true
   ownerId?: true
+  privateOwnerId?: true
   archivedAt?: true
   createdAt?: true
   updatedAt?: true
@@ -99,6 +104,7 @@ export type TransactionListCountAggregateInputType = {
   description?: true
   currency?: true
   ownerId?: true
+  privateOwnerId?: true
   archivedAt?: true
   createdAt?: true
   updatedAt?: true
@@ -185,6 +191,7 @@ export type TransactionListGroupByOutputType = {
   description: string | null
   currency: string
   ownerId: string
+  privateOwnerId: string | null
   archivedAt: Date | null
   createdAt: Date
   updatedAt: Date
@@ -219,6 +226,7 @@ export type TransactionListWhereInput = {
   description?: Prisma.StringNullableFilter<"TransactionList"> | string | null
   currency?: Prisma.StringFilter<"TransactionList"> | string
   ownerId?: Prisma.StringFilter<"TransactionList"> | string
+  privateOwnerId?: Prisma.StringNullableFilter<"TransactionList"> | string | null
   archivedAt?: Prisma.DateTimeNullableFilter<"TransactionList"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"TransactionList"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TransactionList"> | Date | string
@@ -236,6 +244,7 @@ export type TransactionListOrderByWithRelationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   currency?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
+  privateOwnerId?: Prisma.SortOrderInput | Prisma.SortOrder
   archivedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -247,6 +256,7 @@ export type TransactionListOrderByWithRelationInput = {
 
 export type TransactionListWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  privateOwnerId?: string
   AND?: Prisma.TransactionListWhereInput | Prisma.TransactionListWhereInput[]
   OR?: Prisma.TransactionListWhereInput[]
   NOT?: Prisma.TransactionListWhereInput | Prisma.TransactionListWhereInput[]
@@ -263,7 +273,7 @@ export type TransactionListWhereUniqueInput = Prisma.AtLeast<{
   members?: Prisma.TransactionListMemberListRelationFilter
   invites?: Prisma.TransactionListInviteListRelationFilter
   transactions?: Prisma.TransactionListRelationFilter
-}, "id">
+}, "id" | "privateOwnerId">
 
 export type TransactionListOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -273,6 +283,7 @@ export type TransactionListOrderByWithAggregationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   currency?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
+  privateOwnerId?: Prisma.SortOrderInput | Prisma.SortOrder
   archivedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -292,6 +303,7 @@ export type TransactionListScalarWhereWithAggregatesInput = {
   description?: Prisma.StringNullableWithAggregatesFilter<"TransactionList"> | string | null
   currency?: Prisma.StringWithAggregatesFilter<"TransactionList"> | string
   ownerId?: Prisma.StringWithAggregatesFilter<"TransactionList"> | string
+  privateOwnerId?: Prisma.StringNullableWithAggregatesFilter<"TransactionList"> | string | null
   archivedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"TransactionList"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"TransactionList"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"TransactionList"> | Date | string
@@ -304,6 +316,7 @@ export type TransactionListCreateInput = {
   color: string
   description?: string | null
   currency: string
+  privateOwnerId?: string | null
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -321,6 +334,7 @@ export type TransactionListUncheckedCreateInput = {
   description?: string | null
   currency: string
   ownerId: string
+  privateOwnerId?: string | null
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -336,6 +350,7 @@ export type TransactionListUpdateInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  privateOwnerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -353,6 +368,7 @@ export type TransactionListUncheckedUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  privateOwnerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -369,6 +385,7 @@ export type TransactionListCreateManyInput = {
   description?: string | null
   currency: string
   ownerId: string
+  privateOwnerId?: string | null
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -381,6 +398,7 @@ export type TransactionListUpdateManyMutationInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  privateOwnerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -394,6 +412,7 @@ export type TransactionListUncheckedUpdateManyInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  privateOwnerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -409,9 +428,9 @@ export type TransactionListOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type TransactionListNullableScalarRelationFilter = {
-  is?: Prisma.TransactionListWhereInput | null
-  isNot?: Prisma.TransactionListWhereInput | null
+export type TransactionListScalarRelationFilter = {
+  is?: Prisma.TransactionListWhereInput
+  isNot?: Prisma.TransactionListWhereInput
 }
 
 export type TransactionListCountOrderByAggregateInput = {
@@ -422,6 +441,7 @@ export type TransactionListCountOrderByAggregateInput = {
   description?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
+  privateOwnerId?: Prisma.SortOrder
   archivedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -435,6 +455,7 @@ export type TransactionListMaxOrderByAggregateInput = {
   description?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
+  privateOwnerId?: Prisma.SortOrder
   archivedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -448,14 +469,10 @@ export type TransactionListMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
+  privateOwnerId?: Prisma.SortOrder
   archivedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-}
-
-export type TransactionListScalarRelationFilter = {
-  is?: Prisma.TransactionListWhereInput
-  isNot?: Prisma.TransactionListWhereInput
 }
 
 export type TransactionListCreateNestedManyWithoutOwnerInput = {
@@ -506,12 +523,10 @@ export type TransactionListCreateNestedOneWithoutTransactionsInput = {
   connect?: Prisma.TransactionListWhereUniqueInput
 }
 
-export type TransactionListUpdateOneWithoutTransactionsNestedInput = {
+export type TransactionListUpdateOneRequiredWithoutTransactionsNestedInput = {
   create?: Prisma.XOR<Prisma.TransactionListCreateWithoutTransactionsInput, Prisma.TransactionListUncheckedCreateWithoutTransactionsInput>
   connectOrCreate?: Prisma.TransactionListCreateOrConnectWithoutTransactionsInput
   upsert?: Prisma.TransactionListUpsertWithoutTransactionsInput
-  disconnect?: Prisma.TransactionListWhereInput | boolean
-  delete?: Prisma.TransactionListWhereInput | boolean
   connect?: Prisma.TransactionListWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.TransactionListUpdateToOneWithWhereWithoutTransactionsInput, Prisma.TransactionListUpdateWithoutTransactionsInput>, Prisma.TransactionListUncheckedUpdateWithoutTransactionsInput>
 }
@@ -551,6 +566,7 @@ export type TransactionListCreateWithoutOwnerInput = {
   color: string
   description?: string | null
   currency: string
+  privateOwnerId?: string | null
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -566,6 +582,7 @@ export type TransactionListUncheckedCreateWithoutOwnerInput = {
   color: string
   description?: string | null
   currency: string
+  privateOwnerId?: string | null
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -611,6 +628,7 @@ export type TransactionListScalarWhereInput = {
   description?: Prisma.StringNullableFilter<"TransactionList"> | string | null
   currency?: Prisma.StringFilter<"TransactionList"> | string
   ownerId?: Prisma.StringFilter<"TransactionList"> | string
+  privateOwnerId?: Prisma.StringNullableFilter<"TransactionList"> | string | null
   archivedAt?: Prisma.DateTimeNullableFilter<"TransactionList"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"TransactionList"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TransactionList"> | Date | string
@@ -623,6 +641,7 @@ export type TransactionListCreateWithoutTransactionsInput = {
   color: string
   description?: string | null
   currency: string
+  privateOwnerId?: string | null
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -639,6 +658,7 @@ export type TransactionListUncheckedCreateWithoutTransactionsInput = {
   description?: string | null
   currency: string
   ownerId: string
+  privateOwnerId?: string | null
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -669,6 +689,7 @@ export type TransactionListUpdateWithoutTransactionsInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  privateOwnerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -685,6 +706,7 @@ export type TransactionListUncheckedUpdateWithoutTransactionsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  privateOwnerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -699,6 +721,7 @@ export type TransactionListCreateWithoutMembersInput = {
   color: string
   description?: string | null
   currency: string
+  privateOwnerId?: string | null
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -715,6 +738,7 @@ export type TransactionListUncheckedCreateWithoutMembersInput = {
   description?: string | null
   currency: string
   ownerId: string
+  privateOwnerId?: string | null
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -745,6 +769,7 @@ export type TransactionListUpdateWithoutMembersInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  privateOwnerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -761,6 +786,7 @@ export type TransactionListUncheckedUpdateWithoutMembersInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  privateOwnerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -775,6 +801,7 @@ export type TransactionListCreateWithoutInvitesInput = {
   color: string
   description?: string | null
   currency: string
+  privateOwnerId?: string | null
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -791,6 +818,7 @@ export type TransactionListUncheckedCreateWithoutInvitesInput = {
   description?: string | null
   currency: string
   ownerId: string
+  privateOwnerId?: string | null
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -821,6 +849,7 @@ export type TransactionListUpdateWithoutInvitesInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  privateOwnerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -837,6 +866,7 @@ export type TransactionListUncheckedUpdateWithoutInvitesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  privateOwnerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -851,6 +881,7 @@ export type TransactionListCreateManyOwnerInput = {
   color: string
   description?: string | null
   currency: string
+  privateOwnerId?: string | null
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -863,6 +894,7 @@ export type TransactionListUpdateWithoutOwnerInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  privateOwnerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -878,6 +910,7 @@ export type TransactionListUncheckedUpdateWithoutOwnerInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  privateOwnerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -893,6 +926,7 @@ export type TransactionListUncheckedUpdateManyWithoutOwnerInput = {
   color?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  privateOwnerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -955,6 +989,7 @@ export type TransactionListSelect<ExtArgs extends runtime.Types.Extensions.Inter
   description?: boolean
   currency?: boolean
   ownerId?: boolean
+  privateOwnerId?: boolean
   archivedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -973,6 +1008,7 @@ export type TransactionListSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   description?: boolean
   currency?: boolean
   ownerId?: boolean
+  privateOwnerId?: boolean
   archivedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -987,6 +1023,7 @@ export type TransactionListSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   description?: boolean
   currency?: boolean
   ownerId?: boolean
+  privateOwnerId?: boolean
   archivedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1001,12 +1038,13 @@ export type TransactionListSelectScalar = {
   description?: boolean
   currency?: boolean
   ownerId?: boolean
+  privateOwnerId?: boolean
   archivedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type TransactionListOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "icon" | "color" | "description" | "currency" | "ownerId" | "archivedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["transactionList"]>
+export type TransactionListOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "icon" | "color" | "description" | "currency" | "ownerId" | "privateOwnerId" | "archivedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["transactionList"]>
 export type TransactionListInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   members?: boolean | Prisma.TransactionList$membersArgs<ExtArgs>
@@ -1037,6 +1075,7 @@ export type $TransactionListPayload<ExtArgs extends runtime.Types.Extensions.Int
     description: string | null
     currency: string
     ownerId: string
+    privateOwnerId: string | null
     archivedAt: Date | null
     createdAt: Date
     updatedAt: Date
@@ -1474,6 +1513,7 @@ export interface TransactionListFieldRefs {
   readonly description: Prisma.FieldRef<"TransactionList", 'String'>
   readonly currency: Prisma.FieldRef<"TransactionList", 'String'>
   readonly ownerId: Prisma.FieldRef<"TransactionList", 'String'>
+  readonly privateOwnerId: Prisma.FieldRef<"TransactionList", 'String'>
   readonly archivedAt: Prisma.FieldRef<"TransactionList", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"TransactionList", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"TransactionList", 'DateTime'>

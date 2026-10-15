@@ -20,6 +20,7 @@ export const storedList: TransactionList = {
   description: null,
   currency: "PEN",
   ownerId: OWNER,
+  isPrivate: false,
   createdAt: new Date("2026-10-01T00:00:00Z"),
 };
 
@@ -48,7 +49,8 @@ export function fakeLists(overrides: Partial<ListRepository> = {}): ListReposito
     findOverviews: vi.fn().mockResolvedValue([]),
     findBreakdown: vi.fn(),
     findOwnedIds: vi.fn().mockResolvedValue([]),
-    insert: vi.fn(async (list) => ({ ...list, createdAt: new Date() })),
+    ensurePrivate: vi.fn().mockResolvedValue("private-list"),
+    insert: vi.fn(async (list) => ({ ...list, isPrivate: false, createdAt: new Date() })),
     update: vi.fn(async (_id, changes) => ({ ...storedList, ...changes })),
     delete: vi.fn().mockResolvedValue(undefined),
     findEntries: vi.fn().mockResolvedValue([]),

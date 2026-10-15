@@ -13,6 +13,7 @@ export function serializeList(list: ListOverview): TList {
     currency: list.currency,
     role: list.role,
     memberCount: list.memberCount,
+    isPrivate: list.isPrivate,
     count: list.count,
     expenseTotal: list.expenseTotal,
     incomeTotal: list.incomeTotal,

@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import { isUniqueViolation } from "@/lib/db-errors";
+import { ensurePrivateListId, moveToPrivateLists } from "@/lib/private-list";
 import type { TransactionList as TransactionListRow } from "@/generated/prisma/client";
 import { FEED_ORDER, afterCursor } from "@/features/transaction/lib/feed-query";
 import type { TransactionType } from "@/features/transaction/types";
@@ -35,6 +36,7 @@ export function toEntity(row: TransactionListRow): TransactionList {
     description: row.description,
     currency: row.currency,
     ownerId: row.ownerId,
+    isPrivate: row.privateOwnerId !== null,
     createdAt: row.createdAt,
   };
 }
@@ -76,7 +78,7 @@ export class PrismaListRepository implements ListRepository {
     const memberships = await prisma.transactionListMember.findMany({
       where: { userId, list: { archivedAt: null } },
       include: { list: { include: { _count: { select: { members: true } } } } },
-      orderBy: { list: { updatedAt: "desc" } },
+      orderBy: { list: { createdAt: "asc" } },
     });
     if (memberships.length === 0) return [];
 
@@ -88,12 +90,13 @@ export class PrismaListRepository implements ListRepository {
     });
     const totals = totalsBy(groups, "listId");
 
-    return memberships.map(({ list, role }) => ({
+    const overviews = memberships.map(({ list, role }) => ({
       ...toEntity(list),
       ...toListTotals(totals.get(list.id) ?? EMPTY_TOTALS),
       role,
       memberCount: list._count.members,
     }));
+    return overviews.sort((a, b) => Number(b.isPrivate) - Number(a.isPrivate));
   }
 
   async findBreakdown(listId: string) {
@@ -183,6 +186,10 @@ export class PrismaListRepository implements ListRepository {
     return rows.map((row) => row.id);
   }
 
+  async ensurePrivate(userId: string) {
+    return ensurePrivateListId(userId);
+  }
+
   async insert(list: NewTransactionList) {
     try {
       const row = await prisma.transactionList.create({
@@ -200,7 +207,10 @@ export class PrismaListRepository implements ListRepository {
   }
 
   async delete(listId: string) {
-    await prisma.transactionList.deleteMany({ where: { id: listId } });
+    await prisma.$transaction([
+      prisma.transaction.deleteMany({ where: { listId } }),
+      prisma.transactionList.deleteMany({ where: { id: listId } }),
+    ]);
   }
 
   async countOwnedTransactions(userId: string, transactionIds: string[]) {
@@ -216,10 +226,6 @@ export class PrismaListRepository implements ListRepository {
   }
 
   async unassign(listId: string, transactionId: string) {
-    const { count } = await prisma.transaction.updateMany({
-      where: { id: transactionId, listId },
-      data: { listId: null },
-    });
-    return count > 0;
+    return (await moveToPrivateLists(prisma, { listId, transactionId })) > 0;
   }
 }

@@ -161,8 +161,8 @@ model Transaction {
   recurringTransactionId String?
   recurringTransaction   RecurringTransaction? @relation(fields: [recurringTransactionId], references: [id], onDelete: SetNull)
 
-  listId String?
-  list   TransactionList? @relation(fields: [listId], references: [id], onDelete: SetNull)
+  listId String
+  list   TransactionList @relation(fields: [listId], references: [id], onDelete: NoAction)
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -192,7 +192,9 @@ model TransactionList {
   currency    String
 
   ownerId String
-  owner   User   @relation("TransactionListOwner", fields: [ownerId], references: [id])
+  owner   User   @relation("TransactionListOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+
+  privateOwnerId String? @unique
 
   archivedAt DateTime?
 

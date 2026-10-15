@@ -20,6 +20,7 @@ function refreshLists(queryClient: QueryClient) {
   return Promise.all([
     queryClient.invalidateQueries({ queryKey: listKeys.all }),
     queryClient.invalidateQueries({ queryKey: transactionKeys.lists }),
+    queryClient.invalidateQueries({ queryKey: transactionKeys.summaries }),
   ]);
 }
 
@@ -49,7 +50,7 @@ export function useCreateList() {
     networkMode: "always",
     mutationFn: (payload: TListPayload) => listService.createList({ id: crypto.randomUUID(), ...payload }),
     onSuccess: (created) => {
-      queryClient.setQueryData<TList[]>(listKeys.index, (lists) => [created, ...(lists ?? [])]);
+      queryClient.setQueryData<TList[]>(listKeys.index, (lists) => [...(lists ?? []), created]);
       void queryClient.invalidateQueries({ queryKey: listKeys.index });
     },
   });

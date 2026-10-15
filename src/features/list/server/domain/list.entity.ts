@@ -9,10 +9,11 @@ export interface TransactionList {
   description: string | null;
   currency: string;
   ownerId: string;
+  isPrivate: boolean;
   createdAt: Date;
 }
 
-export type NewTransactionList = Omit<TransactionList, "createdAt">;
+export type NewTransactionList = Omit<TransactionList, "createdAt" | "isPrivate">;
 
 export type ListChanges = Partial<Pick<TransactionList, "name" | "icon" | "color" | "description">>;
 

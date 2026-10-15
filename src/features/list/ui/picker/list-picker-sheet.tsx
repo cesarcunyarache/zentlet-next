@@ -8,6 +8,7 @@ import { Sheet } from "@/core/components/ui/sheet";
 import { CategoryEmoji } from "@/features/category/ui/category-emoji";
 import type { TTransaction } from "@/features/transaction/types";
 import { track } from "@/lib/observability/client";
+import { useListName } from "../../hooks/useListName";
 import { listErrorKey } from "../../lib/errors";
 import { useAddToList, useCreateList, useLists, useRemoveFromList } from "../../stores/list.store";
 import type { TList, TListPayload } from "../../types";
@@ -22,6 +23,7 @@ interface ListPickerSheetProps {
 export function ListPickerSheet({ transaction, onClose, onDone }: ListPickerSheetProps) {
   const t = useTranslations("lists");
   const { lists, isLoading } = useLists();
+  const listName = useListName();
   const add = useAddToList();
   const remove = useRemoveFromList();
   const create = useCreateList();
@@ -41,7 +43,7 @@ export function ListPickerSheet({ transaction, onClose, onDone }: ListPickerShee
       {
         onSuccess: () => {
           track("list_entries_added", { count: 1, source: "transaction" });
-          finish(t("toast.moved", { name: list.name }));
+          finish(t("toast.moved", { name: listName(list) }));
         },
         onError: (cause) => fail(cause, list),
       },
@@ -110,7 +112,7 @@ export function ListPickerSheet({ transaction, onClose, onDone }: ListPickerShee
                   >
                     <CategoryEmoji category={list} className="size-11 rounded-2xl text-xl" />
                     <span className="min-w-0 flex-1">
-                      <span className="text-app-fg block truncate text-base font-semibold">{list.name}</span>
+                      <span className="text-app-fg block truncate text-base font-semibold">{listName(list)}</span>
                       {list.memberCount > 1 ? <span className="text-app-muted block text-xs">{t("shared")}</span> : null}
                     </span>
                     {isCurrent ? <Check className="text-app-fg size-5 shrink-0" strokeWidth={2.4} /> : null}
@@ -144,7 +146,7 @@ export function ListPickerSheet({ transaction, onClose, onDone }: ListPickerShee
             <Plus className="size-5" strokeWidth={2.2} aria-hidden />
             {t("create")}
           </button>
-          {transaction?.listId ? (
+          {transaction?.listId && !lists.find((list) => list.id === transaction.listId)?.isPrivate ? (
             <button
               type="button"
               disabled={isBusy}

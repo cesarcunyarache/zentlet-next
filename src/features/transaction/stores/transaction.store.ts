@@ -12,7 +12,7 @@ import {
 } from "@tanstack/react-query";
 import { offlineSyncState } from "@/core/offline/offline-queue";
 import { transactionService } from "../services/transaction.service";
-import type { DateRange, TNewTransaction, TTransaction, TTransactionPayload, TransactionFilters } from "../types";
+import type { SummaryFilters, TNewTransaction, TTransaction, TTransactionPayload, TransactionFilters } from "../types";
 import { transactionKeys, transactionMutationKeys } from "./transaction.keys";
 import {
   fetchSummaryWithPending,
@@ -55,12 +55,12 @@ export function useTransactionFeed(filters: TransactionFilters) {
   };
 }
 
-export function useTransactionSummary(range: DateRange) {
+export function useTransactionSummary(filters: SummaryFilters) {
   const queryClient = useQueryClient();
 
   return useQuery({
-    queryKey: transactionKeys.summary(range),
-    queryFn: () => fetchSummaryWithPending(queryClient, range),
+    queryKey: transactionKeys.summary(filters),
+    queryFn: () => fetchSummaryWithPending(queryClient, filters),
     placeholderData: keepPreviousData,
   });
 }

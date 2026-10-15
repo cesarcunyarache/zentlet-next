@@ -1,6 +1,7 @@
 import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { ensurePrivateListId } from "@/lib/private-list";
 import { GET as listInbox } from "@/app/api/inbox/route";
 import { POST as acceptRoute } from "@/app/api/inbox/[id]/accept/route";
 import { POST as dismissRoute } from "@/app/api/inbox/[id]/dismiss/route";
@@ -163,7 +164,15 @@ describe("movimientos por correo", () => {
   it("marca como posible duplicado lo que ya registraste a mano", async () => {
     const food = await prisma.category.create({ data: { userId, name: "Comida", icon: "🍜", color: "#FDDCC4" } });
     const manual = await prisma.transaction.create({
-      data: { userId, type: "expense", amount: 14.5, categoryId: food.id, description: "KFC", transactionDate: new Date("2026-09-25") },
+      data: {
+        userId,
+        type: "expense",
+        amount: 14.5,
+        categoryId: food.id,
+        description: "KFC",
+        transactionDate: new Date("2026-09-25"),
+        listId: await ensurePrivateListId(userId),
+      },
     });
     await receive(BCP, bcpBody("IKF A53 PIURA 21", "14.50", "1"));
     expect((await pending())[0].duplicateOfId).toBe(manual.id);

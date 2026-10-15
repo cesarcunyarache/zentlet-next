@@ -25,7 +25,7 @@ describe("CreateInviteUseCase", () => {
   it("guarda solo el hash del token y vence en 7 días", async () => {
     const invites = fakeInvites();
 
-    const result = await new CreateInviteUseCase(invites, fakeMembers(), fakeTokens()).execute(
+    const result = await new CreateInviteUseCase(invites, fakeLists(), fakeMembers(), fakeTokens()).execute(
       OWNER,
       LIST_ID,
       { role: "viewer" },
@@ -39,7 +39,7 @@ describe("CreateInviteUseCase", () => {
   });
 
   it("solo el dueño invita", async () => {
-    const result = await new CreateInviteUseCase(fakeInvites(), membersWithRoles({ ed: "editor" }), fakeTokens()).execute(
+    const result = await new CreateInviteUseCase(fakeInvites(), fakeLists(), membersWithRoles({ ed: "editor" }), fakeTokens()).execute(
       "ed",
       LIST_ID,
       { role: "viewer" },
@@ -136,7 +136,7 @@ describe("EmailInviteUseCase", () => {
     const invites = fakeInvites();
     const mailer = { send: vi.fn().mockResolvedValue(sent) };
     const useCase = new EmailInviteUseCase(
-      new CreateInviteUseCase(invites, members, fakeTokens()),
+      new CreateInviteUseCase(invites, fakeLists(), members, fakeTokens()),
       invites,
       fakeLists(),
       members,

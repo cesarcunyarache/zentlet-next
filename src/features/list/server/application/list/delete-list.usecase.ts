@@ -13,6 +13,7 @@ export class DeleteListUseCase {
     const membership = await this.members.find(listId, userId);
     if (!membership) return fail("not_found");
     if (!canManage(membership.role)) return fail("forbidden");
+    if ((await this.lists.findById(listId))?.isPrivate) return fail("forbidden");
 
     await this.lists.delete(listId);
     return { ok: true as const };

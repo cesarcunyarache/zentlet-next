@@ -23,6 +23,7 @@ import {
 } from "../../stores/list.store";
 import type { TListDetail, TListEntry, TListPayload } from "../../types";
 import { ListFormSheet } from "../form/list-form-sheet";
+import { useListName } from "../../hooks/useListName";
 import { ShareSheet } from "../share/share-sheet";
 import { AddEntriesSheet } from "./add-entries-sheet";
 import { ListEntrySheet } from "./list-entry-sheet";
@@ -74,6 +75,7 @@ function LoadedList({ list }: { list: TListDetail }) {
 
   const currency = currencyOf(list.currency);
   const isOwner = list.role === "owner";
+  const listName = useListName();
   const canContribute = list.role !== "viewer";
   const isShared = list.memberCount > 1;
   const transactions = useMemo(() => feed.entries.map(toTransaction), [feed.entries]);
@@ -133,21 +135,23 @@ function LoadedList({ list }: { list: TListDetail }) {
         <CategoryEmoji category={list} className="size-14 rounded-[20px] text-[28px]" />
         <div className="min-w-0 flex-1">
           <h1 className="font-display m-0 truncate text-[26px] leading-tight font-bold tracking-[-0.03em]">
-            {list.name}
+            {listName(list)}
           </h1>
           <p className="text-app-muted m-0 text-[13px]">
             {t("count", { count: list.count })} · {t("detail.currency", { currency: list.currency })}
           </p>
         </div>
-        <button
-          type="button"
-          aria-label={t("detail.share")}
-          onClick={() => setSheet("share")}
-          className="bg-app-fill hover:bg-app-fill-strong text-app-muted hover:text-app-fg grid size-10 shrink-0 place-items-center rounded-full transition-colors"
-        >
-          <Users className="size-[18px]" strokeWidth={1.9} />
-        </button>
-        {isOwner ? (
+        {list.isPrivate ? null : (
+          <button
+            type="button"
+            aria-label={t("detail.share")}
+            onClick={() => setSheet("share")}
+            className="bg-app-fill hover:bg-app-fill-strong text-app-muted hover:text-app-fg grid size-10 shrink-0 place-items-center rounded-full transition-colors"
+          >
+            <Users className="size-[18px]" strokeWidth={1.9} />
+          </button>
+        )}
+        {isOwner && !list.isPrivate ? (
           <button
             type="button"
             aria-label={t("detail.edit")}
@@ -236,7 +240,7 @@ function LoadedList({ list }: { list: TListDetail }) {
         entry={selected}
         author={selected && isShared ? membersById.get(selected.authorId) : undefined}
         currency={currency}
-        canRemove={isOwner || selected?.authorId === userId}
+        canRemove={!list.isPrivate && (isOwner || selected?.authorId === userId)}
         isRemoving={removeEntry.isPending}
         onOpenChange={(open) => !open && setSelected(null)}
         onRemove={removeSelected}

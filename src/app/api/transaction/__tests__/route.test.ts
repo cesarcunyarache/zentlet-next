@@ -18,6 +18,7 @@ vi.mock("@/lib/prisma", () => ({
       deleteMany: vi.fn(),
     },
     category: { findFirst: vi.fn() },
+    transactionList: { findUnique: vi.fn() },
     $queryRaw: vi.fn(),
   },
 }));
@@ -75,6 +76,7 @@ beforeEach(() => {
   db.category.findFirst.mockResolvedValue({ id: "health" } as never);
   db.transaction.create.mockResolvedValue(row("user-1") as never);
   db.$queryRaw.mockResolvedValue([{ count: 1 }] as never);
+  db.transactionList.findUnique.mockResolvedValue({ id: "private-list" } as never);
 });
 
 describe("POST /api/transaction", () => {

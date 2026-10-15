@@ -17,7 +17,7 @@ export class AssignEntriesUseCase {
     const list = membership && (await this.lists.findById(listId));
     if (!membership || !list) return fail("not_found");
     if (!canContribute(membership.role)) return fail("forbidden");
-    if (list.currency !== (await this.currency.of(userId))) return fail("currency_mismatch");
+    if (!list.isPrivate && list.currency !== (await this.currency.of(userId))) return fail("currency_mismatch");
 
     const ids = [...new Set(transactionIds)];
     if ((await this.lists.countOwnedTransactions(userId, ids)) !== ids.length) return fail("transaction_not_found");

@@ -2,7 +2,7 @@ import prisma from "@/lib/prisma";
 import { isForeignKeyViolation, isUniqueViolation } from "@/lib/db-errors";
 import type { Transaction as TransactionRow } from "@/generated/prisma/client";
 import { FEED_ORDER, afterCursor, feedWhere, summaryWhere, toSummary } from "../../lib/feed-query";
-import type { DateRange, TransactionFilters } from "../../types";
+import type { SummaryFilters, TransactionFilters } from "../../types";
 import type { FeedCursor, NewTransaction, TransactionChanges } from "../domain/transaction.entity";
 import type { TransactionRepository } from "../domain/transaction.repository";
 import { toDomain } from "./transaction.mapper";
@@ -28,10 +28,10 @@ export class PrismaTransactionRepository implements TransactionRepository {
     return rows.map(toDomain);
   }
 
-  async summarize(userId: string, range: DateRange) {
+  async summarize(userId: string, filters: SummaryFilters) {
     const groups = await prisma.transaction.groupBy({
       by: ["categoryId", "type"],
-      where: summaryWhere(userId, range),
+      where: summaryWhere(userId, filters),
       _sum: { amount: true },
       _count: { _all: true },
     });

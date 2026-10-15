@@ -36,14 +36,15 @@ export const createTransactionSchema = z.object({
   id: z.uuid(),
   ...transactionFields,
   recurrence: z.enum(RECURRENCE_FREQUENCIES).optional(),
+  listId: z.uuid().nullable().optional(),
 });
 
 export const updateTransactionSchema = z.object(transactionFields).partial();
 
-const dateRangeFields = { from: isoDate.optional(), to: isoDate.optional() };
+const summaryFields = { from: isoDate.optional(), to: isoDate.optional(), listId: z.uuid().optional() };
 
 export const transactionSummaryQuerySchema = z.object({
-  ...dateRangeFields,
+  ...summaryFields,
   ids: z
     .string()
     .optional()
@@ -52,7 +53,7 @@ export const transactionSummaryQuerySchema = z.object({
 });
 
 export const transactionListQuerySchema = z.object({
-  ...dateRangeFields,
+  ...summaryFields,
   type: transactionFields.type.optional(),
   categoryId: transactionFields.categoryId.optional(),
   q: z.string().trim().max(MAX_SEARCH_LENGTH).optional(),

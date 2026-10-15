@@ -12,6 +12,7 @@ export class HandOverListsUseCase {
 
   async execute(ownerId: string) {
     for (const listId of await this.lists.findOwnedIds(ownerId)) {
+      if ((await this.lists.findById(listId))?.isPrivate) continue;
       const successor = pickSuccessor(await this.members.findAll(listId), ownerId);
       if (!successor) {
         await this.lists.delete(listId);

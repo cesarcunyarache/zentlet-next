@@ -16,6 +16,7 @@ export class RemoveEntryUseCase {
     const authorId = await this.lists.findEntryAuthor(listId, transactionId);
     if (!authorId) return fail("transaction_not_found");
     if (!canRemoveEntry(membership.role, authorId === userId)) return fail("forbidden");
+    if ((await this.lists.findById(listId))?.isPrivate) return fail("forbidden");
 
     await this.lists.unassign(listId, transactionId);
     return { ok: true as const };

@@ -3,6 +3,7 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { APIError, createAuthMiddleware } from "better-auth/api";
 import { captcha } from "better-auth/plugins";
 import { cancelUserSubscription } from "@/features/billing/server/cancel";
+import { ensurePrivateListId } from "@/lib/private-list";
 import { listUseCases } from "@/features/list/server/infrastructure/list.container";
 import { LEGAL_CONSENT_HEADER, LEGAL_VERSION } from "@/features/legal/config";
 import { recordSignUpConsent } from "@/features/legal/server/consent";
@@ -187,6 +188,10 @@ export const auth = betterAuth({
       create: {
         after: async (user, context: HookContext) => {
           await recordSignUpConsent(user.id);
+          // si falla, se crea al pedir las listas o al guardar el primer movimiento
+          await ensurePrivateListId(user.id).catch((error) =>
+            logger.error({ err: error, userId: user.id }, "list.private_create_failed"),
+          );
           trackServerEvent(user.id, "user_signed_up", { method: authMethod(context) });
         },
       },

@@ -4,12 +4,10 @@ import { Button, cn } from "@heroui/react";
 import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Sheet } from "@/core/components/ui/sheet";
-import { CategoryEmoji } from "@/features/category/ui/category-emoji";
 import { GhostInput } from "@/features/category/ui/ghost-input";
 import { useDeleteConfirmation } from "@/features/transaction/hooks/useDeleteConfirmation";
 import { useListForm } from "../../hooks/useListForm";
 import type { TList, TListPayload } from "../../types";
-import { ListIconGrid } from "./list-icon-grid";
 
 interface ListFormSheetProps {
   isOpen: boolean;
@@ -21,8 +19,27 @@ interface ListFormSheetProps {
   onDelete?: () => void;
 }
 
-export function ListFormSheet({ isOpen, list, isSaving, error, onClose, onSubmit, onDelete }: ListFormSheetProps) {
+export function ListFormSheet(props: ListFormSheetProps) {
+  return <ListFormSheetContent key={props.list?.id ?? "new"} {...props} />;
+}
+
+function ListFormSheetContent({
+  isOpen,
+  list,
+  isSaving,
+  error,
+  onClose,
+  onSubmit,
+  onDelete,
+}: ListFormSheetProps) {
   const t = useTranslations("lists.form");
+  const tActions = useTranslations("common.actions");
+  const form = useListForm(list);
+  const canSave = form.isValid && !isSaving;
+
+  function submit() {
+    if (canSave) onSubmit(form.payload);
+  }
 
   return (
     <Sheet
@@ -31,66 +48,42 @@ export function ListFormSheet({ isOpen, list, isSaving, error, onClose, onSubmit
       title={t(list ? "edit" : "new")}
       hideTitle
       bodyClassName="flex flex-col"
-    >
-      <div className="my-auto flex flex-col pb-4">
-        <ListForm
-          key={list?.id ?? "new"}
-          list={list}
-          isSaving={isSaving}
-          error={error}
-          onSubmit={onSubmit}
-          onDelete={onDelete}
-        />
-      </div>
-    </Sheet>
-  );
-}
-
-interface ListFormProps {
-  list: TList | null;
-  isSaving: boolean;
-  error: string | null;
-  onSubmit: (payload: TListPayload) => void;
-  onDelete?: () => void;
-}
-
-function ListForm({ list, isSaving, error, onSubmit, onDelete }: ListFormProps) {
-  const t = useTranslations("lists.form");
-  const tActions = useTranslations("common.actions");
-  const form = useListForm(list);
-
-  return (
-    <form
-      className="flex flex-col gap-6"
-      onSubmit={(event) => {
-        event.preventDefault();
-        if (form.isValid && !isSaving) onSubmit(form.payload);
-      }}
-    >
-      <CategoryEmoji category={form.icon} className="size-24 rounded-[28px] text-[44px]" />
-      <GhostInput
-        label={t("nameLabel")}
-        value={form.name}
-        inputSize="text-4xl sm:text-3xl"
-        placeholder={t("namePlaceholder")}
-        onChange={form.setName}
-      />
-      <ListIconGrid value={form.icon} onChange={form.setIcon} />
-
-      {error ? (
-        <p role="alert" className="text-app-expense m-0 text-sm">
-          {error}
-        </p>
-      ) : null}
-
-      <div className="flex flex-col gap-2.5">
-        <Button type="submit" className="w-full" isDisabled={!form.isValid || isSaving}>
-          <Check />
+      footer={
+        <Button
+          type="button"
+          onPress={submit}
+          isDisabled={!canSave}
+          className="bg-app-fg text-app-surface disabled:bg-app-fill-strong disabled:text-app-muted min-h-[54px] w-full rounded-2xl text-base font-semibold transition-[background-color,transform] active:scale-[0.98]"
+        >
+          <Check className="size-[17px]" strokeWidth={2.4} />
           {tActions("save")}
         </Button>
+      }
+    >
+      <form
+        className="my-auto flex flex-col gap-6 pt-6 pb-2"
+        onSubmit={(event) => {
+          event.preventDefault();
+          submit();
+        }}
+      >
+        <GhostInput
+          label={t("nameLabel")}
+          value={form.name}
+          inputSize="text-4xl sm:text-3xl"
+          placeholder={t("namePlaceholder")}
+          onChange={form.setName}
+        />
+
+        {error ? (
+          <p role="alert" className="text-app-expense m-0 text-sm">
+            {error}
+          </p>
+        ) : null}
+
         {list && onDelete ? <DeleteListButton listId={list.id} onConfirm={onDelete} /> : null}
-      </div>
-    </form>
+      </form>
+    </Sheet>
   );
 }
 

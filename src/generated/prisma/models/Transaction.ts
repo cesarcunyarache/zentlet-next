@@ -230,7 +230,7 @@ export type TransactionGroupByOutputType = {
   reference: string | null
   transactionDate: Date
   recurringTransactionId: string | null
-  listId: string | null
+  listId: string
   userId: string
   createdAt: Date
   updatedAt: Date
@@ -268,13 +268,13 @@ export type TransactionWhereInput = {
   reference?: Prisma.StringNullableFilter<"Transaction"> | string | null
   transactionDate?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   recurringTransactionId?: Prisma.StringNullableFilter<"Transaction"> | string | null
-  listId?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  listId?: Prisma.StringFilter<"Transaction"> | string
   userId?: Prisma.StringFilter<"Transaction"> | string
   createdAt?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   category?: Prisma.XOR<Prisma.CategoryScalarRelationFilter, Prisma.CategoryWhereInput>
   recurringTransaction?: Prisma.XOR<Prisma.RecurringTransactionNullableScalarRelationFilter, Prisma.RecurringTransactionWhereInput> | null
-  list?: Prisma.XOR<Prisma.TransactionListNullableScalarRelationFilter, Prisma.TransactionListWhereInput> | null
+  list?: Prisma.XOR<Prisma.TransactionListScalarRelationFilter, Prisma.TransactionListWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
@@ -287,7 +287,7 @@ export type TransactionOrderByWithRelationInput = {
   reference?: Prisma.SortOrderInput | Prisma.SortOrder
   transactionDate?: Prisma.SortOrder
   recurringTransactionId?: Prisma.SortOrderInput | Prisma.SortOrder
-  listId?: Prisma.SortOrderInput | Prisma.SortOrder
+  listId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -310,13 +310,13 @@ export type TransactionWhereUniqueInput = Prisma.AtLeast<{
   reference?: Prisma.StringNullableFilter<"Transaction"> | string | null
   transactionDate?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   recurringTransactionId?: Prisma.StringNullableFilter<"Transaction"> | string | null
-  listId?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  listId?: Prisma.StringFilter<"Transaction"> | string
   userId?: Prisma.StringFilter<"Transaction"> | string
   createdAt?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   category?: Prisma.XOR<Prisma.CategoryScalarRelationFilter, Prisma.CategoryWhereInput>
   recurringTransaction?: Prisma.XOR<Prisma.RecurringTransactionNullableScalarRelationFilter, Prisma.RecurringTransactionWhereInput> | null
-  list?: Prisma.XOR<Prisma.TransactionListNullableScalarRelationFilter, Prisma.TransactionListWhereInput> | null
+  list?: Prisma.XOR<Prisma.TransactionListScalarRelationFilter, Prisma.TransactionListWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id" | "recurringTransactionId_transactionDate">
 
@@ -329,7 +329,7 @@ export type TransactionOrderByWithAggregationInput = {
   reference?: Prisma.SortOrderInput | Prisma.SortOrder
   transactionDate?: Prisma.SortOrder
   recurringTransactionId?: Prisma.SortOrderInput | Prisma.SortOrder
-  listId?: Prisma.SortOrderInput | Prisma.SortOrder
+  listId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -352,7 +352,7 @@ export type TransactionScalarWhereWithAggregatesInput = {
   reference?: Prisma.StringNullableWithAggregatesFilter<"Transaction"> | string | null
   transactionDate?: Prisma.DateTimeWithAggregatesFilter<"Transaction"> | Date | string
   recurringTransactionId?: Prisma.StringNullableWithAggregatesFilter<"Transaction"> | string | null
-  listId?: Prisma.StringNullableWithAggregatesFilter<"Transaction"> | string | null
+  listId?: Prisma.StringWithAggregatesFilter<"Transaction"> | string
   userId?: Prisma.StringWithAggregatesFilter<"Transaction"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Transaction"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Transaction"> | Date | string
@@ -369,7 +369,7 @@ export type TransactionCreateInput = {
   updatedAt?: Date | string
   category: Prisma.CategoryCreateNestedOneWithoutTransactionsInput
   recurringTransaction?: Prisma.RecurringTransactionCreateNestedOneWithoutTransactionsInput
-  list?: Prisma.TransactionListCreateNestedOneWithoutTransactionsInput
+  list: Prisma.TransactionListCreateNestedOneWithoutTransactionsInput
   user: Prisma.UserCreateNestedOneWithoutTransactionsInput
 }
 
@@ -382,7 +382,7 @@ export type TransactionUncheckedCreateInput = {
   reference?: string | null
   transactionDate: Date | string
   recurringTransactionId?: string | null
-  listId?: string | null
+  listId: string
   userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -399,7 +399,7 @@ export type TransactionUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   category?: Prisma.CategoryUpdateOneRequiredWithoutTransactionsNestedInput
   recurringTransaction?: Prisma.RecurringTransactionUpdateOneWithoutTransactionsNestedInput
-  list?: Prisma.TransactionListUpdateOneWithoutTransactionsNestedInput
+  list?: Prisma.TransactionListUpdateOneRequiredWithoutTransactionsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
 }
 
@@ -412,7 +412,7 @@ export type TransactionUncheckedUpdateInput = {
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recurringTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  listId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  listId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -427,7 +427,7 @@ export type TransactionCreateManyInput = {
   reference?: string | null
   transactionDate: Date | string
   recurringTransactionId?: string | null
-  listId?: string | null
+  listId: string
   userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -453,7 +453,7 @@ export type TransactionUncheckedUpdateManyInput = {
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recurringTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  listId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  listId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -714,7 +714,7 @@ export type TransactionCreateWithoutUserInput = {
   updatedAt?: Date | string
   category: Prisma.CategoryCreateNestedOneWithoutTransactionsInput
   recurringTransaction?: Prisma.RecurringTransactionCreateNestedOneWithoutTransactionsInput
-  list?: Prisma.TransactionListCreateNestedOneWithoutTransactionsInput
+  list: Prisma.TransactionListCreateNestedOneWithoutTransactionsInput
 }
 
 export type TransactionUncheckedCreateWithoutUserInput = {
@@ -726,7 +726,7 @@ export type TransactionUncheckedCreateWithoutUserInput = {
   reference?: string | null
   transactionDate: Date | string
   recurringTransactionId?: string | null
-  listId?: string | null
+  listId: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -769,7 +769,7 @@ export type TransactionScalarWhereInput = {
   reference?: Prisma.StringNullableFilter<"Transaction"> | string | null
   transactionDate?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   recurringTransactionId?: Prisma.StringNullableFilter<"Transaction"> | string | null
-  listId?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  listId?: Prisma.StringFilter<"Transaction"> | string
   userId?: Prisma.StringFilter<"Transaction"> | string
   createdAt?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Transaction"> | Date | string
@@ -785,7 +785,7 @@ export type TransactionCreateWithoutCategoryInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   recurringTransaction?: Prisma.RecurringTransactionCreateNestedOneWithoutTransactionsInput
-  list?: Prisma.TransactionListCreateNestedOneWithoutTransactionsInput
+  list: Prisma.TransactionListCreateNestedOneWithoutTransactionsInput
   user: Prisma.UserCreateNestedOneWithoutTransactionsInput
 }
 
@@ -797,7 +797,7 @@ export type TransactionUncheckedCreateWithoutCategoryInput = {
   reference?: string | null
   transactionDate: Date | string
   recurringTransactionId?: string | null
-  listId?: string | null
+  listId: string
   userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -893,7 +893,7 @@ export type TransactionCreateWithoutRecurringTransactionInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   category: Prisma.CategoryCreateNestedOneWithoutTransactionsInput
-  list?: Prisma.TransactionListCreateNestedOneWithoutTransactionsInput
+  list: Prisma.TransactionListCreateNestedOneWithoutTransactionsInput
   user: Prisma.UserCreateNestedOneWithoutTransactionsInput
 }
 
@@ -905,7 +905,7 @@ export type TransactionUncheckedCreateWithoutRecurringTransactionInput = {
   description?: string | null
   reference?: string | null
   transactionDate: Date | string
-  listId?: string | null
+  listId: string
   userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -946,7 +946,7 @@ export type TransactionCreateManyUserInput = {
   reference?: string | null
   transactionDate: Date | string
   recurringTransactionId?: string | null
-  listId?: string | null
+  listId: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -962,7 +962,7 @@ export type TransactionUpdateWithoutUserInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   category?: Prisma.CategoryUpdateOneRequiredWithoutTransactionsNestedInput
   recurringTransaction?: Prisma.RecurringTransactionUpdateOneWithoutTransactionsNestedInput
-  list?: Prisma.TransactionListUpdateOneWithoutTransactionsNestedInput
+  list?: Prisma.TransactionListUpdateOneRequiredWithoutTransactionsNestedInput
 }
 
 export type TransactionUncheckedUpdateWithoutUserInput = {
@@ -974,7 +974,7 @@ export type TransactionUncheckedUpdateWithoutUserInput = {
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recurringTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  listId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  listId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -988,7 +988,7 @@ export type TransactionUncheckedUpdateManyWithoutUserInput = {
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recurringTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  listId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  listId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1001,7 +1001,7 @@ export type TransactionCreateManyCategoryInput = {
   reference?: string | null
   transactionDate: Date | string
   recurringTransactionId?: string | null
-  listId?: string | null
+  listId: string
   userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1017,7 +1017,7 @@ export type TransactionUpdateWithoutCategoryInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recurringTransaction?: Prisma.RecurringTransactionUpdateOneWithoutTransactionsNestedInput
-  list?: Prisma.TransactionListUpdateOneWithoutTransactionsNestedInput
+  list?: Prisma.TransactionListUpdateOneRequiredWithoutTransactionsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
 }
 
@@ -1029,7 +1029,7 @@ export type TransactionUncheckedUpdateWithoutCategoryInput = {
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recurringTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  listId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  listId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1043,7 +1043,7 @@ export type TransactionUncheckedUpdateManyWithoutCategoryInput = {
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recurringTransactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  listId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  listId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1113,7 +1113,7 @@ export type TransactionCreateManyRecurringTransactionInput = {
   description?: string | null
   reference?: string | null
   transactionDate: Date | string
-  listId?: string | null
+  listId: string
   userId: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1129,7 +1129,7 @@ export type TransactionUpdateWithoutRecurringTransactionInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   category?: Prisma.CategoryUpdateOneRequiredWithoutTransactionsNestedInput
-  list?: Prisma.TransactionListUpdateOneWithoutTransactionsNestedInput
+  list?: Prisma.TransactionListUpdateOneRequiredWithoutTransactionsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
 }
 
@@ -1141,7 +1141,7 @@ export type TransactionUncheckedUpdateWithoutRecurringTransactionInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  listId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  listId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1155,7 +1155,7 @@ export type TransactionUncheckedUpdateManyWithoutRecurringTransactionInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   transactionDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  listId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  listId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1178,7 +1178,7 @@ export type TransactionSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   updatedAt?: boolean
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
   recurringTransaction?: boolean | Prisma.Transaction$recurringTransactionArgs<ExtArgs>
-  list?: boolean | Prisma.Transaction$listArgs<ExtArgs>
+  list?: boolean | Prisma.TransactionListDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["transaction"]>
 
@@ -1197,7 +1197,7 @@ export type TransactionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   updatedAt?: boolean
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
   recurringTransaction?: boolean | Prisma.Transaction$recurringTransactionArgs<ExtArgs>
-  list?: boolean | Prisma.Transaction$listArgs<ExtArgs>
+  list?: boolean | Prisma.TransactionListDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["transaction"]>
 
@@ -1216,7 +1216,7 @@ export type TransactionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   updatedAt?: boolean
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
   recurringTransaction?: boolean | Prisma.Transaction$recurringTransactionArgs<ExtArgs>
-  list?: boolean | Prisma.Transaction$listArgs<ExtArgs>
+  list?: boolean | Prisma.TransactionListDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["transaction"]>
 
@@ -1239,19 +1239,19 @@ export type TransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type TransactionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
   recurringTransaction?: boolean | Prisma.Transaction$recurringTransactionArgs<ExtArgs>
-  list?: boolean | Prisma.Transaction$listArgs<ExtArgs>
+  list?: boolean | Prisma.TransactionListDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type TransactionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
   recurringTransaction?: boolean | Prisma.Transaction$recurringTransactionArgs<ExtArgs>
-  list?: boolean | Prisma.Transaction$listArgs<ExtArgs>
+  list?: boolean | Prisma.TransactionListDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type TransactionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
   recurringTransaction?: boolean | Prisma.Transaction$recurringTransactionArgs<ExtArgs>
-  list?: boolean | Prisma.Transaction$listArgs<ExtArgs>
+  list?: boolean | Prisma.TransactionListDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
@@ -1260,7 +1260,7 @@ export type $TransactionPayload<ExtArgs extends runtime.Types.Extensions.Interna
   objects: {
     category: Prisma.$CategoryPayload<ExtArgs>
     recurringTransaction: Prisma.$RecurringTransactionPayload<ExtArgs> | null
-    list: Prisma.$TransactionListPayload<ExtArgs> | null
+    list: Prisma.$TransactionListPayload<ExtArgs>
     user: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1272,7 +1272,7 @@ export type $TransactionPayload<ExtArgs extends runtime.Types.Extensions.Interna
     reference: string | null
     transactionDate: Date
     recurringTransactionId: string | null
-    listId: string | null
+    listId: string
     userId: string
     createdAt: Date
     updatedAt: Date
@@ -1672,7 +1672,7 @@ export interface Prisma__TransactionClient<T, Null = never, ExtArgs extends runt
   readonly [Symbol.toStringTag]: "PrismaPromise"
   category<T extends Prisma.CategoryDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CategoryDefaultArgs<ExtArgs>>): Prisma.Prisma__CategoryClient<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   recurringTransaction<T extends Prisma.Transaction$recurringTransactionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$recurringTransactionArgs<ExtArgs>>): Prisma.Prisma__RecurringTransactionClient<runtime.Types.Result.GetResult<Prisma.$RecurringTransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  list<T extends Prisma.Transaction$listArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$listArgs<ExtArgs>>): Prisma.Prisma__TransactionListClient<runtime.Types.Result.GetResult<Prisma.$TransactionListPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  list<T extends Prisma.TransactionListDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TransactionListDefaultArgs<ExtArgs>>): Prisma.Prisma__TransactionListClient<runtime.Types.Result.GetResult<Prisma.$TransactionListPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2132,25 +2132,6 @@ export type Transaction$recurringTransactionArgs<ExtArgs extends runtime.Types.E
    */
   include?: Prisma.RecurringTransactionInclude<ExtArgs> | null
   where?: Prisma.RecurringTransactionWhereInput
-}
-
-/**
- * Transaction.list
- */
-export type Transaction$listArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the TransactionList
-   */
-  select?: Prisma.TransactionListSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the TransactionList
-   */
-  omit?: Prisma.TransactionListOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.TransactionListInclude<ExtArgs> | null
-  where?: Prisma.TransactionListWhereInput
 }
 
 /**

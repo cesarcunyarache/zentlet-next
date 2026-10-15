@@ -1,5 +1,5 @@
 import type {
-  DateRange,
+  SummaryFilters,
   TransactionFilters,
   TransactionSummary,
 } from "../../types";
@@ -22,7 +22,7 @@ export interface TransactionRepository {
     take: number,
   ): Promise<Transaction[]>;
 
-  summarize(userId: string, range: DateRange): Promise<TransactionSummary>;
+  summarize(userId: string, filters: SummaryFilters): Promise<TransactionSummary>;
 
   findExistingIds(userId: string, ids: string[]): Promise<string[]>;
 

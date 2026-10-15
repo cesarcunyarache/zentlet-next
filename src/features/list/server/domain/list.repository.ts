@@ -17,6 +17,8 @@ export interface ListRepository {
 
   findOwnedIds(ownerId: string): Promise<string[]>;
 
+  ensurePrivate(userId: string): Promise<string>;
+
   insert(list: NewTransactionList): Promise<TransactionList | "id_taken">;
 
   update(listId: string, changes: ListChanges): Promise<TransactionList>;

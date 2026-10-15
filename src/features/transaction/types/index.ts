@@ -26,7 +26,11 @@ export interface DateRange {
   to?: string;
 }
 
-export interface TransactionFilters extends DateRange {
+export interface SummaryFilters extends DateRange {
+  listId?: string;
+}
+
+export interface TransactionFilters extends SummaryFilters {
   type?: TransactionType;
   categoryId?: string;
   q?: string;

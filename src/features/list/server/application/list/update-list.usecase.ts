@@ -14,6 +14,7 @@ export class UpdateListUseCase {
     const membership = await this.members.find(listId, userId);
     if (!membership) return fail("not_found");
     if (!canManage(membership.role)) return fail("forbidden");
+    if ((await this.lists.findById(listId))?.isPrivate) return fail("forbidden");
 
     return { list: await this.lists.update(listId, input) };
   }

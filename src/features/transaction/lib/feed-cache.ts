@@ -1,5 +1,12 @@
 import type { InfiniteData } from "@tanstack/react-query";
-import type { DateRange, TTransaction, TransactionFilters, TransactionPage, TransactionSummary } from "../types";
+import type {
+  DateRange,
+  SummaryFilters,
+  TTransaction,
+  TransactionFilters,
+  TransactionPage,
+  TransactionSummary,
+} from "../types";
 
 export type FeedData = InfiniteData<TransactionPage, string | null>;
 
@@ -7,8 +14,12 @@ export function inRange(date: string, { from, to }: DateRange) {
   return (!from || date >= from) && (!to || date < to);
 }
 
+export function matchesSummary(tx: TTransaction, { listId, ...range }: SummaryFilters) {
+  return inRange(tx.transactionDate, range) && (!listId || tx.listId === listId);
+}
+
 export function matchesFilters(tx: TTransaction, filters: TransactionFilters) {
-  if (!inRange(tx.transactionDate, filters)) return false;
+  if (!matchesSummary(tx, filters)) return false;
   if (filters.type && tx.type !== filters.type) return false;
   if (filters.categoryId && tx.categoryId !== filters.categoryId) return false;
   if (filters.q && !tx.description.toLowerCase().includes(filters.q.toLowerCase())) return false;
