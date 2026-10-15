@@ -41,7 +41,7 @@ export async function scanReceiptImage(userId: string, request: ReceiptScanReque
       operation: OPERATION,
       prompt: buildReceiptScanPrompt(limitPromptCategories(parsed.data.categories), parsed.data.today),
       schema: receiptExtractionSchema,
-      image: request.image,
+      file: request.image,
       timeoutMs: TIMEOUT_MS,
     })) as ReceiptExtraction;
 

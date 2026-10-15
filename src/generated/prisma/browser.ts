@@ -167,3 +167,18 @@ export type InboxTransaction = Prisma.InboxTransactionModel
  * 
  */
 export type MerchantRule = Prisma.MerchantRuleModel
+/**
+ * Model WhatsappLink
+ * 
+ */
+export type WhatsappLink = Prisma.WhatsappLinkModel
+/**
+ * Model WhatsappLinkCode
+ * 
+ */
+export type WhatsappLinkCode = Prisma.WhatsappLinkCodeModel
+/**
+ * Model WhatsappMessage
+ * 
+ */
+export type WhatsappMessage = Prisma.WhatsappMessageModel

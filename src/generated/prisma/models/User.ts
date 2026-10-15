@@ -223,6 +223,8 @@ export type UserWhereInput = {
   inboxTransactions?: Prisma.InboxTransactionListRelationFilter
   merchantRules?: Prisma.MerchantRuleListRelationFilter
   recurringTransactions?: Prisma.RecurringTransactionListRelationFilter
+  whatsappLink?: Prisma.XOR<Prisma.WhatsappLinkNullableScalarRelationFilter, Prisma.WhatsappLinkWhereInput> | null
+  whatsappLinkCode?: Prisma.XOR<Prisma.WhatsappLinkCodeNullableScalarRelationFilter, Prisma.WhatsappLinkCodeWhereInput> | null
   ownedTransactionLists?: Prisma.TransactionListListRelationFilter
   transactionListMembers?: Prisma.TransactionListMemberListRelationFilter
   transactionListInvites?: Prisma.TransactionListInviteListRelationFilter
@@ -254,6 +256,8 @@ export type UserOrderByWithRelationInput = {
   inboxTransactions?: Prisma.InboxTransactionOrderByRelationAggregateInput
   merchantRules?: Prisma.MerchantRuleOrderByRelationAggregateInput
   recurringTransactions?: Prisma.RecurringTransactionOrderByRelationAggregateInput
+  whatsappLink?: Prisma.WhatsappLinkOrderByWithRelationInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeOrderByWithRelationInput
   ownedTransactionLists?: Prisma.TransactionListOrderByRelationAggregateInput
   transactionListMembers?: Prisma.TransactionListMemberOrderByRelationAggregateInput
   transactionListInvites?: Prisma.TransactionListInviteOrderByRelationAggregateInput
@@ -288,6 +292,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   inboxTransactions?: Prisma.InboxTransactionListRelationFilter
   merchantRules?: Prisma.MerchantRuleListRelationFilter
   recurringTransactions?: Prisma.RecurringTransactionListRelationFilter
+  whatsappLink?: Prisma.XOR<Prisma.WhatsappLinkNullableScalarRelationFilter, Prisma.WhatsappLinkWhereInput> | null
+  whatsappLinkCode?: Prisma.XOR<Prisma.WhatsappLinkCodeNullableScalarRelationFilter, Prisma.WhatsappLinkCodeWhereInput> | null
   ownedTransactionLists?: Prisma.TransactionListListRelationFilter
   transactionListMembers?: Prisma.TransactionListMemberListRelationFilter
   transactionListInvites?: Prisma.TransactionListInviteListRelationFilter
@@ -347,6 +353,8 @@ export type UserCreateInput = {
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
@@ -378,6 +386,8 @@ export type UserUncheckedCreateInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
@@ -409,6 +419,8 @@ export type UserUpdateInput = {
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
@@ -440,6 +452,8 @@ export type UserUncheckedUpdateInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -816,6 +830,34 @@ export type UserUpdateOneRequiredWithoutMerchantRulesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutMerchantRulesInput, Prisma.UserUpdateWithoutMerchantRulesInput>, Prisma.UserUncheckedUpdateWithoutMerchantRulesInput>
 }
 
+export type UserCreateNestedOneWithoutWhatsappLinkInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWhatsappLinkInput, Prisma.UserUncheckedCreateWithoutWhatsappLinkInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWhatsappLinkInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutWhatsappLinkNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWhatsappLinkInput, Prisma.UserUncheckedCreateWithoutWhatsappLinkInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWhatsappLinkInput
+  upsert?: Prisma.UserUpsertWithoutWhatsappLinkInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutWhatsappLinkInput, Prisma.UserUpdateWithoutWhatsappLinkInput>, Prisma.UserUncheckedUpdateWithoutWhatsappLinkInput>
+}
+
+export type UserCreateNestedOneWithoutWhatsappLinkCodeInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWhatsappLinkCodeInput, Prisma.UserUncheckedCreateWithoutWhatsappLinkCodeInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWhatsappLinkCodeInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutWhatsappLinkCodeNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWhatsappLinkCodeInput, Prisma.UserUncheckedCreateWithoutWhatsappLinkCodeInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWhatsappLinkCodeInput
+  upsert?: Prisma.UserUpsertWithoutWhatsappLinkCodeInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutWhatsappLinkCodeInput, Prisma.UserUpdateWithoutWhatsappLinkCodeInput>, Prisma.UserUncheckedUpdateWithoutWhatsappLinkCodeInput>
+}
+
 export type UserCreateWithoutConsentsInput = {
   id: string
   name: string
@@ -841,6 +883,8 @@ export type UserCreateWithoutConsentsInput = {
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
@@ -871,6 +915,8 @@ export type UserUncheckedCreateWithoutConsentsInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
@@ -917,6 +963,8 @@ export type UserUpdateWithoutConsentsInput = {
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
@@ -947,6 +995,8 @@ export type UserUncheckedUpdateWithoutConsentsInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -977,6 +1027,8 @@ export type UserCreateWithoutPreferenceInput = {
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
@@ -1007,6 +1059,8 @@ export type UserUncheckedCreateWithoutPreferenceInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
@@ -1053,6 +1107,8 @@ export type UserUpdateWithoutPreferenceInput = {
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
@@ -1083,6 +1139,8 @@ export type UserUncheckedUpdateWithoutPreferenceInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -1113,6 +1171,8 @@ export type UserCreateWithoutSessionsInput = {
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
@@ -1143,6 +1203,8 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
@@ -1189,6 +1251,8 @@ export type UserUpdateWithoutSessionsInput = {
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
@@ -1219,6 +1283,8 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -1249,6 +1315,8 @@ export type UserCreateWithoutAccountsInput = {
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
@@ -1279,6 +1347,8 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
@@ -1325,6 +1395,8 @@ export type UserUpdateWithoutAccountsInput = {
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
@@ -1355,6 +1427,8 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -1385,6 +1459,8 @@ export type UserCreateWithoutCategoriesInput = {
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
@@ -1415,6 +1491,8 @@ export type UserUncheckedCreateWithoutCategoriesInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
@@ -1461,6 +1539,8 @@ export type UserUpdateWithoutCategoriesInput = {
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
@@ -1491,6 +1571,8 @@ export type UserUncheckedUpdateWithoutCategoriesInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -1521,6 +1603,8 @@ export type UserCreateWithoutTransactionsInput = {
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
@@ -1551,6 +1635,8 @@ export type UserUncheckedCreateWithoutTransactionsInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
@@ -1597,6 +1683,8 @@ export type UserUpdateWithoutTransactionsInput = {
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
@@ -1627,6 +1715,8 @@ export type UserUncheckedUpdateWithoutTransactionsInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -1658,6 +1748,8 @@ export type UserCreateWithoutOwnedTransactionListsInput = {
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
   transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
 }
@@ -1688,6 +1780,8 @@ export type UserUncheckedCreateWithoutOwnedTransactionListsInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
 }
@@ -1734,6 +1828,8 @@ export type UserUpdateWithoutOwnedTransactionListsInput = {
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
 }
@@ -1764,6 +1860,8 @@ export type UserUncheckedUpdateWithoutOwnedTransactionListsInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
 }
@@ -1794,6 +1892,8 @@ export type UserCreateWithoutTransactionListMembersInput = {
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
   transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
 }
@@ -1824,6 +1924,8 @@ export type UserUncheckedCreateWithoutTransactionListMembersInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
 }
@@ -1870,6 +1972,8 @@ export type UserUpdateWithoutTransactionListMembersInput = {
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
 }
@@ -1900,6 +2004,8 @@ export type UserUncheckedUpdateWithoutTransactionListMembersInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
 }
@@ -1930,6 +2036,8 @@ export type UserCreateWithoutTransactionListInvitesInput = {
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
 }
@@ -1960,6 +2068,8 @@ export type UserUncheckedCreateWithoutTransactionListInvitesInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
 }
@@ -2006,6 +2116,8 @@ export type UserUpdateWithoutTransactionListInvitesInput = {
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
 }
@@ -2036,6 +2148,8 @@ export type UserUncheckedUpdateWithoutTransactionListInvitesInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -2065,6 +2179,8 @@ export type UserCreateWithoutRecurringTransactionsInput = {
   inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
@@ -2095,6 +2211,8 @@ export type UserUncheckedCreateWithoutRecurringTransactionsInput = {
   inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
@@ -2141,6 +2259,8 @@ export type UserUpdateWithoutRecurringTransactionsInput = {
   inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
@@ -2171,6 +2291,8 @@ export type UserUncheckedUpdateWithoutRecurringTransactionsInput = {
   inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -2201,6 +2323,8 @@ export type UserCreateWithoutFeedbackInput = {
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
@@ -2231,6 +2355,8 @@ export type UserUncheckedCreateWithoutFeedbackInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
@@ -2277,6 +2403,8 @@ export type UserUpdateWithoutFeedbackInput = {
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
@@ -2307,6 +2435,8 @@ export type UserUncheckedUpdateWithoutFeedbackInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -2337,6 +2467,8 @@ export type UserCreateWithoutBudgetsInput = {
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
@@ -2367,6 +2499,8 @@ export type UserUncheckedCreateWithoutBudgetsInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
@@ -2413,6 +2547,8 @@ export type UserUpdateWithoutBudgetsInput = {
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
@@ -2443,6 +2579,8 @@ export type UserUncheckedUpdateWithoutBudgetsInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -2473,6 +2611,8 @@ export type UserCreateWithoutNotificationsInput = {
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
@@ -2503,6 +2643,8 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
@@ -2549,6 +2691,8 @@ export type UserUpdateWithoutNotificationsInput = {
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
@@ -2579,6 +2723,8 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -2609,6 +2755,8 @@ export type UserCreateWithoutSubscriptionsInput = {
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
@@ -2639,6 +2787,8 @@ export type UserUncheckedCreateWithoutSubscriptionsInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
@@ -2685,6 +2835,8 @@ export type UserUpdateWithoutSubscriptionsInput = {
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
@@ -2715,6 +2867,8 @@ export type UserUncheckedUpdateWithoutSubscriptionsInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -2745,6 +2899,8 @@ export type UserCreateWithoutFeaturesInput = {
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
@@ -2775,6 +2931,8 @@ export type UserUncheckedCreateWithoutFeaturesInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
@@ -2821,6 +2979,8 @@ export type UserUpdateWithoutFeaturesInput = {
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
@@ -2851,6 +3011,8 @@ export type UserUncheckedUpdateWithoutFeaturesInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -2881,6 +3043,8 @@ export type UserCreateWithoutEmailInboxInput = {
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
@@ -2911,6 +3075,8 @@ export type UserUncheckedCreateWithoutEmailInboxInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
@@ -2957,6 +3123,8 @@ export type UserUpdateWithoutEmailInboxInput = {
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
@@ -2987,6 +3155,8 @@ export type UserUncheckedUpdateWithoutEmailInboxInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -3017,6 +3187,8 @@ export type UserCreateWithoutGmailConnectionInput = {
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
@@ -3047,6 +3219,8 @@ export type UserUncheckedCreateWithoutGmailConnectionInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
@@ -3093,6 +3267,8 @@ export type UserUpdateWithoutGmailConnectionInput = {
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
@@ -3123,6 +3299,8 @@ export type UserUncheckedUpdateWithoutGmailConnectionInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -3153,6 +3331,8 @@ export type UserCreateWithoutInboxSendersInput = {
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
@@ -3183,6 +3363,8 @@ export type UserUncheckedCreateWithoutInboxSendersInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
@@ -3229,6 +3411,8 @@ export type UserUpdateWithoutInboxSendersInput = {
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
@@ -3259,6 +3443,8 @@ export type UserUncheckedUpdateWithoutInboxSendersInput = {
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -3289,6 +3475,8 @@ export type UserCreateWithoutInboxTransactionsInput = {
   inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
@@ -3319,6 +3507,8 @@ export type UserUncheckedCreateWithoutInboxTransactionsInput = {
   inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
   merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
@@ -3365,6 +3555,8 @@ export type UserUpdateWithoutInboxTransactionsInput = {
   inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
@@ -3395,6 +3587,8 @@ export type UserUncheckedUpdateWithoutInboxTransactionsInput = {
   inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
   merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -3425,6 +3619,8 @@ export type UserCreateWithoutMerchantRulesInput = {
   inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
@@ -3455,6 +3651,8 @@ export type UserUncheckedCreateWithoutMerchantRulesInput = {
   inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
@@ -3501,6 +3699,8 @@ export type UserUpdateWithoutMerchantRulesInput = {
   inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
@@ -3531,6 +3731,296 @@ export type UserUncheckedUpdateWithoutMerchantRulesInput = {
   inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
   inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
   recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
+  ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
+  transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
+  transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutWhatsappLinkInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
+  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
+  ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
+  transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
+  transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutWhatsappLinkInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
+  ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
+  transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
+  transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutWhatsappLinkInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutWhatsappLinkInput, Prisma.UserUncheckedCreateWithoutWhatsappLinkInput>
+}
+
+export type UserUpsertWithoutWhatsappLinkInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutWhatsappLinkInput, Prisma.UserUncheckedUpdateWithoutWhatsappLinkInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutWhatsappLinkInput, Prisma.UserUncheckedCreateWithoutWhatsappLinkInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutWhatsappLinkInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutWhatsappLinkInput, Prisma.UserUncheckedUpdateWithoutWhatsappLinkInput>
+}
+
+export type UserUpdateWithoutWhatsappLinkInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
+  ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
+  transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
+  transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutWhatsappLinkInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
+  ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
+  transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
+  transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutWhatsappLinkCodeInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
+  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
+  transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
+  transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutWhatsappLinkCodeInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
+  transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
+  transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutWhatsappLinkCodeInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutWhatsappLinkCodeInput, Prisma.UserUncheckedCreateWithoutWhatsappLinkCodeInput>
+}
+
+export type UserUpsertWithoutWhatsappLinkCodeInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutWhatsappLinkCodeInput, Prisma.UserUncheckedUpdateWithoutWhatsappLinkCodeInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutWhatsappLinkCodeInput, Prisma.UserUncheckedCreateWithoutWhatsappLinkCodeInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutWhatsappLinkCodeInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutWhatsappLinkCodeInput, Prisma.UserUncheckedUpdateWithoutWhatsappLinkCodeInput>
+}
+
+export type UserUpdateWithoutWhatsappLinkCodeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
+  transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
+  transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutWhatsappLinkCodeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
   ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
   transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
   transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -3737,6 +4227,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   inboxTransactions?: boolean | Prisma.User$inboxTransactionsArgs<ExtArgs>
   merchantRules?: boolean | Prisma.User$merchantRulesArgs<ExtArgs>
   recurringTransactions?: boolean | Prisma.User$recurringTransactionsArgs<ExtArgs>
+  whatsappLink?: boolean | Prisma.User$whatsappLinkArgs<ExtArgs>
+  whatsappLinkCode?: boolean | Prisma.User$whatsappLinkCodeArgs<ExtArgs>
   ownedTransactionLists?: boolean | Prisma.User$ownedTransactionListsArgs<ExtArgs>
   transactionListMembers?: boolean | Prisma.User$transactionListMembersArgs<ExtArgs>
   transactionListInvites?: boolean | Prisma.User$transactionListInvitesArgs<ExtArgs>
@@ -3795,6 +4287,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   inboxTransactions?: boolean | Prisma.User$inboxTransactionsArgs<ExtArgs>
   merchantRules?: boolean | Prisma.User$merchantRulesArgs<ExtArgs>
   recurringTransactions?: boolean | Prisma.User$recurringTransactionsArgs<ExtArgs>
+  whatsappLink?: boolean | Prisma.User$whatsappLinkArgs<ExtArgs>
+  whatsappLinkCode?: boolean | Prisma.User$whatsappLinkCodeArgs<ExtArgs>
   ownedTransactionLists?: boolean | Prisma.User$ownedTransactionListsArgs<ExtArgs>
   transactionListMembers?: boolean | Prisma.User$transactionListMembersArgs<ExtArgs>
   transactionListInvites?: boolean | Prisma.User$transactionListInvitesArgs<ExtArgs>
@@ -3823,6 +4317,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     inboxTransactions: Prisma.$InboxTransactionPayload<ExtArgs>[]
     merchantRules: Prisma.$MerchantRulePayload<ExtArgs>[]
     recurringTransactions: Prisma.$RecurringTransactionPayload<ExtArgs>[]
+    whatsappLink: Prisma.$WhatsappLinkPayload<ExtArgs> | null
+    whatsappLinkCode: Prisma.$WhatsappLinkCodePayload<ExtArgs> | null
     ownedTransactionLists: Prisma.$TransactionListPayload<ExtArgs>[]
     transactionListMembers: Prisma.$TransactionListMemberPayload<ExtArgs>[]
     transactionListInvites: Prisma.$TransactionListInvitePayload<ExtArgs>[]
@@ -4247,6 +4743,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   inboxTransactions<T extends Prisma.User$inboxTransactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$inboxTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InboxTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   merchantRules<T extends Prisma.User$merchantRulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$merchantRulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MerchantRulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   recurringTransactions<T extends Prisma.User$recurringTransactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$recurringTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RecurringTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  whatsappLink<T extends Prisma.User$whatsappLinkArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$whatsappLinkArgs<ExtArgs>>): Prisma.Prisma__WhatsappLinkClient<runtime.Types.Result.GetResult<Prisma.$WhatsappLinkPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  whatsappLinkCode<T extends Prisma.User$whatsappLinkCodeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$whatsappLinkCodeArgs<ExtArgs>>): Prisma.Prisma__WhatsappLinkCodeClient<runtime.Types.Result.GetResult<Prisma.$WhatsappLinkCodePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   ownedTransactionLists<T extends Prisma.User$ownedTransactionListsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ownedTransactionListsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransactionListPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   transactionListMembers<T extends Prisma.User$transactionListMembersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$transactionListMembersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransactionListMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   transactionListInvites<T extends Prisma.User$transactionListInvitesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$transactionListInvitesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransactionListInvitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -5070,6 +5568,44 @@ export type User$recurringTransactionsArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   distinct?: Prisma.RecurringTransactionScalarFieldEnum | Prisma.RecurringTransactionScalarFieldEnum[]
+}
+
+/**
+ * User.whatsappLink
+ */
+export type User$whatsappLinkArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WhatsappLink
+   */
+  select?: Prisma.WhatsappLinkSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WhatsappLink
+   */
+  omit?: Prisma.WhatsappLinkOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WhatsappLinkInclude<ExtArgs> | null
+  where?: Prisma.WhatsappLinkWhereInput
+}
+
+/**
+ * User.whatsappLinkCode
+ */
+export type User$whatsappLinkCodeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WhatsappLinkCode
+   */
+  select?: Prisma.WhatsappLinkCodeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WhatsappLinkCode
+   */
+  omit?: Prisma.WhatsappLinkCodeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WhatsappLinkCodeInclude<ExtArgs> | null
+  where?: Prisma.WhatsappLinkCodeWhereInput
 }
 
 /**

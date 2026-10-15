@@ -80,7 +80,10 @@ export const ModelName = {
   GmailConnection: 'GmailConnection',
   InboxSender: 'InboxSender',
   InboxTransaction: 'InboxTransaction',
-  MerchantRule: 'MerchantRule'
+  MerchantRule: 'MerchantRule',
+  WhatsappLink: 'WhatsappLink',
+  WhatsappLinkCode: 'WhatsappLinkCode',
+  WhatsappMessage: 'WhatsappMessage'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -546,6 +549,38 @@ export const MerchantRuleScalarFieldEnum = {
 } as const
 
 export type MerchantRuleScalarFieldEnum = (typeof MerchantRuleScalarFieldEnum)[keyof typeof MerchantRuleScalarFieldEnum]
+
+
+export const WhatsappLinkScalarFieldEnum = {
+  id: 'id',
+  phone: 'phone',
+  userId: 'userId',
+  conversation: 'conversation',
+  conversationExpiresAt: 'conversationExpiresAt',
+  lastMessageAt: 'lastMessageAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WhatsappLinkScalarFieldEnum = (typeof WhatsappLinkScalarFieldEnum)[keyof typeof WhatsappLinkScalarFieldEnum]
+
+
+export const WhatsappLinkCodeScalarFieldEnum = {
+  codeHash: 'codeHash',
+  expiresAt: 'expiresAt',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type WhatsappLinkCodeScalarFieldEnum = (typeof WhatsappLinkCodeScalarFieldEnum)[keyof typeof WhatsappLinkCodeScalarFieldEnum]
+
+
+export const WhatsappMessageScalarFieldEnum = {
+  id: 'id',
+  receivedAt: 'receivedAt'
+} as const
+
+export type WhatsappMessageScalarFieldEnum = (typeof WhatsappMessageScalarFieldEnum)[keyof typeof WhatsappMessageScalarFieldEnum]
 
 
 export const SortOrder = {

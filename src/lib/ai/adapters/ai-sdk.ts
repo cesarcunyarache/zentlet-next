@@ -1,6 +1,6 @@
 import { generateText, Output, type LanguageModel } from "ai";
 import type { z, ZodTypeAny } from "zod";
-import type { GenerateObjectImage, GenerateObjectRequest, ObjectGenerator } from "../types";
+import type { GenerateObjectFile, GenerateObjectRequest, ObjectGenerator } from "../types";
 
 /*
  * Llamada común a cualquier modelo del AI SDK. Con el proveedor degradado
@@ -10,15 +10,15 @@ import type { GenerateObjectImage, GenerateObjectRequest, ObjectGenerator } from
 
 const MAX_RETRIES = 1;
 
-function buildInput(prompt: string, image?: GenerateObjectImage) {
-  if (!image) return { prompt };
+function buildInput(prompt: string, file?: GenerateObjectFile) {
+  if (!file) return { prompt };
   return {
     messages: [
       {
         role: "user" as const,
         content: [
           { type: "text" as const, text: prompt },
-          { type: "file" as const, data: image.data, mediaType: image.mediaType },
+          { type: "file" as const, data: file.data, mediaType: file.mediaType },
         ],
       },
     ],
@@ -26,10 +26,10 @@ function buildInput(prompt: string, image?: GenerateObjectImage) {
 }
 
 export function aiSdkGenerate(model: LanguageModel): ObjectGenerator["generate"] {
-  return async <T extends ZodTypeAny>({ operation, prompt, schema, image, timeoutMs }: GenerateObjectRequest<T>) => {
+  return async <T extends ZodTypeAny>({ operation, prompt, schema, file, timeoutMs }: GenerateObjectRequest<T>) => {
     const { output, usage } = await generateText({
       model,
-      ...buildInput(prompt, image),
+      ...buildInput(prompt, file),
       timeout: timeoutMs,
       maxRetries: MAX_RETRIES,
       output: Output.object({ schema }),

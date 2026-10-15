@@ -122,5 +122,26 @@
       "sessionExpired": "For your security, sign out, sign back in and try again.",
       "fallback": "We couldn't delete your account. Please try again."
     }
+  },
+  "whatsapp": {
+    "label": "WhatsApp",
+    "hint": "Log your expenses by messaging our assistant",
+    "connected": "Connected: message your expenses to the assistant",
+    "configure": "Set up",
+    "hide": "Hide",
+    "pitch": "Connect your WhatsApp and log expenses and income with a message, a voice note or a receipt photo. If something is missing, the assistant asks you.",
+    "connect": "Connect WhatsApp",
+    "connecting": "Creating code…",
+    "connectFailed": "We couldn't create the code. Try again.",
+    "privacy": "We only answer messages from the number you connect. You can disconnect it anytime.",
+    "openHint": "Tap the button and send the message already typed in WhatsApp. The code expires in 10 minutes.",
+    "open": "Open WhatsApp",
+    "manual": "Is WhatsApp on another phone? Send \"{command}\" to our number.",
+    "waiting": "Waiting for your message…",
+    "connectedAs": "Connected: {phone}",
+    "usage": "Message it, for example, \"lunch 25\" or \"how much did I spend this week?\".",
+    "disconnect": "Disconnect",
+    "disconnecting": "Disconnecting…",
+    "disconnectFailed": "We couldn't disconnect your WhatsApp. Try again."
   }
 }

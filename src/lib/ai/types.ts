@@ -1,7 +1,7 @@
 import type { z, ZodTypeAny } from "zod";
 import type { CheckOutcome } from "@/lib/health/types";
 
-export interface GenerateObjectImage {
+export interface GenerateObjectFile {
   data: Uint8Array;
   mediaType: string;
 }
@@ -11,8 +11,8 @@ export interface GenerateObjectRequest<T extends ZodTypeAny> {
   operation: string;
   prompt: string;
   schema: T;
-  /** Imagen que acompaña al prompt (p. ej. una boleta). Nunca se registra. */
-  image?: GenerateObjectImage;
+  /** Archivo que acompaña al prompt (la foto de una boleta, una nota de voz). Nunca se registra. */
+  file?: GenerateObjectFile;
   timeoutMs: number;
 }
 
