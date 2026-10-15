@@ -12,6 +12,7 @@ import type esBudgets from "@/locales/es/budgets.json";
 import type esBilling from "@/locales/es/billing.json";
 import type esNotifications from "@/locales/es/notifications.json";
 import type esInbox from "@/locales/es/inbox.json";
+import type esLists from "@/locales/es/lists.json";
 
 import type enCommon from "@/locales/en/common.json";
 import type enAuth from "@/locales/en/auth.json";
@@ -25,6 +26,7 @@ import type enBudgets from "@/locales/en/budgets.json";
 import type enBilling from "@/locales/en/billing.json";
 import type enNotifications from "@/locales/en/notifications.json";
 import type enInbox from "@/locales/en/inbox.json";
+import type enLists from "@/locales/en/lists.json";
 
 /** El español es la referencia: sus keys son las únicas válidas en `t()`. */
 type AppMessages = {
@@ -40,6 +42,7 @@ type AppMessages = {
   billing: typeof esBilling;
   notifications: typeof esNotifications;
   inbox: typeof esInbox;
+  lists: typeof esLists;
 };
 
 type EnMessages = {
@@ -55,6 +58,7 @@ type EnMessages = {
   billing: typeof enBilling;
   notifications: typeof enNotifications;
   inbox: typeof enInbox;
+  lists: typeof enLists;
 };
 
 /*

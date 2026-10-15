@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const categoryIconSchema = z.object({ icon: z.string(), color: z.string() });
+export const categoryIconSchema = z.object({ icon: z.string(), color: z.string() });
 
 export const categoryAiSchema = z.object({ categories: z.array(categoryIconSchema) });
 

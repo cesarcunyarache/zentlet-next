@@ -17,6 +17,7 @@ export interface TBudgetLimit {
 export interface TBudget extends BudgetRule {
   id: string;
   categoryId: string;
+  listId: string;
   kind: BudgetKind;
   startDate: string;
   limits: TBudgetLimit[];

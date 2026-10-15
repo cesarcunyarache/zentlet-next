@@ -1,6 +1,6 @@
 import { APIService } from "@/core/services/api.service";
 import type {
-  DateRange,
+  SummaryFilters,
   TNewTransaction,
   TTransaction,
   TTransactionPayload,
@@ -25,10 +25,10 @@ class TransactionService extends APIService {
     return response.data;
   }
 
-  async getSummary(range: DateRange, ids: string[] = []): Promise<TransactionSummaryResponse> {
+  async getSummary(filters: SummaryFilters, ids: string[] = []): Promise<TransactionSummaryResponse> {
     const response = await this.get<TransactionSummaryResponse>(
       `${BASE_URL}/summary`,
-      withoutEmpty({ ...range, ids: ids.join(",") }),
+      withoutEmpty({ ...filters, ids: ids.join(",") }),
     );
     return response.data;
   }

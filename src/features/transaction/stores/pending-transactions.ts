@@ -5,15 +5,15 @@ import { transactionService } from "../services/transaction.service";
 import {
   applyToSummary,
   findInFeed,
-  inRange,
   insertIntoFeed,
   matchesFilters,
+  matchesSummary,
   patchInFeed,
   removeFromFeed,
   type FeedData,
 } from "../lib/feed-cache";
 import type {
-  DateRange,
+  SummaryFilters,
   TTransaction,
   TTransactionPayload,
   TransactionFilters,
@@ -140,15 +140,18 @@ function adjustmentSign({ kind, row }: SummaryAdjustment, presentIds: Set<string
   }
 }
 
-export async function fetchSummaryWithPending(queryClient: QueryClient, range: DateRange): Promise<TransactionSummary> {
+export async function fetchSummaryWithPending(
+  queryClient: QueryClient,
+  filters: SummaryFilters,
+): Promise<TransactionSummary> {
   const changes = pendingChanges(queryClient);
   const createdIds = new Set(changes.flatMap((change) => (change.kind === "create" ? [change.row.id] : [])));
   const adjustments = changes
     .flatMap((change) => toAdjustments(change, changes, createdIds))
-    .filter(({ row }) => inRange(row.transactionDate, range));
+    .filter(({ row }) => matchesSummary(row, filters));
 
   const { presentIds, ...summary } = await transactionService.getSummary(
-    range,
+    filters,
     adjustments.filter(needsServerCheck).map(({ row }) => row.id),
   );
   const present = new Set(presentIds);

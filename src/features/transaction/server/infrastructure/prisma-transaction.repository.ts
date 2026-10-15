@@ -2,34 +2,20 @@ import prisma from "@/lib/prisma";
 import { isForeignKeyViolation, isUniqueViolation } from "@/lib/db-errors";
 import type { Transaction as TransactionRow } from "@/generated/prisma/client";
 import { FEED_ORDER, afterCursor, feedWhere, summaryWhere, toSummary } from "../../lib/feed-query";
-import type { DateRange, TransactionFilters, TransactionType } from "../../types";
-import type { FeedCursor, NewTransaction, Transaction, TransactionChanges } from "../domain/transaction.entity";
+import type { SummaryFilters, TransactionFilters } from "../../types";
+import type { FeedCursor, NewTransaction, TransactionChanges } from "../domain/transaction.entity";
 import type { TransactionRepository } from "../domain/transaction.repository";
+import { toDomain } from "./transaction.mapper";
 
-export function toEntity(row: TransactionRow): Transaction {
-  return {
-    id: row.id,
-    userId: row.userId,
-    description: row.description,
-    amount: Number(row.amount),
-    type: row.type as TransactionType,
-    categoryId: row.categoryId,
-    reference: row.reference,
-    transactionDate: row.transactionDate,
-    recurringTransactionId: row.recurringTransactionId,
-    createdAt: row.createdAt,
-  };
-}
-
-const toEntityOrNull = (row: TransactionRow | null) => (row ? toEntity(row) : null);
+const toDomainOrNull = (row: TransactionRow | null) => (row ? toDomain(row) : null);
 
 export class PrismaTransactionRepository implements TransactionRepository {
   async findById(id: string) {
-    return toEntityOrNull(await prisma.transaction.findUnique({ where: { id } }));
+    return toDomainOrNull(await prisma.transaction.findUnique({ where: { id } }));
   }
 
   async findOwned(userId: string, id: string) {
-    return toEntityOrNull(await prisma.transaction.findFirst({ where: { id, userId } }));
+    return toDomainOrNull(await prisma.transaction.findFirst({ where: { id, userId } }));
   }
 
   async findFeed(userId: string, filters: TransactionFilters, after: FeedCursor | null, take: number) {
@@ -39,13 +25,13 @@ export class PrismaTransactionRepository implements TransactionRepository {
       orderBy: FEED_ORDER,
       take,
     });
-    return rows.map(toEntity);
+    return rows.map(toDomain);
   }
 
-  async summarize(userId: string, range: DateRange) {
+  async summarize(userId: string, filters: SummaryFilters) {
     const groups = await prisma.transaction.groupBy({
       by: ["categoryId", "type"],
-      where: summaryWhere(userId, range),
+      where: summaryWhere(userId, filters),
       _sum: { amount: true },
       _count: { _all: true },
     });
@@ -60,7 +46,7 @@ export class PrismaTransactionRepository implements TransactionRepository {
 
   async insert(transaction: NewTransaction) {
     try {
-      return toEntity(await prisma.transaction.create({ data: transaction }));
+      return toDomain(await prisma.transaction.create({ data: transaction }));
     } catch (error) {
       if (isUniqueViolation(error)) return "id_taken" as const;
       throw error;
@@ -75,7 +61,7 @@ export class PrismaTransactionRepository implements TransactionRepository {
       if (isForeignKeyViolation(error)) return "category_not_found" as const;
       throw error;
     }
-    return toEntity(await prisma.transaction.findUniqueOrThrow({ where: { id } }));
+    return toDomain(await prisma.transaction.findUniqueOrThrow({ where: { id } }));
   }
 
   async deleteOwned(userId: string, id: string) {

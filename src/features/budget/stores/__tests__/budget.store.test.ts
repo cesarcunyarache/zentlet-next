@@ -26,6 +26,7 @@ const service = vi.mocked(budgetService);
 const food: TBudget = {
   id: "budget-food",
   categoryId: "food",
+  listId: "private",
   kind: "recurring",
   periodUnit: "month",
   periodCount: 1,
@@ -35,6 +36,7 @@ const food: TBudget = {
 const health: CreateBudgetPayload = {
   id: "budget-health",
   categoryId: "health",
+  listId: "private",
   kind: "once",
   periodUnit: "month",
   periodCount: 1,

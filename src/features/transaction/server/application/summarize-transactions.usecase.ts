@@ -6,9 +6,9 @@ export class SummarizeTransactionsUseCase {
   constructor(private readonly transactions: TransactionRepository) {}
 
   async execute(userId: string, query: TransactionSummaryQuery): Promise<TransactionSummaryResponse> {
-    const { ids, ...range } = query;
+    const { ids, ...filters } = query;
     const [summary, presentIds] = await Promise.all([
-      this.transactions.summarize(userId, range),
+      this.transactions.summarize(userId, filters),
       this.transactions.findExistingIds(userId, ids),
     ]);
     return { ...summary, presentIds };

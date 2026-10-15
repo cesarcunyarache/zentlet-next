@@ -5,9 +5,11 @@ import { DELETE } from "../[id]/route";
 import { PUT } from "../[id]/limits/[effectiveFrom]/route";
 import { GET, POST } from "../route";
 import { scheduleBudgetCheck } from "@/features/budget/server/check";
+import { resolveTargetListId } from "@/lib/private-list";
 
 vi.mock("@/lib/auth", () => ({ auth: { api: { getSession: vi.fn() } } }));
 vi.mock("@/features/budget/server/check", () => ({ scheduleBudgetCheck: vi.fn() }));
+vi.mock("@/lib/private-list", () => ({ resolveTargetListId: vi.fn() }));
 vi.mock("@/lib/prisma", () => ({
   default: {
     budget: {
@@ -28,9 +30,11 @@ const db = vi.mocked(prisma, { deep: true });
 const getSession = vi.mocked(auth.api.getSession);
 
 const ID = "5d0b7a3c-9e1f-4c2d-8a6b-3f4e5d6c7b8a";
+const LIST_ID = "8c1e2d3f-4a5b-4c6d-8e7f-9a0b1c2d3e4f";
 const body = {
   id: ID,
   categoryId: "food",
+  listId: LIST_ID,
   kind: "recurring",
   periodUnit: "month",
   periodCount: 1,
@@ -40,6 +44,7 @@ const body = {
 const row = (userId = "user-1", limits = [{ effectiveFrom: new Date("2026-09-01"), amount: "600.00" }]) => ({
   id: ID,
   categoryId: "food",
+  listId: LIST_ID,
   kind: "recurring",
   periodUnit: "month",
   periodCount: 1,
@@ -71,6 +76,7 @@ beforeEach(() => {
   db.subscription.findMany.mockResolvedValue(PRO as never);
   db.budget.findUnique.mockResolvedValue(null);
   db.category.findFirst.mockResolvedValue({ id: "food" } as never);
+  vi.mocked(resolveTargetListId).mockImplementation(async (_userId, listId) => listId ?? "private");
   db.budget.create.mockResolvedValue(row() as never);
 });
 
@@ -84,6 +90,7 @@ describe("GET /api/budget", () => {
       {
         id: ID,
         categoryId: "food",
+        listId: LIST_ID,
         kind: "recurring",
         periodUnit: "month",
         periodCount: 1,
@@ -120,6 +127,7 @@ describe("POST /api/budget", () => {
         data: {
           id: ID,
           categoryId: "food",
+          listId: LIST_ID,
           kind: "recurring",
           periodUnit: "month",
           periodCount: 1,
@@ -153,14 +161,21 @@ describe("POST /api/budget", () => {
     expect(db.budget.create).not.toHaveBeenCalled();
   });
 
-  it("si la categoría ya tiene presupuesto es 409", async () => {
+  it("una lista a la que no puede aportar es 422", async () => {
+    vi.mocked(resolveTargetListId).mockResolvedValue("private");
+    expect((await post()).status).toBe(422);
+    expect(resolveTargetListId).toHaveBeenCalledWith("user-1", LIST_ID);
+    expect(db.budget.create).not.toHaveBeenCalled();
+  });
+
+  it("si la categoría ya tiene presupuesto en la lista es 409", async () => {
     db.budget.create.mockRejectedValue(uniqueViolation);
     db.budget.findFirst.mockResolvedValue(null);
 
     const response = await post();
 
     expect(response.status).toBe(409);
-    expect(await response.json()).toEqual({ message: "Category already has a budget" });
+    expect(await response.json()).toEqual({ message: "Category already has a budget in this list" });
   });
 
   it("dos envíos simultáneos del mismo alta: el segundo devuelve el ganador con 200", async () => {

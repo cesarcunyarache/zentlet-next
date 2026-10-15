@@ -10,6 +10,7 @@ export interface Transaction {
   reference: string | null;
   transactionDate: Date;
   recurringTransactionId: string | null;
+  listId: string;
   createdAt: Date;
 }
 
@@ -22,6 +23,7 @@ export interface NewTransaction {
   categoryId: string;
   reference: string | null;
   transactionDate: Date;
+  listId: string;
 }
 
 export type TransactionChanges = Partial<

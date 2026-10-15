@@ -7,9 +7,20 @@
 @import "tw-animate-css";
 @import "@heroui/styles/base/base.css" layer(base);
 @import "@heroui/styles/base/scrollbar.css" layer(base);
-@import "@heroui/styles/themes/default" layer(theme);
+@import "@heroui/styles/themes/default" layer(theme) theme(static);
 @import "@heroui/styles/utilities";
 @import "@heroui/styles/variants";
+
+/*
+ * `heroui-components.css` usa `@reference`, que no emite variables del tema, y sus
+ * componentes las leen con `var()` (p. ej. `--border-width-field`). `theme(static)`
+ * arriba las emite todas; estas son las de Tailwind que también necesitan.
+ */
+@theme static {
+  --blur-md: 12px;
+  --tracking-tight: -0.025em;
+  --color-black: #000;
+}
 
 /* `dark:` sigue a la clase `.dark` (HeroUI), no a la preferencia del sistema */
 @custom-variant dark (&:is(.dark *));

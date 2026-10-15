@@ -14,6 +14,7 @@ export interface TransactionSeed {
   categoryId: string;
   reference: string | null;
   transactionDate: Date;
+  listId: string;
 }
 
 const laterOf = (a: string, b: string) => (a > b ? a : b);

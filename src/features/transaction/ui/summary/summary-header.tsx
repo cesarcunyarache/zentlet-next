@@ -30,6 +30,7 @@ interface SummaryHeaderProps {
   kind: TransactionType | null;
   onPeriodChange: (period: Period) => void;
   onKindChange: (kind: TransactionType | null) => void;
+  children?: React.ReactNode;
 }
 
 export function SummaryHeader({
@@ -43,6 +44,7 @@ export function SummaryHeader({
   kind,
   onPeriodChange,
   onKindChange,
+  children,
 }: SummaryHeaderProps) {
   const t = useTranslations("transactions.summary");
 
@@ -86,6 +88,7 @@ export function SummaryHeader({
           onChange={onPeriodChange}
           className="hover:bg-app-fill"
         />
+        {children}
       </div>
     </section>
   );

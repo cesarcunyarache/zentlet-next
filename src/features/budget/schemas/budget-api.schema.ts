@@ -9,6 +9,7 @@ export const createBudgetSchema = z
   .object({
     id: z.uuid(),
     categoryId: z.string().min(1).max(64),
+    listId: z.uuid(),
     kind: z.enum(["recurring", "once"]).default("recurring"),
     periodUnit: z.enum(["week", "half_month", "month", "year"]),
     periodCount: z.number().int(),

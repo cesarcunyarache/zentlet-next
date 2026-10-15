@@ -16,6 +16,16 @@ describe("summaryWhere", () => {
       transactionDate: { gte: new Date("2026-09-01"), lt: new Date("2026-10-01") },
     });
   });
+
+  it("con lista, sólo los movimientos de esa lista", () => {
+    expect(summaryWhere("u1", { listId: "l1" })).toEqual({ userId: "u1", transactionDate: undefined, listId: "l1" });
+    expect(feedWhere("u1", { listId: "l1", type: "expense" })).toEqual({
+      userId: "u1",
+      transactionDate: undefined,
+      listId: "l1",
+      type: "expense",
+    });
+  });
 });
 
 describe("feedWhere", () => {

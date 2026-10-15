@@ -31,8 +31,8 @@ type LimitVariables = { budgetId: string; effectiveFrom: string; amount: number 
 
 type BudgetErrorKey = "createBudget" | "updateBudget" | "deleteBudget";
 
-function localBudget({ id, categoryId, kind, periodUnit, periodCount, startDate, amount }: CreateBudgetPayload): TBudget {
-  return { id, categoryId, kind, periodUnit, periodCount, startDate, limits: [{ effectiveFrom: startDate, amount }] };
+function localBudget({ id, categoryId, listId, kind, periodUnit, periodCount, startDate, amount }: CreateBudgetPayload): TBudget {
+  return { id, categoryId, listId, kind, periodUnit, periodCount, startDate, limits: [{ effectiveFrom: startDate, amount }] };
 }
 
 function applyLimit(rows: TBudget[], { budgetId, effectiveFrom, amount }: LimitVariables): TBudget[] {
@@ -147,7 +147,9 @@ export function useBudgetStore() {
   const budgets = query.data ?? [];
 
   function saveBudget(input: BudgetInput) {
-    const existing = budgets.find((budget) => budget.categoryId === input.categoryId);
+    const existing = budgets.find(
+      (budget) => budget.listId === input.listId && budget.categoryId === input.categoryId,
+    );
     const plan = planBudgetSave(existing, input, todayISO());
     if (plan.limit) limit.mutate(plan.limit);
     if (plan.remove) remove.mutate(plan.remove);

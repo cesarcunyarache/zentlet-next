@@ -57,27 +57,33 @@ export const ModelName = {
   Session: 'Session',
   Account: 'Account',
   Verification: 'Verification',
-  Category: 'Category',
-  Transaction: 'Transaction',
-  RecurringTransaction: 'RecurringTransaction',
-  Feedback: 'Feedback',
-  Budget: 'Budget',
-  BudgetAlert: 'BudgetAlert',
-  Notification: 'Notification',
-  NotificationDelivery: 'NotificationDelivery',
-  BudgetLimit: 'BudgetLimit',
-  RateLimit: 'RateLimit',
-  UsageLimit: 'UsageLimit',
   Subscription: 'Subscription',
   BillingPayment: 'BillingPayment',
   BillingEvent: 'BillingEvent',
-  Feature: 'Feature',
-  UserFeature: 'UserFeature',
+  Budget: 'Budget',
+  BudgetAlert: 'BudgetAlert',
+  BudgetLimit: 'BudgetLimit',
   EmailInbox: 'EmailInbox',
   GmailConnection: 'GmailConnection',
   InboxSender: 'InboxSender',
   InboxTransaction: 'InboxTransaction',
-  MerchantRule: 'MerchantRule'
+  MerchantRule: 'MerchantRule',
+  Notification: 'Notification',
+  NotificationDelivery: 'NotificationDelivery',
+  Feedback: 'Feedback',
+  RateLimit: 'RateLimit',
+  UsageLimit: 'UsageLimit',
+  Feature: 'Feature',
+  UserFeature: 'UserFeature',
+  Category: 'Category',
+  Transaction: 'Transaction',
+  TransactionList: 'TransactionList',
+  TransactionListMember: 'TransactionListMember',
+  TransactionListInvite: 'TransactionListInvite',
+  RecurringTransaction: 'RecurringTransaction',
+  WhatsappLink: 'WhatsappLink',
+  WhatsappLinkCode: 'WhatsappLinkCode',
+  WhatsappMessage: 'WhatsappMessage'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -180,152 +186,6 @@ export const VerificationScalarFieldEnum = {
 export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
 
 
-export const CategoryScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  icon: 'icon',
-  color: 'color',
-  description: 'description',
-  aiSuggestions: 'aiSuggestions',
-  userId: 'userId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
-
-
-export const TransactionScalarFieldEnum = {
-  id: 'id',
-  type: 'type',
-  amount: 'amount',
-  categoryId: 'categoryId',
-  description: 'description',
-  reference: 'reference',
-  transactionDate: 'transactionDate',
-  recurringTransactionId: 'recurringTransactionId',
-  userId: 'userId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[keyof typeof TransactionScalarFieldEnum]
-
-
-export const RecurringTransactionScalarFieldEnum = {
-  id: 'id',
-  type: 'type',
-  amount: 'amount',
-  description: 'description',
-  categoryId: 'categoryId',
-  frequency: 'frequency',
-  anchorDate: 'anchorDate',
-  nextDueDate: 'nextDueDate',
-  userId: 'userId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type RecurringTransactionScalarFieldEnum = (typeof RecurringTransactionScalarFieldEnum)[keyof typeof RecurringTransactionScalarFieldEnum]
-
-
-export const FeedbackScalarFieldEnum = {
-  id: 'id',
-  type: 'type',
-  status: 'status',
-  message: 'message',
-  context: 'context',
-  userId: 'userId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type FeedbackScalarFieldEnum = (typeof FeedbackScalarFieldEnum)[keyof typeof FeedbackScalarFieldEnum]
-
-
-export const BudgetScalarFieldEnum = {
-  id: 'id',
-  categoryId: 'categoryId',
-  kind: 'kind',
-  periodUnit: 'periodUnit',
-  periodCount: 'periodCount',
-  startDate: 'startDate',
-  userId: 'userId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type BudgetScalarFieldEnum = (typeof BudgetScalarFieldEnum)[keyof typeof BudgetScalarFieldEnum]
-
-
-export const BudgetAlertScalarFieldEnum = {
-  id: 'id',
-  budgetId: 'budgetId',
-  kind: 'kind',
-  value: 'value',
-  createdAt: 'createdAt'
-} as const
-
-export type BudgetAlertScalarFieldEnum = (typeof BudgetAlertScalarFieldEnum)[keyof typeof BudgetAlertScalarFieldEnum]
-
-
-export const NotificationScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  type: 'type',
-  data: 'data',
-  dedupeKey: 'dedupeKey',
-  readAt: 'readAt',
-  createdAt: 'createdAt'
-} as const
-
-export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
-
-
-export const NotificationDeliveryScalarFieldEnum = {
-  id: 'id',
-  notificationId: 'notificationId',
-  channel: 'channel',
-  status: 'status',
-  attempts: 'attempts',
-  nextAttemptAt: 'nextAttemptAt',
-  sentAt: 'sentAt',
-  createdAt: 'createdAt'
-} as const
-
-export type NotificationDeliveryScalarFieldEnum = (typeof NotificationDeliveryScalarFieldEnum)[keyof typeof NotificationDeliveryScalarFieldEnum]
-
-
-export const BudgetLimitScalarFieldEnum = {
-  budgetId: 'budgetId',
-  effectiveFrom: 'effectiveFrom',
-  amount: 'amount',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type BudgetLimitScalarFieldEnum = (typeof BudgetLimitScalarFieldEnum)[keyof typeof BudgetLimitScalarFieldEnum]
-
-
-export const RateLimitScalarFieldEnum = {
-  id: 'id',
-  key: 'key',
-  count: 'count',
-  lastRequest: 'lastRequest'
-} as const
-
-export type RateLimitScalarFieldEnum = (typeof RateLimitScalarFieldEnum)[keyof typeof RateLimitScalarFieldEnum]
-
-
-export const UsageLimitScalarFieldEnum = {
-  key: 'key',
-  count: 'count',
-  windowStart: 'windowStart'
-} as const
-
-export type UsageLimitScalarFieldEnum = (typeof UsageLimitScalarFieldEnum)[keyof typeof UsageLimitScalarFieldEnum]
-
-
 export const SubscriptionScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -382,32 +242,42 @@ export const BillingEventScalarFieldEnum = {
 export type BillingEventScalarFieldEnum = (typeof BillingEventScalarFieldEnum)[keyof typeof BillingEventScalarFieldEnum]
 
 
-export const FeatureScalarFieldEnum = {
-  slug: 'slug',
-  enabled: 'enabled',
-  rollout: 'rollout',
-  description: 'description',
-  type: 'type',
-  stale: 'stale',
-  lastUsedAt: 'lastUsedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  updatedBy: 'updatedBy'
-} as const
-
-export type FeatureScalarFieldEnum = (typeof FeatureScalarFieldEnum)[keyof typeof FeatureScalarFieldEnum]
-
-
-export const UserFeatureScalarFieldEnum = {
+export const BudgetScalarFieldEnum = {
+  id: 'id',
+  categoryId: 'categoryId',
+  listId: 'listId',
+  kind: 'kind',
+  periodUnit: 'periodUnit',
+  periodCount: 'periodCount',
+  startDate: 'startDate',
   userId: 'userId',
-  featureId: 'featureId',
-  enabled: 'enabled',
-  assignedAt: 'assignedAt',
-  assignedBy: 'assignedBy',
+  createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
-export type UserFeatureScalarFieldEnum = (typeof UserFeatureScalarFieldEnum)[keyof typeof UserFeatureScalarFieldEnum]
+export type BudgetScalarFieldEnum = (typeof BudgetScalarFieldEnum)[keyof typeof BudgetScalarFieldEnum]
+
+
+export const BudgetAlertScalarFieldEnum = {
+  id: 'id',
+  budgetId: 'budgetId',
+  kind: 'kind',
+  value: 'value',
+  createdAt: 'createdAt'
+} as const
+
+export type BudgetAlertScalarFieldEnum = (typeof BudgetAlertScalarFieldEnum)[keyof typeof BudgetAlertScalarFieldEnum]
+
+
+export const BudgetLimitScalarFieldEnum = {
+  budgetId: 'budgetId',
+  effectiveFrom: 'effectiveFrom',
+  amount: 'amount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BudgetLimitScalarFieldEnum = (typeof BudgetLimitScalarFieldEnum)[keyof typeof BudgetLimitScalarFieldEnum]
 
 
 export const EmailInboxScalarFieldEnum = {
@@ -498,6 +368,219 @@ export const MerchantRuleScalarFieldEnum = {
 } as const
 
 export type MerchantRuleScalarFieldEnum = (typeof MerchantRuleScalarFieldEnum)[keyof typeof MerchantRuleScalarFieldEnum]
+
+
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  data: 'data',
+  dedupeKey: 'dedupeKey',
+  readAt: 'readAt',
+  createdAt: 'createdAt'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+export const NotificationDeliveryScalarFieldEnum = {
+  id: 'id',
+  notificationId: 'notificationId',
+  channel: 'channel',
+  status: 'status',
+  attempts: 'attempts',
+  nextAttemptAt: 'nextAttemptAt',
+  sentAt: 'sentAt',
+  createdAt: 'createdAt'
+} as const
+
+export type NotificationDeliveryScalarFieldEnum = (typeof NotificationDeliveryScalarFieldEnum)[keyof typeof NotificationDeliveryScalarFieldEnum]
+
+
+export const FeedbackScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  status: 'status',
+  message: 'message',
+  context: 'context',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FeedbackScalarFieldEnum = (typeof FeedbackScalarFieldEnum)[keyof typeof FeedbackScalarFieldEnum]
+
+
+export const RateLimitScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  count: 'count',
+  lastRequest: 'lastRequest'
+} as const
+
+export type RateLimitScalarFieldEnum = (typeof RateLimitScalarFieldEnum)[keyof typeof RateLimitScalarFieldEnum]
+
+
+export const UsageLimitScalarFieldEnum = {
+  key: 'key',
+  count: 'count',
+  windowStart: 'windowStart'
+} as const
+
+export type UsageLimitScalarFieldEnum = (typeof UsageLimitScalarFieldEnum)[keyof typeof UsageLimitScalarFieldEnum]
+
+
+export const FeatureScalarFieldEnum = {
+  slug: 'slug',
+  enabled: 'enabled',
+  rollout: 'rollout',
+  description: 'description',
+  type: 'type',
+  stale: 'stale',
+  lastUsedAt: 'lastUsedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  updatedBy: 'updatedBy'
+} as const
+
+export type FeatureScalarFieldEnum = (typeof FeatureScalarFieldEnum)[keyof typeof FeatureScalarFieldEnum]
+
+
+export const UserFeatureScalarFieldEnum = {
+  userId: 'userId',
+  featureId: 'featureId',
+  enabled: 'enabled',
+  assignedAt: 'assignedAt',
+  assignedBy: 'assignedBy',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserFeatureScalarFieldEnum = (typeof UserFeatureScalarFieldEnum)[keyof typeof UserFeatureScalarFieldEnum]
+
+
+export const CategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  icon: 'icon',
+  color: 'color',
+  description: 'description',
+  aiSuggestions: 'aiSuggestions',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
+
+
+export const TransactionScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  amount: 'amount',
+  categoryId: 'categoryId',
+  description: 'description',
+  reference: 'reference',
+  transactionDate: 'transactionDate',
+  recurringTransactionId: 'recurringTransactionId',
+  listId: 'listId',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[keyof typeof TransactionScalarFieldEnum]
+
+
+export const TransactionListScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  icon: 'icon',
+  color: 'color',
+  description: 'description',
+  currency: 'currency',
+  ownerId: 'ownerId',
+  privateOwnerId: 'privateOwnerId',
+  archivedAt: 'archivedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TransactionListScalarFieldEnum = (typeof TransactionListScalarFieldEnum)[keyof typeof TransactionListScalarFieldEnum]
+
+
+export const TransactionListMemberScalarFieldEnum = {
+  listId: 'listId',
+  userId: 'userId',
+  role: 'role',
+  joinedAt: 'joinedAt'
+} as const
+
+export type TransactionListMemberScalarFieldEnum = (typeof TransactionListMemberScalarFieldEnum)[keyof typeof TransactionListMemberScalarFieldEnum]
+
+
+export const TransactionListInviteScalarFieldEnum = {
+  id: 'id',
+  listId: 'listId',
+  tokenHash: 'tokenHash',
+  role: 'role',
+  email: 'email',
+  expiresAt: 'expiresAt',
+  createdById: 'createdById',
+  acceptedAt: 'acceptedAt',
+  revokedAt: 'revokedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type TransactionListInviteScalarFieldEnum = (typeof TransactionListInviteScalarFieldEnum)[keyof typeof TransactionListInviteScalarFieldEnum]
+
+
+export const RecurringTransactionScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  amount: 'amount',
+  description: 'description',
+  categoryId: 'categoryId',
+  frequency: 'frequency',
+  anchorDate: 'anchorDate',
+  nextDueDate: 'nextDueDate',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RecurringTransactionScalarFieldEnum = (typeof RecurringTransactionScalarFieldEnum)[keyof typeof RecurringTransactionScalarFieldEnum]
+
+
+export const WhatsappLinkScalarFieldEnum = {
+  id: 'id',
+  phone: 'phone',
+  userId: 'userId',
+  conversation: 'conversation',
+  conversationExpiresAt: 'conversationExpiresAt',
+  lastMessageAt: 'lastMessageAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WhatsappLinkScalarFieldEnum = (typeof WhatsappLinkScalarFieldEnum)[keyof typeof WhatsappLinkScalarFieldEnum]
+
+
+export const WhatsappLinkCodeScalarFieldEnum = {
+  codeHash: 'codeHash',
+  expiresAt: 'expiresAt',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type WhatsappLinkCodeScalarFieldEnum = (typeof WhatsappLinkCodeScalarFieldEnum)[keyof typeof WhatsappLinkCodeScalarFieldEnum]
+
+
+export const WhatsappMessageScalarFieldEnum = {
+  id: 'id',
+  receivedAt: 'receivedAt'
+} as const
+
+export type WhatsappMessageScalarFieldEnum = (typeof WhatsappMessageScalarFieldEnum)[keyof typeof WhatsappMessageScalarFieldEnum]
 
 
 export const SortOrder = {

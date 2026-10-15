@@ -72,61 +72,6 @@ export type Account = Prisma.AccountModel
  */
 export type Verification = Prisma.VerificationModel
 /**
- * Model Category
- * 
- */
-export type Category = Prisma.CategoryModel
-/**
- * Model Transaction
- * 
- */
-export type Transaction = Prisma.TransactionModel
-/**
- * Model RecurringTransaction
- * 
- */
-export type RecurringTransaction = Prisma.RecurringTransactionModel
-/**
- * Model Feedback
- * 
- */
-export type Feedback = Prisma.FeedbackModel
-/**
- * Model Budget
- * 
- */
-export type Budget = Prisma.BudgetModel
-/**
- * Model BudgetAlert
- * 
- */
-export type BudgetAlert = Prisma.BudgetAlertModel
-/**
- * Model Notification
- * 
- */
-export type Notification = Prisma.NotificationModel
-/**
- * Model NotificationDelivery
- * 
- */
-export type NotificationDelivery = Prisma.NotificationDeliveryModel
-/**
- * Model BudgetLimit
- * 
- */
-export type BudgetLimit = Prisma.BudgetLimitModel
-/**
- * Model RateLimit
- * 
- */
-export type RateLimit = Prisma.RateLimitModel
-/**
- * Model UsageLimit
- * 
- */
-export type UsageLimit = Prisma.UsageLimitModel
-/**
  * Model Subscription
  * 
  */
@@ -142,15 +87,20 @@ export type BillingPayment = Prisma.BillingPaymentModel
  */
 export type BillingEvent = Prisma.BillingEventModel
 /**
- * Model Feature
+ * Model Budget
  * 
  */
-export type Feature = Prisma.FeatureModel
+export type Budget = Prisma.BudgetModel
 /**
- * Model UserFeature
+ * Model BudgetAlert
  * 
  */
-export type UserFeature = Prisma.UserFeatureModel
+export type BudgetAlert = Prisma.BudgetAlertModel
+/**
+ * Model BudgetLimit
+ * 
+ */
+export type BudgetLimit = Prisma.BudgetLimitModel
 /**
  * Model EmailInbox
  * 
@@ -176,3 +126,83 @@ export type InboxTransaction = Prisma.InboxTransactionModel
  * 
  */
 export type MerchantRule = Prisma.MerchantRuleModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel
+/**
+ * Model NotificationDelivery
+ * 
+ */
+export type NotificationDelivery = Prisma.NotificationDeliveryModel
+/**
+ * Model Feedback
+ * 
+ */
+export type Feedback = Prisma.FeedbackModel
+/**
+ * Model RateLimit
+ * 
+ */
+export type RateLimit = Prisma.RateLimitModel
+/**
+ * Model UsageLimit
+ * 
+ */
+export type UsageLimit = Prisma.UsageLimitModel
+/**
+ * Model Feature
+ * 
+ */
+export type Feature = Prisma.FeatureModel
+/**
+ * Model UserFeature
+ * 
+ */
+export type UserFeature = Prisma.UserFeatureModel
+/**
+ * Model Category
+ * 
+ */
+export type Category = Prisma.CategoryModel
+/**
+ * Model Transaction
+ * 
+ */
+export type Transaction = Prisma.TransactionModel
+/**
+ * Model TransactionList
+ * 
+ */
+export type TransactionList = Prisma.TransactionListModel
+/**
+ * Model TransactionListMember
+ * 
+ */
+export type TransactionListMember = Prisma.TransactionListMemberModel
+/**
+ * Model TransactionListInvite
+ * 
+ */
+export type TransactionListInvite = Prisma.TransactionListInviteModel
+/**
+ * Model RecurringTransaction
+ * 
+ */
+export type RecurringTransaction = Prisma.RecurringTransactionModel
+/**
+ * Model WhatsappLink
+ * 
+ */
+export type WhatsappLink = Prisma.WhatsappLinkModel
+/**
+ * Model WhatsappLinkCode
+ * 
+ */
+export type WhatsappLinkCode = Prisma.WhatsappLinkCodeModel
+/**
+ * Model WhatsappMessage
+ * 
+ */
+export type WhatsappMessage = Prisma.WhatsappMessageModel

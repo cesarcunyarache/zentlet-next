@@ -1,5 +1,5 @@
 import type { Prisma } from "@/generated/prisma/client";
-import type { DateRange, TransactionFilters, TransactionSummary } from "../types";
+import type { DateRange, SummaryFilters, TransactionFilters, TransactionSummary } from "../types";
 import { toUTCISODate } from "@/lib/dates";
 
 export const FEED_ORDER = [
@@ -25,8 +25,9 @@ function searchWhere(q: string): Prisma.TransactionWhereInput {
   };
 }
 
-export function summaryWhere(userId: string, range: DateRange): Prisma.TransactionWhereInput {
-  return { userId, transactionDate: dateWhere(range) };
+export function summaryWhere(userId: string, filters: SummaryFilters): Prisma.TransactionWhereInput {
+  const { listId, ...range } = filters;
+  return { userId, transactionDate: dateWhere(range), ...(listId ? { listId } : {}) };
 }
 
 export function feedWhere(userId: string, filters: TransactionFilters): Prisma.TransactionWhereInput {

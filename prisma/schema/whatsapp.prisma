@@ -1,0 +1,37 @@
+model WhatsappLink {
+  id    String @id @default(uuid())
+  phone String @unique
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  conversation          Json?
+  conversationExpiresAt DateTime?
+  lastMessageAt         DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("whatsapp_link")
+}
+
+model WhatsappLinkCode {
+  codeHash  String   @id
+  expiresAt DateTime
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([expiresAt])
+  @@map("whatsapp_link_code")
+}
+
+model WhatsappMessage {
+  id         String   @id
+  receivedAt DateTime @default(now())
+
+  @@index([receivedAt])
+  @@map("whatsapp_message")
+}

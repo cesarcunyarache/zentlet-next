@@ -17,6 +17,7 @@ export const siteConfig = {
     forgotPassword: "/auth/forgot-password",
     resetPassword: "/auth/reset-password",
     app: "/admin",
+    lists: "/admin/list",
     privacy: "/legal/privacy",
     terms: "/legal/terms",
   },

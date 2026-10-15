@@ -1,11 +1,11 @@
-import type { DateRange, TransactionFilters } from "../types";
+import type { SummaryFilters, TransactionFilters } from "../types";
 
 export const transactionKeys = {
   all: ["transactions"] as const,
   lists: ["transactions", "list"] as const,
   list: (filters: TransactionFilters) => ["transactions", "list", filters] as const,
   summaries: ["transactions", "summary"] as const,
-  summary: (range: DateRange) => ["transactions", "summary", range] as const,
+  summary: (filters: SummaryFilters) => ["transactions", "summary", filters] as const,
   detail: (transactionId: string) => ["transactions", transactionId] as const,
 };
 

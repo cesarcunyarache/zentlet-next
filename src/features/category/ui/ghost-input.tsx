@@ -61,7 +61,7 @@ export function GhostInput({ label, value, placeholder, inputSize, onChange }: G
                 transition={CHAR_TRANSITION}
                 className="inline-block text-center will-change-[transform,opacity,filter]"
               >
-                {char}
+                {char === " " ? "\u00A0" : char}
               </motion.span>
             ))}
           </AnimatePresence>

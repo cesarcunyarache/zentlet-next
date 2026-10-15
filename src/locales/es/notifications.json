@@ -12,6 +12,16 @@
         "title": "Te pasaste de tu límite en {category}",
         "body": "Llevas {spent} de {limit} ({percent} %)."
       }
+    },
+    "list": {
+      "joined": {
+        "title": "{member} se unió a {list}",
+        "body": "Ya puede ver la lista y, si es editor, agregar sus movimientos."
+      },
+      "owned": {
+        "title": "Ahora eres dueño de {list}",
+        "body": "La persona que la creó cerró su cuenta y la lista pasó a ti."
+      }
     }
   }
 }

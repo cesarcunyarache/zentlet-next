@@ -40,6 +40,10 @@ import { InboxIcon } from "@/features/inbox/ui/inbox-icon";
 import { InboxSheet } from "@/features/inbox/ui/inbox-sheet";
 import { useInboxItems } from "@/features/inbox/stores/inbox.store";
 import { useGmailConnectResult } from "@/features/inbox/hooks/useGmailConnectResult";
+import { ListFilterSelect } from "@/features/list/ui/filter/list-filter-select";
+import { ListActionsMenu } from "@/features/list/ui/actions/list-actions-menu";
+import { useLists } from "@/features/list/stores/list.store";
+import { TransactionListField } from "@/features/list/ui/picker/transaction-list-field";
 import { ToastBubble } from "@/core/components/ui/toast-bubble";
 import { Onboarding } from "@/features/onboarding/ui/onboarding";
 import { periodRange } from "@/features/transaction/lib/format";
@@ -110,6 +114,12 @@ export default function HomePage() {
   const [period, setPeriod] = useState<Period>("month");
   const [kind, setKind] = useState<TransactionType | null>(null);
   const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
+  const [listFilter, setListFilter] = useState<string | null>(null);
+  const { lists } = useLists();
+  const selectedList =
+    lists.find((list) => list.id === listFilter) ??
+    lists.find((list) => list.isPrivate);
+  const listId = selectedList?.id ?? null;
   const [query, setQuery] = useState("");
   const [searching, setSearching] = useState(false);
 
@@ -131,9 +141,11 @@ export default function HomePage() {
   function saveTransaction(
     values: TransactionFormValues,
     recurrence: RecurrenceFrequency | null = null,
+    targetListId: string | null = listId,
   ) {
     createTransaction({
       ...values,
+      listId: targetListId,
       reference: null,
       recurrence: recurrence ?? undefined,
     });
@@ -176,8 +188,9 @@ export default function HomePage() {
 
   const [debouncedQuery] = useDebounce(query.trim(), 300);
   const range = periodRange(period);
+  const summaryFilters = { ...range, listId: listId ?? undefined };
   const filters: TransactionFilters = {
-    ...range,
+    ...summaryFilters,
     type: kind ?? undefined,
     categoryId: categoryFilter ?? undefined,
     q: debouncedQuery || undefined,
@@ -188,7 +201,7 @@ export default function HomePage() {
     ? (feed.transactions.find((transaction) => transaction.id === detailId) ??
       null)
     : null;
-  const { data: summary } = useTransactionSummary(range);
+  const { data: summary } = useTransactionSummary(summaryFilters);
   const { data: lifetime } = useTransactionSummary(ALL_TIME);
 
   const expenseTotal = summary?.expenseTotal ?? 0;
@@ -200,7 +213,7 @@ export default function HomePage() {
     [totalsByCategory, kind],
   );
 
-  const budgetBars = useBudgetBars(budgets, range);
+  const budgetBars = useBudgetBars(budgets, range, listId);
   const stripData = useMemo<CategoryTotal[]>(
     () =>
       buildStripData({
@@ -305,7 +318,18 @@ export default function HomePage() {
             setCategoryFilter(null);
           }}
           onKindChange={setKind}
-        />
+        >
+          <ListFilterSelect
+            value={listId}
+            onChange={(next) => {
+              setListFilter(next);
+              setCategoryFilter(null);
+            }}
+          />
+          {selectedList && !selectedList.isPrivate ? (
+            <ListActionsMenu list={selectedList} onToast={toast} />
+          ) : null}
+        </SummaryHeader>
 
         <div className="mt-8">
           <CategoryStrip
@@ -474,11 +498,12 @@ export default function HomePage() {
         categories={categories}
         currency={currency}
         draft={formDraft}
+        defaultListId={listId}
         isEditing={Boolean(editing)}
-        onSubmit={(values, recurrence) =>
+        onSubmit={(values, recurrence, targetListId) =>
           editing
             ? saveEdit(editing, values)
-            : saveTransaction(values, recurrence)
+            : saveTransaction(values, recurrence, targetListId)
         }
       />
 
@@ -507,10 +532,13 @@ export default function HomePage() {
           if (detail?.id === id) removeTransaction(detail);
           toast(t("toast.deleted"));
         }}
-      />
+      >
+        <TransactionListField transaction={detail} onMessage={toast} />
+      </TransactionDetailSheet>
 
       <BudgetSheet
         category={budgetCategory}
+        listId={listId}
         currency={currency}
         onClose={() => setBudgetCategory(null)}
         onSaved={() => {

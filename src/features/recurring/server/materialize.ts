@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { isoDateIn, toUTCISODate } from "@/lib/dates";
 import { logger } from "@/lib/observability/logger";
+import { ensurePrivateListId } from "@/lib/private-list";
 import { scheduleBudgetCheck } from "@/features/budget/server/check";
 import { userLocalDate } from "@/features/preference/server/timezone";
 import type { RecurringTransaction } from "@/generated/prisma/client";
@@ -15,6 +16,7 @@ async function materialize(recurring: RecurringTransaction, now: Date) {
   const { dates, nextDueDate } = dueDatesThrough(schedule, await userLocalDate(userId, now), MAX_OCCURRENCES_PER_RUN);
   if (!dates.length) return 0;
 
+  const listId = await ensurePrivateListId(userId);
   const rows = dates.map((date) => ({
     userId,
     type,
@@ -23,6 +25,7 @@ async function materialize(recurring: RecurringTransaction, now: Date) {
     categoryId,
     transactionDate: new Date(date),
     recurringTransactionId: id,
+    listId,
   }));
   const [{ count }] = await prisma.$transaction([
     prisma.transaction.createMany({ data: rows, skipDuplicates: true }),

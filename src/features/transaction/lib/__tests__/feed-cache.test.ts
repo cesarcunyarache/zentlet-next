@@ -6,6 +6,7 @@ import {
   inRange,
   insertIntoFeed,
   matchesFilters,
+  matchesSummary,
   patchInFeed,
   removeFromFeed,
   type FeedData,
@@ -60,6 +61,19 @@ describe("matchesFilters", () => {
   it("busca en la descripción sin distinguir mayúsculas", () => {
     expect(matchesFilters(tx(), { q: "TAXI" })).toBe(true);
     expect(matchesFilters(tx(), { q: "almuerzo" })).toBe(false);
+  });
+});
+
+describe("matchesSummary", () => {
+  it("con lista, sólo cuentan los movimientos de esa lista", () => {
+    expect(matchesSummary(tx({ listId: "l1" }), { listId: "l1" })).toBe(true);
+    expect(matchesSummary(tx({ listId: "l2" }), { listId: "l1" })).toBe(false);
+    expect(matchesSummary(tx(), { listId: "l1" })).toBe(false);
+    expect(matchesSummary(tx(), {})).toBe(true);
+  });
+
+  it("también respeta el periodo", () => {
+    expect(matchesSummary(tx({ listId: "l1" }), { listId: "l1", from: "2026-10-01" })).toBe(false);
   });
 });
 

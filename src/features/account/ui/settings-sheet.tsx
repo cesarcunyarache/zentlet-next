@@ -6,6 +6,7 @@ import { currencySymbol, type CurrencyCode } from "@/features/preference/lib/cur
 import { FeedbackRow } from "@/features/feedback/ui/feedback-row";
 import { PlanRow } from "@/features/billing/ui/plan-row";
 import { EmailImportRow } from "@/features/inbox/ui/email-import-row";
+import { WhatsappRow } from "@/features/whatsapp/ui/whatsapp-row";
 import { analyticsAvailable } from "@/lib/observability/client";
 import { AnalyticsRow } from "./analytics-row";
 import { AppearanceRow } from "./appearance-row";
@@ -41,6 +42,7 @@ export function SettingsSheet({
       <LanguageRow />
       <AppearanceRow />
       <EmailImportRow />
+      <WhatsappRow />
       <DataExportRow transactionCount={transactionCount} currencySymbol={currencySymbol(currency)} />
       {analyticsAvailable && <AnalyticsRow />}
       <FeedbackRow />

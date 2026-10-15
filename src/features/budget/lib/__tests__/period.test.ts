@@ -17,6 +17,7 @@ function budget(overrides: Partial<TBudget> = {}): TBudget {
   return {
     id: "b1",
     categoryId: "food",
+    listId: "private",
     kind: "recurring",
     ...monthly,
     startDate: "2026-07-01",

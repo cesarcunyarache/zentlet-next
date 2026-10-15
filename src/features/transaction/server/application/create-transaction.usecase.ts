@@ -3,6 +3,7 @@ import { isExpense, type NewTransaction } from "../domain/transaction.entity";
 import { fail } from "../domain/transaction.errors";
 import type {
   BudgetMonitor,
+  ListPlacement,
   RecurringSeries,
 } from "../domain/transaction.ports";
 import type { TransactionRepository } from "../domain/transaction.repository";
@@ -10,6 +11,7 @@ import type { TransactionRepository } from "../domain/transaction.repository";
 function toNewTransaction(
   userId: string,
   input: CreateTransactionInput,
+  listId: string,
 ): NewTransaction {
   return {
     id: input.id,
@@ -20,6 +22,7 @@ function toNewTransaction(
     categoryId: input.categoryId,
     reference: input.reference ?? null,
     transactionDate: new Date(input.transactionDate),
+    listId,
   };
 }
 
@@ -28,6 +31,7 @@ export class CreateTransactionUseCase {
     private readonly transactions: TransactionRepository,
     private readonly recurring: RecurringSeries,
     private readonly budget: BudgetMonitor,
+    private readonly lists: ListPlacement,
   ) {}
 
   async execute(userId: string, input: CreateTransactionInput) {
@@ -40,7 +44,9 @@ export class CreateTransactionUseCase {
     if (!(await this.transactions.categoryBelongsTo(userId, input.categoryId)))
       return fail("category_not_found");
 
-    const draft = toNewTransaction(userId, input);
+    const requestedListId = input.recurrence ? null : (input.listId ?? null);
+    const listId = await this.lists.targetFor(userId, requestedListId);
+    const draft = toNewTransaction(userId, input, listId);
     const created = input.recurrence
       ? await this.recurring.start(draft, input.recurrence)
       : await this.transactions.insert(draft);

@@ -122,5 +122,26 @@
       "sessionExpired": "Por seguridad, cierra sesión, vuelve a entrar e inténtalo de nuevo.",
       "fallback": "No pudimos eliminar tu cuenta. Inténtalo de nuevo."
     }
+  },
+  "whatsapp": {
+    "label": "WhatsApp",
+    "hint": "Registra tus gastos escribiéndole a nuestro asistente",
+    "connected": "Conectado: escríbele tus gastos al asistente",
+    "configure": "Configurar",
+    "hide": "Ocultar",
+    "pitch": "Conecta tu WhatsApp y registra gastos e ingresos con un mensaje, una nota de voz o la foto de una boleta. Si falta algún dato, el asistente te lo pregunta.",
+    "connect": "Conectar WhatsApp",
+    "connecting": "Generando código…",
+    "connectFailed": "No pudimos generar el código. Inténtalo de nuevo.",
+    "privacy": "Solo atendemos mensajes del número que conectes. Puedes desconectarlo cuando quieras.",
+    "openHint": "Toca el botón y envía el mensaje que aparece escrito en WhatsApp. El código vence en 10 minutos.",
+    "open": "Abrir WhatsApp",
+    "manual": "¿WhatsApp está en otro teléfono? Envía «{command}» a nuestro número.",
+    "waiting": "Esperando tu mensaje…",
+    "connectedAs": "Conectado: {phone}",
+    "usage": "Escríbele, por ejemplo, «almuerzo 25» o «¿cuánto gasté esta semana?».",
+    "disconnect": "Desconectar",
+    "disconnecting": "Desconectando…",
+    "disconnectFailed": "No pudimos desconectar tu WhatsApp. Inténtalo de nuevo."
   }
 }
