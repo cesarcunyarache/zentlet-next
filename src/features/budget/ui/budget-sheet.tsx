@@ -13,6 +13,7 @@ import { BudgetRing } from "./budget-ring";
 import { BudgetSheetFooter } from "./budget-sheet-footer";
 
 interface BudgetSheetProps {
+  listId: string | null;
   category: CategoryBase | null;
   currency: string;
   onClose: () => void;
@@ -20,9 +21,9 @@ interface BudgetSheetProps {
   onRemoved: () => void;
 }
 
-export function BudgetSheet({ category, currency, onClose, onSaved, onRemoved }: BudgetSheetProps) {
+export function BudgetSheet({ category, listId, currency, onClose, onSaved, onRemoved }: BudgetSheetProps) {
   const t = useTranslations("budgets.sheet");
-  const sheet = useBudgetSheet({ category, onSaved, onRemoved });
+  const sheet = useBudgetSheet({ category, listId, onSaved, onRemoved });
   const { shown, draft } = sheet;
 
   const periodOptions = BUDGET_PERIOD_OPTIONS.map((value) => ({ value, label: t(`periods.${value}`) }));

@@ -3,6 +3,7 @@ import type { BudgetAlert, BudgetAlertKind, BudgetKind, BudgetPeriodUnit, TBudge
 interface BudgetRow {
   id: string;
   categoryId: string;
+  listId: string;
   kind: string;
   periodUnit: string;
   periodCount: number;
@@ -18,6 +19,7 @@ export function serializeBudget(row: BudgetRow): TBudget {
   return {
     id: row.id,
     categoryId: row.categoryId,
+    listId: row.listId,
     kind: row.kind as BudgetKind,
     periodUnit: row.periodUnit as BudgetPeriodUnit,
     periodCount: row.periodCount,

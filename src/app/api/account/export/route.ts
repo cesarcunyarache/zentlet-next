@@ -57,7 +57,9 @@ function findExportData(userId: string) {
         description: true,
         createdAt: true,
         _count: { select: { transactions: true } },
-        budget: {
+        budgets: {
+          where: { list: { privateOwnerId: userId } },
+          take: 1,
           select: {
             kind: true,
             periodUnit: true,
@@ -85,7 +87,7 @@ export async function GET(req: Request) {
     const [transactions, categories] = await findExportData(userId);
 
     const sheets = buildWorkbook(
-      { transactions, categories },
+      { transactions, categories: categories.map(({ budgets, ...category }) => ({ ...category, budget: budgets[0] ?? null })) },
       withCurrency(LABELS[locale], currency),
       DATE_FORMATS[locale],
     );

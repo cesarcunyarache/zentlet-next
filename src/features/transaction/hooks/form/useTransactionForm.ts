@@ -13,12 +13,14 @@ interface UseTransactionFormOptions {
   isOpen: boolean;
   draft?: Partial<TransactionFormValues>;
   categories: CategoryLike[];
+  defaultListId?: string | null;
 }
 
-export function useTransactionForm({ isOpen, draft, categories }: UseTransactionFormOptions) {
+export function useTransactionForm({ isOpen, draft, categories, defaultListId = null }: UseTransactionFormOptions) {
   const [rawAmount, setRawAmount] = useState("");
   const [autoCategoryId, setAutoCategoryId] = useState<string | null>(null);
   const [recurrence, setRecurrence] = useState<RecurrenceFrequency | null>(null);
+  const [listId, setListId] = useState<string | null>(defaultListId);
   const manualChoices = useRef({ category: false, type: false });
 
   const form = useForm<TransactionFormValues>({
@@ -37,6 +39,7 @@ export function useTransactionForm({ isOpen, draft, categories }: UseTransaction
     setRawAmount(initialRawAmount(draft));
     setAutoCategoryId(null);
     setRecurrence(null);
+    setListId(defaultListId);
     manualChoices.current = { category: Boolean(draft?.categoryId), type: Boolean(draft?.type) };
     form.reset(initialFormValues(draft));
     if (draft) void form.trigger();
@@ -110,12 +113,14 @@ export function useTransactionForm({ isOpen, draft, categories }: UseTransaction
     rawAmount,
     autoCategoryId,
     recurrence,
+    listId,
     isThinking,
     submit,
     changeDescription,
     changeAmount,
     changeDate,
     changeRecurrence: setRecurrence,
+    changeList: setListId,
     chooseType,
     toggleCategory,
     selectCategory,

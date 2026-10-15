@@ -9,6 +9,7 @@ const thisMonth = { from: "2026-09-01", to: "2026-10-01" };
 const food: TBudget = {
   id: "b-food",
   categoryId: "food",
+  listId: "private",
   kind: "recurring",
   ...BUDGET_PERIODS.monthly,
   startDate: "2026-08-01",
@@ -20,6 +21,7 @@ const food: TBudget = {
 const taxi: TBudget = {
   id: "b-taxi",
   categoryId: "taxi",
+  listId: "private",
   kind: "recurring",
   ...BUDGET_PERIODS.weekly,
   startDate: "2026-09-07",

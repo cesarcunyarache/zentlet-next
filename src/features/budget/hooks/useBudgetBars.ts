@@ -10,16 +10,20 @@ import type { PeriodRange, TBudget } from "../types";
 
 const rangeKey = ({ from, to }: PeriodRange) => `${from}/${to}`;
 
-export function useBudgetBars(budgets: TBudget[], view: DateRange): Map<string, BudgetBar> {
+export function useBudgetBars(budgets: TBudget[], view: DateRange, listId: string | null): Map<string, BudgetBar> {
   const queryClient = useQueryClient();
-  const measurements = budgetMeasurements(budgets, view, todayISO());
+  const inList = budgets.filter((budget) => budget.listId === listId);
+  const measurements = budgetMeasurements(inList, view, todayISO());
   const ranges = [...new Map(measurements.map(({ range }) => [rangeKey(range), range])).values()];
 
   const summaries = useQueries({
-    queries: ranges.map((range) => ({
-      queryKey: transactionKeys.summary(range),
-      queryFn: () => fetchSummaryWithPending(queryClient, range),
-    })),
+    queries: ranges.map((range) => {
+      const filters = { ...range, listId: listId ?? undefined };
+      return {
+        queryKey: transactionKeys.summary(filters),
+        queryFn: () => fetchSummaryWithPending(queryClient, filters),
+      };
+    }),
   });
   const summaryByRange = new Map(ranges.map((range, index) => [rangeKey(range), summaries[index].data]));
 

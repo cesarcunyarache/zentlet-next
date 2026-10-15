@@ -5,6 +5,7 @@ import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Sheet } from "@/core/components/ui/sheet";
 import { CategoryFormSheet } from "@/features/category/ui/category-form-sheet";
+import { ListSelect } from "@/features/list/ui/picker/list-select";
 import type { RecurrenceFrequency } from "@/features/recurring/types";
 import { track } from "@/lib/observability/client";
 import type { TransactionFormValues } from "../../schemas/transaction.schema";
@@ -30,8 +31,9 @@ interface TransactionFormSheetProps {
   onOpenChange: (open: boolean) => void;
   categories: CategoryLike[];
   currency: string;
-  onSubmit: (values: TransactionFormValues, recurrence: RecurrenceFrequency | null) => void;
+  onSubmit: (values: TransactionFormValues, recurrence: RecurrenceFrequency | null, listId: string | null) => void;
   draft?: Partial<TransactionFormValues>;
+  defaultListId?: string | null;
   isEditing?: boolean;
 }
 
@@ -42,18 +44,17 @@ export function TransactionFormSheet({
   currency,
   onSubmit,
   draft,
+  defaultListId = null,
   isEditing = false,
 }: TransactionFormSheetProps) {
   const t = useTranslations();
-  const transactionForm = useTransactionForm({ isOpen, draft, categories });
+  const transactionForm = useTransactionForm({ isOpen, draft, categories, defaultListId });
   const { values, autoCategoryId } = transactionForm;
   const { isCreating, startCreating, stopCreating } = useCategoryCreation(categories, (created) =>
     transactionForm.selectCategory(created.id),
   );
-
-
   function saveTransaction(submitted: TransactionFormValues) {
-    onSubmit(finalizeFormValues(submitted, categories, t("transactions.defaultDescription")), transactionForm.recurrence);
+    onSubmit(finalizeFormValues(submitted, categories, t("transactions.defaultDescription")), transactionForm.recurrence, transactionForm.listId);
     onOpenChange(false);
     if (isEditing) {
       track("transaction_updated", transactionUpdatedPayload(submitted, draft));
@@ -92,6 +93,9 @@ export function TransactionFormSheet({
             />
             {isEditing ? null : (
               <TransactionRepeatField value={transactionForm.recurrence} onChange={transactionForm.changeRecurrence} />
+            )}
+            {isEditing || transactionForm.recurrence ? null : (
+              <ListSelect value={transactionForm.listId} onChange={transactionForm.changeList} className="bg-app-fill min-h-9 max-w-48 px-3" />
             )}
           </div>
 

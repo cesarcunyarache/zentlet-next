@@ -4,6 +4,7 @@ import type { BudgetKind, BudgetPeriodUnit, TBudget } from "../types";
 export interface CreateBudgetPayload {
   id: string;
   categoryId: string;
+  listId: string;
   kind: BudgetKind;
   periodUnit: BudgetPeriodUnit;
   periodCount: number;

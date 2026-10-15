@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { Button, cn } from "@heroui/react";
-import { Pencil } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Sheet } from "@/core/components/ui/sheet";
 import { CategoryEmoji } from "@/features/category/ui/category-emoji";
@@ -96,7 +96,10 @@ function DeleteButton({ isConfirming, onPress }: DeleteButtonProps) {
           exit={{ opacity: 0, y: -12 }}
           transition={{ duration: 0.16 }}
         >
-          {t(isConfirming ? "confirmDelete" : "delete")}
+          <span className="flex items-center justify-center gap-2">
+            <Trash2 className="size-[17px]" strokeWidth={2.2} aria-hidden />
+            {t(isConfirming ? "confirmDelete" : "delete")}
+          </span>
         </motion.span>
       </AnimatePresence>
     </Button>
@@ -115,29 +118,43 @@ function TransactionDetails({ transaction, category, currency, children }: Trans
   const locale = useLocale();
   const amount = signedAmount(transaction);
 
+  const isExpense = amount < 0;
+
   return (
     <>
       <motion.div
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center gap-3.5 pt-2 pb-[18px]"
+        className="flex flex-col items-center gap-3 pt-2 pb-6 text-center"
       >
-        <CategoryEmoji category={category} className="size-[52px] rounded-2xl text-[25px]" />
-        <span>
-          <span className="font-display text-app-fg block text-[21px] font-bold tracking-[-0.02em]">
-            {transaction.description}
+        <CategoryEmoji category={category} className="size-16 rounded-[22px] text-[30px]" />
+        <span className="flex min-w-0 flex-col items-center gap-1">
+          <span className="text-app-muted line-clamp-2 text-[15px] font-medium">{transaction.description}</span>
+          <span
+            className={cn(
+              "num font-display text-[40px] leading-none font-bold tracking-[-0.03em]",
+              isExpense ? "text-app-expense" : "text-app-income",
+            )}
+          >
+            {formatSigned(amount, currency)}
           </span>
-          <span className="text-app-muted block text-[13px]">{category?.name ?? t("uncategorized")}</span>
+        </span>
+        <span className="flex flex-wrap items-center justify-center gap-1.5 text-xs font-semibold">
+          <span className="bg-app-fill text-app-fg rounded-full px-2.5 py-1">
+            {category?.name ?? t("uncategorized")}
+          </span>
+          <span
+            className={cn(
+              "rounded-full px-2.5 py-1",
+              isExpense ? "bg-app-expense-soft text-app-expense" : "bg-app-income-soft text-app-income",
+            )}
+          >
+            {t(`type.${transaction.type}`)}
+          </span>
         </span>
       </motion.div>
 
-      <dl className="border-app-border border-t">
-        <DetailRow label={t("fields.amount")}>
-          <span className={cn("num font-semibold", amount < 0 ? "text-app-expense" : "text-app-income")}>
-            {formatSigned(amount, currency)}
-          </span>
-        </DetailRow>
-        <DetailRow label={t("fields.type")}>{t(`type.${transaction.type}`)}</DetailRow>
+      <dl className="bg-app-fill m-0 rounded-2xl px-4 [&>*:last-child]:border-b-0">
         <DetailRow label={t("fields.date")}>{fullDate(transaction.transactionDate, locale)}</DetailRow>
         {transaction.recurringTransactionId ? (
           <TransactionRecurrenceRow recurringTransactionId={transaction.recurringTransactionId} />
@@ -155,9 +172,9 @@ interface DetailRowProps {
 
 function DetailRow({ label, children }: DetailRowProps) {
   return (
-    <div className="border-app-border flex items-center justify-between border-b px-0.5 py-[13px] text-sm">
-      <dt className="text-app-muted m-0">{label}</dt>
-      <dd className="text-app-fg m-0 font-semibold">{children}</dd>
+    <div className="border-app-border flex items-center justify-between gap-3 border-b px-0.5 py-[13px] text-sm">
+      <dt className="text-app-muted m-0 shrink-0">{label}</dt>
+      <dd className="text-app-fg m-0 text-right font-semibold first-letter:uppercase">{children}</dd>
     </div>
   );
 }

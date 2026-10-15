@@ -8,6 +8,7 @@ const today = "2026-09-26";
 const food: TBudget = {
   id: "b-food",
   categoryId: "food",
+  listId: "private",
   kind: "recurring",
   ...BUDGET_PERIODS.weekly,
   startDate: "2026-08-03",

@@ -133,7 +133,7 @@ model Category {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   transactions          Transaction[]
-  budget                Budget?
+  budgets               Budget[]
   merchantRules         MerchantRule[]
   recurringTransactions RecurringTransaction[]
 
@@ -201,6 +201,7 @@ model TransactionList {
   members      TransactionListMember[]
   invites      TransactionListInvite[]
   transactions Transaction[]
+  budgets      Budget[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -302,8 +303,11 @@ model Feedback {
 
 model Budget {
   id         String   @id @default(uuid())
-  categoryId String   @unique
+  categoryId String
   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  listId String
+  list   TransactionList @relation(fields: [listId], references: [id], onDelete: Cascade)
 
   kind        String   @default("recurring")
   periodUnit  String   @default("month")
@@ -319,6 +323,7 @@ model Budget {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@unique([listId, categoryId])
   @@index([userId])
   @@map("budget")
 }

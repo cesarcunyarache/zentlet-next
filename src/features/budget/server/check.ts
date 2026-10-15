@@ -9,8 +9,8 @@ import { activePeriod, limitAt } from "../lib/period";
 import { BUDGET_LIMITS, serializeAlert, serializeBudget } from "../lib/serialize";
 import type { PeriodRange } from "../types";
 
-const loadBudget = (userId: string, categoryId: string) =>
-  prisma.budget.findFirst({
+const loadBudgets = (userId: string, categoryId: string) =>
+  prisma.budget.findMany({
     where: { userId, categoryId },
     include: { ...BUDGET_LIMITS, alerts: true, category: { select: { name: true } } },
   });
@@ -20,9 +20,9 @@ async function loadPreferences(userId: string) {
   return preferencesSchema.pick({ currency: true, timezone: true }).parse(row ?? {});
 }
 
-async function spentIn(userId: string, categoryId: string, { from, to }: PeriodRange) {
+async function spentIn(userId: string, categoryId: string, listId: string, { from, to }: PeriodRange) {
   const { _sum } = await prisma.transaction.aggregate({
-    where: { userId, categoryId, type: "expense", transactionDate: { gte: new Date(from), lt: new Date(to) } },
+    where: { userId, categoryId, listId, type: "expense", transactionDate: { gte: new Date(from), lt: new Date(to) } },
     _sum: { amount: true },
   });
   return Number(_sum.amount ?? 0);
@@ -36,17 +36,22 @@ async function sentKeys(userId: string, prefix: string) {
   return rows.flatMap(({ dedupeKey }) => (dedupeKey ? [dedupeKey] : []));
 }
 
-export async function checkBudget(userId: string, categoryId: string) {
-  const [row, { currency, timezone }] = await Promise.all([loadBudget(userId, categoryId), loadPreferences(userId)]);
-  if (!row) return;
+type BudgetWithAlerts = Awaited<ReturnType<typeof loadBudgets>>[number];
+type Preferences = Awaited<ReturnType<typeof loadPreferences>>;
 
+export async function checkBudget(userId: string, categoryId: string) {
+  const [rows, preferences] = await Promise.all([loadBudgets(userId, categoryId), loadPreferences(userId)]);
+  await Promise.all(rows.map((row) => checkListBudget(userId, row, preferences)));
+}
+
+async function checkListBudget(userId: string, row: BudgetWithAlerts, { currency, timezone }: Preferences) {
   const budget = serializeBudget(row);
   const period = activePeriod(budget, isoDateIn(timezone));
   const limit = period ? limitAt(budget, period.from) : null;
   if (!period || limit === null) return;
 
   const [spent, sent] = await Promise.all([
-    spentIn(userId, categoryId, period),
+    spentIn(userId, row.categoryId, row.listId, period),
     sentKeys(userId, noticeKeyPrefix(budget.id, period.from)),
   ]);
   const alerts = row.alerts.map(serializeAlert);

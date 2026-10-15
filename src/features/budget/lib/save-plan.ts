@@ -4,6 +4,7 @@ import { BUDGET_PERIODS, activePeriod, periodContaining } from "./period";
 
 export interface BudgetInput {
   categoryId: string;
+  listId: string;
   amount: number;
   period: BudgetPeriod;
   kind: BudgetKind;
@@ -27,6 +28,6 @@ export function planBudgetSave(existing: TBudget | undefined, input: BudgetInput
   if (existing && keepsRule) {
     return { limit: { budgetId: existing.id, effectiveFrom: current.from, amount: input.amount } };
   }
-  const create = { categoryId: input.categoryId, kind: input.kind, ...rule, startDate: current.from, amount: input.amount };
+  const create = { categoryId: input.categoryId, listId: input.listId, kind: input.kind, ...rule, startDate: current.from, amount: input.amount };
   return existing ? { remove: existing.id, create } : { create };
 }

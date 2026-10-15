@@ -43,7 +43,6 @@ import { useGmailConnectResult } from "@/features/inbox/hooks/useGmailConnectRes
 import { ListFilterSelect } from "@/features/list/ui/filter/list-filter-select";
 import { ListActionsMenu } from "@/features/list/ui/actions/list-actions-menu";
 import { useLists } from "@/features/list/stores/list.store";
-import { ListPickerSheet } from "@/features/list/ui/picker/list-picker-sheet";
 import { TransactionListField } from "@/features/list/ui/picker/transaction-list-field";
 import { ToastBubble } from "@/core/components/ui/toast-bubble";
 import { Onboarding } from "@/features/onboarding/ui/onboarding";
@@ -132,7 +131,6 @@ export default function HomePage() {
   });
   const [detailId, setDetailId] = useState<string | null>(null);
   const [pendingDelete, setPendingDelete] = useState<TTransaction | null>(null);
-  const [listTarget, setListTarget] = useState<TTransaction | null>(null);
   const [formDraft, setFormDraft] = useState<Partial<TransactionFormValues>>();
   const [editing, setEditing] = useState<TTransaction | null>(null);
   const [budgetCategory, setBudgetCategory] = useState<CategoryLike | null>(
@@ -143,10 +141,11 @@ export default function HomePage() {
   function saveTransaction(
     values: TransactionFormValues,
     recurrence: RecurrenceFrequency | null = null,
+    targetListId: string | null = listId,
   ) {
     createTransaction({
       ...values,
-      listId,
+      listId: targetListId,
       reference: null,
       recurrence: recurrence ?? undefined,
     });
@@ -214,7 +213,7 @@ export default function HomePage() {
     [totalsByCategory, kind],
   );
 
-  const budgetBars = useBudgetBars(budgets, range);
+  const budgetBars = useBudgetBars(budgets, range, listId);
   const stripData = useMemo<CategoryTotal[]>(
     () =>
       buildStripData({
@@ -499,11 +498,12 @@ export default function HomePage() {
         categories={categories}
         currency={currency}
         draft={formDraft}
+        defaultListId={listId}
         isEditing={Boolean(editing)}
-        onSubmit={(values, recurrence) =>
+        onSubmit={(values, recurrence, targetListId) =>
           editing
             ? saveEdit(editing, values)
-            : saveTransaction(values, recurrence)
+            : saveTransaction(values, recurrence, targetListId)
         }
       />
 
@@ -533,26 +533,12 @@ export default function HomePage() {
           toast(t("toast.deleted"));
         }}
       >
-        <TransactionListField
-          listId={detail?.listId}
-          onPress={() => {
-            setDetailId(null);
-            setListTarget(detail);
-          }}
-        />
+        <TransactionListField transaction={detail} onMessage={toast} />
       </TransactionDetailSheet>
-
-      <ListPickerSheet
-        transaction={listTarget}
-        onClose={() => setListTarget(null)}
-        onDone={(text) => {
-          setListTarget(null);
-          toast(text);
-        }}
-      />
 
       <BudgetSheet
         category={budgetCategory}
+        listId={listId}
         currency={currency}
         onClose={() => setBudgetCategory(null)}
         onSaved={() => {

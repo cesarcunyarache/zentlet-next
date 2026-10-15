@@ -2886,6 +2886,7 @@ export type FeedbackScalarFieldEnum = (typeof FeedbackScalarFieldEnum)[keyof typ
 export const BudgetScalarFieldEnum = {
   id: 'id',
   categoryId: 'categoryId',
+  listId: 'listId',
   kind: 'kind',
   periodUnit: 'periodUnit',
   periodCount: 'periodCount',

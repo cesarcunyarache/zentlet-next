@@ -5,7 +5,7 @@ import { checkBudget } from "../check";
 
 vi.mock("@/lib/prisma", () => ({
   default: {
-    budget: { findFirst: vi.fn() },
+    budget: { findMany: vi.fn() },
     userPreference: { findUnique: vi.fn() },
     transaction: { aggregate: vi.fn() },
     notification: { findMany: vi.fn() },
@@ -18,6 +18,7 @@ const db = vi.mocked(prisma, { deep: true });
 const budget = {
   id: "b1",
   categoryId: "food",
+  listId: "list-1",
   kind: "recurring",
   periodUnit: "month",
   periodCount: 1,
@@ -33,7 +34,7 @@ const spend = (amount: string | null) =>
 beforeEach(() => {
   vi.resetAllMocks();
   vi.useFakeTimers({ now: new Date("2026-10-01T03:00:00.000Z"), toFake: ["Date"] });
-  db.budget.findFirst.mockResolvedValue(budget as never);
+  db.budget.findMany.mockResolvedValue([budget] as never);
   db.userPreference.findUnique.mockResolvedValue({ currency: "PEN", timezone: "America/Lima" } as never);
   db.notification.findMany.mockResolvedValue([]);
 });
@@ -48,6 +49,7 @@ describe("checkBudget", () => {
       where: {
         userId: "user-1",
         categoryId: "food",
+        listId: "list-1",
         type: "expense",
         transactionDate: { gte: new Date("2026-09-01"), lt: new Date("2026-10-01") },
       },
@@ -62,7 +64,7 @@ describe("checkBudget", () => {
   });
 
   it("does nothing without a budget for the category", async () => {
-    db.budget.findFirst.mockResolvedValue(null);
+    db.budget.findMany.mockResolvedValue([]);
 
     await checkBudget("user-1", "food");
 
