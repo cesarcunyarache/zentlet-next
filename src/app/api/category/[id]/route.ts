@@ -1,14 +1,11 @@
 import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
-import { Prisma } from "@/generated/prisma/client";
-import { sanitizeSuggestions } from "@/features/category/ai/lib/normalize-suggestions";
 import { updateCategorySchema } from "@/features/category/schemas/category-api.schema";
-import { errorResponse, getSessionUserId, internalError, parseBody, unauthorized, writeLimit } from "@/lib/api/route-helpers";
-import { isForeignKeyViolation } from "@/lib/db-errors";
+import { categoryUseCases } from "@/features/category/server/infrastructure/category.container";
+import { serializeCategory } from "@/features/category/lib/serialize";
+import { CATEGORY_ERRORS } from "@/features/category/server/infrastructure/http/category.http-errors";
+import { errorFrom, getSessionUserId, internalError, parseBody, unauthorized, writeLimit } from "@/lib/api/route-helpers";
 
 type RouteContext = { params: Promise<{ id: string }> };
-
-const notFound = () => errorResponse("Category not found", 404);
 
 export async function PATCH(req: Request, { params }: RouteContext) {
   try {
@@ -18,23 +15,13 @@ export async function PATCH(req: Request, { params }: RouteContext) {
     const limited = await writeLimit(userId);
     if (limited) return limited;
 
-    const { id } = await params;
     const parsed = await parseBody(req, updateCategorySchema);
     if ("error" in parsed) return parsed.error;
 
-    const { aiSuggestions, ...fields } = parsed.data;
-    const { count } = await prisma.category.updateMany({
-      where: { id, userId },
-      data: {
-        ...fields,
-        ...(aiSuggestions !== undefined && { aiSuggestions: sanitizeSuggestions(aiSuggestions) ?? Prisma.DbNull }),
-      },
-    });
-
-    if (count === 0) return notFound();
-
-    const category = await prisma.category.findUnique({ where: { id } });
-    return NextResponse.json(category);
+    const { id } = await params;
+    const result = await categoryUseCases.update.execute(userId, id, parsed.data);
+    if ("error" in result) return errorFrom(CATEGORY_ERRORS, result.error);
+    return NextResponse.json(serializeCategory(result.category));
   } catch (error) {
     return internalError(req, error, "Error updating category");
   }
@@ -49,12 +36,10 @@ export async function DELETE(req: Request, { params }: RouteContext) {
     if (limited) return limited;
 
     const { id } = await params;
-    const { count } = await prisma.category.deleteMany({ where: { id, userId } });
-    if (count === 0) return notFound();
-
+    const result = await categoryUseCases.delete.execute(userId, id);
+    if ("error" in result) return errorFrom(CATEGORY_ERRORS, result.error);
     return new NextResponse(null, { status: 204 });
   } catch (error) {
-    if (isForeignKeyViolation(error)) return errorResponse("Category has transactions", 409);
     return internalError(req, error, "Error deleting category");
   }
 }
