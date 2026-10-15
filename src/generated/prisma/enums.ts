@@ -9,6 +9,15 @@
 * 🟢 You can import this file directly.
 */
 
+export const TransactionListRole = {
+  owner: 'owner',
+  editor: 'editor',
+  viewer: 'viewer'
+} as const
+
+export type TransactionListRole = (typeof TransactionListRole)[keyof typeof TransactionListRole]
+
+
 export const RecurrenceFrequency = {
   WEEKLY: 'WEEKLY',
   MONTHLY: 'MONTHLY',

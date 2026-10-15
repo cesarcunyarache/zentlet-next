@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { reportError } from "@/lib/observability/server";
 import { checkEmail, isEmailConfigured, sendEmail } from "..";
-import { emailLocale, resetPasswordEmail, verificationEmail } from "../templates";
+import { emailLocale, listInviteEmail, resetPasswordEmail, verificationEmail } from "../templates";
 
 vi.mock("@/lib/observability/server", () => ({ reportError: vi.fn() }));
 
@@ -126,5 +126,22 @@ describe("proveedor de correo", () => {
     expect((await checkEmail()).status).toBe("off");
     vi.stubEnv("NODE_ENV", "production");
     expect((await checkEmail()).status).toBe("error");
+  });
+});
+
+describe("listInviteEmail", () => {
+  it("nombra a quien invita y la lista, enlaza la invitación y escapa el HTML", () => {
+    const email = listInviteEmail("es", {
+      to: "diego@gmail.com",
+      inviterName: "Camila",
+      listName: "<b>Viaje</b>",
+      url: "https://zentlet.app/admin/list/invite/abc",
+    });
+
+    expect(email.subject).toBe("Camila te invitó a la lista <b>Viaje</b> en Zentlet");
+    expect(email.text).toContain("Hola:");
+    expect(email.text).toContain("https://zentlet.app/admin/list/invite/abc");
+    expect(email.html).toContain("&#60;b&#62;Viaje&#60;/b&#62;");
+    expect(email.html).not.toContain("<b>Viaje</b>");
   });
 });

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { LayoutGrid, Plus, Search, Settings, X } from "lucide-react";
+import { Layers, LayoutGrid, Plus, Search, Settings, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useDebounce } from "use-debounce";
 import { useTranslations } from "next-intl";
@@ -40,6 +40,9 @@ import { InboxIcon } from "@/features/inbox/ui/inbox-icon";
 import { InboxSheet } from "@/features/inbox/ui/inbox-sheet";
 import { useInboxItems } from "@/features/inbox/stores/inbox.store";
 import { useGmailConnectResult } from "@/features/inbox/hooks/useGmailConnectResult";
+import { ListsSheet } from "@/features/list/ui/index/lists-sheet";
+import { ListPickerSheet } from "@/features/list/ui/picker/list-picker-sheet";
+import { TransactionListField } from "@/features/list/ui/picker/transaction-list-field";
 import { ToastBubble } from "@/core/components/ui/toast-bubble";
 import { Onboarding } from "@/features/onboarding/ui/onboarding";
 import { periodRange } from "@/features/transaction/lib/format";
@@ -63,6 +66,7 @@ type Sheet =
   | "settings"
   | "notifications"
   | "inbox"
+  | "lists"
   | null;
 
 const ALL_TIME: DateRange = {};
@@ -74,6 +78,7 @@ export default function HomePage() {
   const tNotifications = useTranslations("notifications");
   const { unreadCount } = useNotifications();
   const tInbox = useTranslations("inbox");
+  const tLists = useTranslations("lists");
   const { items: inboxItems } = useInboxItems();
   const { categories: rawCategories } = useCategoryStore();
 
@@ -121,6 +126,7 @@ export default function HomePage() {
   });
   const [detailId, setDetailId] = useState<string | null>(null);
   const [pendingDelete, setPendingDelete] = useState<TTransaction | null>(null);
+  const [listTarget, setListTarget] = useState<TTransaction | null>(null);
   const [formDraft, setFormDraft] = useState<Partial<TransactionFormValues>>();
   const [editing, setEditing] = useState<TTransaction | null>(null);
   const [budgetCategory, setBudgetCategory] = useState<CategoryLike | null>(
@@ -412,6 +418,9 @@ export default function HomePage() {
             >
               <LayoutGrid className="size-5" strokeWidth={1.7} />
             </IconButton>
+            <IconButton label={tLists("open")} onClick={() => setSheet("lists")}>
+              <Layers className="size-5" strokeWidth={1.7} />
+            </IconButton>
             <IconButton
               label={t(searching ? "home.closeSearch" : "home.search")}
               pressed={searching}
@@ -507,6 +516,28 @@ export default function HomePage() {
           if (detail?.id === id) removeTransaction(detail);
           toast(t("toast.deleted"));
         }}
+      >
+        <TransactionListField
+          listId={detail?.listId}
+          onPress={() => {
+            setDetailId(null);
+            setListTarget(detail);
+          }}
+        />
+      </TransactionDetailSheet>
+
+      <ListPickerSheet
+        transaction={listTarget}
+        onClose={() => setListTarget(null)}
+        onDone={(text) => {
+          setListTarget(null);
+          toast(text);
+        }}
+      />
+
+      <ListsSheet
+        isOpen={sheet === "lists"}
+        onOpenChange={(open) => setSheet(open ? "lists" : null)}
       />
 
       <BudgetSheet

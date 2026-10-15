@@ -392,6 +392,9 @@ export const ModelName = {
   Verification: 'Verification',
   Category: 'Category',
   Transaction: 'Transaction',
+  TransactionList: 'TransactionList',
+  TransactionListMember: 'TransactionListMember',
+  TransactionListInvite: 'TransactionListInvite',
   RecurringTransaction: 'RecurringTransaction',
   Feedback: 'Feedback',
   Budget: 'Budget',
@@ -426,7 +429,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "userConsent" | "userPreference" | "session" | "account" | "verification" | "category" | "transaction" | "recurringTransaction" | "feedback" | "budget" | "budgetAlert" | "notification" | "notificationDelivery" | "budgetLimit" | "rateLimit" | "usageLimit" | "subscription" | "billingPayment" | "billingEvent" | "feature" | "userFeature" | "emailInbox" | "gmailConnection" | "inboxSender" | "inboxTransaction" | "merchantRule"
+    modelProps: "user" | "userConsent" | "userPreference" | "session" | "account" | "verification" | "category" | "transaction" | "transactionList" | "transactionListMember" | "transactionListInvite" | "recurringTransaction" | "feedback" | "budget" | "budgetAlert" | "notification" | "notificationDelivery" | "budgetLimit" | "rateLimit" | "usageLimit" | "subscription" | "billingPayment" | "billingEvent" | "feature" | "userFeature" | "emailInbox" | "gmailConnection" | "inboxSender" | "inboxTransaction" | "merchantRule"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1019,6 +1022,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.TransactionCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.TransactionCountAggregateOutputType> | number
+        }
+      }
+    }
+    TransactionList: {
+      payload: Prisma.$TransactionListPayload<ExtArgs>
+      fields: Prisma.TransactionListFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TransactionListFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TransactionListFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListPayload>
+        }
+        findFirst: {
+          args: Prisma.TransactionListFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TransactionListFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListPayload>
+        }
+        findMany: {
+          args: Prisma.TransactionListFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListPayload>[]
+        }
+        create: {
+          args: Prisma.TransactionListCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListPayload>
+        }
+        createMany: {
+          args: Prisma.TransactionListCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TransactionListCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListPayload>[]
+        }
+        delete: {
+          args: Prisma.TransactionListDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListPayload>
+        }
+        update: {
+          args: Prisma.TransactionListUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListPayload>
+        }
+        deleteMany: {
+          args: Prisma.TransactionListDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TransactionListUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TransactionListUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListPayload>[]
+        }
+        upsert: {
+          args: Prisma.TransactionListUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListPayload>
+        }
+        aggregate: {
+          args: Prisma.TransactionListAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTransactionList>
+        }
+        groupBy: {
+          args: Prisma.TransactionListGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TransactionListGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TransactionListCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TransactionListCountAggregateOutputType> | number
+        }
+      }
+    }
+    TransactionListMember: {
+      payload: Prisma.$TransactionListMemberPayload<ExtArgs>
+      fields: Prisma.TransactionListMemberFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TransactionListMemberFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListMemberPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TransactionListMemberFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListMemberPayload>
+        }
+        findFirst: {
+          args: Prisma.TransactionListMemberFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListMemberPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TransactionListMemberFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListMemberPayload>
+        }
+        findMany: {
+          args: Prisma.TransactionListMemberFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListMemberPayload>[]
+        }
+        create: {
+          args: Prisma.TransactionListMemberCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListMemberPayload>
+        }
+        createMany: {
+          args: Prisma.TransactionListMemberCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TransactionListMemberCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListMemberPayload>[]
+        }
+        delete: {
+          args: Prisma.TransactionListMemberDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListMemberPayload>
+        }
+        update: {
+          args: Prisma.TransactionListMemberUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListMemberPayload>
+        }
+        deleteMany: {
+          args: Prisma.TransactionListMemberDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TransactionListMemberUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TransactionListMemberUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListMemberPayload>[]
+        }
+        upsert: {
+          args: Prisma.TransactionListMemberUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListMemberPayload>
+        }
+        aggregate: {
+          args: Prisma.TransactionListMemberAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTransactionListMember>
+        }
+        groupBy: {
+          args: Prisma.TransactionListMemberGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TransactionListMemberGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TransactionListMemberCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TransactionListMemberCountAggregateOutputType> | number
+        }
+      }
+    }
+    TransactionListInvite: {
+      payload: Prisma.$TransactionListInvitePayload<ExtArgs>
+      fields: Prisma.TransactionListInviteFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TransactionListInviteFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListInvitePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TransactionListInviteFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListInvitePayload>
+        }
+        findFirst: {
+          args: Prisma.TransactionListInviteFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListInvitePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TransactionListInviteFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListInvitePayload>
+        }
+        findMany: {
+          args: Prisma.TransactionListInviteFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListInvitePayload>[]
+        }
+        create: {
+          args: Prisma.TransactionListInviteCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListInvitePayload>
+        }
+        createMany: {
+          args: Prisma.TransactionListInviteCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TransactionListInviteCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListInvitePayload>[]
+        }
+        delete: {
+          args: Prisma.TransactionListInviteDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListInvitePayload>
+        }
+        update: {
+          args: Prisma.TransactionListInviteUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListInvitePayload>
+        }
+        deleteMany: {
+          args: Prisma.TransactionListInviteDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TransactionListInviteUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TransactionListInviteUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListInvitePayload>[]
+        }
+        upsert: {
+          args: Prisma.TransactionListInviteUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TransactionListInvitePayload>
+        }
+        aggregate: {
+          args: Prisma.TransactionListInviteAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTransactionListInvite>
+        }
+        groupBy: {
+          args: Prisma.TransactionListInviteGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TransactionListInviteGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TransactionListInviteCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TransactionListInviteCountAggregateOutputType> | number
         }
       }
     }
@@ -2575,12 +2800,55 @@ export const TransactionScalarFieldEnum = {
   reference: 'reference',
   transactionDate: 'transactionDate',
   recurringTransactionId: 'recurringTransactionId',
+  listId: 'listId',
   userId: 'userId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[keyof typeof TransactionScalarFieldEnum]
+
+
+export const TransactionListScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  icon: 'icon',
+  color: 'color',
+  description: 'description',
+  currency: 'currency',
+  ownerId: 'ownerId',
+  archivedAt: 'archivedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TransactionListScalarFieldEnum = (typeof TransactionListScalarFieldEnum)[keyof typeof TransactionListScalarFieldEnum]
+
+
+export const TransactionListMemberScalarFieldEnum = {
+  listId: 'listId',
+  userId: 'userId',
+  role: 'role',
+  joinedAt: 'joinedAt'
+} as const
+
+export type TransactionListMemberScalarFieldEnum = (typeof TransactionListMemberScalarFieldEnum)[keyof typeof TransactionListMemberScalarFieldEnum]
+
+
+export const TransactionListInviteScalarFieldEnum = {
+  id: 'id',
+  listId: 'listId',
+  tokenHash: 'tokenHash',
+  role: 'role',
+  email: 'email',
+  expiresAt: 'expiresAt',
+  createdById: 'createdById',
+  acceptedAt: 'acceptedAt',
+  revokedAt: 'revokedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type TransactionListInviteScalarFieldEnum = (typeof TransactionListInviteScalarFieldEnum)[keyof typeof TransactionListInviteScalarFieldEnum]
 
 
 export const RecurringTransactionScalarFieldEnum = {
@@ -2989,6 +3257,20 @@ export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMo
 
 
 /**
+ * Reference to a field of type 'TransactionListRole'
+ */
+export type EnumTransactionListRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransactionListRole'>
+    
+
+
+/**
+ * Reference to a field of type 'TransactionListRole[]'
+ */
+export type ListEnumTransactionListRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransactionListRole[]'>
+    
+
+
+/**
  * Reference to a field of type 'RecurrenceFrequency'
  */
 export type EnumRecurrenceFrequencyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RecurrenceFrequency'>
@@ -3175,6 +3457,9 @@ export type GlobalOmitConfig = {
   verification?: Prisma.VerificationOmit
   category?: Prisma.CategoryOmit
   transaction?: Prisma.TransactionOmit
+  transactionList?: Prisma.TransactionListOmit
+  transactionListMember?: Prisma.TransactionListMemberOmit
+  transactionListInvite?: Prisma.TransactionListInviteOmit
   recurringTransaction?: Prisma.RecurringTransactionOmit
   feedback?: Prisma.FeedbackOmit
   budget?: Prisma.BudgetOmit

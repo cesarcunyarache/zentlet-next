@@ -35,6 +35,10 @@ model User {
   merchantRules         MerchantRule[]
   recurringTransactions RecurringTransaction[]
 
+  ownedTransactionLists  TransactionList[]       @relation("TransactionListOwner")
+  transactionListMembers TransactionListMember[]
+  transactionListInvites TransactionListInvite[] @relation("TransactionListInviteCreator")
+
   @@unique([email])
   @@map("user")
 }
@@ -157,6 +161,9 @@ model Transaction {
   recurringTransactionId String?
   recurringTransaction   RecurringTransaction? @relation(fields: [recurringTransactionId], references: [id], onDelete: SetNull)
 
+  listId String?
+  list   TransactionList? @relation(fields: [listId], references: [id], onDelete: SetNull)
+
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -166,7 +173,75 @@ model Transaction {
   @@unique([recurringTransactionId, transactionDate])
   @@index([categoryId])
   @@index([userId, transactionDate(sort: Desc), createdAt(sort: Desc), id(sort: Desc)])
+  @@index([listId, transactionDate(sort: Desc), createdAt(sort: Desc), id(sort: Desc)])
   @@map("transaction")
+}
+
+enum TransactionListRole {
+  owner
+  editor
+  viewer
+}
+
+model TransactionList {
+  id          String  @id @default(uuid())
+  name        String
+  icon        String
+  color       String
+  description String?
+  currency    String
+
+  ownerId String
+  owner   User   @relation("TransactionListOwner", fields: [ownerId], references: [id])
+
+  archivedAt DateTime?
+
+  members      TransactionListMember[]
+  invites      TransactionListInvite[]
+  transactions Transaction[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([ownerId])
+  @@map("transaction_list")
+}
+
+model TransactionListMember {
+  listId String
+  list   TransactionList @relation(fields: [listId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  role     TransactionListRole @default(viewer)
+  joinedAt DateTime            @default(now())
+
+  @@id([listId, userId])
+  @@index([userId])
+  @@map("transaction_list_member")
+}
+
+model TransactionListInvite {
+  id String @id @default(uuid())
+
+  listId String
+  list   TransactionList @relation(fields: [listId], references: [id], onDelete: Cascade)
+
+  tokenHash String              @unique
+  role      TransactionListRole @default(viewer)
+  email     String?
+  expiresAt DateTime
+
+  createdById String
+  createdBy   User   @relation("TransactionListInviteCreator", fields: [createdById], references: [id], onDelete: Cascade)
+
+  acceptedAt DateTime?
+  revokedAt  DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([listId])
+  @@map("transaction_list_invite")
 }
 
 enum RecurrenceFrequency {

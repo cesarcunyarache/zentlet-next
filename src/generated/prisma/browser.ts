@@ -58,6 +58,21 @@ export type Category = Prisma.CategoryModel
  */
 export type Transaction = Prisma.TransactionModel
 /**
+ * Model TransactionList
+ * 
+ */
+export type TransactionList = Prisma.TransactionListModel
+/**
+ * Model TransactionListMember
+ * 
+ */
+export type TransactionListMember = Prisma.TransactionListMemberModel
+/**
+ * Model TransactionListInvite
+ * 
+ */
+export type TransactionListInvite = Prisma.TransactionListInviteModel
+/**
  * Model RecurringTransaction
  * 
  */

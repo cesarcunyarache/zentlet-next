@@ -277,6 +277,23 @@ export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedDecimalFilter<$PrismaModel>
 }
 
+export type EnumTransactionListRoleFilter<$PrismaModel = never> = {
+  equals?: $Enums.TransactionListRole | Prisma.EnumTransactionListRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.TransactionListRole[] | Prisma.ListEnumTransactionListRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TransactionListRole[] | Prisma.ListEnumTransactionListRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTransactionListRoleFilter<$PrismaModel> | $Enums.TransactionListRole
+}
+
+export type EnumTransactionListRoleWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TransactionListRole | Prisma.EnumTransactionListRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.TransactionListRole[] | Prisma.ListEnumTransactionListRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TransactionListRole[] | Prisma.ListEnumTransactionListRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTransactionListRoleWithAggregatesFilter<$PrismaModel> | $Enums.TransactionListRole
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTransactionListRoleFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTransactionListRoleFilter<$PrismaModel>
+}
+
 export type EnumRecurrenceFrequencyFilter<$PrismaModel = never> = {
   equals?: $Enums.RecurrenceFrequency | Prisma.EnumRecurrenceFrequencyFieldRefInput<$PrismaModel>
   in?: $Enums.RecurrenceFrequency[] | Prisma.ListEnumRecurrenceFrequencyFieldRefInput<$PrismaModel>
@@ -639,6 +656,23 @@ export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedDecimalFilter<$PrismaModel>
   _min?: Prisma.NestedDecimalFilter<$PrismaModel>
   _max?: Prisma.NestedDecimalFilter<$PrismaModel>
+}
+
+export type NestedEnumTransactionListRoleFilter<$PrismaModel = never> = {
+  equals?: $Enums.TransactionListRole | Prisma.EnumTransactionListRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.TransactionListRole[] | Prisma.ListEnumTransactionListRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TransactionListRole[] | Prisma.ListEnumTransactionListRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTransactionListRoleFilter<$PrismaModel> | $Enums.TransactionListRole
+}
+
+export type NestedEnumTransactionListRoleWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TransactionListRole | Prisma.EnumTransactionListRoleFieldRefInput<$PrismaModel>
+  in?: $Enums.TransactionListRole[] | Prisma.ListEnumTransactionListRoleFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TransactionListRole[] | Prisma.ListEnumTransactionListRoleFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTransactionListRoleWithAggregatesFilter<$PrismaModel> | $Enums.TransactionListRole
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTransactionListRoleFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTransactionListRoleFilter<$PrismaModel>
 }
 
 export type NestedEnumRecurrenceFrequencyFilter<$PrismaModel = never> = {

@@ -1,6 +1,8 @@
 import { currencySymbol } from "@/features/preference/lib/currency";
 import { formatMoney } from "@/lib/money";
-import type { BudgetNoticeData, TNotification } from "../types";
+import type { BudgetNoticeData, NotificationPayloads, NotificationType } from "../types";
+
+type MessageInput = { [Type in NotificationType]: { type: Type; data: NotificationPayloads[Type] } }[NotificationType];
 
 const PERCENT = 100;
 
@@ -14,10 +16,22 @@ function budgetValues({ categoryName, currency, spent, limit }: BudgetNoticeData
   };
 }
 
-export function notificationMessage(notification: Pick<TNotification, "type" | "data">) {
+function messageValues(notification: MessageInput): Record<string, string | number> {
+  switch (notification.type) {
+    case "budget.alert":
+    case "budget.exceeded":
+      return budgetValues(notification.data);
+    case "list.joined":
+      return { list: notification.data.listName, member: notification.data.memberName };
+    case "list.owned":
+      return { list: notification.data.listName };
+  }
+}
+
+export function notificationMessage(notification: MessageInput) {
   return {
     title: `types.${notification.type}.title`,
     body: `types.${notification.type}.body`,
-    values: budgetValues(notification.data),
+    values: messageValues(notification),
   } as const;
 }

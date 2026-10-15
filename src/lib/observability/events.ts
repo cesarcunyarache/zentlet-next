@@ -39,6 +39,13 @@ export interface AnalyticsEvents {
   inbox_gmail_result: { outcome: GmailConnectResult };
   recurring_created: { frequency: RecurrenceFrequency };
   recurring_stopped: Record<string, never>;
+  list_created: Record<string, never>;
+  list_deleted: Record<string, never>;
+  list_entries_added: { count: number; source: "list" | "transaction" };
+  list_entry_removed: Record<string, never>;
+  list_invite_created: { role: "editor" | "viewer" };
+  list_joined: { role: "editor" | "viewer" };
+  list_left: Record<string, never>;
   inbox_item_accepted: { edited: boolean; learned: boolean };
   inbox_item_dismissed: { duplicate: boolean };
   data_exported: Record<string, never>;

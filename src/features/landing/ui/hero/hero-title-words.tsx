@@ -20,7 +20,7 @@ export function HeroTitleWords({ words }: { words: string[] }) {
     <WordRotate
       words={words}
       duration={WORD_DURATION_MS}
-      className="text-brand-ink whitespace-nowrap"
+      className="text-brand-ink pb-[0.12em] whitespace-nowrap"
       motionProps={reduceMotion ? STATIC_WORD_MOTION : WORD_MOTION}
     />
   );

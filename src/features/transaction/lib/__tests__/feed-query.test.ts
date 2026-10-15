@@ -75,6 +75,7 @@ describe("serializeTransaction", () => {
       transactionDate: "2026-09-10",
       reference: null,
       recurringTransactionId: null,
+      listId: null,
     });
   });
 });

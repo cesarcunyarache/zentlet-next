@@ -59,6 +59,9 @@ export const ModelName = {
   Verification: 'Verification',
   Category: 'Category',
   Transaction: 'Transaction',
+  TransactionList: 'TransactionList',
+  TransactionListMember: 'TransactionListMember',
+  TransactionListInvite: 'TransactionListInvite',
   RecurringTransaction: 'RecurringTransaction',
   Feedback: 'Feedback',
   Budget: 'Budget',
@@ -204,12 +207,55 @@ export const TransactionScalarFieldEnum = {
   reference: 'reference',
   transactionDate: 'transactionDate',
   recurringTransactionId: 'recurringTransactionId',
+  listId: 'listId',
   userId: 'userId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[keyof typeof TransactionScalarFieldEnum]
+
+
+export const TransactionListScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  icon: 'icon',
+  color: 'color',
+  description: 'description',
+  currency: 'currency',
+  ownerId: 'ownerId',
+  archivedAt: 'archivedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TransactionListScalarFieldEnum = (typeof TransactionListScalarFieldEnum)[keyof typeof TransactionListScalarFieldEnum]
+
+
+export const TransactionListMemberScalarFieldEnum = {
+  listId: 'listId',
+  userId: 'userId',
+  role: 'role',
+  joinedAt: 'joinedAt'
+} as const
+
+export type TransactionListMemberScalarFieldEnum = (typeof TransactionListMemberScalarFieldEnum)[keyof typeof TransactionListMemberScalarFieldEnum]
+
+
+export const TransactionListInviteScalarFieldEnum = {
+  id: 'id',
+  listId: 'listId',
+  tokenHash: 'tokenHash',
+  role: 'role',
+  email: 'email',
+  expiresAt: 'expiresAt',
+  createdById: 'createdById',
+  acceptedAt: 'acceptedAt',
+  revokedAt: 'revokedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type TransactionListInviteScalarFieldEnum = (typeof TransactionListInviteScalarFieldEnum)[keyof typeof TransactionListInviteScalarFieldEnum]
 
 
 export const RecurringTransactionScalarFieldEnum = {

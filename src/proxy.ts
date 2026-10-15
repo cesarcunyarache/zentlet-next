@@ -4,6 +4,11 @@ import createMiddleware from "next-intl/middleware";
 import { auth } from "@/lib/auth";
 import { siteConfig } from "@/lib/site";
 import { routing } from "@/i18n/routing";
+import {
+  PENDING_INVITE_COOKIE,
+  PENDING_INVITE_MAX_AGE_S,
+  inviteTokenFromPath,
+} from "@/features/list/lib/pending-invite";
 
 const handleI18n = createMiddleware(routing);
 
@@ -13,6 +18,21 @@ function splitLocale(pathname: string) {
   const locale = routing.locales.find((candidate) => candidate === first);
   if (!locale) return { prefix: "", path: pathname };
   return { prefix: `/${locale}`, path: pathname.slice(locale.length + 1) || "/" };
+}
+
+/** Una invitación abierta sin sesión sobrevive al login (o al registro) en una cookie corta. */
+function rememberInvite(path: string, response: NextResponse) {
+  const token = inviteTokenFromPath(path);
+  if (token) {
+    response.cookies.set(PENDING_INVITE_COOKIE, token, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: PENDING_INVITE_MAX_AGE_S,
+    });
+  }
+  return response;
 }
 
 export async function proxy(request: NextRequest) {
@@ -30,7 +50,7 @@ export async function proxy(request: NextRequest) {
       return NextResponse.redirect(new URL(prefix + siteConfig.routes.app, request.url));
     }
     if (isAppPage && !session) {
-      return NextResponse.redirect(new URL(prefix + siteConfig.routes.signIn, request.url));
+      return rememberInvite(path, NextResponse.redirect(new URL(prefix + siteConfig.routes.signIn, request.url)));
     }
   }
 

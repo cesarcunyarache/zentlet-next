@@ -10,6 +10,7 @@ export interface Transaction {
   reference: string | null;
   transactionDate: Date;
   recurringTransactionId: string | null;
+  listId: string | null;
   createdAt: Date;
 }
 

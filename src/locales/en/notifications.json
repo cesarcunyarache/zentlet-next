@@ -12,6 +12,16 @@
         "title": "You went over your {category} limit",
         "body": "You've spent {spent} of {limit} ({percent}%)."
       }
+    },
+    "list": {
+      "joined": {
+        "title": "{member} joined {list}",
+        "body": "They can now see the list and, if they're an editor, add their transactions."
+      },
+      "owned": {
+        "title": "You now own {list}",
+        "body": "The person who created it closed their account and the list passed to you."
+      }
     }
   }
 }

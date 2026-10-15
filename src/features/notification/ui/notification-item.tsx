@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@heroui/react";
-import { CircleAlert, TrendingUp } from "lucide-react";
+import { CircleAlert, Crown, TrendingUp, UserPlus } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { dayLabel, toISODate } from "@/lib/dates";
 import { notificationMessage } from "../lib/message";
@@ -10,11 +10,15 @@ import type { NotificationType, TNotification } from "../types";
 const ICONS: Record<NotificationType, typeof CircleAlert> = {
   "budget.alert": TrendingUp,
   "budget.exceeded": CircleAlert,
+  "list.joined": UserPlus,
+  "list.owned": Crown,
 };
 
 const ICON_TONE: Record<NotificationType, string> = {
   "budget.alert": "bg-app-fill text-app-fg",
   "budget.exceeded": "bg-app-expense-soft text-app-expense",
+  "list.joined": "bg-app-fill text-app-fg",
+  "list.owned": "bg-app-fill text-app-fg",
 };
 
 export function NotificationItem({ notification }: { notification: TNotification }) {

@@ -17,6 +17,7 @@ export function toEntity(row: TransactionRow): Transaction {
     reference: row.reference,
     transactionDate: row.transactionDate,
     recurringTransactionId: row.recurringTransactionId,
+    listId: row.listId,
     createdAt: row.createdAt,
   };
 }

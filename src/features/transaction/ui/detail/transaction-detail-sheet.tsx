@@ -20,6 +20,7 @@ interface TransactionDetailSheetProps {
   onOpenChange: (open: boolean) => void;
   onEdit: (transaction: TTransaction) => void;
   onDelete: (id: string) => void;
+  children?: React.ReactNode;
 }
 
 export function TransactionDetailSheet({
@@ -29,6 +30,7 @@ export function TransactionDetailSheet({
   onOpenChange,
   onEdit,
   onDelete,
+  children,
 }: TransactionDetailSheetProps) {
   const t = useTranslations("transactions");
   const { isConfirming, requestConfirmation } = useDeleteConfirmation(transaction?.id);
@@ -58,7 +60,11 @@ export function TransactionDetailSheet({
         </div>
       }
     >
-      {transaction ? <TransactionDetails transaction={transaction} category={category} currency={currency} /> : null}
+      {transaction ? (
+        <TransactionDetails transaction={transaction} category={category} currency={currency}>
+          {children}
+        </TransactionDetails>
+      ) : null}
     </Sheet>
   );
 }
@@ -101,9 +107,10 @@ interface TransactionDetailsProps {
   transaction: TTransaction;
   category?: CategoryLike;
   currency: string;
+  children?: React.ReactNode;
 }
 
-function TransactionDetails({ transaction, category, currency }: TransactionDetailsProps) {
+function TransactionDetails({ transaction, category, currency, children }: TransactionDetailsProps) {
   const t = useTranslations("transactions");
   const locale = useLocale();
   const amount = signedAmount(transaction);
@@ -135,6 +142,7 @@ function TransactionDetails({ transaction, category, currency }: TransactionDeta
         {transaction.recurringTransactionId ? (
           <TransactionRecurrenceRow recurringTransactionId={transaction.recurringTransactionId} />
         ) : null}
+        {children}
       </dl>
     </>
   );

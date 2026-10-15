@@ -10,6 +10,7 @@ interface TransactionRow {
   transactionDate: Date;
   reference: string | null;
   recurringTransactionId: string | null;
+  listId?: string | null;
 }
 
 export function serializeTransaction(row: TransactionRow): TTransaction {
@@ -22,5 +23,6 @@ export function serializeTransaction(row: TransactionRow): TTransaction {
     transactionDate: toUTCISODate(row.transactionDate),
     reference: row.reference,
     recurringTransactionId: row.recurringTransactionId,
+    listId: row.listId ?? null,
   };
 }

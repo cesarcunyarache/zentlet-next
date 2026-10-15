@@ -17,7 +17,7 @@ const input: CreateTransactionInput = {
 };
 
 function stored(draft: NewTransaction, recurringTransactionId: string | null = null): Transaction {
-  return { ...draft, recurringTransactionId, createdAt: new Date() };
+  return { ...draft, recurringTransactionId, listId: null, createdAt: new Date() };
 }
 
 function fakeRepository(overrides: Partial<TransactionRepository> = {}): TransactionRepository {

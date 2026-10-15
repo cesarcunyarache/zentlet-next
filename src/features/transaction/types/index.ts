@@ -12,6 +12,7 @@ export interface TTransaction {
   transactionDate: string;
   reference?: string | null;
   recurringTransactionId?: string | null;
+  listId?: string | null;
 }
 
 export interface TNewTransaction extends TTransaction {

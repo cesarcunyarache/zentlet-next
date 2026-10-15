@@ -1,5 +1,5 @@
 import "../../heroui-components.css";
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { getLocale } from "next-intl/server";
 import { auth } from "@/lib/auth";
 import { siteConfig } from "@/lib/site";
@@ -14,6 +14,8 @@ import { BillingReturn } from "@/features/billing/ui/billing-return";
 import { PreferenceSync } from "@/features/preference/ui/preference-sync";
 import { AccountCurrencyProvider } from "@/features/preference/ui/account-currency-provider";
 import { preferencesSchema } from "@/features/preference/schemas/preference.schema";
+import { PENDING_INVITE_COOKIE } from "@/features/list/lib/pending-invite";
+import { PendingInviteRedirect } from "@/features/list/ui/invite/pending-invite-redirect";
 
 /**
  * La sesión se lee aquí (servidor) y el id del usuario viaja en el HTML:
@@ -41,6 +43,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) return redirect({ href: siteConfig.routes.signIn, locale: await getLocale() });
   const currency = await accountCurrency(session.user.id);
+  const pendingInvite = (await cookies()).get(PENDING_INVITE_COOKIE)?.value ?? null;
 
   return (
     <OfflineQueryProvider
@@ -52,6 +55,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <AnalyticsIdentity userId={session.user.id} />
       <PreferenceSync />
       <BillingReturn />
+      {pendingInvite ? <PendingInviteRedirect token={pendingInvite} /> : null}
       <AccountCurrencyProvider currency={currency}>
         <OnboardingProvider userId={session.user.id} pending={!session.user.onboardingCompletedAt}>
           {children}

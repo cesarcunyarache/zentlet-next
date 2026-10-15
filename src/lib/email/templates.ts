@@ -10,6 +10,7 @@ import type { Email } from "./types";
 const COPY = {
   es: {
     greeting: (name: string) => `Hola, ${name}:`,
+    anonymousGreeting: "Hola:",
     verify: {
       subject: "Confirma tu correo en Zentlet",
       body: "Confirma tu correo para empezar a registrar tus gastos.",
@@ -26,10 +27,18 @@ const COPY = {
       action: "Abrir Zentlet",
       footer: "Recibes este correo porque tienes presupuestos activos en Zentlet.",
     },
+    listInvite: {
+      subject: (inviter: string, list: string) => `${inviter} te invitó a la lista ${list} en Zentlet`,
+      body: (inviter: string, list: string) =>
+        `${inviter} quiere compartir contigo la lista «${list}» para registrar juntos sus gastos. La invitación vence en 7 días y sirve para una sola persona.`,
+      action: "Ver invitación",
+      footer: "Si no esperabas esta invitación, ignora este mensaje.",
+    },
     fallbackLink: "Si el botón no funciona, copia este enlace en tu navegador:",
   },
   en: {
     greeting: (name: string) => `Hi ${name},`,
+    anonymousGreeting: "Hi,",
     verify: {
       subject: "Confirm your email for Zentlet",
       body: "Confirm your email to start tracking your expenses.",
@@ -45,6 +54,13 @@ const COPY = {
     notification: {
       action: "Open Zentlet",
       footer: "You're receiving this email because you have active budgets in Zentlet.",
+    },
+    listInvite: {
+      subject: (inviter: string, list: string) => `${inviter} invited you to the list ${list} on Zentlet`,
+      body: (inviter: string, list: string) =>
+        `${inviter} wants to share the list "${list}" with you to track its expenses together. The invite expires in 7 days and works for one person.`,
+      action: "View invite",
+      footer: "If you weren't expecting this invite, ignore this message.",
     },
     fallbackLink: "If the button doesn't work, paste this link into your browser:",
   },
@@ -77,7 +93,7 @@ interface EmailContent {
 
 function renderEmail(locale: Locale, { to, name, subject, body, action, url, footer }: EmailContent): Email {
   const copy = COPY[locale];
-  const greeting = copy.greeting(name);
+  const greeting = name ? copy.greeting(name) : copy.anonymousGreeting;
   const safeUrl = escapeHtml(url);
 
   const html = `<!doctype html>
@@ -125,4 +141,20 @@ export function notificationEmail(
 function appUrl(locale: Locale) {
   const prefix = locale === routing.defaultLocale ? "" : `/${locale}`;
   return `${siteConfig.url}${prefix}${siteConfig.routes.app}`;
+}
+
+export function listInviteEmail(
+  locale: Locale,
+  { to, inviterName, listName, url }: { to: string; inviterName: string; listName: string; url: string },
+): Email {
+  const { subject, body, action, footer } = COPY[locale].listInvite;
+  return renderEmail(locale, {
+    to,
+    name: "",
+    subject: subject(inviterName, listName),
+    body: body(inviterName, listName),
+    action,
+    url,
+    footer,
+  });
 }

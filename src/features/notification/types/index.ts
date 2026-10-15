@@ -11,9 +11,22 @@ export type BudgetNoticeData = {
   periodFrom: string;
 };
 
+export type ListJoinedData = {
+  listId: string;
+  listName: string;
+  memberName: string;
+};
+
+export type ListOwnedData = {
+  listId: string;
+  listName: string;
+};
+
 export interface NotificationPayloads {
   "budget.alert": BudgetNoticeData;
   "budget.exceeded": BudgetNoticeData;
+  "list.joined": ListJoinedData;
+  "list.owned": ListOwnedData;
 }
 
 export type NotificationType = keyof NotificationPayloads;
