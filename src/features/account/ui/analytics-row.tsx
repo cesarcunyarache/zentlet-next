@@ -1,19 +1,17 @@
 "use client";
 
-import { useState } from "react";
 import { cn } from "@heroui/react";
 import { useTranslations } from "next-intl";
-import { getAnalyticsConsent, setAnalyticsConsent } from "@/lib/observability/client";
+import { useAnalyticsConsent } from "@/features/legal/hooks/useAnalyticsConsent";
 import { SettingsRow } from "./settings-row";
 
 export function AnalyticsRow() {
   const t = useTranslations("settings.analytics");
-  const [isEnabled, setIsEnabled] = useState(() => getAnalyticsConsent() === "granted");
+  const { consent, choose } = useAnalyticsConsent();
+  const isEnabled = consent === "granted";
 
   function toggle() {
-    const next = !isEnabled;
-    setAnalyticsConsent(next ? "granted" : "denied");
-    setIsEnabled(next);
+    choose(isEnabled ? "denied" : "granted", "settings");
   }
 
   return (

@@ -4,7 +4,7 @@ import { cn } from "@heroui/react";
 import { useLocale, useTranslations } from "next-intl";
 import { Sheet } from "@/core/components/ui/sheet";
 import { CategoryEmoji } from "@/features/category/ui/category-emoji";
-import { useDeleteConfirmation } from "@/features/transaction/hooks/useDeleteConfirmation";
+import { useDeleteConfirmation } from "@/core/hooks/useDeleteConfirmation";
 import { fullDate } from "@/lib/dates";
 import { formatSigned } from "@/lib/money";
 import type { TListEntry, TListMember } from "../../types";

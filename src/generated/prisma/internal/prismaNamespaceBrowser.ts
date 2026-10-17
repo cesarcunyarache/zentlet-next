@@ -53,6 +53,7 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   UserConsent: 'UserConsent',
+  UserCookieConsent: 'UserCookieConsent',
   UserPreference: 'UserPreference',
   Session: 'Session',
   Account: 'Account',
@@ -125,6 +126,20 @@ export const UserConsentScalarFieldEnum = {
 } as const
 
 export type UserConsentScalarFieldEnum = (typeof UserConsentScalarFieldEnum)[keyof typeof UserConsentScalarFieldEnum]
+
+
+export const UserCookieConsentScalarFieldEnum = {
+  id: 'id',
+  visitorId: 'visitorId',
+  userId: 'userId',
+  granted: 'granted',
+  policyVersion: 'policyVersion',
+  source: 'source',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt'
+} as const
+
+export type UserCookieConsentScalarFieldEnum = (typeof UserCookieConsentScalarFieldEnum)[keyof typeof UserCookieConsentScalarFieldEnum]
 
 
 export const UserPreferenceScalarFieldEnum = {

@@ -10,6 +10,7 @@
  */
 export type * from './models/User'
 export type * from './models/UserConsent'
+export type * from './models/UserCookieConsent'
 export type * from './models/UserPreference'
 export type * from './models/Session'
 export type * from './models/Account'

@@ -5,7 +5,7 @@ import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Sheet } from "@/core/components/ui/sheet";
 import { GhostInput } from "@/features/category/ui/ghost-input";
-import { useDeleteConfirmation } from "@/features/transaction/hooks/useDeleteConfirmation";
+import { useDeleteConfirmation } from "@/core/hooks/useDeleteConfirmation";
 import { useListForm } from "../../hooks/useListForm";
 import type { TList, TListPayload } from "../../types";
 

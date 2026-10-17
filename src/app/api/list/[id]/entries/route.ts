@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { assignEntriesSchema, listEntriesQuerySchema } from "@/features/list/schemas/list-api.schema";
 import { listUseCases } from "@/features/list/server/infrastructure/list.container";
-import { LIST_ERRORS } from "@/features/list/server/infrastructure/list.http-errors";
+import { LIST_ERRORS } from "@/features/list/server/infrastructure/http/list.http-errors";
 import { serializeEntry } from "@/features/list/lib/serialize";
 import type { TListEntryPage } from "@/features/list/types";
 import { errorFrom, getSessionUserId, internalError, parseBody, parseQuery, unauthorized, writeLimit } from "@/lib/api/route-helpers";

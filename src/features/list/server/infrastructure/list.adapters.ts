@@ -1,14 +1,14 @@
 import { createHash, randomBytes } from "node:crypto";
 import prisma from "@/lib/prisma";
 import { DEFAULT_CURRENCY } from "@/features/preference/lib/currency";
-import { notify } from "@/features/notification/server/notify";
+import { notificationUseCases } from "@/features/notification/server/infrastructure/notification.container";
 import { routing } from "@/i18n/routing";
 import { sendEmail } from "@/lib/email";
 import { listInviteEmail } from "@/lib/email/templates";
 import { siteConfig } from "@/lib/site";
 import { invitePath } from "../../lib/pending-invite";
-import type { InviteMailer, InviteTokens } from "../domain/invite.ports";
-import type { AccountCurrency, ListNotifier } from "../domain/list.ports";
+import type { InviteMailer, InviteTokens } from "../domain/ports/invite.ports";
+import type { AccountCurrency, ListNotifier } from "../domain/ports/list.ports";
 
 const TOKEN_BYTES = 24;
 
@@ -29,20 +29,24 @@ export const inviteTokens: InviteTokens = {
   hash: hashToken,
 };
 
+function inviteUrl(token: string, locale: string) {
+  const lang = routing.locales.find((candidate) => candidate === locale) ?? routing.defaultLocale;
+  const localePrefix = lang === routing.defaultLocale ? "" : `/${lang}`;
+  return { lang, url: `${siteConfig.url}${localePrefix}${invitePath(token)}` };
+}
+
 export const inviteMailer: InviteMailer = {
   send({ to, token, inviterName, listName, locale }) {
-    const lang = routing.locales.find((candidate) => candidate === locale) ?? routing.defaultLocale;
-    const prefix = lang === routing.defaultLocale ? "" : `/${lang}`;
-    const url = `${siteConfig.url}${prefix}${invitePath(token)}`;
+    const { lang, url } = inviteUrl(token, locale);
     return sendEmail(listInviteEmail(lang, { to, inviterName, listName, url }));
   },
 };
 
 export const listNotifier: ListNotifier = {
   async memberJoined(ownerId, data) {
-    await notify({ type: "list.joined", userId: ownerId, data, dedupeKey: `list.joined:${data.listId}:${Date.now()}` });
+    await notificationUseCases.notify.execute({ type: "list.joined", userId: ownerId, data, dedupeKey: `list.joined:${data.listId}:${Date.now()}` });
   },
   async ownershipReceived(userId, data) {
-    await notify({ type: "list.owned", userId, data, dedupeKey: `list.owned:${data.listId}` });
+    await notificationUseCases.notify.execute({ type: "list.owned", userId, data, dedupeKey: `list.owned:${data.listId}` });
   },
 };

@@ -5,13 +5,13 @@ import prisma from "@/lib/prisma";
 import { POST as createTransaction } from "@/app/api/transaction/route";
 import { DELETE as stopRoute, GET as getRoute } from "@/app/api/recurring-transaction/[id]/route";
 import { GET as recurringCron } from "@/app/api/cron/recurring/route";
-import { scheduleBudgetCheck } from "@/features/budget/server/check";
+import { scheduleBudgetCheck } from "@/features/budget/server/infrastructure/budget.monitor";
 import { createUser, resetDatabase } from "@/test/integration/database";
 import type { TTransaction } from "@/features/transaction/types";
 import type { RecurrenceFrequency, TRecurringTransaction } from "../types";
 
 vi.mock("@/lib/auth", () => ({ auth: { api: { getSession: vi.fn() } } }));
-vi.mock("@/features/budget/server/check", () => ({ scheduleBudgetCheck: vi.fn() }));
+vi.mock("@/features/budget/server/infrastructure/budget.monitor", () => ({ scheduleBudgetCheck: vi.fn() }));
 
 const getSession = vi.mocked(auth.api.getSession);
 const BASE_URL = "http://localhost";

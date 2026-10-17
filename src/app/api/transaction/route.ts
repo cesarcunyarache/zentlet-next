@@ -6,7 +6,7 @@ import {
 import { transactionUseCases } from "@/features/transaction/server/infrastructure/transaction.container";
 import { serializeTransaction } from "@/features/transaction/lib/serialize";
 import type { TransactionPage } from "@/features/transaction/types";
-import { TRANSACTION_ERRORS } from "@/features/transaction/server/infrastructure/transaction.http-errors";
+import { TRANSACTION_ERRORS } from "@/features/transaction/server/infrastructure/http/transaction.http-errors";
 import { errorFrom, getSessionUserId, internalError, parseBody, parseQuery, unauthorized, writeLimit } from "@/lib/api/route-helpers";
 
 export async function GET(req: Request) {

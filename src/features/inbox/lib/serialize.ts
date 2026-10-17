@@ -1,4 +1,5 @@
-import type { TInboxItem, TInboxSender } from "../types";
+import type { InboxConnection } from "../server/domain/entities/inbox-connection.entity";
+import type { GmailConnectionStatus, TInboxConnection, TInboxItem, TInboxSender } from "../types";
 
 interface InboxItemRow {
   id: string;
@@ -9,7 +10,7 @@ interface InboxItemRow {
   isNewSender: boolean;
   isLearned: boolean;
   type: string;
-  amount: { toNumber(): number } | null;
+  amount: number | null;
   currency: string | null;
   merchant: string | null;
   description: string;
@@ -38,7 +39,7 @@ export function serializeInboxItem(row: InboxItemRow): TInboxItem {
     isNewSender: row.isNewSender,
     isLearned: row.isLearned,
     type: row.type === "income" ? "income" : "expense",
-    amount: row.amount ? row.amount.toNumber() : null,
+    amount: row.amount,
     currency: row.currency,
     merchant: row.merchant,
     description: row.description,
@@ -57,5 +58,21 @@ export function serializeInboxSender(row: InboxSenderRow): TInboxSender {
     status: row.status === "blocked" ? "blocked" : "trusted",
     origin: row.origin === "manual" ? "manual" : "learned",
     acceptedCount: row.acceptedCount,
+  };
+}
+
+export function serializeInboxConnection({ isAvailable, inbox, visibleSenders, gmail }: InboxConnection): TInboxConnection {
+  return {
+    isAvailable,
+    address: inbox?.address ?? null,
+    verificationCode: inbox?.verificationCode ?? null,
+    verificationUrl: inbox?.verificationUrl ?? null,
+    lastReceivedAt: inbox?.lastReceivedAt?.toISOString() ?? null,
+    senders: visibleSenders.map(serializeInboxSender),
+    gmail: {
+      isAvailable: gmail.isAvailable,
+      email: gmail.connection?.email ?? null,
+      status: (gmail.connection?.status as GmailConnectionStatus | undefined) ?? null,
+    },
   };
 }

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { refundSchema } from "@/features/billing/schemas/billing-api.schema";
-import { refundPayment } from "@/features/billing/server/payments";
+import { billingUseCases } from "@/features/billing/server/infrastructure/billing.container";
 import { errorResponse, hasBearerSecret, internalError, parseBody, unauthorized } from "@/lib/api/route-helpers";
 
 const REFUND_ERRORS = {
@@ -16,7 +16,7 @@ export async function POST(req: Request) {
     const parsed = await parseBody(req, refundSchema);
     if ("error" in parsed) return parsed.error;
 
-    const outcome = await refundPayment(parsed.data);
+    const outcome = await billingUseCases.refundPayment.execute(parsed.data);
     if (outcome.kind !== "refunded") {
       const { message, status } = REFUND_ERRORS[outcome.kind];
       return errorResponse(message, status);

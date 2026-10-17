@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import type { Locale } from "@/i18n/routing";
 import { today, toISODate } from "@/lib/dates";
 import { track } from "@/lib/observability/client";
 import { suggestTransactionCategory } from "../../ai/actions/category-suggester";
@@ -73,7 +72,7 @@ async function suggestCategoryId(description: string, categories: CategoryLike[]
 
 export function useReceiptScan({ categories, currency, onSave, onEdit }: UseReceiptScanOptions) {
   const t = useTranslations();
-  const locale = useLocale() as Locale;
+  const locale = useLocale();
   const [isOpen, setIsOpen] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [scan, setScan] = useState<ScanState>(SCANNING);

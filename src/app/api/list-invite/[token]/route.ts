@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { inviteTokenSchema } from "@/features/list/schemas/list-api.schema";
 import { listUseCases } from "@/features/list/server/infrastructure/list.container";
-import { LIST_ERRORS } from "@/features/list/server/infrastructure/list.http-errors";
+import { LIST_ERRORS } from "@/features/list/server/infrastructure/http/list.http-errors";
 import { serializeInvitePreview } from "@/features/list/lib/serialize";
 import { PENDING_INVITE_COOKIE } from "@/features/list/lib/pending-invite";
 import { errorFrom, getSessionUserId, internalError, unauthorized, writeLimit } from "@/lib/api/route-helpers";

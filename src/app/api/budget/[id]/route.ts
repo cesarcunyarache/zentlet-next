@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
-import { errorResponse, getSessionUserId, internalError, unauthorized, writeLimit } from "@/lib/api/route-helpers";
+import { budgetUseCases } from "@/features/budget/server/infrastructure/budget.container";
+import { BUDGET_ERRORS } from "@/features/budget/server/infrastructure/http/budget.http-errors";
+import { errorFrom, getSessionUserId, internalError, unauthorized, writeLimit } from "@/lib/api/route-helpers";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -13,9 +14,8 @@ export async function DELETE(req: Request, { params }: RouteContext) {
     if (limited) return limited;
 
     const { id } = await params;
-    const { count } = await prisma.budget.deleteMany({ where: { id, userId } });
-    if (count === 0) return errorResponse("Budget not found", 404);
-
+    const result = await budgetUseCases.delete.execute(userId, id);
+    if ("error" in result) return errorFrom(BUDGET_ERRORS, result.error);
     return new NextResponse(null, { status: 204 });
   } catch (error) {
     return internalError(req, error, "Error deleting budget");

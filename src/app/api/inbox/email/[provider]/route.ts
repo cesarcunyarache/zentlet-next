@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { handleInboundEmail } from "@/features/inbox/server/webhook";
+import { handleInboundEmail } from "@/features/inbox/server/infrastructure/http/inbound-email";
 import { errorResponse, internalError } from "@/lib/api/route-helpers";
 
 export async function POST(req: Request, { params }: { params: Promise<{ provider: string }> }) {

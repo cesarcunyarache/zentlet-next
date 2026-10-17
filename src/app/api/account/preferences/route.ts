@@ -1,17 +1,14 @@
 import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
 import { getSessionUserId, internalError, parseBody, unauthorized, writeLimit } from "@/lib/api/route-helpers";
-import { preferenceUpdateSchema, preferencesSchema } from "@/features/preference/schemas/preference.schema";
-
-const PREFERENCE_SELECT = { language: true, currency: true, timezone: true, extras: true } as const;
+import { preferenceUpdateSchema } from "@/features/preference/schemas/preference.schema";
+import { preferenceUseCases } from "@/features/preference/server/infrastructure/preference.container";
 
 export async function GET(req: Request) {
   try {
     const userId = await getSessionUserId(req);
     if (!userId) return unauthorized();
 
-    const row = await prisma.userPreference.findUnique({ where: { userId }, select: PREFERENCE_SELECT });
-    return NextResponse.json(row && preferencesSchema.parse(row));
+    return NextResponse.json(await preferenceUseCases.get.execute(userId));
   } catch (error) {
     return internalError(req, error, "Error loading preferences");
   }
@@ -28,13 +25,7 @@ export async function PATCH(req: Request) {
     const parsed = await parseBody(req, preferenceUpdateSchema);
     if ("error" in parsed) return parsed.error;
 
-    const row = await prisma.userPreference.upsert({
-      where: { userId },
-      create: { userId, ...parsed.data },
-      update: parsed.data,
-      select: PREFERENCE_SELECT,
-    });
-    return NextResponse.json(preferencesSchema.parse(row));
+    return NextResponse.json(await preferenceUseCases.update.execute(userId, parsed.data));
   } catch (error) {
     return internalError(req, error, "Error saving preferences");
   }

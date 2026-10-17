@@ -41,3 +41,7 @@ export const budgetAlertsSchema = z.object({
       message: "Alertas repetidas",
     }),
 });
+
+export type CreateBudgetInput = z.infer<typeof createBudgetSchema>;
+export type BudgetLimitInput = z.infer<typeof budgetLimitSchema>;
+export type BudgetAlertsInput = z.infer<typeof budgetAlertsSchema>;

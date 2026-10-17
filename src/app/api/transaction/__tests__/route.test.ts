@@ -3,16 +3,15 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { DELETE, GET, PATCH } from "../[id]/route";
 import { POST } from "../route";
-import { scheduleBudgetCheck } from "@/features/budget/server/check";
+import { scheduleBudgetCheck } from "@/features/budget/server/infrastructure/budget.monitor";
 
 vi.mock("@/lib/auth", () => ({ auth: { api: { getSession: vi.fn() } } }));
-vi.mock("@/features/budget/server/check", () => ({ scheduleBudgetCheck: vi.fn() }));
+vi.mock("@/features/budget/server/infrastructure/budget.monitor", () => ({ scheduleBudgetCheck: vi.fn() }));
 vi.mock("@/lib/prisma", () => ({
   default: {
     transaction: {
       findUnique: vi.fn(),
       findFirst: vi.fn(),
-      findUniqueOrThrow: vi.fn(),
       create: vi.fn(),
       updateMany: vi.fn(),
       deleteMany: vi.fn(),
@@ -211,7 +210,7 @@ describe("GET /api/transaction/[id]", () => {
 describe("PATCH /api/transaction/[id]", () => {
   beforeEach(() => {
     db.transaction.updateMany.mockResolvedValue({ count: 1 });
-    db.transaction.findUniqueOrThrow.mockResolvedValue(row("user-1") as never);
+    db.transaction.findUnique.mockResolvedValue(row("user-1") as never);
   });
 
   it("actualiza sólo movimientos del usuario y devuelve el resultado", async () => {
@@ -229,7 +228,14 @@ describe("PATCH /api/transaction/[id]", () => {
     db.transaction.updateMany.mockResolvedValue({ count: 0 });
 
     expect((await patch({ amount: 30 })).status).toBe(404);
-    expect(db.transaction.findUniqueOrThrow).not.toHaveBeenCalled();
+    expect(db.transaction.findUnique).not.toHaveBeenCalled();
+  });
+
+  it("si se borra entre la escritura y la relectura es 404, no 500", async () => {
+    db.transaction.findUnique.mockResolvedValue(null);
+
+    expect((await patch({ amount: 30 })).status).toBe(404);
+    expect(scheduleBudgetCheck).not.toHaveBeenCalled();
   });
 
   it("mover a una categoría que no es del usuario es 422 y no escribe", async () => {

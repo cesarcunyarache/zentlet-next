@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server";
 import { redirectToGoogle, redirectWithResult } from "@/features/inbox/http/gmail-oauth";
-import { startGmailConnect } from "@/features/inbox/server/gmail-connection";
+import { inboxUseCases } from "@/features/inbox/server/infrastructure/inbox.container";
 import { getSessionUserId, internalError } from "@/lib/api/route-helpers";
 
 export async function GET(req: NextRequest) {
@@ -8,9 +8,9 @@ export async function GET(req: NextRequest) {
     const userId = await getSessionUserId(req);
     if (!userId) return redirectWithResult(req, "error");
 
-    const started = startGmailConnect();
-    if (!started) return redirectWithResult(req, "unavailable");
-    return redirectToGoogle(started.url, started.state);
+    const authorization = inboxUseCases.startGmailConnect.execute();
+    if (!authorization) return redirectWithResult(req, "unavailable");
+    return redirectToGoogle(authorization.url, authorization.state);
   } catch (error) {
     return internalError(req, error, "Error starting Gmail connection");
   }

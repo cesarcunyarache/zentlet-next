@@ -11,8 +11,6 @@ interface BudgetRow {
   limits: { effectiveFrom: Date; amount: { toString(): string } }[];
 }
 
-export const BUDGET_LIMITS = { limits: { orderBy: { effectiveFrom: "asc" } } } as const;
-
 const toISODate = (date: Date) => date.toISOString().slice(0, 10);
 
 export function serializeBudget(row: BudgetRow): TBudget {

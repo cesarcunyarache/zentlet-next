@@ -19,3 +19,13 @@ export const LEGAL_CONSENT_HEADER = "x-legal-consent";
 export const LEGAL_DOCUMENTS = ["terms", "privacy"] as const;
 
 export type LegalDocumentId = (typeof LEGAL_DOCUMENTS)[number];
+
+export const COOKIE_POLICY_VERSION = "2026-09-26";
+
+export const COOKIE_CATEGORIES = ["analytics"] as const;
+
+export type CookieCategory = (typeof COOKIE_CATEGORIES)[number];
+
+export const COOKIE_CONSENT_SOURCES = ["banner", "settings"] as const;
+
+export type CookieConsentSource = (typeof COOKIE_CONSENT_SOURCES)[number];

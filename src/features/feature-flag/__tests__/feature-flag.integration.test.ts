@@ -3,12 +3,23 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { GET as flagsRoute } from "@/app/api/account/features/route";
 import { createUser, resetDatabase } from "@/test/integration/database";
-import { clearUserFlag, createFlag, deleteFlag, setFlagEnabled, setFlagRollout, setUserFlag } from "../server/admin";
-import { getEnabledFlags, isFlagEnabled } from "../server/flags";
+import { featureFlagUseCases } from "../server/infrastructure/feature-flag.container";
 
 vi.mock("@/lib/auth", () => ({ auth: { api: { getSession: vi.fn() } } }));
 
 const ACTOR = "test";
+
+const flags = featureFlagUseCases;
+const createFlag = (input: { slug: string; type?: "EXPERIMENT"; description?: string }, actor: string) =>
+  flags.create.execute(input, actor);
+const setFlagEnabled = (slug: string, enabled: boolean, actor: string) => flags.update.execute(slug, { enabled }, actor);
+const setFlagRollout = (slug: string, rollout: number, actor: string) => flags.update.execute(slug, { rollout }, actor);
+const setUserFlag = (email: string, slug: string, enabled: boolean, actor: string) =>
+  flags.assignUser.execute(email, slug, enabled, actor);
+const clearUserFlag = (email: string, slug: string) => flags.clearUser.execute(email, slug);
+const deleteFlag = (slug: string) => flags.delete.execute(slug);
+const getEnabledFlags = (userId: string) => flags.getEnabled.execute(userId);
+const isFlagEnabled = (userId: string, slug: string) => flags.isEnabled.execute(userId, slug);
 let user: { id: string; email: string };
 
 beforeEach(async () => {
@@ -90,7 +101,7 @@ describe("feature flags con Postgres", () => {
   it("el porcentaje sólo admite enteros de 0 a 100", async () => {
     await createFlag({ slug: "beta" }, ACTOR);
 
-    await expect(setFlagRollout("beta", 150, ACTOR)).rejects.toThrow("0 to 100");
+    expect(await setFlagRollout("beta", 150, ACTOR)).toEqual({ error: "invalid_rollout" });
     await expect(prisma.feature.update({ where: { slug: "beta" }, data: { rollout: 150 } })).rejects.toThrow();
     expect((await prisma.feature.findUniqueOrThrow({ where: { slug: "beta" } })).rollout).toBe(100);
   });
@@ -109,8 +120,17 @@ describe("feature flags con Postgres", () => {
   it("asignar a un correo inexistente falla sin crear nada", async () => {
     await createFlag({ slug: "beta" }, ACTOR);
 
-    await expect(setUserFlag("nadie@example.com", "beta", true, ACTOR)).rejects.toThrow("No user with email");
+    expect(await setUserFlag("nadie@example.com", "beta", true, ACTOR)).toEqual({ error: "user_not_found" });
     expect(await prisma.userFeature.count()).toBe(0);
+  });
+
+  it("cambiar, asignar o borrar un flag que no existe es flag_not_found; repetir un slug es slug_taken", async () => {
+    await createFlag({ slug: "beta" }, ACTOR);
+
+    expect(await createFlag({ slug: "beta" }, ACTOR)).toEqual({ error: "slug_taken" });
+    expect(await setFlagEnabled("nope", true, ACTOR)).toEqual({ error: "flag_not_found" });
+    expect(await setUserFlag(user.email, "nope", true, ACTOR)).toEqual({ error: "flag_not_found" });
+    expect(await deleteFlag("nope")).toEqual({ error: "flag_not_found" });
   });
 
   it("borrar el flag o el usuario borra sus asignaciones", async () => {

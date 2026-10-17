@@ -7,12 +7,12 @@ import { POST as acceptRoute } from "@/app/api/inbox/[id]/accept/route";
 import { POST as dismissRoute } from "@/app/api/inbox/[id]/dismiss/route";
 import { GET as getConnection, POST as createConnection } from "@/app/api/inbox/connection/route";
 import { POST as webhookRoute } from "@/app/api/inbox/email/[provider]/route";
-import { scheduleBudgetCheck } from "@/features/budget/server/check";
+import { scheduleBudgetCheck } from "@/features/budget/server/infrastructure/budget.monitor";
 import { createUser, resetDatabase } from "@/test/integration/database";
 import type { TInboxConnection, TInboxItem } from "../types";
 
 vi.mock("@/lib/auth", () => ({ auth: { api: { getSession: vi.fn() } } }));
-vi.mock("@/features/budget/server/check", () => ({ scheduleBudgetCheck: vi.fn() }));
+vi.mock("@/features/budget/server/infrastructure/budget.monitor", () => ({ scheduleBudgetCheck: vi.fn() }));
 
 const getSession = vi.mocked(auth.api.getSession);
 const BASE_URL = "http://localhost";

@@ -1,8 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { deliverPending } from "@/features/notification/server/deliver";
+import { notificationUseCases } from "@/features/notification/server/infrastructure/notification.container";
 import { GET } from "../route";
 
-vi.mock("@/features/notification/server/deliver", () => ({ deliverPending: vi.fn() }));
+vi.mock("@/features/notification/server/infrastructure/notification.container", () => ({
+  notificationUseCases: { deliverPending: { execute: vi.fn() } },
+}));
+
+const deliverPending = vi.mocked(notificationUseCases.deliverPending.execute);
 
 const SECRET = "cron-secret-for-tests";
 const get = (authorization?: string) =>
@@ -11,7 +15,7 @@ const get = (authorization?: string) =>
 beforeEach(() => {
   vi.resetAllMocks();
   vi.stubEnv("CRON_SECRET", SECRET);
-  vi.mocked(deliverPending).mockResolvedValue({ processed: 3 });
+  deliverPending.mockResolvedValue({ processed: 3 });
 });
 
 describe("GET /api/cron/notifications", () => {

@@ -1,6 +1,6 @@
 import { toUTCISODate } from "@/lib/dates";
-import type { ListInvite, StoredInvite } from "../server/domain/invite.entity";
-import type { ListBreakdown, ListEntry, ListOverview, TransactionList } from "../server/domain/list.entity";
+import type { ListInvite, StoredInvite } from "../server/domain/entities/invite.entity";
+import type { ListBreakdown, ListEntry, ListOverview, TransactionList } from "../server/domain/entities/list.entity";
 import type { ListRole, TInvitePreview, TList, TListDetail, TListEntry, TListInvite } from "../types";
 
 export function serializeList(list: ListOverview): TList {

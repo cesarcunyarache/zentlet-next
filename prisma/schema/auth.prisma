@@ -15,6 +15,7 @@ model User {
   feedback              Feedback[]
   budgets               Budget[]
   consents              UserConsent[]
+  cookieConsents        UserCookieConsent[]
   preference            UserPreference?
   subscriptions         Subscription[]
   features              UserFeature[]
@@ -48,6 +49,23 @@ model UserConsent {
   @@unique([userId, document, version])
   @@index([userId, document, acceptedAt])
   @@map("user_consent")
+}
+
+model UserCookieConsent {
+  id            String   @id @default(uuid())
+  visitorId     String
+  userId        String?
+  granted       String[]
+  policyVersion String
+  source        String
+  userAgent     String?  @db.VarChar(512)
+  createdAt     DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([visitorId, createdAt(sort: Desc)])
+  @@index([userId, createdAt(sort: Desc)])
+  @@map("user_cookie_consent")
 }
 
 model UserPreference {

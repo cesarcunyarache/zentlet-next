@@ -6,7 +6,7 @@ import en from "@/locales/en/whatsapp.json";
 import es from "@/locales/es/whatsapp.json";
 import { categoryUseCases } from "@/features/category/server/infrastructure/category.container";
 import { currencySymbol, parseStoredCurrency } from "@/features/preference/lib/currency";
-import { userLocalDate } from "@/features/preference/server/timezone";
+import { preferenceUseCases } from "@/features/preference/server/infrastructure/preference.container";
 import { scanReceiptImage } from "@/features/transaction/ai/services/receipt-scan";
 import { transactionUseCases } from "@/features/transaction/server/infrastructure/transaction.container";
 import { interpretMessage } from "../../ai/services/message-interpretation";
@@ -43,7 +43,7 @@ export const ledger: Ledger = {
         where: { id: userId },
         select: { name: true, preference: { select: { language: true, currency: true } } },
       }),
-      userLocalDate(userId),
+      preferenceUseCases.localDate.execute(userId),
     ]);
     const language = user.preference?.language;
     return {

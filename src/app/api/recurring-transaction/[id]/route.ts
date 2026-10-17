@@ -1,18 +1,19 @@
 import { NextResponse } from "next/server";
-import { getRecurringTransaction, stopRecurringTransaction } from "@/features/recurring/server/recurring";
-import { errorResponse, getSessionUserId, internalError, unauthorized, writeLimit } from "@/lib/api/route-helpers";
+import { serializeRecurringTransaction } from "@/features/recurring/lib/serialize";
+import { RECURRING_ERRORS } from "@/features/recurring/server/infrastructure/http/recurring.http-errors";
+import { recurringUseCases } from "@/features/recurring/server/infrastructure/recurring.container";
+import { errorFrom, getSessionUserId, internalError, unauthorized, writeLimit } from "@/lib/api/route-helpers";
 
 type RouteContext = { params: Promise<{ id: string }> };
-
-const notFound = () => errorResponse("Recurring transaction not found", 404);
 
 export async function GET(req: Request, { params }: RouteContext) {
   try {
     const userId = await getSessionUserId(req);
     if (!userId) return unauthorized();
 
-    const recurring = await getRecurringTransaction(userId, (await params).id);
-    return recurring ? NextResponse.json(recurring) : notFound();
+    const result = await recurringUseCases.get.execute(userId, (await params).id);
+    if ("error" in result) return errorFrom(RECURRING_ERRORS, result.error);
+    return NextResponse.json(serializeRecurringTransaction(result.recurring));
   } catch (error) {
     return internalError(req, error, "Error fetching recurring transaction");
   }
@@ -26,8 +27,9 @@ export async function DELETE(req: Request, { params }: RouteContext) {
     const limited = await writeLimit(userId);
     if (limited) return limited;
 
-    const isStopped = await stopRecurringTransaction(userId, (await params).id);
-    return isStopped ? new NextResponse(null, { status: 204 }) : notFound();
+    const result = await recurringUseCases.stop.execute(userId, (await params).id);
+    if ("error" in result) return errorFrom(RECURRING_ERRORS, result.error);
+    return new NextResponse(null, { status: 204 });
   } catch (error) {
     return internalError(req, error, "Error stopping recurring transaction");
   }

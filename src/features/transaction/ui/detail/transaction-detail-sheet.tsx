@@ -10,7 +10,7 @@ import { formatSigned } from "@/lib/money";
 import { fullDate } from "@/lib/dates";
 import { signedAmount } from "../../lib/format";
 import type { CategoryLike, TTransaction } from "../../types";
-import { useDeleteConfirmation } from "../../hooks/useDeleteConfirmation";
+import { useDeleteConfirmation } from "@/core/hooks/useDeleteConfirmation";
 import { TransactionRecurrenceRow } from "./transaction-recurrence-row";
 
 interface TransactionDetailSheetProps {

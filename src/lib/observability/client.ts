@@ -1,5 +1,6 @@
 import type { FeatureFlagsIntegration } from "@sentry/nextjs";
 import type { PostHog } from "posthog-js";
+import { COOKIE_POLICY_VERSION, type CookieCategory } from "@/features/legal/config";
 import type { AnalyticsEvent, AnalyticsEvents } from "./events";
 
 /*
@@ -24,33 +25,81 @@ let posthog: Promise<PostHog | null> | null = null;
 /*
  * Consentimiento de analítica: PostHog guarda un identificador en el
  * navegador, así que sólo se carga si el usuario lo acepta (aviso de la
- * primera visita o Ajustes). Se recuerda por dispositivo.
+ * primera visita o Ajustes). Se recuerda por dispositivo junto con la
+ * versión de la política: si la política cambia, se vuelve a preguntar.
+ * El registro probatorio en el servidor lo hace `features/legal`.
  */
-const CONSENT_KEY = "zentlet-analytics-consent";
+const CONSENT_KEY = "zentlet-cookie-consent";
+const LEGACY_CONSENT_KEY = "zentlet-analytics-consent";
+const VISITOR_KEY = "zentlet-visitor-id";
 
-/** Para <head>: marca el documento si ya hay respuesta, antes del primer pintado. */
-export const consentInitScript = `try{var v=localStorage.getItem(${JSON.stringify(CONSENT_KEY)});if(v==="granted"||v==="denied")document.documentElement.dataset.consentAnswered=""}catch(e){}`;
+/** Se emite en la pestaña actual al cambiar la respuesta (`storage` sólo llega a las demás). */
+export const CONSENT_CHANGE_EVENT = "zentlet:consent-change";
+
+/** Para <head>: marca el documento si ya hay respuesta vigente, antes del primer pintado. */
+export const consentInitScript = `try{var c=JSON.parse(localStorage.getItem(${JSON.stringify(CONSENT_KEY)}));if(c&&c.v===${JSON.stringify(COOKIE_POLICY_VERSION)})document.documentElement.dataset.consentAnswered=""}catch(e){}`;
 
 export type AnalyticsConsent = "granted" | "denied";
+
+interface StoredConsent {
+  v: string;
+  granted: CookieCategory[];
+}
 
 /** Hay analítica configurada: sólo entonces tiene sentido preguntar. */
 export const analyticsAvailable = Boolean(POSTHOG_KEY);
 
-export function getAnalyticsConsent(): AnalyticsConsent | null {
+/** Sin almacenamiento disponible, la respuesta vale para esta visita. */
+let visitConsent: StoredConsent | null = null;
+
+function readStoredConsent(): StoredConsent | null {
   try {
-    const value = localStorage.getItem(CONSENT_KEY);
-    return value === "granted" || value === "denied" ? value : null;
+    const value: unknown = JSON.parse(localStorage.getItem(CONSENT_KEY) ?? "null");
+    if (typeof value !== "object" || value === null) return visitConsent;
+    const { v, granted } = value as Partial<StoredConsent>;
+    return typeof v === "string" && Array.isArray(granted) ? { v, granted } : visitConsent;
   } catch {
-    return null;
+    return visitConsent;
+  }
+}
+
+/** Respuesta para la política vigente; `null` si no hay o es de una versión anterior. */
+export function getAnalyticsConsent(): AnalyticsConsent | null {
+  const stored = readStoredConsent();
+  if (stored?.v !== COOKIE_POLICY_VERSION) return null;
+  return stored.granted.includes("analytics") ? "granted" : "denied";
+}
+
+/**
+ * Id aleatorio del dispositivo con el que el servidor agrupa sus respuestas
+ * (y las une a la cuenta al iniciar sesión). Sólo sirve para el registro
+ * del consentimiento; no se comparte con la analítica.
+ */
+export function getVisitorId() {
+  try {
+    const existing = localStorage.getItem(VISITOR_KEY);
+    if (existing) return existing;
+    const created = crypto.randomUUID();
+    localStorage.setItem(VISITOR_KEY, created);
+    return created;
+  } catch {
+    return crypto.randomUUID();
   }
 }
 
 export function setAnalyticsConsent(consent: AnalyticsConsent) {
+  const stored: StoredConsent = {
+    v: COOKIE_POLICY_VERSION,
+    granted: consent === "granted" ? ["analytics"] : [],
+  };
+  visitConsent = stored;
   try {
-    localStorage.setItem(CONSENT_KEY, consent);
+    localStorage.setItem(CONSENT_KEY, JSON.stringify(stored));
+    localStorage.removeItem(LEGACY_CONSENT_KEY);
   } catch {
-    // sin almacenamiento, la decisión vale para esta visita
+    // sin almacenamiento queda `visitConsent`
   }
+  window.dispatchEvent(new Event(CONSENT_CHANGE_EVENT));
   if (consent === "granted") {
     posthog?.then((client) => client?.opt_in_capturing()).catch(noop);
     loadPosthog();

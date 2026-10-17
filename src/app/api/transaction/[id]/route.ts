@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { updateTransactionSchema } from "@/features/transaction/schemas/transaction-api.schema";
 import { transactionUseCases } from "@/features/transaction/server/infrastructure/transaction.container";
 import { serializeTransaction } from "@/features/transaction/lib/serialize";
-import { TRANSACTION_ERRORS } from "@/features/transaction/server/infrastructure/transaction.http-errors";
+import { TRANSACTION_ERRORS } from "@/features/transaction/server/infrastructure/http/transaction.http-errors";
 import { errorFrom, getSessionUserId, internalError, parseBody, unauthorized, writeLimit } from "@/lib/api/route-helpers";
 
 type RouteContext = { params: Promise<{ id: string }> };

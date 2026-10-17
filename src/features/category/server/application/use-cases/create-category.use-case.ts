@@ -4,10 +4,7 @@ import { MAX_CATEGORIES, type NewCategory } from "../../domain/entities/category
 import { fail } from "../../domain/errors/category.errors";
 import type { CategoryRepository } from "../../domain/repositories/category.repository";
 
-function toNewCategory(
-  userId: string,
-  input: CreateCategoryInput,
-): NewCategory {
+function toNewCategory(userId: string, input: CreateCategoryInput): NewCategory {
   return {
     id: input.id,
     userId,
@@ -23,36 +20,26 @@ export class CreateCategoryUseCase {
   constructor(private readonly categoryRepository: CategoryRepository) {}
 
   async execute(userId: string, input: CreateCategoryInput) {
-    const foundCategory = await this.categoryRepository.findById(input.id);
+    const existing = await this.categoryRepository.findById(input.id);
 
-    if (foundCategory && foundCategory.userId !== userId) {
-      return fail("id_taken");
+    if (existing) {
+      const belongsToAnotherUser = existing.userId !== userId;
+      if (belongsToAnotherUser) return fail("id_taken");
+      return { category: existing, created: false };
     }
 
-    if (foundCategory) {
-      return {
-        category: foundCategory,
-        created: false,
-      };
-    }
+    const ownedCount = await this.categoryRepository.countOwned(userId);
+    if (ownedCount >= MAX_CATEGORIES) return fail("limit_reached");
 
-    const countCategories = await this.categoryRepository.countOwned(userId);
-
-    const isLimitReached = countCategories >= MAX_CATEGORIES;
-
-    if (isLimitReached) return fail("limit_reached");
-
-    const created = await this.categoryRepository.insert(
-      toNewCategory(userId, input),
-    );
-
-    if (created === "id_taken") return this.concurrentWinner(userId, input.id);
+    const created = await this.categoryRepository.insert(toNewCategory(userId, input));
+    if (created === "id_taken") return this.findRetriedCreation(userId, input.id);
 
     return { category: created, created: true };
   }
 
-  private async concurrentWinner(userId: string, id: string) {
-    const winner = await this.categoryRepository.findOwned(userId, id);
-    return winner ? { category: winner, created: false } : fail("id_taken");
+  private async findRetriedCreation(userId: string, id: string) {
+    const category = await this.categoryRepository.findOwned(userId, id);
+    if (!category) return fail("id_taken");
+    return { category, created: false };
   }
 }

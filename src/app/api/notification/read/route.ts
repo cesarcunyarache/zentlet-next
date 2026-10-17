@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
 import { getSessionUserId, internalError, unauthorized, writeLimit } from "@/lib/api/route-helpers";
+import { notificationUseCases } from "@/features/notification/server/infrastructure/notification.container";
 
 export async function POST(req: Request) {
   try {
@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     const limited = await writeLimit(userId);
     if (limited) return limited;
 
-    await prisma.notification.updateMany({ where: { userId, readAt: null }, data: { readAt: new Date() } });
+    await notificationUseCases.markAllRead.execute(userId);
     return new NextResponse(null, { status: 204 });
   } catch (error) {
     return internalError(req, error, "Error marking notifications as read");

@@ -1,15 +1,9 @@
 import { NextResponse } from "next/server";
 import { acceptInboxItemSchema } from "@/features/inbox/schemas/inbox-api.schema";
-import { acceptInboxItem } from "@/features/inbox/server/review";
+import { inboxUseCases } from "@/features/inbox/server/infrastructure/inbox.container";
+import { INBOX_ERRORS } from "@/features/inbox/server/infrastructure/http/inbox.http-errors";
 import { serializeTransaction } from "@/features/transaction/lib/serialize";
-import {
-  errorResponse,
-  getSessionUserId,
-  internalError,
-  parseBody,
-  unauthorized,
-  writeLimit,
-} from "@/lib/api/route-helpers";
+import { errorFrom, getSessionUserId, internalError, parseBody, unauthorized, writeLimit } from "@/lib/api/route-helpers";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -25,12 +19,8 @@ export async function POST(req: Request, { params }: RouteContext) {
     if ("error" in parsed) return parsed.error;
 
     const { id } = await params;
-    const result = await acceptInboxItem(userId, id, parsed.data);
-    if ("error" in result) {
-      return result.error === "not_found"
-        ? errorResponse("Inbox item not found", 404)
-        : errorResponse("Category not found", 422);
-    }
+    const result = await inboxUseCases.accept.execute(userId, id, parsed.data);
+    if ("error" in result) return errorFrom(INBOX_ERRORS, result.error);
     return NextResponse.json(serializeTransaction(result.transaction), { status: 201 });
   } catch (error) {
     return internalError(req, error, "Error accepting inbox item");
