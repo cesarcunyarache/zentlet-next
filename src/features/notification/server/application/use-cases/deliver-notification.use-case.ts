@@ -25,7 +25,8 @@ export class DeliverNotificationUseCase {
     if (claimedByAnotherWorker) return;
 
     const isSent = await this.send(delivery);
-    await this.deliveryRepository.saveOutcome(deliveryId, deliveryOutcome(isSent, delivery.attempts, now));
+    const outcome = deliveryOutcome(isSent, delivery.attempts, now);
+    await this.deliveryRepository.saveOutcome(deliveryId, outcome);
 
     if (!isSent) this.notificationMonitor.deliveryFailed(deliveryId, delivery.channel, delivery.attempts);
   }

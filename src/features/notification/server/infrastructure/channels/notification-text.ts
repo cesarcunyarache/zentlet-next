@@ -8,7 +8,11 @@ import type { NotificationText, TNotification } from "../../../types";
 const MESSAGES = { es, en } satisfies Record<Locale, typeof es>;
 
 export function notificationText(locale: Locale, notification: TNotification): NotificationText {
-  const t = createTranslator({ locale, messages: { notifications: MESSAGES[locale] }, namespace: "notifications" });
+  const t = createTranslator({
+    locale,
+    messages: { notifications: MESSAGES[locale] },
+    namespace: "notifications",
+  });
   const { title, body, values } = notificationMessage(notification);
   return { title: t(title, values), body: t(body, values) };
 }

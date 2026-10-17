@@ -24,7 +24,9 @@ export class NotifyUseCase {
   }
 
   private async enabledChannels(userId: string, candidates: NotificationChannel[]) {
-    const isEnabled = await Promise.all(candidates.map((channel) => this.channelFlags.isEnabled(userId, channel)));
+    const isEnabled = await Promise.all(
+      candidates.map((channel) => this.channelFlags.isEnabled(userId, channel)),
+    );
     return candidates.filter((_, index) => isEnabled[index]);
   }
 }
