@@ -1,6 +1,6 @@
 import { isUniqueViolation } from "@/lib/db-errors";
 import { resolveTargetListId } from "@/lib/private-list";
-import { scheduleBudgetCheck } from "@/features/budget/server/check";
+import { scheduleBudgetCheck } from "@/features/budget/server/infrastructure/budget.monitor";
 import { createRepeatingTransaction } from "@/features/recurring/server/recurring";
 import type { RecurrenceFrequency } from "@/features/recurring/types";
 import type { NewTransaction } from "../domain/entities/transaction.entity";

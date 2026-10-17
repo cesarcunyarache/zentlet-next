@@ -2,7 +2,7 @@ import prisma from "@/lib/prisma";
 import { isoDateIn, toUTCISODate } from "@/lib/dates";
 import { logger } from "@/lib/observability/logger";
 import { ensurePrivateListId } from "@/lib/private-list";
-import { scheduleBudgetCheck } from "@/features/budget/server/check";
+import { scheduleBudgetCheck } from "@/features/budget/server/infrastructure/budget.monitor";
 import { userLocalDate } from "@/features/preference/server/timezone";
 import type { RecurringTransaction } from "@/generated/prisma/client";
 import { dueDatesThrough } from "../lib/schedule";

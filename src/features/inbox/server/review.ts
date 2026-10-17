@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { ensurePrivateListId } from "@/lib/private-list";
-import { scheduleBudgetCheck } from "@/features/budget/server/check";
+import { scheduleBudgetCheck } from "@/features/budget/server/infrastructure/budget.monitor";
 import type { AcceptInboxItemInput } from "../schemas/inbox-api.schema";
 import { merchantKey } from "../lib/merchant";
 import { shouldAutoBlock } from "../lib/sender";

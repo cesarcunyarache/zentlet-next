@@ -1,23 +1,16 @@
 import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
 import { createBudgetSchema } from "@/features/budget/schemas/budget-api.schema";
-import { BUDGET_LIMITS, serializeBudget } from "@/features/budget/lib/serialize";
-import { errorResponse, getSessionUserId, internalError, parseBody, unauthorized, writeLimit } from "@/lib/api/route-helpers";
-import { isUniqueViolation } from "@/lib/db-errors";
-import { DEFAULT_ALERTS } from "@/features/budget/lib/alerts";
-import { resolveTargetListId } from "@/lib/private-list";
+import { budgetUseCases } from "@/features/budget/server/infrastructure/budget.container";
+import { serializeBudget } from "@/features/budget/lib/serialize";
+import { BUDGET_ERRORS } from "@/features/budget/server/infrastructure/http/budget.http-errors";
+import { errorFrom, getSessionUserId, internalError, parseBody, unauthorized, writeLimit } from "@/lib/api/route-helpers";
 
 export async function GET(req: Request) {
   try {
     const userId = await getSessionUserId(req);
     if (!userId) return unauthorized();
 
-    const budgets = await prisma.budget.findMany({
-      where: { userId },
-      include: BUDGET_LIMITS,
-      orderBy: { createdAt: "asc" },
-    });
-
+    const budgets = await budgetUseCases.list.execute(userId);
     return NextResponse.json(budgets.map(serializeBudget));
   } catch (error) {
     return internalError(req, error, "Error fetching budgets");
@@ -34,45 +27,12 @@ export async function POST(req: Request) {
 
     const parsed = await parseBody(req, createBudgetSchema);
     if ("error" in parsed) return parsed.error;
-    const { id, categoryId, listId, kind, periodUnit, periodCount, startDate, amount } = parsed.data;
 
-    const existing = await prisma.budget.findUnique({ where: { id }, include: BUDGET_LIMITS });
-    if (existing) {
-      return existing.userId === userId
-        ? NextResponse.json(serializeBudget(existing), { status: 200 })
-        : errorResponse("Budget id already in use", 409);
-    }
-
-    const category = await prisma.category.findFirst({ where: { id: categoryId, userId }, select: { id: true } });
-    if (!category) return errorResponse("Category not found", 422);
-
-    if ((await resolveTargetListId(userId, listId)) !== listId) return errorResponse("List not found", 422);
-
-    try {
-      const start = new Date(startDate);
-      const budget = await prisma.budget.create({
-        data: {
-          id,
-          categoryId,
-          listId,
-          kind,
-          periodUnit,
-          periodCount,
-          startDate: start,
-          userId,
-          limits: { create: { effectiveFrom: start, amount } },
-          alerts: { create: DEFAULT_ALERTS },
-        },
-        include: BUDGET_LIMITS,
-      });
-      return NextResponse.json(serializeBudget(budget), { status: 201 });
-    } catch (error) {
-      if (!isUniqueViolation(error)) throw error;
-      const winner = await prisma.budget.findFirst({ where: { id, userId }, include: BUDGET_LIMITS });
-      return winner
-        ? NextResponse.json(serializeBudget(winner), { status: 200 })
-        : errorResponse("Category already has a budget in this list", 409);
-    }
+    const result = await budgetUseCases.create.execute(userId, parsed.data);
+    if ("error" in result) return errorFrom(BUDGET_ERRORS, result.error);
+    return NextResponse.json(serializeBudget(result.budget), {
+      status: result.created ? 201 : 200,
+    });
   } catch (error) {
     return internalError(req, error, "Error creating budget");
   }

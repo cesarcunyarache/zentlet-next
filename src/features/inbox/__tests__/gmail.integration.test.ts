@@ -12,7 +12,7 @@ import { createUser, resetDatabase } from "@/test/integration/database";
 import type { TInboxConnection } from "../types";
 
 vi.mock("@/lib/auth", () => ({ auth: { api: { getSession: vi.fn() } } }));
-vi.mock("@/features/budget/server/check", () => ({ scheduleBudgetCheck: vi.fn() }));
+vi.mock("@/features/budget/server/infrastructure/budget.monitor", () => ({ scheduleBudgetCheck: vi.fn() }));
 
 const getSession = vi.mocked(auth.api.getSession);
 const BASE_URL = "http://localhost";

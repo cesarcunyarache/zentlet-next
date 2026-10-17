@@ -3,10 +3,10 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { DELETE, GET, PATCH } from "../[id]/route";
 import { POST } from "../route";
-import { scheduleBudgetCheck } from "@/features/budget/server/check";
+import { scheduleBudgetCheck } from "@/features/budget/server/infrastructure/budget.monitor";
 
 vi.mock("@/lib/auth", () => ({ auth: { api: { getSession: vi.fn() } } }));
-vi.mock("@/features/budget/server/check", () => ({ scheduleBudgetCheck: vi.fn() }));
+vi.mock("@/features/budget/server/infrastructure/budget.monitor", () => ({ scheduleBudgetCheck: vi.fn() }));
 vi.mock("@/lib/prisma", () => ({
   default: {
     transaction: {

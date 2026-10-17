@@ -4,11 +4,11 @@ import prisma from "@/lib/prisma";
 import { DELETE } from "../[id]/route";
 import { PUT } from "../[id]/limits/[effectiveFrom]/route";
 import { GET, POST } from "../route";
-import { scheduleBudgetCheck } from "@/features/budget/server/check";
+import { scheduleBudgetCheck } from "@/features/budget/server/infrastructure/budget.monitor";
 import { resolveTargetListId } from "@/lib/private-list";
 
 vi.mock("@/lib/auth", () => ({ auth: { api: { getSession: vi.fn() } } }));
-vi.mock("@/features/budget/server/check", () => ({ scheduleBudgetCheck: vi.fn() }));
+vi.mock("@/features/budget/server/infrastructure/budget.monitor", () => ({ scheduleBudgetCheck: vi.fn() }));
 vi.mock("@/lib/private-list", () => ({ resolveTargetListId: vi.fn() }));
 vi.mock("@/lib/prisma", () => ({
   default: {

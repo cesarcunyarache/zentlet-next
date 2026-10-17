@@ -24,7 +24,7 @@ const env = vi.hoisted(() => {
 const background = vi.hoisted(() => ({ tasks: [] as Promise<unknown>[] }));
 
 vi.mock("@/lib/auth", () => ({ auth: { api: { getSession: vi.fn() } } }));
-vi.mock("@/features/budget/server/check", () => ({ scheduleBudgetCheck: vi.fn() }));
+vi.mock("@/features/budget/server/infrastructure/budget.monitor", () => ({ scheduleBudgetCheck: vi.fn() }));
 vi.mock("@/lib/ai/client", () => ({ generateObject: vi.fn() }));
 vi.mock("@/lib/background", () => ({
   runInBackground: (task: () => Promise<unknown>) => background.tasks.push(task()),

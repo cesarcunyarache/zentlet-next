@@ -2,7 +2,7 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { APIError, createAuthMiddleware } from "better-auth/api";
 import { captcha } from "better-auth/plugins";
-import { cancelUserSubscription } from "@/features/billing/server/cancel";
+import { billingUseCases } from "@/features/billing/server/infrastructure/billing.container";
 import { ensurePrivateListId } from "@/lib/private-list";
 import { listUseCases } from "@/features/list/server/infrastructure/list.container";
 import { LEGAL_CONSENT_HEADER, LEGAL_VERSION } from "@/features/legal/config";
@@ -173,7 +173,7 @@ export const auth = betterAuth({
     deleteUser: {
       enabled: true,
       beforeDelete: async (user) => {
-        await cancelUserSubscription(user.id, "system");
+        await billingUseCases.cancelUserSubscription.execute(user.id, "system");
         await listUseCases.handOver.execute(user.id);
       },
       afterDelete: async (user) => {

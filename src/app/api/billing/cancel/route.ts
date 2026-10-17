@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { trackServerEvent } from "@/lib/observability/server";
-import { cancelUserSubscription } from "@/features/billing/server/cancel";
-import { getBillingSummary } from "@/features/billing/server/subscriptions";
+import { billingUseCases } from "@/features/billing/server/infrastructure/billing.container";
 import { getSessionUserId, internalError, unauthorized, writeLimit } from "@/lib/api/route-helpers";
 
 export async function POST(req: Request) {
@@ -12,8 +11,10 @@ export async function POST(req: Request) {
     const limited = await writeLimit(userId);
     if (limited) return limited;
 
-    if (await cancelUserSubscription(userId)) trackServerEvent(userId, "subscription_canceled", {});
-    return NextResponse.json(await getBillingSummary(userId));
+    const canceled = await billingUseCases.cancelUserSubscription.execute(userId);
+    if (canceled) trackServerEvent(userId, "subscription_canceled", {});
+
+    return NextResponse.json(await billingUseCases.getSummary.execute(userId));
   } catch (error) {
     return internalError(req, error, "Error canceling subscription");
   }

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { findLiveSubscription, getBillingSummary, syncSubscription } from "@/features/billing/server/subscriptions";
+import { billingUseCases } from "@/features/billing/server/infrastructure/billing.container";
 import { getSessionUserId, internalError, unauthorized, writeLimit } from "@/lib/api/route-helpers";
 
 export async function POST(req: Request) {
@@ -10,9 +10,8 @@ export async function POST(req: Request) {
     const limited = await writeLimit(userId);
     if (limited) return limited;
 
-    const live = await findLiveSubscription(userId);
-    if (live) await syncSubscription(live);
-    return NextResponse.json(await getBillingSummary(userId));
+    await billingUseCases.syncUserSubscription.execute(userId);
+    return NextResponse.json(await billingUseCases.getSummary.execute(userId));
   } catch (error) {
     return internalError(req, error, "Error syncing subscription");
   }

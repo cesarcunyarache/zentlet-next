@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { siteConfig } from "@/lib/site";
 import { trackServerEvent } from "@/lib/observability/server";
 import { checkoutSchema } from "@/features/billing/schemas/billing-api.schema";
-import { startCheckout } from "@/features/billing/server/checkout";
+import { billingUseCases } from "@/features/billing/server/infrastructure/billing.container";
 import {
   errorResponse,
   getSessionUserId,
@@ -29,8 +29,7 @@ export async function POST(req: Request) {
     const user = await prisma.user.findUnique({ where: { id: userId }, select: { email: true } });
     if (!user) return unauthorized();
 
-    const outcome = await startCheckout({
-      userId,
+    const outcome = await billingUseCases.startCheckout.execute(userId, {
       email: user.email,
       planKey: parsed.data.planKey,
       returnUrl: RETURN_URL,
