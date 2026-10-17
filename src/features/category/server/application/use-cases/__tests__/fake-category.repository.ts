@@ -14,7 +14,7 @@ export function fakeRepository(overrides: Partial<CategoryRepository> = {}): Cat
     countOwned: vi.fn().mockResolvedValue(0),
     insert: vi.fn(async (draft: NewCategory) => stored(draft)),
     updateOwned: vi.fn(),
-    deleteOwned: vi.fn().mockResolvedValue(true),
+    deleteOwned: vi.fn().mockResolvedValue("deleted"),
     ...overrides,
   };
 }

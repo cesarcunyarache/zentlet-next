@@ -13,5 +13,5 @@ export interface CategoryRepository {
 
   updateOwned(userId: string, id: string, changes: CategoryChanges): Promise<Category | "not_found">;
 
-  deleteOwned(userId: string, id: string): Promise<boolean | "has_transactions">;
+  deleteOwned(userId: string, id: string): Promise<"deleted" | "not_found" | "has_transactions">;
 }

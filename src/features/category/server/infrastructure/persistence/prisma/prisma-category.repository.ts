@@ -35,15 +35,23 @@ export class PrismaCategoryRepository implements CategoryRepository {
   }
 
   async updateOwned(userId: string, id: string, changes: CategoryChanges) {
-    const { count } = await prisma.category.updateMany({ where: { id, userId }, data: toPersistenceChanges(changes) });
+    const { count } = await prisma.category.updateMany({
+      where: { id, userId },
+      data: toPersistenceChanges(changes),
+    });
     if (count === 0) return "not_found" as const;
-    return toDomainOrNull(await prisma.category.findUnique({ where: { id } })) ?? ("not_found" as const);
+
+    const updated = await prisma.category.findUnique({ where: { id } });
+    if (!updated) return "not_found" as const;
+
+    return toDomain(updated);
   }
 
   async deleteOwned(userId: string, id: string) {
     try {
       const { count } = await prisma.category.deleteMany({ where: { id, userId } });
-      return count > 0;
+      if (count === 0) return "not_found" as const;
+      return "deleted" as const;
     } catch (error) {
       if (isForeignKeyViolation(error)) return "has_transactions" as const;
       throw error;
