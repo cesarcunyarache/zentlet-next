@@ -23,7 +23,8 @@ export class CreateInviteUseCase {
     if (!canManage(membership.role)) return fail("forbidden");
 
     const list = await this.listRepository.findById(listId);
-    if (list?.isPrivate) return fail("forbidden");
+    const isPrivateList = Boolean(list?.isPrivate);
+    if (isPrivateList) return fail("forbidden");
 
     const { token, hash } = this.inviteTokens.create();
     const invite = await this.inviteRepository.create({

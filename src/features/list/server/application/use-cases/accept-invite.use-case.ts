@@ -23,7 +23,8 @@ export class AcceptInviteUseCase {
 
     if (!isInviteUsable(invite, now)) return fail("invite_invalid");
 
-    if (invite.role === "editor") {
+    const joinsAsEditor = invite.role === "editor";
+    if (joinsAsEditor) {
       const userCurrency = await this.accountCurrency.of(userId);
       if (invite.list.currency !== userCurrency) return fail("currency_mismatch");
     }

@@ -95,7 +95,12 @@ export class PrismaListRepository implements ListRepository {
 
     const overall = sumTotals(totalsByUser.values());
 
-    return { ...toListTotals(overall), memberCount: members.length, byCategory, members: memberTotals };
+    return {
+      ...toListTotals(overall),
+      memberCount: members.length,
+      byCategory,
+      members: memberTotals,
+    };
   }
 
   async findEntries(listId: string, after: EntryCursor | null, take: number) {

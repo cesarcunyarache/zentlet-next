@@ -23,7 +23,8 @@ export class SetBudgetLimitUseCase {
     if (!isPeriodStart(schedule, effectiveFrom)) return fail("invalid_period_start");
 
     const start = new Date(effectiveFrom);
-    if (start < schedule.startDate) return fail("limit_before_start");
+    const startsBeforeBudget = start < schedule.startDate;
+    if (startsBeforeBudget) return fail("limit_before_start");
     if (isOutsideSinglePeriod(schedule, start)) return fail("single_period");
 
     const saved = await this.budgetRepository.setLimit(id, start, amount);

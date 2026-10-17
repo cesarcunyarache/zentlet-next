@@ -26,8 +26,9 @@ export class CheckBudgetUseCase {
 
   private async checkListBudget(userId: string, budget: BudgetWithAlerts, { currency, timezone }: Preferences) {
     const serialized = serializeBudget(budget);
+    const userToday = isoDateIn(timezone);
 
-    const period = activePeriod(serialized, isoDateIn(timezone));
+    const period = activePeriod(serialized, userToday);
     if (!period) return;
 
     const limit = limitAt(serialized, period.from);

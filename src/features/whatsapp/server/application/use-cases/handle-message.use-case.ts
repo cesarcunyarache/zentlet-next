@@ -79,6 +79,16 @@ function userTurnText(message: IncomingMessage) {
 
 const replyText = (reply: Reply) => reply.text;
 
+const RECEIPT_ERROR_REPLIES = { limited: "busy", not_receipt: "notReceipt", failed: "imageFailed" } as const;
+
+function validDate(value: string | undefined) {
+  if (!value) return null;
+  const isValid = isoDate.safeParse(value).success;
+  return isValid ? value : null;
+}
+
+const firstOfMonth = (isoDay: string) => `${isoDay.slice(0, 8)}01`;
+
 export class HandleMessageUseCase {
   private readonly now: () => Date;
 
@@ -88,8 +98,12 @@ export class HandleMessageUseCase {
 
   async execute(message: IncomingMessage): Promise<HandleOutcome> {
     const { links, messenger, throttle } = this.deps;
-    if (!(await links.markMessageSeen(message.id))) return "duplicate";
-    if (!(await throttle.allow(`whatsapp:${message.from}`, MESSAGES_PER_MINUTE, MINUTE_MS))) return "throttled";
+    const isFirstDelivery = await links.markMessageSeen(message.id);
+    if (!isFirstDelivery) return "duplicate";
+
+    const withinRate = await throttle.allow(`whatsapp:${message.from}`, MESSAGES_PER_MINUTE, MINUTE_MS);
+    if (!withinRate) return "throttled";
+
     await messenger.markRead(message.id);
 
     const command = message.kind === "text" ? parseCommand(message.text) : null;
@@ -115,8 +129,8 @@ export class HandleMessageUseCase {
   private async link(phone: string, code: string) {
     const { links, messenger, ledger, throttle } = this.deps;
     const t = this.defaultTexts();
-    if (!(await throttle.allow(`whatsapp-link:${phone}`, LINK_ATTEMPTS_PER_HOUR, HOUR_MS)))
-      return messenger.send(phone, { kind: "text", text: t("linkLimited") });
+    const canTryLinking = await throttle.allow(`whatsapp-link:${phone}`, LINK_ATTEMPTS_PER_HOUR, HOUR_MS);
+    if (!canTryLinking) return messenger.send(phone, { kind: "text", text: t("linkLimited") });
 
     const userId = await links.consumeLinkCode(hashLinkCode(code), this.now());
     if (!userId) return messenger.send(phone, { kind: "text", text: t("linkInvalid") });
@@ -129,12 +143,15 @@ export class HandleMessageUseCase {
 
   private async greetStranger(phone: string) {
     const { messenger, throttle } = this.deps;
-    if (!(await throttle.allow(`whatsapp-stranger:${phone}`, STRANGER_REPLIES_PER_DAY, DAY_MS))) return;
-    await messenger.send(phone, { kind: "text", text: this.defaultTexts()("notLinked", { url: this.deps.appUrl }) });
+    const canReply = await throttle.allow(`whatsapp-stranger:${phone}`, STRANGER_REPLIES_PER_DAY, DAY_MS);
+    if (!canReply) return;
+
+    const text = this.defaultTexts()("notLinked", { url: this.deps.appUrl });
+    await messenger.send(phone, { kind: "text", text });
   }
 
   private async converse(link: WhatsappLink, message: IncomingMessage, command: Command | null) {
-    const { links, messenger, ledger } = this.deps;
+    const { messenger, ledger } = this.deps;
     const [profile, categories] = await Promise.all([ledger.profile(link.userId), ledger.categories(link.userId)]);
     const t = this.deps.texts(profile.locale);
     const context: Context = {
@@ -154,19 +171,29 @@ export class HandleMessageUseCase {
       throw error;
     }
 
-    if (command?.kind !== "unlink") {
-      const withUser = withTurn(outcome.conversation, "user", userTurnText(message));
-      const conversation = outcome.replies.reduce((current, reply) => withTurn(current, "bot", replyText(reply)), withUser);
-      const now = this.now();
-      await links.saveConversation(link.userId, conversation, new Date(now.getTime() + CONVERSATION_TTL_MS), now);
-    }
+    const isUnlinking = command?.kind === "unlink";
+    if (!isUnlinking) await this.saveTranscript(link.userId, message, outcome);
+
     for (const reply of outcome.replies) await messenger.send(message.from, reply);
+  }
+
+  private async saveTranscript(userId: string, message: IncomingMessage, outcome: Outcome) {
+    const withUser = withTurn(outcome.conversation, "user", userTurnText(message));
+    const conversation = outcome.replies.reduce(
+      (current, reply) => withTurn(current, "bot", replyText(reply)),
+      withUser,
+    );
+
+    const now = this.now();
+    const expiresAt = new Date(now.getTime() + CONVERSATION_TTL_MS);
+    await this.deps.links.saveConversation(userId, conversation, expiresAt, now);
   }
 
   private async respond(context: Context, conversation: Conversation, message: IncomingMessage, command: Command | null) {
     switch (message.kind) {
       case "text":
-        return command ? this.runCommand(context, conversation, command) : this.understand(context, conversation, message.text, null);
+        if (command) return this.runCommand(context, conversation, command);
+        return this.understand(context, conversation, message.text, null);
       case "choice":
         return this.choose(context, conversation, message.choiceId);
       case "audio": {
@@ -203,8 +230,11 @@ export class HandleMessageUseCase {
   }
 
   private async undo(context: Context, conversation: Conversation, ids: string[]): Promise<Outcome> {
-    const removed = ids.length ? await this.deps.ledger.remove(context.userId, ids) : 0;
+    if (ids.length === 0) return say(conversation, context.replies.text("nothingToUndo"));
+
+    const removed = await this.deps.ledger.remove(context.userId, ids);
     if (removed === 0) return say(conversation, context.replies.text("nothingToUndo"));
+
     const lastRecorded = conversation.lastRecorded.filter((id) => !ids.includes(id));
     return say({ ...conversation, lastRecorded }, context.replies.text("undone", { count: removed }));
   }
@@ -224,7 +254,8 @@ export class HandleMessageUseCase {
   private async understand(context: Context, conversation: Conversation, text: string | null, audio: MediaFile | null) {
     const [head, ...rest] = conversation.drafts;
     const missing = head ? missingField(head) : null;
-    if (text !== null && head && missing) {
+    const canAnswerQuickly = text !== null && head && missing;
+    if (canAnswerQuickly) {
       const quick = quickAnswer(text, missing, context.categories, context.profile.locale);
       if (quick) return this.advance(context, { ...conversation, drafts: [mergeMovement(head, quick), ...rest] });
     }
@@ -297,11 +328,10 @@ export class HandleMessageUseCase {
     const image = await this.deps.messenger.downloadMedia(mediaId);
     if (!image) return say(conversation, replies.text("imageFailed"));
 
-    const result = await this.deps.interpreter.readReceipt(context.userId, image, context.categories, context.profile.today);
-    if (!result.ok) {
-      const key = { limited: "busy", not_receipt: "notReceipt", failed: "imageFailed" }[result.error];
-      return say(conversation, replies.text(key));
-    }
+    const { userId, categories, profile } = context;
+    const result = await this.deps.interpreter.readReceipt(userId, image, categories, profile.today);
+    if (!result.ok) return say(conversation, replies.text(RECEIPT_ERROR_REPLIES[result.error]));
+
     const movement = sanitizeMovement(result.movement, context.categories);
     if (movement.amount === null) return say(conversation, replies.text("notReceipt"));
     return this.advance(context, { ...conversation, drafts: [movement] });
@@ -309,10 +339,13 @@ export class HandleMessageUseCase {
 
   private async summarize(context: Context, conversation: Conversation, period: Partial<Period> | null) {
     const { profile, userId, replies } = context;
-    const valid = (value: string | undefined) => (value && isoDate.safeParse(value).success ? value : null);
-    const to = valid(period?.to) ?? profile.today;
-    const from = valid(period?.from) ?? `${profile.today.slice(0, 8)}01`;
-    const [start, end] = from <= to ? [from, to] : [to, from];
+    const to = validDate(period?.to) ?? profile.today;
+    const from = validDate(period?.from) ?? firstOfMonth(profile.today);
+
+    const isInOrder = from <= to;
+    const start = isInOrder ? from : to;
+    const end = isInOrder ? to : from;
+
     const summary = await this.deps.ledger.summarize(userId, { from: start, to: end });
     return say(conversation, replies.summary(summary, start, end));
   }
@@ -327,7 +360,8 @@ export class HandleMessageUseCase {
     for (const [index, draft] of ready.entries()) {
       const movement = toReadyMovement(draft, context.profile.today, context.categories);
       const id = movementId(context.messageId, index);
-      if (await this.deps.ledger.record(context.userId, id, movement)) {
+      const isRecorded = await this.deps.ledger.record(context.userId, id, movement);
+      if (isRecorded) {
         recorded.push(movement);
         recordedIds.push(id);
       } else {
@@ -336,9 +370,10 @@ export class HandleMessageUseCase {
     }
 
     if (recorded.length) replies.push(context.replies.recorded(recorded, recordedIds));
+
     const stillPending = [...rejected, ...pending];
     const [head] = stillPending;
-    if (head) replies.push(missingField(head) === "amount" ? context.replies.askAmount(head) : context.replies.askCategory(head));
+    if (head) replies.push(this.askForMissing(context, head));
 
     return {
       conversation: {
@@ -348,5 +383,11 @@ export class HandleMessageUseCase {
       },
       replies,
     };
+  }
+
+  private askForMissing({ replies }: Context, draft: Movement) {
+    const isMissingAmount = missingField(draft) === "amount";
+    if (isMissingAmount) return replies.askAmount(draft);
+    return replies.askCategory(draft);
   }
 }
