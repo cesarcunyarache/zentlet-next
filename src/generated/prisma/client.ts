@@ -52,6 +52,11 @@ export type User = Prisma.UserModel
  */
 export type UserConsent = Prisma.UserConsentModel
 /**
+ * Model UserCookieConsent
+ * 
+ */
+export type UserCookieConsent = Prisma.UserCookieConsentModel
+/**
  * Model UserPreference
  * 
  */

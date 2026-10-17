@@ -1,43 +1,28 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { siteConfig } from "@/lib/site";
-import {
-  analyticsAvailable,
-  getAnalyticsConsent,
-  setAnalyticsConsent,
-  type AnalyticsConsent,
-} from "@/lib/observability/client";
+import { analyticsAvailable, type AnalyticsConsent } from "@/lib/observability/client";
+import { useAnalyticsConsent } from "@/features/legal/hooks/useAnalyticsConsent";
 
 /**
- * Pregunta una vez por dispositivo si se aceptan las estadísticas de uso.
- * Aceptar y rechazar pesan lo mismo; sin respuesta no se carga nada. Sin
- * analítica configurada no aparece.
- */
-const subscribe = (onChange: () => void) => {
-  window.addEventListener("storage", onChange);
-  return () => window.removeEventListener("storage", onChange);
-};
-const hasAnswered = () => getAnalyticsConsent() !== null;
-/*
+ * Pregunta una vez por dispositivo y versión de la política si se aceptan
+ * las estadísticas de uso. Aceptar y rechazar pesan lo mismo; sin respuesta
+ * no se carga nada. Sin analítica configurada no aparece.
+ *
  * El aviso llega en el HTML y se pinta junto al resto de la página (si
- * apareciera al hidratar sería el LCP). Con respuesta guardada, `consentInitScript`
- * lo oculta antes del primer pintado y al hidratar se desmonta.
+ * apareciera al hidratar sería el LCP). Con respuesta vigente guardada,
+ * `consentInitScript` lo oculta antes del primer pintado y al hidratar se desmonta.
  */
-const answeredOnServer = () => false;
-
 export function AnalyticsConsentBanner() {
   const t = useTranslations("common.analyticsConsent");
-  const answered = useSyncExternalStore(subscribe, hasAnswered, answeredOnServer);
-  const [answeredNow, setAnsweredNow] = useState(false);
+  const { consent, choose: saveConsent } = useAnalyticsConsent();
 
-  if (!analyticsAvailable || answered || answeredNow) return null;
+  if (!analyticsAvailable || consent !== null) return null;
 
-  function choose(consent: AnalyticsConsent) {
-    setAnalyticsConsent(consent);
-    setAnsweredNow(true);
+  function choose(next: AnalyticsConsent) {
+    saveConsent(next, "banner");
   }
 
   return (

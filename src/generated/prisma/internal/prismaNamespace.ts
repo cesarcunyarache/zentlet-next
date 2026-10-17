@@ -386,6 +386,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   User: 'User',
   UserConsent: 'UserConsent',
+  UserCookieConsent: 'UserCookieConsent',
   UserPreference: 'UserPreference',
   Session: 'Session',
   Account: 'Account',
@@ -432,7 +433,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "userConsent" | "userPreference" | "session" | "account" | "verification" | "subscription" | "billingPayment" | "billingEvent" | "budget" | "budgetAlert" | "budgetLimit" | "emailInbox" | "gmailConnection" | "inboxSender" | "inboxTransaction" | "merchantRule" | "notification" | "notificationDelivery" | "feedback" | "rateLimit" | "usageLimit" | "feature" | "userFeature" | "category" | "transaction" | "transactionList" | "transactionListMember" | "transactionListInvite" | "recurringTransaction" | "whatsappLink" | "whatsappLinkCode" | "whatsappMessage"
+    modelProps: "user" | "userConsent" | "userCookieConsent" | "userPreference" | "session" | "account" | "verification" | "subscription" | "billingPayment" | "billingEvent" | "budget" | "budgetAlert" | "budgetLimit" | "emailInbox" | "gmailConnection" | "inboxSender" | "inboxTransaction" | "merchantRule" | "notification" | "notificationDelivery" | "feedback" | "rateLimit" | "usageLimit" | "feature" | "userFeature" | "category" | "transaction" | "transactionList" | "transactionListMember" | "transactionListInvite" | "recurringTransaction" | "whatsappLink" | "whatsappLinkCode" | "whatsappMessage"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -581,6 +582,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.UserConsentCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.UserConsentCountAggregateOutputType> | number
+        }
+      }
+    }
+    UserCookieConsent: {
+      payload: Prisma.$UserCookieConsentPayload<ExtArgs>
+      fields: Prisma.UserCookieConsentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.UserCookieConsentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCookieConsentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.UserCookieConsentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCookieConsentPayload>
+        }
+        findFirst: {
+          args: Prisma.UserCookieConsentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCookieConsentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.UserCookieConsentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCookieConsentPayload>
+        }
+        findMany: {
+          args: Prisma.UserCookieConsentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCookieConsentPayload>[]
+        }
+        create: {
+          args: Prisma.UserCookieConsentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCookieConsentPayload>
+        }
+        createMany: {
+          args: Prisma.UserCookieConsentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.UserCookieConsentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCookieConsentPayload>[]
+        }
+        delete: {
+          args: Prisma.UserCookieConsentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCookieConsentPayload>
+        }
+        update: {
+          args: Prisma.UserCookieConsentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCookieConsentPayload>
+        }
+        deleteMany: {
+          args: Prisma.UserCookieConsentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.UserCookieConsentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.UserCookieConsentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCookieConsentPayload>[]
+        }
+        upsert: {
+          args: Prisma.UserCookieConsentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserCookieConsentPayload>
+        }
+        aggregate: {
+          args: Prisma.UserCookieConsentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUserCookieConsent>
+        }
+        groupBy: {
+          args: Prisma.UserCookieConsentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserCookieConsentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.UserCookieConsentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserCookieConsentCountAggregateOutputType> | number
         }
       }
     }
@@ -2942,6 +3017,20 @@ export const UserConsentScalarFieldEnum = {
 export type UserConsentScalarFieldEnum = (typeof UserConsentScalarFieldEnum)[keyof typeof UserConsentScalarFieldEnum]
 
 
+export const UserCookieConsentScalarFieldEnum = {
+  id: 'id',
+  visitorId: 'visitorId',
+  userId: 'userId',
+  granted: 'granted',
+  policyVersion: 'policyVersion',
+  source: 'source',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt'
+} as const
+
+export type UserCookieConsentScalarFieldEnum = (typeof UserCookieConsentScalarFieldEnum)[keyof typeof UserCookieConsentScalarFieldEnum]
+
+
 export const UserPreferenceScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -3710,6 +3799,7 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   userConsent?: Prisma.UserConsentOmit
+  userCookieConsent?: Prisma.UserCookieConsentOmit
   userPreference?: Prisma.UserPreferenceOmit
   session?: Prisma.SessionOmit
   account?: Prisma.AccountOmit

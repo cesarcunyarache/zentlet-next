@@ -213,6 +213,7 @@ export type UserWhereInput = {
   feedback?: Prisma.FeedbackListRelationFilter
   budgets?: Prisma.BudgetListRelationFilter
   consents?: Prisma.UserConsentListRelationFilter
+  cookieConsents?: Prisma.UserCookieConsentListRelationFilter
   preference?: Prisma.XOR<Prisma.UserPreferenceNullableScalarRelationFilter, Prisma.UserPreferenceWhereInput> | null
   subscriptions?: Prisma.SubscriptionListRelationFilter
   features?: Prisma.UserFeatureListRelationFilter
@@ -246,6 +247,7 @@ export type UserOrderByWithRelationInput = {
   feedback?: Prisma.FeedbackOrderByRelationAggregateInput
   budgets?: Prisma.BudgetOrderByRelationAggregateInput
   consents?: Prisma.UserConsentOrderByRelationAggregateInput
+  cookieConsents?: Prisma.UserCookieConsentOrderByRelationAggregateInput
   preference?: Prisma.UserPreferenceOrderByWithRelationInput
   subscriptions?: Prisma.SubscriptionOrderByRelationAggregateInput
   features?: Prisma.UserFeatureOrderByRelationAggregateInput
@@ -282,6 +284,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   feedback?: Prisma.FeedbackListRelationFilter
   budgets?: Prisma.BudgetListRelationFilter
   consents?: Prisma.UserConsentListRelationFilter
+  cookieConsents?: Prisma.UserCookieConsentListRelationFilter
   preference?: Prisma.XOR<Prisma.UserPreferenceNullableScalarRelationFilter, Prisma.UserPreferenceWhereInput> | null
   subscriptions?: Prisma.SubscriptionListRelationFilter
   features?: Prisma.UserFeatureListRelationFilter
@@ -343,6 +346,7 @@ export type UserCreateInput = {
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
@@ -376,6 +380,7 @@ export type UserUncheckedCreateInput = {
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
@@ -409,6 +414,7 @@ export type UserUpdateInput = {
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
@@ -442,6 +448,7 @@ export type UserUncheckedUpdateInput = {
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
@@ -530,6 +537,11 @@ export type UserScalarRelationFilter = {
   isNot?: Prisma.UserWhereInput
 }
 
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null
+  isNot?: Prisma.UserWhereInput | null
+}
+
 export type StringFieldUpdateOperationsInput = {
   set?: string
 }
@@ -562,6 +574,22 @@ export type UserUpdateOneRequiredWithoutConsentsNestedInput = {
   upsert?: Prisma.UserUpsertWithoutConsentsInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutConsentsInput, Prisma.UserUpdateWithoutConsentsInput>, Prisma.UserUncheckedUpdateWithoutConsentsInput>
+}
+
+export type UserCreateNestedOneWithoutCookieConsentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCookieConsentsInput, Prisma.UserUncheckedCreateWithoutCookieConsentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCookieConsentsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutCookieConsentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCookieConsentsInput, Prisma.UserUncheckedCreateWithoutCookieConsentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCookieConsentsInput
+  upsert?: Prisma.UserUpsertWithoutCookieConsentsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCookieConsentsInput, Prisma.UserUpdateWithoutCookieConsentsInput>, Prisma.UserUncheckedUpdateWithoutCookieConsentsInput>
 }
 
 export type UserCreateNestedOneWithoutPreferenceInput = {
@@ -873,6 +901,7 @@ export type UserCreateWithoutConsentsInput = {
   transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
@@ -905,6 +934,7 @@ export type UserUncheckedCreateWithoutConsentsInput = {
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
@@ -953,6 +983,7 @@ export type UserUpdateWithoutConsentsInput = {
   transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
@@ -985,6 +1016,155 @@ export type UserUncheckedUpdateWithoutConsentsInput = {
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUncheckedUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUncheckedUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUncheckedUpdateManyWithoutUserNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedUpdateOneWithoutUserNestedInput
+  ownedTransactionLists?: Prisma.TransactionListUncheckedUpdateManyWithoutOwnerNestedInput
+  transactionListMembers?: Prisma.TransactionListMemberUncheckedUpdateManyWithoutUserNestedInput
+  transactionListInvites?: Prisma.TransactionListInviteUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutCookieConsentsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleCreateNestedManyWithoutUserInput
+  recurringTransactions?: Prisma.RecurringTransactionCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeCreateNestedOneWithoutUserInput
+  ownedTransactionLists?: Prisma.TransactionListCreateNestedManyWithoutOwnerInput
+  transactionListMembers?: Prisma.TransactionListMemberCreateNestedManyWithoutUserInput
+  transactionListInvites?: Prisma.TransactionListInviteCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutCookieConsentsInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  onboardingCompletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
+  consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  emailInbox?: Prisma.EmailInboxUncheckedCreateNestedOneWithoutUserInput
+  gmailConnection?: Prisma.GmailConnectionUncheckedCreateNestedOneWithoutUserInput
+  inboxSenders?: Prisma.InboxSenderUncheckedCreateNestedManyWithoutUserInput
+  inboxTransactions?: Prisma.InboxTransactionUncheckedCreateNestedManyWithoutUserInput
+  merchantRules?: Prisma.MerchantRuleUncheckedCreateNestedManyWithoutUserInput
+  recurringTransactions?: Prisma.RecurringTransactionUncheckedCreateNestedManyWithoutUserInput
+  whatsappLink?: Prisma.WhatsappLinkUncheckedCreateNestedOneWithoutUserInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUncheckedCreateNestedOneWithoutUserInput
+  ownedTransactionLists?: Prisma.TransactionListUncheckedCreateNestedManyWithoutOwnerInput
+  transactionListMembers?: Prisma.TransactionListMemberUncheckedCreateNestedManyWithoutUserInput
+  transactionListInvites?: Prisma.TransactionListInviteUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutCookieConsentsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCookieConsentsInput, Prisma.UserUncheckedCreateWithoutCookieConsentsInput>
+}
+
+export type UserUpsertWithoutCookieConsentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCookieConsentsInput, Prisma.UserUncheckedUpdateWithoutCookieConsentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCookieConsentsInput, Prisma.UserUncheckedCreateWithoutCookieConsentsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCookieConsentsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCookieConsentsInput, Prisma.UserUncheckedUpdateWithoutCookieConsentsInput>
+}
+
+export type UserUpdateWithoutCookieConsentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  emailInbox?: Prisma.EmailInboxUpdateOneWithoutUserNestedInput
+  gmailConnection?: Prisma.GmailConnectionUpdateOneWithoutUserNestedInput
+  inboxSenders?: Prisma.InboxSenderUpdateManyWithoutUserNestedInput
+  inboxTransactions?: Prisma.InboxTransactionUpdateManyWithoutUserNestedInput
+  merchantRules?: Prisma.MerchantRuleUpdateManyWithoutUserNestedInput
+  recurringTransactions?: Prisma.RecurringTransactionUpdateManyWithoutUserNestedInput
+  whatsappLink?: Prisma.WhatsappLinkUpdateOneWithoutUserNestedInput
+  whatsappLinkCode?: Prisma.WhatsappLinkCodeUpdateOneWithoutUserNestedInput
+  ownedTransactionLists?: Prisma.TransactionListUpdateManyWithoutOwnerNestedInput
+  transactionListMembers?: Prisma.TransactionListMemberUpdateManyWithoutUserNestedInput
+  transactionListInvites?: Prisma.TransactionListInviteUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCookieConsentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  onboardingCompletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
+  consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
@@ -1018,6 +1198,7 @@ export type UserCreateWithoutPreferenceInput = {
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentCreateNestedManyWithoutUserInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
@@ -1050,6 +1231,7 @@ export type UserUncheckedCreateWithoutPreferenceInput = {
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedCreateNestedManyWithoutUserInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -1098,6 +1280,7 @@ export type UserUpdateWithoutPreferenceInput = {
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUpdateManyWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
@@ -1130,6 +1313,7 @@ export type UserUncheckedUpdateWithoutPreferenceInput = {
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedUpdateManyWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -1161,6 +1345,7 @@ export type UserCreateWithoutSessionsInput = {
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
@@ -1193,6 +1378,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
@@ -1241,6 +1427,7 @@ export type UserUpdateWithoutSessionsInput = {
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
@@ -1273,6 +1460,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
@@ -1305,6 +1493,7 @@ export type UserCreateWithoutAccountsInput = {
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
@@ -1337,6 +1526,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
@@ -1385,6 +1575,7 @@ export type UserUpdateWithoutAccountsInput = {
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
@@ -1417,6 +1608,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
@@ -1450,6 +1642,7 @@ export type UserCreateWithoutSubscriptionsInput = {
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
@@ -1482,6 +1675,7 @@ export type UserUncheckedCreateWithoutSubscriptionsInput = {
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -1530,6 +1724,7 @@ export type UserUpdateWithoutSubscriptionsInput = {
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
@@ -1562,6 +1757,7 @@ export type UserUncheckedUpdateWithoutSubscriptionsInput = {
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -1593,6 +1789,7 @@ export type UserCreateWithoutBudgetsInput = {
   transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
@@ -1625,6 +1822,7 @@ export type UserUncheckedCreateWithoutBudgetsInput = {
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
@@ -1673,6 +1871,7 @@ export type UserUpdateWithoutBudgetsInput = {
   transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
@@ -1705,6 +1904,7 @@ export type UserUncheckedUpdateWithoutBudgetsInput = {
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
@@ -1738,6 +1938,7 @@ export type UserCreateWithoutEmailInboxInput = {
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
@@ -1770,6 +1971,7 @@ export type UserUncheckedCreateWithoutEmailInboxInput = {
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
@@ -1818,6 +2020,7 @@ export type UserUpdateWithoutEmailInboxInput = {
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
@@ -1850,6 +2053,7 @@ export type UserUncheckedUpdateWithoutEmailInboxInput = {
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
@@ -1882,6 +2086,7 @@ export type UserCreateWithoutGmailConnectionInput = {
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
@@ -1914,6 +2119,7 @@ export type UserUncheckedCreateWithoutGmailConnectionInput = {
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
@@ -1962,6 +2168,7 @@ export type UserUpdateWithoutGmailConnectionInput = {
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
@@ -1994,6 +2201,7 @@ export type UserUncheckedUpdateWithoutGmailConnectionInput = {
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
@@ -2026,6 +2234,7 @@ export type UserCreateWithoutInboxSendersInput = {
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
@@ -2058,6 +2267,7 @@ export type UserUncheckedCreateWithoutInboxSendersInput = {
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
@@ -2106,6 +2316,7 @@ export type UserUpdateWithoutInboxSendersInput = {
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
@@ -2138,6 +2349,7 @@ export type UserUncheckedUpdateWithoutInboxSendersInput = {
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
@@ -2170,6 +2382,7 @@ export type UserCreateWithoutInboxTransactionsInput = {
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
@@ -2202,6 +2415,7 @@ export type UserUncheckedCreateWithoutInboxTransactionsInput = {
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
@@ -2250,6 +2464,7 @@ export type UserUpdateWithoutInboxTransactionsInput = {
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
@@ -2282,6 +2497,7 @@ export type UserUncheckedUpdateWithoutInboxTransactionsInput = {
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
@@ -2314,6 +2530,7 @@ export type UserCreateWithoutMerchantRulesInput = {
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
@@ -2346,6 +2563,7 @@ export type UserUncheckedCreateWithoutMerchantRulesInput = {
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
@@ -2394,6 +2612,7 @@ export type UserUpdateWithoutMerchantRulesInput = {
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
@@ -2426,6 +2645,7 @@ export type UserUncheckedUpdateWithoutMerchantRulesInput = {
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
@@ -2458,6 +2678,7 @@ export type UserCreateWithoutNotificationsInput = {
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
@@ -2490,6 +2711,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
@@ -2538,6 +2760,7 @@ export type UserUpdateWithoutNotificationsInput = {
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
@@ -2570,6 +2793,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
@@ -2601,6 +2825,7 @@ export type UserCreateWithoutFeedbackInput = {
   transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
@@ -2633,6 +2858,7 @@ export type UserUncheckedCreateWithoutFeedbackInput = {
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
@@ -2681,6 +2907,7 @@ export type UserUpdateWithoutFeedbackInput = {
   transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
@@ -2713,6 +2940,7 @@ export type UserUncheckedUpdateWithoutFeedbackInput = {
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
@@ -2746,6 +2974,7 @@ export type UserCreateWithoutFeaturesInput = {
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
@@ -2778,6 +3007,7 @@ export type UserUncheckedCreateWithoutFeaturesInput = {
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
@@ -2826,6 +3056,7 @@ export type UserUpdateWithoutFeaturesInput = {
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
@@ -2858,6 +3089,7 @@ export type UserUncheckedUpdateWithoutFeaturesInput = {
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
@@ -2889,6 +3121,7 @@ export type UserCreateWithoutCategoriesInput = {
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
@@ -2921,6 +3154,7 @@ export type UserUncheckedCreateWithoutCategoriesInput = {
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
@@ -2969,6 +3203,7 @@ export type UserUpdateWithoutCategoriesInput = {
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
@@ -3001,6 +3236,7 @@ export type UserUncheckedUpdateWithoutCategoriesInput = {
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
@@ -3033,6 +3269,7 @@ export type UserCreateWithoutTransactionsInput = {
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
@@ -3065,6 +3302,7 @@ export type UserUncheckedCreateWithoutTransactionsInput = {
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
@@ -3113,6 +3351,7 @@ export type UserUpdateWithoutTransactionsInput = {
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
@@ -3145,6 +3384,7 @@ export type UserUncheckedUpdateWithoutTransactionsInput = {
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
@@ -3178,6 +3418,7 @@ export type UserCreateWithoutOwnedTransactionListsInput = {
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
@@ -3210,6 +3451,7 @@ export type UserUncheckedCreateWithoutOwnedTransactionListsInput = {
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
@@ -3258,6 +3500,7 @@ export type UserUpdateWithoutOwnedTransactionListsInput = {
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
@@ -3290,6 +3533,7 @@ export type UserUncheckedUpdateWithoutOwnedTransactionListsInput = {
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
@@ -3322,6 +3566,7 @@ export type UserCreateWithoutTransactionListMembersInput = {
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
@@ -3354,6 +3599,7 @@ export type UserUncheckedCreateWithoutTransactionListMembersInput = {
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
@@ -3402,6 +3648,7 @@ export type UserUpdateWithoutTransactionListMembersInput = {
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
@@ -3434,6 +3681,7 @@ export type UserUncheckedUpdateWithoutTransactionListMembersInput = {
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
@@ -3466,6 +3714,7 @@ export type UserCreateWithoutTransactionListInvitesInput = {
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
@@ -3498,6 +3747,7 @@ export type UserUncheckedCreateWithoutTransactionListInvitesInput = {
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
@@ -3546,6 +3796,7 @@ export type UserUpdateWithoutTransactionListInvitesInput = {
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
@@ -3578,6 +3829,7 @@ export type UserUncheckedUpdateWithoutTransactionListInvitesInput = {
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
@@ -3610,6 +3862,7 @@ export type UserCreateWithoutRecurringTransactionsInput = {
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
@@ -3642,6 +3895,7 @@ export type UserUncheckedCreateWithoutRecurringTransactionsInput = {
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
@@ -3690,6 +3944,7 @@ export type UserUpdateWithoutRecurringTransactionsInput = {
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
@@ -3722,6 +3977,7 @@ export type UserUncheckedUpdateWithoutRecurringTransactionsInput = {
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
@@ -3754,6 +4010,7 @@ export type UserCreateWithoutWhatsappLinkInput = {
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
@@ -3786,6 +4043,7 @@ export type UserUncheckedCreateWithoutWhatsappLinkInput = {
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
@@ -3834,6 +4092,7 @@ export type UserUpdateWithoutWhatsappLinkInput = {
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
@@ -3866,6 +4125,7 @@ export type UserUncheckedUpdateWithoutWhatsappLinkInput = {
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
@@ -3898,6 +4158,7 @@ export type UserCreateWithoutWhatsappLinkCodeInput = {
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureCreateNestedManyWithoutUserInput
@@ -3930,6 +4191,7 @@ export type UserUncheckedCreateWithoutWhatsappLinkCodeInput = {
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   budgets?: Prisma.BudgetUncheckedCreateNestedManyWithoutUserInput
   consents?: Prisma.UserConsentUncheckedCreateNestedManyWithoutUserInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedCreateNestedManyWithoutUserInput
   preference?: Prisma.UserPreferenceUncheckedCreateNestedOneWithoutUserInput
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   features?: Prisma.UserFeatureUncheckedCreateNestedManyWithoutUserInput
@@ -3978,6 +4240,7 @@ export type UserUpdateWithoutWhatsappLinkCodeInput = {
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUpdateManyWithoutUserNestedInput
@@ -4010,6 +4273,7 @@ export type UserUncheckedUpdateWithoutWhatsappLinkCodeInput = {
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   budgets?: Prisma.BudgetUncheckedUpdateManyWithoutUserNestedInput
   consents?: Prisma.UserConsentUncheckedUpdateManyWithoutUserNestedInput
+  cookieConsents?: Prisma.UserCookieConsentUncheckedUpdateManyWithoutUserNestedInput
   preference?: Prisma.UserPreferenceUncheckedUpdateOneWithoutUserNestedInput
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   features?: Prisma.UserFeatureUncheckedUpdateManyWithoutUserNestedInput
@@ -4039,6 +4303,7 @@ export type UserCountOutputType = {
   feedback: number
   budgets: number
   consents: number
+  cookieConsents: number
   subscriptions: number
   features: number
   notifications: number
@@ -4059,6 +4324,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   feedback?: boolean | UserCountOutputTypeCountFeedbackArgs
   budgets?: boolean | UserCountOutputTypeCountBudgetsArgs
   consents?: boolean | UserCountOutputTypeCountConsentsArgs
+  cookieConsents?: boolean | UserCountOutputTypeCountCookieConsentsArgs
   subscriptions?: boolean | UserCountOutputTypeCountSubscriptionsArgs
   features?: boolean | UserCountOutputTypeCountFeaturesArgs
   notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
@@ -4128,6 +4394,13 @@ export type UserCountOutputTypeCountBudgetsArgs<ExtArgs extends runtime.Types.Ex
  */
 export type UserCountOutputTypeCountConsentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.UserConsentWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCookieConsentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserCookieConsentWhereInput
 }
 
 /**
@@ -4217,6 +4490,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   feedback?: boolean | Prisma.User$feedbackArgs<ExtArgs>
   budgets?: boolean | Prisma.User$budgetsArgs<ExtArgs>
   consents?: boolean | Prisma.User$consentsArgs<ExtArgs>
+  cookieConsents?: boolean | Prisma.User$cookieConsentsArgs<ExtArgs>
   preference?: boolean | Prisma.User$preferenceArgs<ExtArgs>
   subscriptions?: boolean | Prisma.User$subscriptionsArgs<ExtArgs>
   features?: boolean | Prisma.User$featuresArgs<ExtArgs>
@@ -4277,6 +4551,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   feedback?: boolean | Prisma.User$feedbackArgs<ExtArgs>
   budgets?: boolean | Prisma.User$budgetsArgs<ExtArgs>
   consents?: boolean | Prisma.User$consentsArgs<ExtArgs>
+  cookieConsents?: boolean | Prisma.User$cookieConsentsArgs<ExtArgs>
   preference?: boolean | Prisma.User$preferenceArgs<ExtArgs>
   subscriptions?: boolean | Prisma.User$subscriptionsArgs<ExtArgs>
   features?: boolean | Prisma.User$featuresArgs<ExtArgs>
@@ -4307,6 +4582,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     feedback: Prisma.$FeedbackPayload<ExtArgs>[]
     budgets: Prisma.$BudgetPayload<ExtArgs>[]
     consents: Prisma.$UserConsentPayload<ExtArgs>[]
+    cookieConsents: Prisma.$UserCookieConsentPayload<ExtArgs>[]
     preference: Prisma.$UserPreferencePayload<ExtArgs> | null
     subscriptions: Prisma.$SubscriptionPayload<ExtArgs>[]
     features: Prisma.$UserFeaturePayload<ExtArgs>[]
@@ -4733,6 +5009,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   feedback<T extends Prisma.User$feedbackArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$feedbackArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   budgets<T extends Prisma.User$budgetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$budgetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BudgetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   consents<T extends Prisma.User$consentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$consentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserConsentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  cookieConsents<T extends Prisma.User$cookieConsentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$cookieConsentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserCookieConsentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   preference<T extends Prisma.User$preferenceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$preferenceArgs<ExtArgs>>): Prisma.Prisma__UserPreferenceClient<runtime.Types.Result.GetResult<Prisma.$UserPreferencePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   subscriptions<T extends Prisma.User$subscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$subscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   features<T extends Prisma.User$featuresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$featuresArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserFeaturePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -5343,6 +5620,30 @@ export type User$consentsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.UserConsentScalarFieldEnum | Prisma.UserConsentScalarFieldEnum[]
+}
+
+/**
+ * User.cookieConsents
+ */
+export type User$cookieConsentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserCookieConsent
+   */
+  select?: Prisma.UserCookieConsentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserCookieConsent
+   */
+  omit?: Prisma.UserCookieConsentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserCookieConsentInclude<ExtArgs> | null
+  where?: Prisma.UserCookieConsentWhereInput
+  orderBy?: Prisma.UserCookieConsentOrderByWithRelationInput | Prisma.UserCookieConsentOrderByWithRelationInput[]
+  cursor?: Prisma.UserCookieConsentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserCookieConsentScalarFieldEnum | Prisma.UserCookieConsentScalarFieldEnum[]
 }
 
 /**

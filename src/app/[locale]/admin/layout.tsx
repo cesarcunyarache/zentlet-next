@@ -12,6 +12,7 @@ import prisma from "@/lib/prisma";
 import { OnboardingProvider } from "@/features/onboarding/ui/onboarding-provider";
 import { BillingReturn } from "@/features/billing/ui/billing-return";
 import { PreferenceSync } from "@/features/preference/ui/preference-sync";
+import { CookieConsentSync } from "@/features/legal/ui/cookie-consent-sync";
 import { AccountCurrencyProvider } from "@/features/preference/ui/account-currency-provider";
 import { preferencesSchema } from "@/features/preference/schemas/preference.schema";
 import { PENDING_INVITE_COOKIE } from "@/features/list/lib/pending-invite";
@@ -53,6 +54,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     >
       <ThemeController />
       <AnalyticsIdentity userId={session.user.id} />
+      <CookieConsentSync userId={session.user.id} />
       <PreferenceSync />
       <BillingReturn />
       {pendingInvite ? <PendingInviteRedirect token={pendingInvite} /> : null}
