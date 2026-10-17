@@ -16,3 +16,4 @@ export const createFeedbackSchema = z.object({
 
 export type FeedbackContext = z.infer<typeof feedbackContextSchema>;
 export type FeedbackPayload = z.input<typeof createFeedbackSchema>;
+export type CreateFeedbackInput = z.infer<typeof createFeedbackSchema>;

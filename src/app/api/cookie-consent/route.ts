@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { recordCookieConsentSchema } from "@/features/legal/schemas/cookie-consent-api.schema";
-import { cookieConsentUseCases } from "@/features/legal/server/infrastructure/cookie-consent.container";
+import { legalUseCases } from "@/features/legal/server/infrastructure/legal.container";
 import { rateLimit } from "@/lib/rate-limit";
 import { getSessionUserId, internalError, parseBody, tooManyRequests } from "@/lib/api/route-helpers";
 
@@ -21,7 +21,7 @@ export async function POST(req: Request) {
     if (!allowed) return tooManyRequests("Too many requests", HOUR_SECONDS);
 
     const userId = await getSessionUserId(req);
-    const consent = await cookieConsentUseCases.record.execute(userId, parsed.data, {
+    const consent = await legalUseCases.recordCookieConsent.execute(userId, parsed.data, {
       userAgent: req.headers.get("user-agent"),
     });
 

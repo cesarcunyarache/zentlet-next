@@ -1,19 +1,18 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import prisma from "@/lib/prisma";
-import { LEGAL_DOCUMENTS, LEGAL_VERSION } from "../../config";
-import { legalDocumentSchema, recordLegalConsent, recordSignUpConsent, type LegalDocument } from "../consent";
+import { describe, expect, it, vi } from "vitest";
+import { LEGAL_DOCUMENTS, LEGAL_VERSION, type LegalDocumentId } from "../../../../config";
+import { legalDocumentSchema } from "../../../../schemas/legal-consent.schema";
+import type { SignUpRollback } from "../../../domain/ports/legal.ports";
+import type { LegalConsentRepository } from "../../../domain/repositories/legal-consent.repository";
+import { RecordLegalConsentUseCase } from "../record-legal-consent.use-case";
+import { RecordSignUpConsentUseCase } from "../record-sign-up-consent.use-case";
 
-vi.mock("@/lib/prisma", () => ({
-  default: { userConsent: { createMany: vi.fn() }, user: { delete: vi.fn() } },
-}));
-
-const db = vi.mocked(prisma, { deep: true });
-
-beforeEach(() => {
-  vi.resetAllMocks();
-  db.userConsent.createMany.mockResolvedValue({ count: 2 });
-  db.user.delete.mockResolvedValue({} as never);
-});
+function setup() {
+  const repository: LegalConsentRepository = { recordAccepted: vi.fn().mockResolvedValue(undefined) };
+  const rollback: SignUpRollback = { undo: vi.fn().mockResolvedValue(undefined) };
+  const recordLegalConsent = new RecordLegalConsentUseCase(repository);
+  const recordSignUpConsent = new RecordSignUpConsentUseCase(recordLegalConsent, rollback);
+  return { repository, rollback, recordLegalConsent, recordSignUpConsent };
+}
 
 describe("legalDocumentSchema", () => {
   it("admite sólo los textos declarados", () => {
@@ -23,51 +22,62 @@ describe("legalDocumentSchema", () => {
   });
 });
 
-describe("recordLegalConsent", () => {
-  it("guarda una fila por texto con la versión vigente, sin duplicar", async () => {
-    await recordLegalConsent("user-1");
-    expect(db.userConsent.createMany).toHaveBeenCalledWith({
-      data: [
-        { userId: "user-1", document: "terms", version: LEGAL_VERSION },
-        { userId: "user-1", document: "privacy", version: LEGAL_VERSION },
-      ],
-      skipDuplicates: true,
-    });
+describe("RecordLegalConsentUseCase", () => {
+  it("guarda una fila por texto con la versión vigente", async () => {
+    const { repository, recordLegalConsent } = setup();
+
+    await recordLegalConsent.execute("user-1");
+
+    expect(repository.recordAccepted).toHaveBeenCalledWith([
+      { userId: "user-1", document: "terms", version: LEGAL_VERSION },
+      { userId: "user-1", document: "privacy", version: LEGAL_VERSION },
+    ]);
   });
 
   it("acepta un texto y una versión concretos", async () => {
-    await recordLegalConsent("user-1", ["privacy"], "2027-01-01");
-    expect(db.userConsent.createMany).toHaveBeenCalledWith({
-      data: [{ userId: "user-1", document: "privacy", version: "2027-01-01" }],
-      skipDuplicates: true,
-    });
+    const { repository, recordLegalConsent } = setup();
+
+    await recordLegalConsent.execute("user-1", ["privacy"], "2027-01-01");
+
+    expect(repository.recordAccepted).toHaveBeenCalledWith([
+      { userId: "user-1", document: "privacy", version: "2027-01-01" },
+    ]);
   });
 
   it("rechaza un texto desconocido o una lista vacía sin escribir", async () => {
-    await expect(recordLegalConsent("user-1", ["marketing" as LegalDocument])).rejects.toThrow();
-    await expect(recordLegalConsent("user-1", [])).rejects.toThrow();
-    expect(db.userConsent.createMany).not.toHaveBeenCalled();
+    const { repository, recordLegalConsent } = setup();
+
+    await expect(recordLegalConsent.execute("user-1", ["marketing" as LegalDocumentId])).rejects.toThrow();
+    await expect(recordLegalConsent.execute("user-1", [])).rejects.toThrow();
+    expect(repository.recordAccepted).not.toHaveBeenCalled();
   });
 });
 
-describe("recordSignUpConsent", () => {
+describe("RecordSignUpConsentUseCase", () => {
   it("guarda el consentimiento y conserva la cuenta", async () => {
-    await recordSignUpConsent("user-1");
-    expect(db.userConsent.createMany).toHaveBeenCalledOnce();
-    expect(db.user.delete).not.toHaveBeenCalled();
+    const { repository, rollback, recordSignUpConsent } = setup();
+
+    await recordSignUpConsent.execute("user-1");
+
+    expect(repository.recordAccepted).toHaveBeenCalledOnce();
+    expect(rollback.undo).not.toHaveBeenCalled();
   });
 
   it("si no se puede guardar, deshace el alta y propaga el error", async () => {
+    const { repository, rollback, recordSignUpConsent } = setup();
     const failure = new Error("db down");
-    db.userConsent.createMany.mockRejectedValue(failure);
-    await expect(recordSignUpConsent("user-1")).rejects.toBe(failure);
-    expect(db.user.delete).toHaveBeenCalledWith({ where: { id: "user-1" } });
+    vi.mocked(repository.recordAccepted).mockRejectedValue(failure);
+
+    await expect(recordSignUpConsent.execute("user-1")).rejects.toBe(failure);
+    expect(rollback.undo).toHaveBeenCalledWith("user-1");
   });
 
   it("propaga el error original aunque también falle el borrado", async () => {
+    const { repository, rollback, recordSignUpConsent } = setup();
     const failure = new Error("db down");
-    db.userConsent.createMany.mockRejectedValue(failure);
-    db.user.delete.mockRejectedValue(new Error("delete failed"));
-    await expect(recordSignUpConsent("user-1")).rejects.toBe(failure);
+    vi.mocked(repository.recordAccepted).mockRejectedValue(failure);
+    vi.mocked(rollback.undo).mockRejectedValue(new Error("delete failed"));
+
+    await expect(recordSignUpConsent.execute("user-1")).rejects.toBe(failure);
   });
 });

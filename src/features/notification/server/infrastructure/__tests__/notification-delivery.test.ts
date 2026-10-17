@@ -2,8 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import prisma from "@/lib/prisma";
 import { sendEmail } from "@/lib/email";
 import { featureFlagUseCases } from "@/features/feature-flag/server/infrastructure/feature-flag.container";
-import { deliverPending } from "../deliver";
-import { notify } from "../notify";
+import { notificationUseCases } from "../notification.container";
 
 vi.mock("@/lib/prisma", () => ({
   default: {
@@ -51,7 +50,7 @@ beforeEach(() => {
 
 describe("notify", () => {
   it("stores the notification with one delivery per enabled channel and sends it", async () => {
-    await notify(input);
+    await notificationUseCases.notify.execute(input);
 
     expect(db.notification.create).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -71,7 +70,7 @@ describe("notify", () => {
     vi.mocked(featureFlagUseCases.isEnabled.execute).mockResolvedValue(false);
     db.notification.create.mockResolvedValue({ deliveries: [] } as never);
 
-    await notify(input);
+    await notificationUseCases.notify.execute(input);
 
     expect(db.notification.create).toHaveBeenCalledWith(
       expect.objectContaining({ data: expect.objectContaining({ deliveries: { create: [] } }) }),
@@ -82,7 +81,7 @@ describe("notify", () => {
   it("ignores a duplicate dedupe key", async () => {
     db.notification.create.mockRejectedValue(Object.assign(new Error("Unique"), { code: "P2002" }));
 
-    await expect(notify(input)).resolves.toBeUndefined();
+    await expect(notificationUseCases.notify.execute(input)).resolves.toBeUndefined();
     expect(sendEmail).not.toHaveBeenCalled();
   });
 });
@@ -91,7 +90,7 @@ describe("delivery", () => {
   it("does not send a delivery another worker already claimed", async () => {
     db.notificationDelivery.updateMany.mockResolvedValue({ count: 0 });
 
-    await notify(input);
+    await notificationUseCases.notify.execute(input);
 
     expect(sendEmail).not.toHaveBeenCalled();
   });
@@ -99,7 +98,7 @@ describe("delivery", () => {
   it("schedules a retry when the channel fails", async () => {
     vi.mocked(sendEmail).mockResolvedValue(false);
 
-    await notify(input);
+    await notificationUseCases.notify.execute(input);
 
     expect(db.notificationDelivery.update).toHaveBeenCalledWith({
       where: { id: "d1" },
@@ -111,7 +110,7 @@ describe("delivery", () => {
     vi.mocked(sendEmail).mockResolvedValue(false);
     db.notificationDelivery.findUnique.mockResolvedValue(claimed(5) as never);
 
-    await notify(input);
+    await notificationUseCases.notify.execute(input);
 
     expect(db.notificationDelivery.update).toHaveBeenCalledWith({ where: { id: "d1" }, data: { status: "failed" } });
   });
@@ -119,7 +118,7 @@ describe("delivery", () => {
   it("retries due deliveries from the cron", async () => {
     db.notificationDelivery.findMany.mockResolvedValue([{ id: "d1" }, { id: "d2" }] as never);
 
-    expect(await deliverPending()).toEqual({ processed: 2 });
+    expect(await notificationUseCases.deliverPending.execute()).toEqual({ processed: 2 });
     expect(sendEmail).toHaveBeenCalledTimes(2);
   });
 });

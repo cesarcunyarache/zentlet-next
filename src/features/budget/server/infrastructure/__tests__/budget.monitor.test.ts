@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import prisma from "@/lib/prisma";
-import { notify } from "@/features/notification/server/notify";
+import { notificationUseCases } from "@/features/notification/server/infrastructure/notification.container";
 import { checkBudget } from "../budget.monitor";
 
 vi.mock("@/lib/prisma", () => ({
@@ -11,9 +11,12 @@ vi.mock("@/lib/prisma", () => ({
     notification: { findMany: vi.fn() },
   },
 }));
-vi.mock("@/features/notification/server/notify", () => ({ notify: vi.fn() }));
+vi.mock("@/features/notification/server/infrastructure/notification.container", () => ({
+  notificationUseCases: { notify: { execute: vi.fn() } },
+}));
 
 const db = vi.mocked(prisma, { deep: true });
+const notify = vi.mocked(notificationUseCases.notify.execute);
 
 const budget = {
   id: "b1",

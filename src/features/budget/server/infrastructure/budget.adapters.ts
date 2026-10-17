@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { resolveTargetListId } from "@/lib/private-list";
-import { notify } from "@/features/notification/server/notify";
+import { notificationUseCases } from "@/features/notification/server/infrastructure/notification.container";
 import { preferencesSchema } from "@/features/preference/schemas/preference.schema";
 import type { AccountPreferences, BudgetNotifier, ListPlacement } from "../domain/ports/budget.ports";
 
@@ -28,5 +28,7 @@ export const budgetNotifier: BudgetNotifier = {
     });
     return rows.flatMap(({ dedupeKey }) => (dedupeKey ? [dedupeKey] : []));
   },
-  notify,
+  notify(notification) {
+    return notificationUseCases.notify.execute(notification);
+  },
 };

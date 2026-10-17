@@ -1,7 +1,7 @@
 import { createHash, randomBytes } from "node:crypto";
 import prisma from "@/lib/prisma";
 import { DEFAULT_CURRENCY } from "@/features/preference/lib/currency";
-import { notify } from "@/features/notification/server/notify";
+import { notificationUseCases } from "@/features/notification/server/infrastructure/notification.container";
 import { routing } from "@/i18n/routing";
 import { sendEmail } from "@/lib/email";
 import { listInviteEmail } from "@/lib/email/templates";
@@ -44,9 +44,9 @@ export const inviteMailer: InviteMailer = {
 
 export const listNotifier: ListNotifier = {
   async memberJoined(ownerId, data) {
-    await notify({ type: "list.joined", userId: ownerId, data, dedupeKey: `list.joined:${data.listId}:${Date.now()}` });
+    await notificationUseCases.notify.execute({ type: "list.joined", userId: ownerId, data, dedupeKey: `list.joined:${data.listId}:${Date.now()}` });
   },
   async ownershipReceived(userId, data) {
-    await notify({ type: "list.owned", userId, data, dedupeKey: `list.owned:${data.listId}` });
+    await notificationUseCases.notify.execute({ type: "list.owned", userId, data, dedupeKey: `list.owned:${data.listId}` });
   },
 };

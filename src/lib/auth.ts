@@ -6,7 +6,7 @@ import { billingUseCases } from "@/features/billing/server/infrastructure/billin
 import { ensurePrivateListId } from "@/lib/private-list";
 import { listUseCases } from "@/features/list/server/infrastructure/list.container";
 import { LEGAL_CONSENT_HEADER, LEGAL_VERSION } from "@/features/legal/config";
-import { recordSignUpConsent } from "@/features/legal/server/consent";
+import { legalUseCases } from "@/features/legal/server/infrastructure/legal.container";
 import prisma from "./prisma";
 import { rateLimit } from "./rate-limit";
 import { isEmailConfigured, sendEmail } from "./email";
@@ -187,7 +187,7 @@ export const auth = betterAuth({
     user: {
       create: {
         after: async (user, context: HookContext) => {
-          await recordSignUpConsent(user.id);
+          await legalUseCases.recordSignUpConsent.execute(user.id);
           // si falla, se crea al pedir las listas o al guardar el primer movimiento
           await ensurePrivateListId(user.id).catch((error) =>
             logger.error({ err: error, userId: user.id }, "list.private_create_failed"),

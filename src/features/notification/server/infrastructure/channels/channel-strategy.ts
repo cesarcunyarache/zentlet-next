@@ -1,5 +1,5 @@
 import type { Locale } from "@/i18n/routing";
-import type { TNotification } from "../../types";
+import type { TNotification } from "../../../types";
 
 interface Recipient {
   email: string;
