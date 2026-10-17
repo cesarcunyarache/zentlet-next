@@ -5,7 +5,8 @@ import { canReuseCheckout, firstChargeDate, isTrialEligible } from "../lib/lifec
 import { PLANS, planPrice, TRIAL_DAYS, type PaidPlanKey } from "../lib/plans";
 import { getBillingProvider } from "../providers";
 import { recordBillingEvent } from "./events";
-import { abandonPending, listUserSubscriptions, type SubscriptionRow } from "./subscriptions";
+import { toSubscriptionRow, type SubscriptionRow } from "./rows";
+import { abandonPending, listUserSubscriptions } from "./subscriptions";
 
 interface CheckoutRequest {
   userId: string;
@@ -24,74 +25,81 @@ function paidUntil(history: SubscriptionRow[], now: Date) {
   return canceled?.currentPeriodEnd ?? null;
 }
 
-async function reuseOrAbandon(live: SubscriptionRow, now: Date): Promise<CheckoutOutcome | null> {
+async function resolveLiveSubscription(live: SubscriptionRow, now: Date): Promise<CheckoutOutcome | "abandoned"> {
   if (live.status !== "pending") return { kind: "already_subscribed" };
   if (!live.checkoutUrl) return { kind: "in_progress" };
   if (canReuseCheckout(live, now)) return { kind: "redirect", checkoutUrl: live.checkoutUrl };
+
   await abandonPending(live, now);
-  return null;
+  return "abandoned";
 }
 
-async function createPendingRow(request: CheckoutRequest, history: SubscriptionRow[], now: Date) {
+async function createPendingSubscription(request: CheckoutRequest, history: SubscriptionRow[], now: Date) {
   const price = planPrice(request.planKey);
   const trialDays = isTrialEligible(history) ? TRIAL_DAYS : 0;
   const firstChargeAt = firstChargeDate({ now, trialDays, paidUntil: paidUntil(history, now) });
-  const row = await prisma.subscription.create({
-    data: {
-      userId: request.userId,
-      planKey: request.planKey,
-      status: "pending",
-      amount: price.amount,
-      currency: price.currency,
-      interval: price.interval,
-      provider: getBillingProvider().name,
-      trialEndsAt: trialDays > 0 ? firstChargeAt : null,
-    },
-  });
-  return { row: row as SubscriptionRow, firstChargeAt };
+
+  try {
+    const row = await prisma.subscription.create({
+      data: {
+        userId: request.userId,
+        planKey: request.planKey,
+        status: "pending",
+        amount: price.amount,
+        currency: price.currency,
+        interval: price.interval,
+        provider: getBillingProvider().name,
+        trialEndsAt: trialDays > 0 ? firstChargeAt : null,
+      },
+    });
+    return { subscription: toSubscriptionRow(row), firstChargeAt };
+  } catch (error) {
+    const anotherCheckoutIsLive = isUniqueViolation(error);
+    if (anotherCheckoutIsLive) return "in_progress" as const;
+    throw error;
+  }
 }
 
-async function openProviderCheckout(request: CheckoutRequest, row: SubscriptionRow, firstChargeAt: Date) {
+async function openProviderCheckout(request: CheckoutRequest, subscription: SubscriptionRow, firstChargeAt: Date) {
   try {
-    const { externalId, checkoutUrl } = await getBillingProvider(row.provider).createCheckout({
-      subscriptionId: row.id,
+    const { externalId, checkoutUrl } = await getBillingProvider(subscription.provider).createCheckout({
+      subscriptionId: subscription.id,
       reason: `Zentlet ${PLANS[request.planKey].name}`,
       payerEmail: request.email,
-      amount: row.amount,
-      currency: row.currency,
+      amount: subscription.amount,
+      currency: subscription.currency,
       interval: planPrice(request.planKey).interval,
       firstChargeAt,
       returnUrl: request.returnUrl,
     });
-    await prisma.subscription.update({ where: { id: row.id }, data: { externalId, checkoutUrl } });
+    await prisma.subscription.update({ where: { id: subscription.id }, data: { externalId, checkoutUrl } });
     return checkoutUrl;
   } catch (error) {
-    await abandonPending(row);
+    await abandonPending(subscription);
     throw error;
   }
 }
 
 export async function startCheckout(request: CheckoutRequest, now = new Date()): Promise<CheckoutOutcome> {
   const history = await listUserSubscriptions(request.userId);
+
   const live = history.find((subscription) => subscription.status !== "canceled");
   if (live) {
-    const outcome = await reuseOrAbandon(live, now);
-    if (outcome) return outcome;
+    const resolution = await resolveLiveSubscription(live, now);
+    if (resolution !== "abandoned") return resolution;
   }
 
-  try {
-    const { row, firstChargeAt } = await createPendingRow(request, history, now);
-    const checkoutUrl = await openProviderCheckout(request, row, firstChargeAt);
-    await recordBillingEvent({
-      source: "user",
-      type: "checkout.started",
-      userId: request.userId,
-      subscriptionId: row.id,
-      data: { planKey: request.planKey, trial: row.trialEndsAt !== null },
-    });
-    return { kind: "redirect", checkoutUrl };
-  } catch (error) {
-    if (isUniqueViolation(error)) return { kind: "in_progress" };
-    throw error;
-  }
+  const pending = await createPendingSubscription(request, history, now);
+  if (pending === "in_progress") return { kind: "in_progress" };
+
+  const checkoutUrl = await openProviderCheckout(request, pending.subscription, pending.firstChargeAt);
+  await recordBillingEvent({
+    source: "user",
+    type: "checkout.started",
+    userId: request.userId,
+    subscriptionId: pending.subscription.id,
+    data: { planKey: request.planKey, trial: pending.subscription.trialEndsAt !== null },
+  });
+
+  return { kind: "redirect", checkoutUrl };
 }

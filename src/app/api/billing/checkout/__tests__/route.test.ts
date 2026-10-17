@@ -129,6 +129,18 @@ describe("POST /api/billing/checkout", () => {
     expect(provider.createCheckout).not.toHaveBeenCalled();
   });
 
+  it("un id duplicado de la pasarela no se confunde con otro checkout en curso: es 500 y se abandona", async () => {
+    db.subscription.update.mockRejectedValueOnce(uniqueViolation);
+
+    expect((await checkout()).status).toBe(500);
+    expect(db.subscription.update).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        where: { id: "sub-new" },
+        data: expect.objectContaining({ status: "canceled" }),
+      }),
+    );
+  });
+
   it("si la pasarela falla, la suscripción se abandona para poder reintentar", async () => {
     provider.createCheckout.mockRejectedValue(new Error("timeout"));
 

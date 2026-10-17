@@ -1,4 +1,3 @@
-import type { Subscription } from "@/generated/prisma/client";
 import { cached, invalidate } from "@/lib/cache";
 import prisma from "@/lib/prisma";
 import { effectivePlan } from "../lib/entitlements";
@@ -6,8 +5,9 @@ import { isTrialEligible, LIVE_STATUSES, resolveStatus } from "../lib/lifecycle"
 import { PAID_PLAN_KEYS, planFeatures, planPrice, type PlanKey } from "../lib/plans";
 import { getBillingProvider } from "../providers";
 import type { SubscriptionSnapshot } from "../providers/types";
-import type { BillingSummary, PaymentStatus, SubscriptionStatus } from "../types";
+import type { BillingSummary } from "../types";
 import { recordBillingEvent } from "./events";
+import { toPaymentStatus, toSubscriptionRow, toSubscriptionRowOrNull, type SubscriptionRow } from "./rows";
 
 const HISTORY_LIMIT = 10;
 const PLAN_CACHE_SECONDS = 60;
@@ -21,22 +21,20 @@ function withTestGrant(plan: PlanKey): PlanKey {
   return isGranted ? "pro" : plan;
 }
 
-export type SubscriptionRow = Subscription & { status: SubscriptionStatus };
-
 export async function listUserSubscriptions(userId: string) {
   const rows = await prisma.subscription.findMany({
     where: { userId },
     orderBy: { createdAt: "desc" },
     take: HISTORY_LIMIT,
   });
-  return rows as SubscriptionRow[];
+  return rows.map(toSubscriptionRow);
 }
 
 export async function findLiveSubscription(userId: string) {
   const row = await prisma.subscription.findFirst({
     where: { userId, status: { in: [...LIVE_STATUSES] } },
   });
-  return row as SubscriptionRow | null;
+  return toSubscriptionRowOrNull(row);
 }
 
 export function getEffectivePlan(userId: string) {
@@ -48,16 +46,19 @@ export function getEffectivePlan(userId: string) {
 export async function getBillingSummary(userId: string, now = new Date()): Promise<BillingSummary> {
   const history = await listUserSubscriptions(userId);
   const plan = withTestGrant(effectivePlan(history, now));
-  const current = history.find((subscription) => subscription.status !== "pending") ?? history[0];
+  const latestSettled = history.find((subscription) => subscription.status !== "pending");
+  const shown = latestSettled ?? history[0];
+  const offeredPlan = PAID_PLAN_KEYS[0];
+
   return {
     plan,
     features: [...planFeatures(plan)],
-    status: current?.status ?? null,
-    trialEndsAt: current?.trialEndsAt?.toISOString() ?? null,
-    currentPeriodEnd: current?.currentPeriodEnd?.toISOString() ?? null,
+    status: shown?.status ?? null,
+    trialEndsAt: shown?.trialEndsAt?.toISOString() ?? null,
+    currentPeriodEnd: shown?.currentPeriodEnd?.toISOString() ?? null,
     isTrialEligible: isTrialEligible(history),
     hasPendingCheckout: history.some((subscription) => subscription.status === "pending"),
-    price: planPrice(PAID_PLAN_KEYS[0]),
+    price: planPrice(offeredPlan),
   };
 }
 
@@ -67,7 +68,8 @@ async function lastPaymentStatus(subscriptionId: string) {
     orderBy: { createdAt: "desc" },
     select: { status: true },
   });
-  return (payment?.status as PaymentStatus | undefined) ?? null;
+  if (!payment) return null;
+  return toPaymentStatus(payment.status);
 }
 
 export async function applySnapshot(subscription: SubscriptionRow, snapshot: SubscriptionSnapshot, now = new Date()) {
@@ -99,7 +101,7 @@ export async function applySnapshot(subscription: SubscriptionRow, snapshot: Sub
       data: { from: subscription.status, to: status },
     });
   }
-  return updated as SubscriptionRow;
+  return toSubscriptionRow(updated);
 }
 
 export async function syncSubscription(subscription: SubscriptionRow) {

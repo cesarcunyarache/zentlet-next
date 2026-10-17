@@ -2,10 +2,11 @@ import prisma from "@/lib/prisma";
 import { refundableAmount, refundedStatus, type RefundMode } from "../lib/proration";
 import { getBillingProvider } from "../providers";
 import type { PaymentSnapshot } from "../providers/types";
-import type { BillingInterval, PaymentStatus } from "../types";
+import type { PaymentStatus } from "../types";
 import { recordBillingEvent } from "./events";
 import { cancelSubscription } from "./cancel";
-import { applySnapshot, type SubscriptionRow } from "./subscriptions";
+import { toBillingInterval, toPaymentStatus, toSubscriptionRow } from "./rows";
+import { applySnapshot } from "./subscriptions";
 
 const REFUNDABLE_STATUSES: PaymentStatus[] = ["approved", "partially_refunded"];
 const LOCAL_REFUND_STATUSES: PaymentStatus[] = ["refunded", "partially_refunded"];
@@ -16,19 +17,24 @@ export type RefundOutcome =
   | { kind: "not_refundable" }
   | { kind: "conflict" };
 
-function keepLocalRefund(current: PaymentStatus | undefined, incoming: PaymentStatus) {
-  return current && LOCAL_REFUND_STATUSES.includes(current) && incoming === "approved" ? current : incoming;
+function resolvePaymentStatus(current: PaymentStatus | null, incoming: PaymentStatus): PaymentStatus {
+  const refundedLocally = current !== null && LOCAL_REFUND_STATUSES.includes(current);
+  const providerStillApproved = incoming === "approved";
+  if (refundedLocally && providerStillApproved) return current;
+  return incoming;
 }
 
 export async function recordPayment(providerName: string, snapshot: PaymentSnapshot) {
-  const subscription = (await prisma.subscription.findUnique({
+  const subscriptionRow = await prisma.subscription.findUnique({
     where: { provider_externalId: { provider: providerName, externalId: snapshot.subscriptionExternalId } },
-  })) as SubscriptionRow | null;
-  if (!subscription) return null;
+  });
+  if (!subscriptionRow) return null;
+  const subscription = toSubscriptionRow(subscriptionRow);
 
   const key = { provider_externalId: { provider: providerName, externalId: snapshot.externalId } };
   const existing = await prisma.billingPayment.findUnique({ where: key, select: { status: true } });
-  const status = keepLocalRefund(existing?.status as PaymentStatus | undefined, snapshot.status);
+  const currentStatus = existing ? toPaymentStatus(existing.status) : null;
+  const status = resolvePaymentStatus(currentStatus, snapshot.status);
 
   await prisma.billingPayment.upsert({
     where: key,
@@ -51,7 +57,8 @@ export async function recordPayment(providerName: string, snapshot: PaymentSnaps
 
   if (subscription.externalId) {
     const provider = getBillingProvider(providerName);
-    await applySnapshot(subscription, await provider.getSubscription(subscription.externalId));
+    const subscriptionSnapshot = await provider.getSubscription(subscription.externalId);
+    await applySnapshot(subscription, subscriptionSnapshot);
   }
   return subscription;
 }
@@ -71,15 +78,17 @@ export async function refundPayment(
     include: { subscription: true },
   });
   if (!payment) return { kind: "not_found" };
-  if (!payment.providerPaymentId || !REFUNDABLE_STATUSES.includes(payment.status as PaymentStatus)) {
-    return { kind: "not_refundable" };
-  }
 
-  const amount = refundableAmount(payment, mode, payment.subscription.interval as BillingInterval, now);
+  const { providerPaymentId } = payment;
+  const isRefundableStatus = REFUNDABLE_STATUSES.includes(toPaymentStatus(payment.status));
+  if (!providerPaymentId || !isRefundableStatus) return { kind: "not_refundable" };
+
+  const interval = toBillingInterval(payment.subscription.interval);
+  const amount = refundableAmount(payment, mode, interval, now);
   if (amount <= 0) return { kind: "not_refundable" };
 
   await getBillingProvider(payment.provider).refundPayment({
-    providerPaymentId: payment.providerPaymentId,
+    providerPaymentId,
     amount,
     idempotencyKey: `refund:${payment.id}:${payment.refundedAmount}`,
   });
@@ -93,7 +102,7 @@ export async function refundPayment(
   if (count === 0) return { kind: "conflict" };
 
   if (revokeAccess) {
-    await cancelSubscription(payment.subscription as SubscriptionRow, { source: "admin", immediate: true, now });
+    await cancelSubscription(toSubscriptionRow(payment.subscription), { source: "admin", immediate: true, now });
   }
   await recordBillingEvent({
     source: "admin",

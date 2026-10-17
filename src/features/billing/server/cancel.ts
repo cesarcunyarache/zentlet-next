@@ -2,7 +2,8 @@ import prisma from "@/lib/prisma";
 import { getBillingProvider } from "../providers";
 import type { BillingEventSource } from "../types";
 import { recordBillingEvent } from "./events";
-import { abandonPending, findLiveSubscription, forgetEffectivePlan, type SubscriptionRow } from "./subscriptions";
+import type { SubscriptionRow } from "./rows";
+import { abandonPending, findLiveSubscription, forgetEffectivePlan } from "./subscriptions";
 
 interface CancelOptions {
   source: BillingEventSource;
@@ -19,7 +20,8 @@ export async function cancelSubscription(
   }
   if (subscription.status === "pending") return abandonPending(subscription, now);
 
-  const accessUntil = immediate ? now : (subscription.currentPeriodEnd ?? subscription.trialEndsAt);
+  const paidAccessEnd = subscription.currentPeriodEnd ?? subscription.trialEndsAt;
+  const accessUntil = immediate ? now : paidAccessEnd;
   await prisma.subscription.update({
     where: { id: subscription.id },
     data: {

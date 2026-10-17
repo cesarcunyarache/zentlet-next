@@ -2,13 +2,24 @@ import { isUniqueViolation } from "@/lib/db-errors";
 import prisma from "@/lib/prisma";
 import { logger } from "@/lib/observability/logger";
 import { getBillingProvider, isProviderName } from "../providers";
-import { BillingProviderError, type BillingProvider, type WebhookNotification } from "../providers/types";
+import {
+  BillingProviderError,
+  type BillingProvider,
+  type SubscriptionSnapshot,
+  type WebhookNotification,
+} from "../providers/types";
 import { recordPayment } from "./payments";
-import { applySnapshot, type SubscriptionRow } from "./subscriptions";
+import { toSubscriptionRow, toSubscriptionRowOrNull, type SubscriptionRow } from "./rows";
+import { applySnapshot } from "./subscriptions";
 
 const NOT_FOUND = 404;
 
 export type WebhookOutcome = "invalid" | "duplicate" | "processed" | "ignored";
+
+type ProcessingResult =
+  | { kind: "ignored" }
+  | { kind: "unmatched" }
+  | { kind: "matched"; subscription: SubscriptionRow };
 
 async function claimEvent(provider: string, notification: WebhookNotification) {
   try {
@@ -29,51 +40,59 @@ async function claimEvent(provider: string, notification: WebhookNotification) {
   }
 }
 
-async function findByReference(provider: BillingProvider, externalId: string, reference: string | null) {
+async function findSubscriptionForSnapshot(provider: BillingProvider, snapshot: SubscriptionSnapshot) {
   const byExternalId = await prisma.subscription.findUnique({
-    where: { provider_externalId: { provider: provider.name, externalId } },
+    where: { provider_externalId: { provider: provider.name, externalId: snapshot.externalId } },
   });
-  if (byExternalId) return byExternalId as SubscriptionRow;
-  if (!reference) return null;
-  return (await prisma.subscription.findFirst({
-    where: { id: reference, provider: provider.name },
-  })) as SubscriptionRow | null;
+  if (byExternalId) return toSubscriptionRow(byExternalId);
+  if (!snapshot.reference) return null;
+
+  const byReference = await prisma.subscription.findFirst({
+    where: { id: snapshot.reference, provider: provider.name },
+  });
+  return toSubscriptionRowOrNull(byReference);
 }
 
 async function processSubscription(provider: BillingProvider, resourceId: string) {
   const snapshot = await provider.getSubscription(resourceId);
-  const subscription = await findByReference(provider, snapshot.externalId, snapshot.reference);
+  const subscription = await findSubscriptionForSnapshot(provider, snapshot);
   if (!subscription) return null;
-  if (snapshot.reference && snapshot.reference !== subscription.id) {
+
+  const referencesAnotherSubscription = Boolean(snapshot.reference) && snapshot.reference !== subscription.id;
+  if (referencesAnotherSubscription) {
     logger.warn({ subscriptionId: subscription.id, resourceId }, "billing.webhook_reference_mismatch");
     return null;
   }
+
   return applySnapshot(subscription, snapshot);
 }
 
 async function processPayment(provider: BillingProvider, resourceId: string) {
-  return recordPayment(provider.name, await provider.getPayment(resourceId));
+  const snapshot = await provider.getPayment(resourceId);
+  return recordPayment(provider.name, snapshot);
 }
 
 async function processResource(provider: BillingProvider, { resource, resourceId }: WebhookNotification) {
   try {
-    return resource === "subscription"
-      ? await processSubscription(provider, resourceId)
-      : await processPayment(provider, resourceId);
+    if (resource === "subscription") return await processSubscription(provider, resourceId);
+    return await processPayment(provider, resourceId);
   } catch (error) {
-    if (error instanceof BillingProviderError && error.status === NOT_FOUND) return null;
+    const resourceGone = error instanceof BillingProviderError && error.status === NOT_FOUND;
+    if (resourceGone) return null;
     throw error;
   }
 }
 
-async function markProcessed(eventId: string, subscription?: SubscriptionRow | null) {
+async function markProcessed(eventId: string, result: ProcessingResult) {
+  const subscription = result.kind === "matched" ? result.subscription : undefined;
+
   await prisma.billingEvent.update({
     where: { id: eventId },
     data: {
       processedAt: new Date(),
       subscriptionId: subscription?.id,
       userId: subscription?.userId,
-      data: subscription === null ? { unmatched: true } : undefined,
+      data: result.kind === "unmatched" ? { unmatched: true } : undefined,
     },
   });
 }
@@ -81,16 +100,21 @@ async function markProcessed(eventId: string, subscription?: SubscriptionRow | n
 export async function handleWebhook(providerName: string, req: Request): Promise<WebhookOutcome> {
   if (!isProviderName(providerName)) return "invalid";
   const provider = getBillingProvider(providerName);
+
   const notification = await provider.parseWebhook(req);
   if (!notification) return "invalid";
 
   const event = await claimEvent(provider.name, notification);
   if (event.processedAt) return "duplicate";
+
   if (notification.resource === "ignored") {
-    await markProcessed(event.id);
+    await markProcessed(event.id, { kind: "ignored" });
     return "ignored";
   }
 
-  await markProcessed(event.id, await processResource(provider, notification));
+  const subscription = await processResource(provider, notification);
+  const result: ProcessingResult = subscription ? { kind: "matched", subscription } : { kind: "unmatched" };
+  await markProcessed(event.id, result);
+
   return "processed";
 }

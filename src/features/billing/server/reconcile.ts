@@ -1,8 +1,10 @@
+import type { Prisma } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 import { reportError } from "@/lib/observability/server";
 import { CHECKOUT_REUSE_MS } from "../lib/lifecycle";
 import { cancelSubscription } from "./cancel";
-import { syncSubscription, type SubscriptionRow } from "./subscriptions";
+import { toSubscriptionRow, type SubscriptionRow } from "./rows";
+import { syncSubscription } from "./subscriptions";
 
 const BATCH_SIZE = 100;
 const PENDING_SYNC_AFTER_MS = 60 * 60 * 1000;
@@ -15,18 +17,22 @@ export interface ReconcileResult {
 }
 
 async function dueSubscriptions(now: Date) {
+  const stalePending: Prisma.SubscriptionWhereInput = {
+    status: "pending",
+    createdAt: { lt: new Date(now.getTime() - PENDING_SYNC_AFTER_MS) },
+  };
+  const expiredPeriod: Prisma.SubscriptionWhereInput = {
+    status: { in: ["trialing", "active"] },
+    currentPeriodEnd: { lt: now },
+  };
+  const pastDue: Prisma.SubscriptionWhereInput = { status: "past_due" };
+
   const rows = await prisma.subscription.findMany({
-    where: {
-      OR: [
-        { status: "pending", createdAt: { lt: new Date(now.getTime() - PENDING_SYNC_AFTER_MS) } },
-        { status: { in: ["trialing", "active"] }, currentPeriodEnd: { lt: now } },
-        { status: "past_due" },
-      ],
-    },
+    where: { OR: [stalePending, expiredPeriod, pastDue] },
     orderBy: { updatedAt: "asc" },
     take: BATCH_SIZE,
   });
-  return rows as SubscriptionRow[];
+  return rows.map(toSubscriptionRow);
 }
 
 const isAbandoned = (subscription: SubscriptionRow, now: Date) =>
