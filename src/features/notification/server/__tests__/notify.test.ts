@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import prisma from "@/lib/prisma";
 import { sendEmail } from "@/lib/email";
-import { isFlagEnabled } from "@/features/feature-flag/server/flags";
+import { featureFlagUseCases } from "@/features/feature-flag/server/infrastructure/feature-flag.container";
 import { deliverPending } from "../deliver";
 import { notify } from "../notify";
 
@@ -11,7 +11,9 @@ vi.mock("@/lib/prisma", () => ({
     notificationDelivery: { updateMany: vi.fn(), findUnique: vi.fn(), update: vi.fn(), findMany: vi.fn() },
   },
 }));
-vi.mock("@/features/feature-flag/server/flags", () => ({ isFlagEnabled: vi.fn() }));
+vi.mock("@/features/feature-flag/server/infrastructure/feature-flag.container", () => ({
+  featureFlagUseCases: { isEnabled: { execute: vi.fn() } },
+}));
 vi.mock("@/lib/email", () => ({ sendEmail: vi.fn() }));
 
 const db = vi.mocked(prisma, { deep: true });
@@ -40,7 +42,7 @@ const claimed = (attempts: number) => ({
 beforeEach(() => {
   vi.resetAllMocks();
   vi.useFakeTimers({ now: NOW, toFake: ["Date"] });
-  vi.mocked(isFlagEnabled).mockResolvedValue(true);
+  vi.mocked(featureFlagUseCases.isEnabled.execute).mockResolvedValue(true);
   db.notification.create.mockResolvedValue({ deliveries: [{ id: "d1" }] } as never);
   db.notificationDelivery.updateMany.mockResolvedValue({ count: 1 });
   db.notificationDelivery.findUnique.mockResolvedValue(claimed(1) as never);
@@ -66,7 +68,7 @@ describe("notify", () => {
   });
 
   it("keeps only the in-app notification when the channel flag is off", async () => {
-    vi.mocked(isFlagEnabled).mockResolvedValue(false);
+    vi.mocked(featureFlagUseCases.isEnabled.execute).mockResolvedValue(false);
     db.notification.create.mockResolvedValue({ deliveries: [] } as never);
 
     await notify(input);

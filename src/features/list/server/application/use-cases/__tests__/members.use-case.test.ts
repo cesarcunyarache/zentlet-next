@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { RemoveMemberUseCase } from "../remove-member.usecase";
-import { UpdateMemberUseCase } from "../update-member.usecase";
-import { LIST_ID, OWNER, membersWithRoles } from "../../__tests__/fakes";
+import { RemoveMemberUseCase } from "../remove-member.use-case";
+import { UpdateMemberUseCase } from "../update-member.use-case";
+import { LIST_ID, OWNER, membersWithRoles } from "./fakes";
 
 const roles = () => membersWithRoles({ [OWNER]: "owner", ed: "editor", v: "viewer" });
 

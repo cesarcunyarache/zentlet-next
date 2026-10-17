@@ -7,8 +7,8 @@ import { sendEmail } from "@/lib/email";
 import { listInviteEmail } from "@/lib/email/templates";
 import { siteConfig } from "@/lib/site";
 import { invitePath } from "../../lib/pending-invite";
-import type { InviteMailer, InviteTokens } from "../domain/invite.ports";
-import type { AccountCurrency, ListNotifier } from "../domain/list.ports";
+import type { InviteMailer, InviteTokens } from "../domain/ports/invite.ports";
+import type { AccountCurrency, ListNotifier } from "../domain/ports/list.ports";
 
 const TOKEN_BYTES = 24;
 
@@ -29,11 +29,15 @@ export const inviteTokens: InviteTokens = {
   hash: hashToken,
 };
 
+function inviteUrl(token: string, locale: string) {
+  const lang = routing.locales.find((candidate) => candidate === locale) ?? routing.defaultLocale;
+  const localePrefix = lang === routing.defaultLocale ? "" : `/${lang}`;
+  return { lang, url: `${siteConfig.url}${localePrefix}${invitePath(token)}` };
+}
+
 export const inviteMailer: InviteMailer = {
   send({ to, token, inviterName, listName, locale }) {
-    const lang = routing.locales.find((candidate) => candidate === locale) ?? routing.defaultLocale;
-    const prefix = lang === routing.defaultLocale ? "" : `/${lang}`;
-    const url = `${siteConfig.url}${prefix}${invitePath(token)}`;
+    const { lang, url } = inviteUrl(token, locale);
     return sendEmail(listInviteEmail(lang, { to, inviterName, listName, url }));
   },
 };

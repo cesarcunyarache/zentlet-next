@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
-import { AssignEntriesUseCase } from "../assign-entries.usecase";
-import { ListEntriesUseCase } from "../list-entries.usecase";
-import { RemoveEntryUseCase } from "../remove-entry.usecase";
-import { LIST_ID, OWNER, fakeCurrency, fakeLists, fakeMembers, membersWithRoles } from "../../__tests__/fakes";
+import { AssignEntriesUseCase } from "../assign-entries.use-case";
+import { ListEntriesUseCase } from "../list-entries.use-case";
+import { RemoveEntryUseCase } from "../remove-entry.use-case";
+import { LIST_ID, OWNER, fakeCurrency, fakeLists, fakeMembers, membersWithRoles } from "./fakes";
 
 const TX_A = "0a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d";
 const TX_B = "1b2c3d4e-5f6a-4b7c-8d9e-0f1a2b3c4d5e";

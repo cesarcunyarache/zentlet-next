@@ -1,5 +1,5 @@
 import type { ErrorTable } from "@/lib/api/route-helpers";
-import type { ListError } from "../domain/list.errors";
+import type { ListError } from "../../domain/errors/list.errors";
 
 export const LIST_ERRORS: ErrorTable<ListError> = {
   not_found: ["List not found", 404],

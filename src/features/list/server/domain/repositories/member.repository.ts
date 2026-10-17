@@ -1,5 +1,5 @@
-import type { ListRole } from "../../types";
-import type { ListMembership } from "./member.entity";
+import type { ListRole } from "../../../types";
+import type { ListMembership } from "../entities/member.entity";
 
 export interface MemberRepository {
   find(listId: string, userId: string): Promise<ListMembership | null>;

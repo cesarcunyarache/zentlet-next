@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma";
 import { moveToPrivateLists } from "@/lib/private-list";
-import type { ListRole } from "../../types";
-import type { MemberRepository } from "../domain/member.repository";
+import type { ListRole } from "../../../../types";
+import type { MemberRepository } from "../../../domain/repositories/member.repository";
 
 export class PrismaMemberRepository implements MemberRepository {
   async find(listId: string, userId: string) {

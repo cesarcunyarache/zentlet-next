@@ -17,3 +17,8 @@ export function isUniqueViolation(error: unknown) {
 export function isForeignKeyViolation(error: unknown) {
   return hasPrismaErrorCode(error, "P2003");
 }
+
+/** El registro a actualizar o borrar no existe (p. ej. `update` con un `where` sin coincidencia). */
+export function isRecordNotFound(error: unknown) {
+  return hasPrismaErrorCode(error, "P2025");
+}

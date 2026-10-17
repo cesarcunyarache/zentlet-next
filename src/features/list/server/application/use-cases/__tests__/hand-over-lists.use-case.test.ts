@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { HandOverListsUseCase } from "../hand-over-lists.usecase";
-import { LIST_ID, OWNER, fakeLists, fakeMembers, fakeNotifier, membership } from "../../__tests__/fakes";
+import { HandOverListsUseCase } from "../hand-over-lists.use-case";
+import { LIST_ID, OWNER, fakeLists, fakeMembers, fakeNotifier, membership } from "./fakes";
 
 const day = (n: number) => new Date(`2026-10-${String(n).padStart(2, "0")}T00:00:00Z`);
 

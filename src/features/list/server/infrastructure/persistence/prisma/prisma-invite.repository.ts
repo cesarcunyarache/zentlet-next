@@ -1,25 +1,14 @@
 import prisma from "@/lib/prisma";
-import type { TransactionListInvite as InviteRow } from "@/generated/prisma/client";
-import type { InviteRole, ListInvite, NewListInvite } from "../domain/invite.entity";
-import type { InviteRepository } from "../domain/invite.repository";
-import { toEntity } from "./prisma-list.repository";
-
-function toInvite(row: InviteRow): ListInvite {
-  return {
-    id: row.id,
-    listId: row.listId,
-    role: row.role as InviteRole,
-    email: row.email,
-    expiresAt: row.expiresAt,
-    createdAt: row.createdAt,
-  };
-}
+import type { NewListInvite } from "../../../domain/entities/invite.entity";
+import type { InviteRepository } from "../../../domain/repositories/invite.repository";
+import { toDomain, toInvite } from "./list.mapper";
 
 const usableInvite = (now: Date) => ({ acceptedAt: null, revokedAt: null, expiresAt: { gt: now } });
 
 export class PrismaInviteRepository implements InviteRepository {
   async create(invite: NewListInvite) {
-    return toInvite(await prisma.transactionListInvite.create({ data: invite }));
+    const row = await prisma.transactionListInvite.create({ data: invite });
+    return toInvite(row);
   }
 
   async findByTokenHash(tokenHash: string) {
@@ -30,12 +19,13 @@ export class PrismaInviteRepository implements InviteRepository {
       },
     });
     if (!row) return null;
+
     const { owner, _count, ...list } = row.list;
     return {
       ...toInvite(row),
       acceptedAt: row.acceptedAt,
       revokedAt: row.revokedAt,
-      list: { ...toEntity(list), ownerName: owner.name, memberCount: _count.members },
+      list: { ...toDomain(list), ownerName: owner.name, memberCount: _count.members },
     };
   }
 
@@ -52,20 +42,23 @@ export class PrismaInviteRepository implements InviteRepository {
       where: { id: inviteId, listId, acceptedAt: null, revokedAt: null },
       data: { revokedAt: now },
     });
-    return count > 0;
+    if (count === 0) return "not_revocable" as const;
+    return "revoked" as const;
   }
 
   async accept(inviteId: string, userId: string, now: Date) {
     return prisma.$transaction(async (tx) => {
       const invite = await tx.transactionListInvite.findUnique({ where: { id: inviteId } });
-      if (!invite) return false;
+      if (!invite) return "not_usable" as const;
+
       const { count } = await tx.transactionListInvite.updateMany({
         where: { id: inviteId, ...usableInvite(now) },
         data: { acceptedAt: now },
       });
-      if (count === 0) return false;
+      if (count === 0) return "not_usable" as const;
+
       await tx.transactionListMember.create({ data: { listId: invite.listId, userId, role: invite.role } });
-      return true;
+      return "accepted" as const;
     });
   }
 }

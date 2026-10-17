@@ -1,4 +1,4 @@
-import type { ListInvite, NewListInvite, StoredInvite } from "./invite.entity";
+import type { ListInvite, NewListInvite, StoredInvite } from "../entities/invite.entity";
 
 export interface InviteRepository {
   create(invite: NewListInvite): Promise<ListInvite>;
@@ -7,7 +7,7 @@ export interface InviteRepository {
 
   findActive(listId: string, now: Date): Promise<ListInvite[]>;
 
-  revoke(listId: string, inviteId: string, now: Date): Promise<boolean>;
+  revoke(listId: string, inviteId: string, now: Date): Promise<"revoked" | "not_revocable">;
 
-  accept(inviteId: string, userId: string, now: Date): Promise<boolean>;
+  accept(inviteId: string, userId: string, now: Date): Promise<"accepted" | "not_usable">;
 }

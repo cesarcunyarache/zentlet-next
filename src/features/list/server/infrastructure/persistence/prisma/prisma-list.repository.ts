@@ -1,77 +1,28 @@
 import prisma from "@/lib/prisma";
 import { isUniqueViolation } from "@/lib/db-errors";
 import { ensurePrivateListId, moveToPrivateLists } from "@/lib/private-list";
-import type { TransactionList as TransactionListRow } from "@/generated/prisma/client";
 import { FEED_ORDER, afterCursor } from "@/features/transaction/lib/feed-query";
-import type { TransactionType } from "@/features/transaction/types";
-import type { ListTotals } from "../../types";
 import type {
   EntryCursor,
   ListCategoryTotal,
   ListChanges,
   ListMemberTotal,
+  ListOverview,
   NewTransactionList,
-  TransactionList,
-} from "../domain/list.entity";
-import type { ListRepository } from "../domain/list.repository";
+} from "../../../domain/entities/list.entity";
+import type { ListRepository } from "../../../domain/repositories/list.repository";
+import { EMPTY_TOTALS, sumTotals, toListTotals, totalsBy } from "./list-totals";
+import { toDomain, toEntry } from "./list.mapper";
 
-interface TypeTotals {
-  expense: number;
-  income: number;
-  count: number;
-}
+const CATEGORY_SUMMARY = { id: true, name: true, icon: true, color: true } as const;
 
-interface TotalsGroup {
-  type: string;
-  _sum: { amount: { toString(): string } | null };
-  _count: { _all: number };
-}
-
-export function toEntity(row: TransactionListRow): TransactionList {
-  return {
-    id: row.id,
-    name: row.name,
-    icon: row.icon,
-    color: row.color,
-    description: row.description,
-    currency: row.currency,
-    ownerId: row.ownerId,
-    isPrivate: row.privateOwnerId !== null,
-    createdAt: row.createdAt,
-  };
-}
-
-function addGroup(totals: TypeTotals, group: TotalsGroup) {
-  const amount = Number(group._sum.amount?.toString() ?? 0);
-  totals.count += group._count._all;
-  if (group.type === "expense") totals.expense += amount;
-  else totals.income += amount;
-}
-
-function totalsBy<K extends string>(groups: (TotalsGroup & Record<K, string | null>)[], key: K) {
-  const totals = new Map<string, TypeTotals>();
-  for (const group of groups) {
-    const id = group[key];
-    if (!id) continue;
-    const current = totals.get(id) ?? { expense: 0, income: 0, count: 0 };
-    addGroup(current, group);
-    totals.set(id, current);
-  }
-  return totals;
-}
-
-const EMPTY_TOTALS: TypeTotals = { expense: 0, income: 0, count: 0 };
-
-const toListTotals = ({ expense, income, count }: TypeTotals): ListTotals => ({
-  count,
-  expenseTotal: expense,
-  incomeTotal: income,
-});
+const privateListFirst = (a: ListOverview, b: ListOverview) => Number(b.isPrivate) - Number(a.isPrivate);
 
 export class PrismaListRepository implements ListRepository {
   async findById(listId: string) {
     const row = await prisma.transactionList.findUnique({ where: { id: listId } });
-    return row ? toEntity(row) : null;
+    if (!row) return null;
+    return toDomain(row);
   }
 
   async findOverviews(userId: string) {
@@ -88,15 +39,16 @@ export class PrismaListRepository implements ListRepository {
       _sum: { amount: true },
       _count: { _all: true },
     });
-    const totals = totalsBy(groups, "listId");
+    const totalsByList = totalsBy(groups, "listId");
 
-    const overviews = memberships.map(({ list, role }) => ({
-      ...toEntity(list),
-      ...toListTotals(totals.get(list.id) ?? EMPTY_TOTALS),
+    const overviews: ListOverview[] = memberships.map(({ list, role }) => ({
+      ...toDomain(list),
+      ...toListTotals(totalsByList.get(list.id) ?? EMPTY_TOTALS),
       role,
       memberCount: list._count.members,
     }));
-    return overviews.sort((a, b) => Number(b.isPrivate) - Number(a.isPrivate));
+
+    return overviews.sort(privateListFirst);
   }
 
   async findBreakdown(listId: string) {
@@ -120,15 +72,16 @@ export class PrismaListRepository implements ListRepository {
       }),
     ]);
 
-    const categoryTotals = totalsBy(byCategoryGroups, "categoryId");
-    const userTotals = totalsBy(byUserGroups, "userId");
+    const totalsByCategory = totalsBy(byCategoryGroups, "categoryId");
+    const totalsByUser = totalsBy(byUserGroups, "userId");
+
     const categories = await prisma.category.findMany({
-      where: { id: { in: [...categoryTotals.keys()] } },
-      select: { id: true, name: true, icon: true, color: true },
+      where: { id: { in: [...totalsByCategory.keys()] } },
+      select: CATEGORY_SUMMARY,
     });
 
     const byCategory: ListCategoryTotal[] = categories.map((category) => {
-      const { expense, income } = categoryTotals.get(category.id) ?? EMPTY_TOTALS;
+      const { expense, income } = totalsByCategory.get(category.id) ?? EMPTY_TOTALS;
       return { ...category, expense, income };
     });
 
@@ -137,40 +90,25 @@ export class PrismaListRepository implements ListRepository {
       role,
       name: user.name,
       image: user.image,
-      ...(userTotals.get(userId) ?? EMPTY_TOTALS),
+      ...(totalsByUser.get(userId) ?? EMPTY_TOTALS),
     }));
 
-    const overall = [...userTotals.values()].reduce(
-      (sum, totals) => ({
-        expense: sum.expense + totals.expense,
-        income: sum.income + totals.income,
-        count: sum.count + totals.count,
-      }),
-      EMPTY_TOTALS,
-    );
+    const overall = sumTotals(totalsByUser.values());
 
     return { ...toListTotals(overall), memberCount: members.length, byCategory, members: memberTotals };
   }
 
   async findEntries(listId: string, after: EntryCursor | null, take: number) {
-    const where = { listId };
+    const inList = { listId };
+    const where = after ? { AND: [inList, afterCursor(after)] } : inList;
+
     const rows = await prisma.transaction.findMany({
-      where: after ? { AND: [where, afterCursor(after)] } : where,
+      where,
       orderBy: FEED_ORDER,
       take,
-      include: { category: { select: { id: true, name: true, icon: true, color: true } } },
+      include: { category: { select: CATEGORY_SUMMARY } },
     });
-    return rows.map((row) => ({
-      id: row.id,
-      userId: row.userId,
-      description: row.description,
-      amount: Number(row.amount),
-      type: row.type as TransactionType,
-      categoryId: row.categoryId,
-      transactionDate: row.transactionDate,
-      createdAt: row.createdAt,
-      category: row.category,
-    }));
+    return rows.map(toEntry);
   }
 
   async findEntryAuthor(listId: string, transactionId: string) {
@@ -186,7 +124,7 @@ export class PrismaListRepository implements ListRepository {
     return rows.map((row) => row.id);
   }
 
-  async ensurePrivate(userId: string) {
+  ensurePrivate(userId: string) {
     return ensurePrivateListId(userId);
   }
 
@@ -195,7 +133,7 @@ export class PrismaListRepository implements ListRepository {
       const row = await prisma.transactionList.create({
         data: { ...list, members: { create: { userId: list.ownerId, role: "owner" } } },
       });
-      return toEntity(row);
+      return toDomain(row);
     } catch (error) {
       if (isUniqueViolation(error)) return "id_taken" as const;
       throw error;
@@ -203,7 +141,8 @@ export class PrismaListRepository implements ListRepository {
   }
 
   async update(listId: string, changes: ListChanges) {
-    return toEntity(await prisma.transactionList.update({ where: { id: listId }, data: changes }));
+    const row = await prisma.transactionList.update({ where: { id: listId }, data: changes });
+    return toDomain(row);
   }
 
   async delete(listId: string) {
@@ -213,7 +152,7 @@ export class PrismaListRepository implements ListRepository {
     ]);
   }
 
-  async countOwnedTransactions(userId: string, transactionIds: string[]) {
+  countOwnedTransactions(userId: string, transactionIds: string[]) {
     return prisma.transaction.count({ where: { userId, id: { in: transactionIds } } });
   }
 
@@ -226,6 +165,6 @@ export class PrismaListRepository implements ListRepository {
   }
 
   async unassign(listId: string, transactionId: string) {
-    return (await moveToPrivateLists(prisma, { listId, transactionId })) > 0;
+    await moveToPrivateLists(prisma, { listId, transactionId });
   }
 }

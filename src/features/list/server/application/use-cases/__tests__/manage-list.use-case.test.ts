@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
-import { DeleteListUseCase } from "../delete-list.usecase";
-import { GetListUseCase } from "../get-list.usecase";
-import { UpdateListUseCase } from "../update-list.usecase";
-import { LIST_ID, OWNER, fakeLists, fakeMembers, membersWithRoles } from "../../__tests__/fakes";
+import { DeleteListUseCase } from "../delete-list.use-case";
+import { GetListUseCase } from "../get-list.use-case";
+import { UpdateListUseCase } from "../update-list.use-case";
+import { LIST_ID, OWNER, fakeLists, fakeMembers, membersWithRoles } from "./fakes";
 
 describe("gestión de la lista", () => {
   it("quien no es miembro no la ve: responde como inexistente", async () => {

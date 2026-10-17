@@ -1,4 +1,5 @@
-import type { GmailMessage } from "../lib/gmail-message";
+import type { GmailMessage } from "../../../lib/gmail-message";
+import type { GmailHistoryPage } from "../../domain/ports/inbox.ports";
 
 const AUTHORIZE_URL = "https://accounts.google.com/o/oauth2/v2/auth";
 const TOKEN_URL = "https://oauth2.googleapis.com/token";
@@ -31,12 +32,6 @@ interface GmailTokens {
   accessToken: string;
   refreshToken: string | null;
   scope: string;
-}
-
-interface GmailHistoryPage {
-  historyId?: string;
-  nextPageToken?: string;
-  history?: { messagesAdded?: { message: { id: string; labelIds?: string[] } }[] }[];
 }
 
 function parseJson(text: string): Record<string, unknown> {

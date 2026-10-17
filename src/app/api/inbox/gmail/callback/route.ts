@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server";
 import { readOAuthState, redirectWithResult } from "@/features/inbox/http/gmail-oauth";
-import { completeGmailConnect } from "@/features/inbox/server/gmail-connection";
+import { inboxUseCases } from "@/features/inbox/server/infrastructure/inbox.container";
 import { getSessionUserId } from "@/lib/api/route-helpers";
 import { safeEqual } from "@/lib/crypto";
 import { reportError } from "@/lib/observability/server";
@@ -16,7 +16,8 @@ export async function GET(req: NextRequest) {
   if (!userId) return redirectWithResult(req, "error");
 
   try {
-    return redirectWithResult(req, await completeGmailConnect(userId, code));
+    const result = await inboxUseCases.completeGmailConnect.execute(userId, code);
+    return redirectWithResult(req, result);
   } catch (error) {
     reportError(error, "Error completing Gmail connection", { userId });
     return redirectWithResult(req, "error");

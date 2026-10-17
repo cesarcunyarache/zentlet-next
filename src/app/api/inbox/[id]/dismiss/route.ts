@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import { dismissInboxItem } from "@/features/inbox/server/review";
-import { errorResponse, getSessionUserId, internalError, unauthorized, writeLimit } from "@/lib/api/route-helpers";
+import { inboxUseCases } from "@/features/inbox/server/infrastructure/inbox.container";
+import { INBOX_ERRORS } from "@/features/inbox/server/infrastructure/http/inbox.http-errors";
+import { errorFrom, getSessionUserId, internalError, unauthorized, writeLimit } from "@/lib/api/route-helpers";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -13,8 +14,8 @@ export async function POST(req: Request, { params }: RouteContext) {
     if (limited) return limited;
 
     const { id } = await params;
-    const result = await dismissInboxItem(userId, id);
-    if ("error" in result) return errorResponse("Inbox item not found", 404);
+    const result = await inboxUseCases.dismiss.execute(userId, id);
+    if ("error" in result) return errorFrom(INBOX_ERRORS, result.error);
     return new NextResponse(null, { status: 204 });
   } catch (error) {
     return internalError(req, error, "Error dismissing inbox item");

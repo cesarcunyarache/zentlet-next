@@ -26,8 +26,9 @@ export async function DELETE(req: Request, { params }: RouteContext) {
     const limited = await writeLimit(userId);
     if (limited) return limited;
 
-    const isStopped = await stopRecurringTransaction(userId, (await params).id);
-    return isStopped ? new NextResponse(null, { status: 204 }) : notFound();
+    const stopped = await stopRecurringTransaction(userId, (await params).id);
+    if (stopped === "not_found") return notFound();
+    return new NextResponse(null, { status: 204 });
   } catch (error) {
     return internalError(req, error, "Error stopping recurring transaction");
   }

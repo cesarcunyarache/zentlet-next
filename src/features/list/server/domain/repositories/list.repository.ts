@@ -6,7 +6,7 @@ import type {
   ListOverview,
   NewTransactionList,
   TransactionList,
-} from "./list.entity";
+} from "../entities/list.entity";
 
 export interface ListRepository {
   findById(listId: string): Promise<TransactionList | null>;
@@ -33,5 +33,5 @@ export interface ListRepository {
 
   assign(listId: string, userId: string, transactionIds: string[]): Promise<number>;
 
-  unassign(listId: string, transactionId: string): Promise<boolean>;
+  unassign(listId: string, transactionId: string): Promise<void>;
 }

@@ -1,10 +1,12 @@
-import type { ListRepository } from "../../domain/list.repository";
+import type { ListRepository } from "../../domain/repositories/list.repository";
 
 export class ListListsUseCase {
-  constructor(private readonly lists: ListRepository) {}
+  constructor(private readonly listRepository: ListRepository) {}
 
   async execute(userId: string) {
-    await this.lists.ensurePrivate(userId);
-    return { lists: await this.lists.findOverviews(userId) };
+    await this.listRepository.ensurePrivate(userId);
+
+    const lists = await this.listRepository.findOverviews(userId);
+    return { lists };
   }
 }

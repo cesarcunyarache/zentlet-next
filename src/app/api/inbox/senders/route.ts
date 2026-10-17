@@ -1,16 +1,9 @@
 import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
-import { normalizeSenderPattern } from "@/features/inbox/lib/sender";
-import { serializeInboxSender } from "@/features/inbox/lib/serialize";
 import { addInboxSenderSchema } from "@/features/inbox/schemas/inbox-api.schema";
-import {
-  errorResponse,
-  getSessionUserId,
-  internalError,
-  parseBody,
-  unauthorized,
-  writeLimit,
-} from "@/lib/api/route-helpers";
+import { inboxUseCases } from "@/features/inbox/server/infrastructure/inbox.container";
+import { INBOX_ERRORS } from "@/features/inbox/server/infrastructure/http/inbox.http-errors";
+import { serializeInboxSender } from "@/features/inbox/lib/serialize";
+import { errorFrom, getSessionUserId, internalError, parseBody, unauthorized, writeLimit } from "@/lib/api/route-helpers";
 
 export async function POST(req: Request) {
   try {
@@ -23,15 +16,9 @@ export async function POST(req: Request) {
     const parsed = await parseBody(req, addInboxSenderSchema);
     if ("error" in parsed) return parsed.error;
 
-    const address = normalizeSenderPattern(parsed.data.address);
-    if (!address) return errorResponse("Invalid sender", 422);
-
-    const sender = await prisma.inboxSender.upsert({
-      where: { userId_address: { userId, address } },
-      create: { userId, address, status: "trusted", origin: "manual" },
-      update: { status: "trusted", origin: "manual" },
-    });
-    return NextResponse.json(serializeInboxSender(sender), { status: 201 });
+    const result = await inboxUseCases.trustSender.execute(userId, parsed.data.address);
+    if ("error" in result) return errorFrom(INBOX_ERRORS, result.error);
+    return NextResponse.json(serializeInboxSender(result.sender), { status: 201 });
   } catch (error) {
     return internalError(req, error, "Error adding sender");
   }

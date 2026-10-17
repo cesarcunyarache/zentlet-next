@@ -1,19 +1,21 @@
-import { fail } from "../../domain/list.errors";
-import type { ListRepository } from "../../domain/list.repository";
-import type { MemberRepository } from "../../domain/member.repository";
+import { fail } from "../../domain/errors/list.errors";
+import type { ListRepository } from "../../domain/repositories/list.repository";
+import type { MemberRepository } from "../../domain/repositories/member.repository";
 
 export class GetListUseCase {
   constructor(
-    private readonly lists: ListRepository,
-    private readonly members: MemberRepository,
+    private readonly listRepository: ListRepository,
+    private readonly memberRepository: MemberRepository,
   ) {}
 
   async execute(userId: string, listId: string) {
-    const membership = await this.members.find(listId, userId);
-    const list = membership && (await this.lists.findById(listId));
-    if (!membership || !list) return fail("not_found");
+    const membership = await this.memberRepository.find(listId, userId);
+    if (!membership) return fail("not_found");
 
-    const breakdown = await this.lists.findBreakdown(listId);
+    const list = await this.listRepository.findById(listId);
+    if (!list) return fail("not_found");
+
+    const breakdown = await this.listRepository.findBreakdown(listId);
     return { list, role: membership.role, breakdown };
   }
 }

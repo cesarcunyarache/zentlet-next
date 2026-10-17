@@ -1,13 +1,13 @@
 import { vi } from "vitest";
-import type { ListRole } from "../../../types";
-import type { StoredInvite } from "../../domain/invite.entity";
-import type { InviteTokens } from "../../domain/invite.ports";
-import type { InviteRepository } from "../../domain/invite.repository";
-import type { TransactionList } from "../../domain/list.entity";
-import type { AccountCurrency, ListNotifier } from "../../domain/list.ports";
-import type { ListRepository } from "../../domain/list.repository";
-import type { ListMembership } from "../../domain/member.entity";
-import type { MemberRepository } from "../../domain/member.repository";
+import type { ListRole } from "../../../../types";
+import type { StoredInvite } from "../../../domain/entities/invite.entity";
+import type { InviteTokens } from "../../../domain/ports/invite.ports";
+import type { InviteRepository } from "../../../domain/repositories/invite.repository";
+import type { TransactionList } from "../../../domain/entities/list.entity";
+import type { AccountCurrency, ListNotifier } from "../../../domain/ports/list.ports";
+import type { ListRepository } from "../../../domain/repositories/list.repository";
+import type { ListMembership } from "../../../domain/entities/member.entity";
+import type { MemberRepository } from "../../../domain/repositories/member.repository";
 
 export const OWNER = "owner-1";
 export const LIST_ID = "6f1c2a3b-4d5e-4f60-8a1b-2c3d4e5f6a7b";
@@ -57,7 +57,7 @@ export function fakeLists(overrides: Partial<ListRepository> = {}): ListReposito
     findEntryAuthor: vi.fn().mockResolvedValue(OWNER),
     countOwnedTransactions: vi.fn(async (_userId, ids: string[]) => ids.length),
     assign: vi.fn(async (_listId, _userId, ids: string[]) => ids.length),
-    unassign: vi.fn().mockResolvedValue(true),
+    unassign: vi.fn().mockResolvedValue(undefined),
     ...overrides,
   };
 }
@@ -91,8 +91,8 @@ export function fakeInvites(overrides: Partial<InviteRepository> = {}): InviteRe
     })),
     findByTokenHash: vi.fn().mockResolvedValue(null),
     findActive: vi.fn().mockResolvedValue([]),
-    revoke: vi.fn().mockResolvedValue(true),
-    accept: vi.fn().mockResolvedValue(true),
+    revoke: vi.fn().mockResolvedValue("revoked"),
+    accept: vi.fn().mockResolvedValue("accepted"),
     ...overrides,
   };
 }

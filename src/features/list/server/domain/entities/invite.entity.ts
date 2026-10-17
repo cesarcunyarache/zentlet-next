@@ -1,4 +1,4 @@
-import type { ListRole } from "../../types";
+import type { ListRole } from "../../../types";
 import type { TransactionList } from "./list.entity";
 
 export type InviteRole = Exclude<ListRole, "owner">;

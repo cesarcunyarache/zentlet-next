@@ -12,12 +12,18 @@ const FURTHEST_AHEAD_TIMEZONE = "Pacific/Kiritimati";
 
 async function materialize(recurring: RecurringTransaction, now: Date) {
   const { id, userId, type, amount, description, categoryId, frequency } = recurring;
-  const schedule = { anchorDate: toUTCISODate(recurring.anchorDate), frequency, nextDueDate: toUTCISODate(recurring.nextDueDate) };
-  const { dates, nextDueDate } = dueDatesThrough(schedule, await userLocalDate(userId, now), MAX_OCCURRENCES_PER_RUN);
-  if (!dates.length) return 0;
+
+  const schedule = {
+    anchorDate: toUTCISODate(recurring.anchorDate),
+    frequency,
+    nextDueDate: toUTCISODate(recurring.nextDueDate),
+  };
+  const userToday = await userLocalDate(userId, now);
+  const { dates, nextDueDate } = dueDatesThrough(schedule, userToday, MAX_OCCURRENCES_PER_RUN);
+  if (dates.length === 0) return 0;
 
   const listId = await ensurePrivateListId(userId);
-  const rows = dates.map((date) => ({
+  const occurrences = dates.map((date) => ({
     userId,
     type,
     amount,
@@ -27,19 +33,25 @@ async function materialize(recurring: RecurringTransaction, now: Date) {
     recurringTransactionId: id,
     listId,
   }));
-  const [{ count }] = await prisma.$transaction([
-    prisma.transaction.createMany({ data: rows, skipDuplicates: true }),
+
+  const [{ count: createdCount }] = await prisma.$transaction([
+    prisma.transaction.createMany({ data: occurrences, skipDuplicates: true }),
     prisma.recurringTransaction.update({ where: { id }, data: { nextDueDate: new Date(nextDueDate) } }),
   ]);
-  if (count > 0 && type === "expense") scheduleBudgetCheck(userId, categoryId);
-  return count;
+
+  const createdExpenses = createdCount > 0 && type === "expense";
+  if (createdExpenses) scheduleBudgetCheck(userId, categoryId);
+
+  return createdCount;
 }
 
 export async function materializeDueTransactions(now = new Date()) {
   const latestToday = new Date(isoDateIn(FURTHEST_AHEAD_TIMEZONE, now));
-  const due = await prisma.recurringTransaction.findMany({ where: { nextDueDate: { lte: latestToday } } });
+  const dueRecurrings = await prisma.recurringTransaction.findMany({ where: { nextDueDate: { lte: latestToday } } });
+
   const totals = { created: 0, failed: 0 };
-  for (const recurring of due) {
+
+  for (const recurring of dueRecurrings) {
     try {
       totals.created += await materialize(recurring, now);
     } catch (error) {
@@ -47,5 +59,6 @@ export async function materializeDueTransactions(now = new Date()) {
       logger.error({ userId: recurring.userId, err: error }, "recurring.materialize_failed");
     }
   }
+
   return totals;
 }

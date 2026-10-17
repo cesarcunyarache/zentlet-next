@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { CreateListUseCase } from "../create-list.usecase";
-import { LIST_ID, OWNER, fakeCurrency, fakeLists, storedList } from "../../__tests__/fakes";
+import { CreateListUseCase } from "../create-list.use-case";
+import { LIST_ID, OWNER, fakeCurrency, fakeLists, storedList } from "./fakes";
 
 const input = { id: LIST_ID, name: "Viaje a Cusco", icon: "🏔️", color: "#D6E8F7" };
 

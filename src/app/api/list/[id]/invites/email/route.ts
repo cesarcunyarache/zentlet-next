@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { emailInviteSchema } from "@/features/list/schemas/list-api.schema";
 import { listUseCases } from "@/features/list/server/infrastructure/list.container";
-import { LIST_ERRORS } from "@/features/list/server/infrastructure/list.http-errors";
+import { LIST_ERRORS } from "@/features/list/server/infrastructure/http/list.http-errors";
 import { serializeInvite } from "@/features/list/lib/serialize";
 import { rateLimit } from "@/lib/rate-limit";
 import {

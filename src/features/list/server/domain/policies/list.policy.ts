@@ -1,5 +1,5 @@
-import type { ListRole } from "../../types";
-import type { ListMembership } from "./member.entity";
+import type { ListRole } from "../../../types";
+import type { ListMembership } from "../entities/member.entity";
 
 const SUCCESSION_ORDER: ListRole[] = ["editor", "viewer"];
 
@@ -9,12 +9,15 @@ export const canContribute = (role: ListRole) => role === "owner" || role === "e
 
 export const canRemoveEntry = (role: ListRole, isAuthor: boolean) => canManage(role) || isAuthor;
 
+function bySuccessionPriority(a: ListMembership, b: ListMembership) {
+  const roleDifference = SUCCESSION_ORDER.indexOf(a.role) - SUCCESSION_ORDER.indexOf(b.role);
+  if (roleDifference !== 0) return roleDifference;
+
+  return a.joinedAt.getTime() - b.joinedAt.getTime();
+}
+
 export function pickSuccessor(members: ListMembership[], ownerId: string): ListMembership | null {
   const candidates = members.filter((member) => member.userId !== ownerId && member.role !== "owner");
-  const ranked = [...candidates].sort(
-    (a, b) =>
-      SUCCESSION_ORDER.indexOf(a.role) - SUCCESSION_ORDER.indexOf(b.role) ||
-      a.joinedAt.getTime() - b.joinedAt.getTime(),
-  );
-  return ranked[0] ?? null;
+  const [successor] = candidates.sort(bySuccessionPriority);
+  return successor ?? null;
 }

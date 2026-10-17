@@ -1,5 +1,5 @@
 import type { TransactionType } from "@/features/transaction/types";
-import type { ListRole, ListTotals } from "../../types";
+import type { ListRole, ListTotals } from "../../../types";
 
 export interface TransactionList {
   id: string;

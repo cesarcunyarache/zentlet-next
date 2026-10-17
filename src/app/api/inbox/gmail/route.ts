@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { disconnectGmail } from "@/features/inbox/server/gmail-connection";
-import { getConnection } from "@/features/inbox/server/connection";
+import { inboxUseCases } from "@/features/inbox/server/infrastructure/inbox.container";
+import { serializeInboxConnection } from "@/features/inbox/lib/serialize";
 import { getSessionUserId, internalError, unauthorized, writeLimit } from "@/lib/api/route-helpers";
 
 export async function DELETE(req: Request) {
@@ -11,8 +11,9 @@ export async function DELETE(req: Request) {
     const limited = await writeLimit(userId);
     if (limited) return limited;
 
-    await disconnectGmail(userId);
-    return NextResponse.json(await getConnection(userId));
+    await inboxUseCases.disconnectGmail.execute(userId);
+    const connection = await inboxUseCases.getConnection.execute(userId);
+    return NextResponse.json(serializeInboxConnection(connection));
   } catch (error) {
     return internalError(req, error, "Error disconnecting Gmail");
   }

@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
-import { AcceptInviteUseCase } from "../accept-invite.usecase";
-import { CreateInviteUseCase } from "../create-invite.usecase";
-import { EmailInviteUseCase } from "../email-invite.usecase";
-import { PreviewInviteUseCase } from "../preview-invite.usecase";
-import { RevokeInviteUseCase } from "../revoke-invite.usecase";
+import { AcceptInviteUseCase } from "../accept-invite.use-case";
+import { CreateInviteUseCase } from "../create-invite.use-case";
+import { EmailInviteUseCase } from "../email-invite.use-case";
+import { PreviewInviteUseCase } from "../preview-invite.use-case";
+import { RevokeInviteUseCase } from "../revoke-invite.use-case";
 import {
   LIST_ID,
   OWNER,
@@ -15,7 +15,7 @@ import {
   fakeTokens,
   membersWithRoles,
   storedInvite,
-} from "../../__tests__/fakes";
+} from "./fakes";
 
 const NOW = new Date("2026-10-10T12:00:00Z");
 const GUEST = "guest-1";
@@ -51,7 +51,7 @@ describe("CreateInviteUseCase", () => {
 
 describe("RevokeInviteUseCase", () => {
   it("una invitación ya usada no se puede revocar", async () => {
-    const invites = fakeInvites({ revoke: vi.fn().mockResolvedValue(false) });
+    const invites = fakeInvites({ revoke: vi.fn().mockResolvedValue("not_revocable") });
 
     expect(await new RevokeInviteUseCase(invites, fakeMembers()).execute(OWNER, LIST_ID, "invite-1")).toEqual({
       error: "invite_invalid",
@@ -118,7 +118,7 @@ describe("AcceptInviteUseCase", () => {
   it("si otra persona la usó primero, falla sin avisar a nadie", async () => {
     const invites = fakeInvites({
       findByTokenHash: vi.fn().mockResolvedValue(storedInvite()),
-      accept: vi.fn().mockResolvedValue(false),
+      accept: vi.fn().mockResolvedValue("not_usable"),
     });
     const notifier = fakeNotifier();
 

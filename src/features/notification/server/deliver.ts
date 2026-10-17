@@ -26,45 +26,61 @@ async function claim(deliveryId: string, now: Date) {
     where: { id: deliveryId, status: "pending", nextAttemptAt: { lte: now } },
     data: { attempts: { increment: 1 }, nextAttemptAt: new Date(now.getTime() + CLAIM_LEASE_MS) },
   });
-  if (count === 0) return null;
+  const claimedByAnotherWorker = count === 0;
+  if (claimedByAnotherWorker) return null;
+
   return prisma.notificationDelivery.findUnique({ where: { id: deliveryId }, select: DELIVERY_SELECT });
 }
 
 async function send({ channel, notification }: ClaimedDelivery) {
   if (!isChannel(channel)) return false;
+
   const { user, ...row } = notification;
   const locale = preferencesSchema.shape.language.parse(user.preference?.language);
+  const recipient = { email: user.email, name: user.name, locale };
+
   try {
-    return await channels[channel].send(serializeNotification(row), { email: user.email, name: user.name, locale });
+    return await channels[channel].send(serializeNotification(row), recipient);
   } catch (error) {
     reportError(error, "notification.send_failed", { channel });
     return false;
   }
 }
 
-function outcome(isSent: boolean, attempts: number, now: Date) {
-  if (isSent) return { status: "sent", sentAt: now };
-  return hasAttemptsLeft(attempts) ? { nextAttemptAt: nextAttemptAt(attempts, now) } : { status: "failed" };
+function deliveryOutcome(isSent: boolean, attempts: number, now: Date) {
+  if (isSent) return { status: "sent" as const, sentAt: now };
+  if (hasAttemptsLeft(attempts)) return { nextAttemptAt: nextAttemptAt(attempts, now) };
+  return { status: "failed" as const };
 }
 
 export async function deliver(deliveryId: string) {
   const now = new Date();
+
   const delivery = await claim(deliveryId, now);
   if (!delivery) return;
 
   const isSent = await send(delivery);
-  await prisma.notificationDelivery.update({ where: { id: deliveryId }, data: outcome(isSent, delivery.attempts, now) });
-  if (isSent) return;
-  logger.warn({ deliveryId, channel: delivery.channel, attempts: delivery.attempts }, "notification.delivery_failed");
+  await prisma.notificationDelivery.update({
+    where: { id: deliveryId },
+    data: deliveryOutcome(isSent, delivery.attempts, now),
+  });
+
+  if (!isSent) {
+    logger.warn({ deliveryId, channel: delivery.channel, attempts: delivery.attempts }, "notification.delivery_failed");
+  }
 }
 
 export async function deliverPending() {
-  const due = await prisma.notificationDelivery.findMany({
+  const dueDeliveries = await prisma.notificationDelivery.findMany({
     where: { status: "pending", nextAttemptAt: { lte: new Date() } },
     select: { id: true },
     orderBy: { nextAttemptAt: "asc" },
     take: PENDING_BATCH,
   });
-  for (const { id } of due) await deliver(id);
-  return { processed: due.length };
+
+  for (const { id } of dueDeliveries) {
+    await deliver(id);
+  }
+
+  return { processed: dueDeliveries.length };
 }
