@@ -2,7 +2,7 @@ import { decryptSecret, encryptSecret } from "@/lib/crypto";
 import { logger } from "@/lib/observability/logger";
 import { ensurePrivateListId } from "@/lib/private-list";
 import { scheduleBudgetCheck } from "@/features/budget/server/infrastructure/budget.monitor";
-import { userLocalDate } from "@/features/preference/server/timezone";
+import { preferenceUseCases } from "@/features/preference/server/infrastructure/preference.container";
 import type {
   BudgetMonitor,
   InboundMailbox,
@@ -21,7 +21,7 @@ export const listPlacement: ListPlacement = {
 };
 
 export const userCalendar: UserCalendar = {
-  localDate: userLocalDate,
+  localDate: (userId, at) => preferenceUseCases.localDate.execute(userId, at),
 };
 
 export const inboundMailbox: InboundMailbox = {

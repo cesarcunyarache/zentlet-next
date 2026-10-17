@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { materializeDueTransactions } from "@/features/recurring/server/materialize";
+import { recurringUseCases } from "@/features/recurring/server/infrastructure/recurring.container";
 import { hasBearerSecret, internalError, unauthorized } from "@/lib/api/route-helpers";
 import { logger } from "@/lib/observability/logger";
 
@@ -7,7 +7,7 @@ export async function GET(req: Request) {
   if (!hasBearerSecret(req, process.env.CRON_SECRET)) return unauthorized();
 
   try {
-    const result = await materializeDueTransactions();
+    const result = await recurringUseCases.materializeDue.execute();
     logger.info(result, "cron.recurring");
     return NextResponse.json(result);
   } catch (error) {

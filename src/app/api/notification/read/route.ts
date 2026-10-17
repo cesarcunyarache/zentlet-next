@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     const limited = await writeLimit(userId);
     if (limited) return limited;
 
-    await notificationUseCases.markRead.execute(userId);
+    await notificationUseCases.markAllRead.execute(userId);
     return new NextResponse(null, { status: 204 });
   } catch (error) {
     return internalError(req, error, "Error marking notifications as read");
