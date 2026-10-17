@@ -22,7 +22,8 @@ export class CreateInboxConnectionUseCase {
     for (let attempt = 0; attempt < MAX_ADDRESS_ATTEMPTS; attempt++) {
       const address = inboxAddress(generateLocalPart(randomBytes), domain);
       const created = await this.emailInboxRepository.insert(userId, address);
-      if (created !== "conflict") return { inbox: created };
+      const addressTaken = created === "conflict";
+      if (!addressTaken) return { inbox: created };
 
       const createdByConcurrentRequest = await this.emailInboxRepository.findByUser(userId);
       if (createdByConcurrentRequest) return { inbox: createdByConcurrentRequest };

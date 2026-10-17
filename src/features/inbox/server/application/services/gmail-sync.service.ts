@@ -43,20 +43,24 @@ export class GmailSyncService {
 
   async syncWithAccessToken(connection: GmailConnection, accessToken: string): Promise<GmailSyncOutcome> {
     const { id, userId, historyId } = connection;
-    if (historyId === null) return this.resetHistory(id, accessToken);
+    const neverSynced = historyId === null;
+    if (neverSynced) return this.resetHistory(id, accessToken);
 
-    const found = await this.findNewMessages(accessToken, historyId.toString());
-    if (!found) return this.resetHistory(id, accessToken);
+    const newMessages = await this.findNewMessages(accessToken, historyId.toString());
+    const historyExpired = newMessages === null;
+    if (historyExpired) return this.resetHistory(id, accessToken);
 
-    const context: SyncContext = { accessToken, userId, isWatched: await this.watchedSenderFilter(userId) };
+    const isWatched = await this.watchedSenderFilter(userId);
+    const context: SyncContext = { accessToken, userId, isWatched };
+
     let created = 0;
-    for (const messageId of found.ids) {
+    for (const messageId of newMessages.ids) {
       const outcome = await this.ingestMessage(context, messageId);
       if (outcome === "created") created++;
     }
 
-    await this.saveProgress(id, found.latestHistoryId);
-    this.inboxMonitor.info("inbox.gmail_synced", { userId, messages: found.ids.length, created });
+    await this.saveProgress(id, newMessages.latestHistoryId);
+    this.inboxMonitor.info("inbox.gmail_synced", { userId, messages: newMessages.ids.length, created });
     return "synced";
   }
 
@@ -80,7 +84,8 @@ export class GmailSyncService {
       if (history === "expired") return null;
 
       latestHistoryId = history.historyId ?? latestHistoryId;
-      const added = (history.history ?? []).flatMap((entry) => entry.messagesAdded ?? []);
+      const entries = history.history ?? [];
+      const added = entries.flatMap((entry) => entry.messagesAdded ?? []);
       for (const { message } of added) {
         if (isIncomingMessage(message.labelIds)) ids.add(message.id);
       }

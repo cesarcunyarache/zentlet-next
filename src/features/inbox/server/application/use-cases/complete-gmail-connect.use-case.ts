@@ -16,7 +16,9 @@ export class CompleteGmailConnectUseCase {
     if (!this.gmailGateway.isAvailable()) return "unavailable";
 
     const grant = await this.gmailGateway.exchangeCode(code);
-    if (!grant.refreshToken || !grant.canReadInbox) return "scope_denied";
+    const { refreshToken } = grant;
+    const deniedInboxAccess = !grant.canReadInbox;
+    if (!refreshToken || deniedInboxAccess) return "scope_denied";
 
     const profile = await this.gmailGateway.getProfile(grant.accessToken);
     const email = profile.emailAddress.toLowerCase();
@@ -32,12 +34,13 @@ export class CompleteGmailConnectUseCase {
     const isSwitchingAccount = previous !== null && previous.email !== email;
     if (isSwitchingAccount) await this.gmailAccess.disconnect(userId);
 
-    const watch = await this.gmailGateway.watch(grant.accessToken);
+    const { historyId, watchExpiresAt } = await this.gmailGateway.watch(grant.accessToken);
     const saved = await this.gmailConnectionRepository.save(userId, {
       email,
-      sealedRefreshToken: this.tokenCipher.seal(grant.refreshToken),
+      sealedRefreshToken: this.tokenCipher.seal(refreshToken),
       status: "active",
-      ...watch,
+      historyId,
+      watchExpiresAt,
     });
     if (saved === "taken") return "taken";
 

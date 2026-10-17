@@ -22,8 +22,12 @@ function gmailConfig() {
   const clientSecret = process.env.GOOGLE_CLIENT_SECRET?.trim();
   const topic = process.env.GMAIL_PUBSUB_TOPIC?.trim();
   const baseUrl = process.env.BETTER_AUTH_URL?.trim();
-  if (!clientId || !clientSecret || !topic || !baseUrl || !isEncryptionConfigured()) return null;
-  return { clientId, clientSecret, topic, redirectUri: new URL(CALLBACK_PATH, baseUrl).toString() };
+
+  const canStoreTokens = isEncryptionConfigured();
+  if (!clientId || !clientSecret || !topic || !baseUrl || !canStoreTokens) return null;
+
+  const redirectUri = new URL(CALLBACK_PATH, baseUrl).toString();
+  return { clientId, clientSecret, topic, redirectUri };
 }
 
 function requireConfig() {

@@ -19,7 +19,8 @@ export class PrismaEmailInboxRepository implements EmailInboxRepository {
 
   async insert(userId: string, address: string) {
     try {
-      return emailInboxToDomain(await prisma.emailInbox.create({ data: { userId, address } }));
+      const row = await prisma.emailInbox.create({ data: { userId, address } });
+      return emailInboxToDomain(row);
     } catch (error) {
       if (isUniqueViolation(error)) return "conflict" as const;
       throw error;
@@ -27,12 +28,13 @@ export class PrismaEmailInboxRepository implements EmailInboxRepository {
   }
 
   async recordReceipt(id: string, receivedAt: Date, verification: EmailVerification | null) {
+    const verificationFields = verification
+      ? { verificationCode: verification.code, verificationUrl: verification.url }
+      : {};
+
     await prisma.emailInbox.update({
       where: { id },
-      data: {
-        lastReceivedAt: receivedAt,
-        ...(verification && { verificationCode: verification.code, verificationUrl: verification.url }),
-      },
+      data: { lastReceivedAt: receivedAt, ...verificationFields },
     });
   }
 }

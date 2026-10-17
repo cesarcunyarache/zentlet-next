@@ -51,12 +51,21 @@ function errorReason(error: unknown) {
 async function request<T>(url: string, init: RequestInit = {}): Promise<T> {
   const response = await fetch(url, { ...init, signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) });
   const body = parseJson(await response.text());
-  if (!response.ok) throw new GmailApiError(response.status, errorReason(body.error) || response.statusText);
+
+  if (!response.ok) {
+    const reason = errorReason(body.error) || response.statusText;
+    throw new GmailApiError(response.status, reason);
+  }
+
   return body as T;
 }
 
 function form(values: Record<string, string>) {
-  return { method: "POST", headers: { "content-type": "application/x-www-form-urlencoded" }, body: new URLSearchParams(values) };
+  return {
+    method: "POST",
+    headers: { "content-type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams(values),
+  };
 }
 
 const bearer = (accessToken: string) => ({ authorization: `Bearer ${accessToken}` });
@@ -86,13 +95,22 @@ export async function exchangeCode(client: OAuthClient, code: string): Promise<G
       grant_type: "authorization_code",
     }),
   );
-  return { accessToken: tokens.access_token, refreshToken: tokens.refresh_token ?? null, scope: tokens.scope ?? "" };
+  return {
+    accessToken: tokens.access_token,
+    refreshToken: tokens.refresh_token ?? null,
+    scope: tokens.scope ?? "",
+  };
 }
 
 export async function refreshAccessToken(client: Omit<OAuthClient, "redirectUri">, refreshToken: string) {
   const tokens = await request<{ access_token: string }>(
     TOKEN_URL,
-    form({ refresh_token: refreshToken, client_id: client.clientId, client_secret: client.clientSecret, grant_type: "refresh_token" }),
+    form({
+      refresh_token: refreshToken,
+      client_id: client.clientId,
+      client_secret: client.clientSecret,
+      grant_type: "refresh_token",
+    }),
   );
   return tokens.access_token;
 }
@@ -125,7 +143,8 @@ export function listHistory(accessToken: string, startHistoryId: string, pageTok
 
 function fetchMessage(accessToken: string, id: string, params: Record<string, string>) {
   const query = new URLSearchParams(params);
-  return request<GmailMessage>(`${GMAIL_URL}/messages/${encodeURIComponent(id)}?${query}`, { headers: bearer(accessToken) });
+  const url = `${GMAIL_URL}/messages/${encodeURIComponent(id)}?${query}`;
+  return request<GmailMessage>(url, { headers: bearer(accessToken) });
 }
 
 export function getMessageSender(accessToken: string, id: string) {

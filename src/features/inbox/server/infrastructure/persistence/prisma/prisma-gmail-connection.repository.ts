@@ -38,11 +38,10 @@ export class PrismaGmailConnectionRepository implements GmailConnectionRepositor
   }
 
   async saveProgress(id: string, historyId: bigint) {
+    const onlyMovesForward = { OR: [{ historyId: null }, { historyId: { lt: historyId } }] };
+
     await Promise.all([
-      prisma.gmailConnection.updateMany({
-        where: { id, OR: [{ historyId: null }, { historyId: { lt: historyId } }] },
-        data: { historyId },
-      }),
+      prisma.gmailConnection.updateMany({ where: { id, ...onlyMovesForward }, data: { historyId } }),
       prisma.gmailConnection.update({ where: { id }, data: { lastSyncedAt: new Date() } }),
     ]);
   }
