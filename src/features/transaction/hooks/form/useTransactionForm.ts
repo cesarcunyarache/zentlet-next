@@ -34,11 +34,17 @@ export function useTransactionForm({ isOpen, draft, categories, defaultListId = 
     name: ["type", "categoryId", "transactionDate", "amount", "description"],
   });
 
-  const resetForOpening = useEffectEvent(() => {
+  const [wasOpen, setWasOpen] = useState(false);
+  const isOpening = isOpen && !wasOpen;
+  if (isOpen !== wasOpen) setWasOpen(isOpen);
+  if (isOpening) {
     setRawAmount(initialRawAmount(draft));
     setAutoCategoryId(null);
     setRecurrence(null);
     setListId(defaultListId);
+  }
+
+  const resetForOpening = useEffectEvent(() => {
     manualChoices.current = { category: Boolean(draft?.categoryId), type: Boolean(draft?.type) };
     form.reset(initialFormValues(draft));
     if (draft) void form.trigger();
