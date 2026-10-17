@@ -3,7 +3,7 @@
 import { cn } from "@heroui/react";
 import { useTranslations } from "next-intl";
 import { Sheet } from "@/core/components/ui/sheet";
-import { useDeleteConfirmation } from "@/features/transaction/hooks/useDeleteConfirmation";
+import { useDeleteConfirmation } from "@/core/hooks/useDeleteConfirmation";
 import { listErrorKey } from "../../lib/errors";
 import { useRemoveMember, useUpdateMember } from "../../stores/list.store";
 import type { TListDetail } from "../../types";

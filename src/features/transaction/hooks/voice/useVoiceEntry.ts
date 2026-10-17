@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import type { Locale } from "@/i18n/routing";
 import { track } from "@/lib/observability/client";
 import { useSpeechRecognition } from "./useSpeechRecognition";
 import { parseVoiceEntry } from "../../lib/parse-voice";
@@ -25,7 +24,7 @@ interface UseVoiceEntryOptions {
 
 export function useVoiceEntry({ categories, onSave, onEdit }: UseVoiceEntryOptions) {
   const t = useTranslations();
-  const locale = useLocale() as Locale;
+  const locale = useLocale();
   const speech = useSpeechRecognition(locale);
   const [isOpen, setIsOpen] = useState(false);
   const [manualPick, setManualPick] = useState<TranscriptCategory | null>(null);

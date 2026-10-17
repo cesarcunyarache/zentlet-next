@@ -1,5 +1,5 @@
 import { useEffect, useEffectEvent, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { RecurrenceFrequency } from "@/features/recurring/types";
 import type { TransactionSuggestion } from "../../ai/schemas/transaction-ai.schema";
@@ -29,11 +29,10 @@ export function useTransactionForm({ isOpen, draft, categories, defaultListId = 
     defaultValues: initialFormValues(),
   });
 
-  const type = form.watch("type");
-  const categoryId = form.watch("categoryId");
-  const transactionDate = form.watch("transactionDate");
-  const amount = form.watch("amount");
-  const description = form.watch("description");
+  const [type, categoryId, transactionDate, amount, description] = useWatch({
+    control: form.control,
+    name: ["type", "categoryId", "transactionDate", "amount", "description"],
+  });
 
   const resetForOpening = useEffectEvent(() => {
     setRawAmount(initialRawAmount(draft));

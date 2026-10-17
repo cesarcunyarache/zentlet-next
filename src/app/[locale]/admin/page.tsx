@@ -19,7 +19,7 @@ import {
   useTransactionSummary,
 } from "@/features/transaction/stores/transaction.store";
 import { useCurrency } from "@/features/preference/hooks/useCurrency";
-import { useToast } from "@/features/transaction/hooks/useToast";
+import { useToast } from "@/core/hooks/useToast";
 import { SummaryHeader } from "@/features/transaction/ui/summary/summary-header";
 import { CategoryStrip } from "@/features/transaction/ui/summary/category-strip";
 import type { CategoryTotal } from "@/features/transaction/types";

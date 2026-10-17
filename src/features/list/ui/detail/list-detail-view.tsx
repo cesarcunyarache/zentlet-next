@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { ToastBubble } from "@/core/components/ui/toast-bubble";
 import { useOfflineSession } from "@/core/offline/offline-query-provider";
 import { CategoryEmoji } from "@/features/category/ui/category-emoji";
-import { useToast } from "@/features/transaction/hooks/useToast";
+import { useToast } from "@/core/hooks/useToast";
 import { TransactionList } from "@/features/transaction/ui/list/transaction-list";
 import { Link, useRouter } from "@/i18n/navigation";
 import { track } from "@/lib/observability/client";

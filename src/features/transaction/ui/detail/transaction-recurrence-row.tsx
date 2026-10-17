@@ -4,7 +4,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { fullDate } from "@/lib/dates";
 import { track } from "@/lib/observability/client";
 import { useRecurringTransaction, useStopRecurringTransaction } from "@/features/recurring/stores/recurring.store";
-import { useDeleteConfirmation } from "../../hooks/useDeleteConfirmation";
+import { useDeleteConfirmation } from "@/core/hooks/useDeleteConfirmation";
 
 function stopLabelKey(isStopping: boolean, isConfirming: boolean) {
   if (isStopping) return "detail.stopping";

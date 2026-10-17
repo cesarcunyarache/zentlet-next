@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 
 const CONFIRMATION_TIMEOUT_MS = 3500;
 
-export function useDeleteConfirmation(transactionId: string | undefined) {
+export function useDeleteConfirmation(resetKey: string | undefined) {
   const [isConfirming, setIsConfirming] = useState(false);
-  const [lastTransactionId, setLastTransactionId] = useState(transactionId);
+  const [lastResetKey, setLastResetKey] = useState(resetKey);
 
-  if (transactionId !== lastTransactionId) {
-    setLastTransactionId(transactionId);
+  const isAnotherItem = resetKey !== lastResetKey;
+  if (isAnotherItem) {
+    setLastResetKey(resetKey);
     setIsConfirming(false);
   }
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useDeleteConfirmation } from "@/features/transaction/hooks/useDeleteConfirmation";
+import { useDeleteConfirmation } from "@/core/hooks/useDeleteConfirmation";
 import type { InviteRole, TListMember } from "../../types";
 import { MemberAvatar } from "./member-avatar";
 
