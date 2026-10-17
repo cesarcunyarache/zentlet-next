@@ -1,6 +1,6 @@
 import type { Transaction as TransactionRow } from "@/generated/prisma/client";
-import type { TransactionType } from "../../types";
-import type { Transaction } from "../domain/transaction.entity";
+import type { TransactionType } from "../../../../types";
+import type { Transaction } from "../../../domain/entities/transaction.entity";
 
 export function toDomain(row: TransactionRow): Transaction {
   return {

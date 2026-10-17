@@ -3,16 +3,16 @@ import { resolveTargetListId } from "@/lib/private-list";
 import { scheduleBudgetCheck } from "@/features/budget/server/check";
 import { createRepeatingTransaction } from "@/features/recurring/server/recurring";
 import type { RecurrenceFrequency } from "@/features/recurring/types";
-import type { NewTransaction } from "../domain/transaction.entity";
-import type { BudgetMonitor, ListPlacement, RecurringSeries } from "../domain/transaction.ports";
-import { toDomain } from "./transaction.mapper";
+import type { NewTransaction } from "../domain/entities/transaction.entity";
+import type { BudgetMonitor, ListPlacement, RecurringSeries } from "../domain/ports/transaction.ports";
+import { toDomain } from "./persistence/prisma/transaction.mapper";
 
 export const budgetMonitor: BudgetMonitor = {
   scheduleCheck: scheduleBudgetCheck,
 };
 
 export const listPlacement: ListPlacement = {
-  targetFor: (userId, requestedListId) => resolveTargetListId(userId, requestedListId),
+  targetFor: resolveTargetListId,
 };
 
 export const recurringSeries: RecurringSeries = {

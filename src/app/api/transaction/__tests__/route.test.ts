@@ -12,7 +12,6 @@ vi.mock("@/lib/prisma", () => ({
     transaction: {
       findUnique: vi.fn(),
       findFirst: vi.fn(),
-      findUniqueOrThrow: vi.fn(),
       create: vi.fn(),
       updateMany: vi.fn(),
       deleteMany: vi.fn(),
@@ -211,7 +210,7 @@ describe("GET /api/transaction/[id]", () => {
 describe("PATCH /api/transaction/[id]", () => {
   beforeEach(() => {
     db.transaction.updateMany.mockResolvedValue({ count: 1 });
-    db.transaction.findUniqueOrThrow.mockResolvedValue(row("user-1") as never);
+    db.transaction.findUnique.mockResolvedValue(row("user-1") as never);
   });
 
   it("actualiza sólo movimientos del usuario y devuelve el resultado", async () => {
@@ -229,7 +228,14 @@ describe("PATCH /api/transaction/[id]", () => {
     db.transaction.updateMany.mockResolvedValue({ count: 0 });
 
     expect((await patch({ amount: 30 })).status).toBe(404);
-    expect(db.transaction.findUniqueOrThrow).not.toHaveBeenCalled();
+    expect(db.transaction.findUnique).not.toHaveBeenCalled();
+  });
+
+  it("si se borra entre la escritura y la relectura es 404, no 500", async () => {
+    db.transaction.findUnique.mockResolvedValue(null);
+
+    expect((await patch({ amount: 30 })).status).toBe(404);
+    expect(scheduleBudgetCheck).not.toHaveBeenCalled();
   });
 
   it("mover a una categoría que no es del usuario es 422 y no escribe", async () => {

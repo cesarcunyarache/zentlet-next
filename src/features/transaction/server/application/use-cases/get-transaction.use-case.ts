@@ -1,11 +1,12 @@
-import { fail } from "../domain/transaction.errors";
-import type { TransactionRepository } from "../domain/transaction.repository";
+import { fail } from "../../domain/errors/transaction.errors";
+import type { TransactionRepository } from "../../domain/repositories/transaction.repository";
 
 export class GetTransactionUseCase {
-  constructor(private readonly transactions: TransactionRepository) {}
+  constructor(private readonly transactionRepository: TransactionRepository) {}
 
   async execute(userId: string, id: string) {
-    const transaction = await this.transactions.findOwned(userId, id);
-    return transaction ? { transaction } : fail("not_found");
+    const transaction = await this.transactionRepository.findOwned(userId, id);
+    if (!transaction) return fail("not_found");
+    return { transaction };
   }
 }

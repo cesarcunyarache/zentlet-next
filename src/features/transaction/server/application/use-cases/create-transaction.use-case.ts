@@ -1,12 +1,15 @@
-import type { CreateTransactionInput } from "../../schemas/transaction-api.schema";
-import { isExpense, type NewTransaction } from "../domain/transaction.entity";
-import { fail } from "../domain/transaction.errors";
+import type { CreateTransactionInput } from "../../../schemas/transaction-api.schema";
+import {
+  isExpense,
+  type NewTransaction,
+} from "../../domain/entities/transaction.entity";
+import { fail } from "../../domain/errors/transaction.errors";
 import type {
   BudgetMonitor,
   ListPlacement,
   RecurringSeries,
-} from "../domain/transaction.ports";
-import type { TransactionRepository } from "../domain/transaction.repository";
+} from "../../domain/ports/transaction.ports";
+import type { TransactionRepository } from "../../domain/repositories/transaction.repository";
 
 function toNewTransaction(
   userId: string,
@@ -26,40 +29,66 @@ function toNewTransaction(
   };
 }
 
+function requestedListId(input: CreateTransactionInput) {
+  const isRecurringSeries = Boolean(input.recurrence);
+  if (isRecurringSeries) return null;
+  return input.listId ?? null;
+}
+
 export class CreateTransactionUseCase {
   constructor(
-    private readonly transactions: TransactionRepository,
-    private readonly recurring: RecurringSeries,
-    private readonly budget: BudgetMonitor,
-    private readonly lists: ListPlacement,
+    private readonly transactionRepository: TransactionRepository,
+    private readonly recurringSeries: RecurringSeries,
+    private readonly budgetMonitor: BudgetMonitor,
+    private readonly listPlacement: ListPlacement,
   ) {}
 
   async execute(userId: string, input: CreateTransactionInput) {
-    const existing = await this.transactions.findById(input.id);
-    if (existing)
-      return existing.userId === userId
-        ? { transaction: existing, created: false }
-        : fail("id_taken");
+    const existing = await this.transactionRepository.findById(input.id);
 
-    if (!(await this.transactions.categoryBelongsTo(userId, input.categoryId)))
-      return fail("category_not_found");
+    if (existing) {
+      const belongsToAnotherUser = existing.userId !== userId;
+      if (belongsToAnotherUser) return fail("id_taken");
+      return { transaction: existing, created: false };
+    }
 
-    const requestedListId = input.recurrence ? null : (input.listId ?? null);
-    const listId = await this.lists.targetFor(userId, requestedListId);
-    const draft = toNewTransaction(userId, input, listId);
-    const created = input.recurrence
-      ? await this.recurring.start(draft, input.recurrence)
-      : await this.transactions.insert(draft);
+    const ownsCategory = await this.transactionRepository.categoryBelongsTo(
+      userId,
+      input.categoryId,
+    );
 
-    if (created === "id_taken") return this.concurrentWinner(userId, input.id);
+    if (!ownsCategory) return fail("category_not_found");
+
+    const listId = await this.listPlacement.targetFor(
+      userId,
+      requestedListId(input),
+    );
+
+    const created = await this.save(
+      toNewTransaction(userId, input, listId),
+      input.recurrence,
+    );
+
+    if (created === "id_taken")
+      return this.findRetriedCreation(userId, input.id);
 
     if (isExpense(created))
-      this.budget.scheduleCheck(userId, created.categoryId);
+      this.budgetMonitor.scheduleCheck(userId, created.categoryId);
+
     return { transaction: created, created: true };
   }
 
-  private async concurrentWinner(userId: string, id: string) {
-    const winner = await this.transactions.findOwned(userId, id);
-    return winner ? { transaction: winner, created: false } : fail("id_taken");
+  private save(
+    draft: NewTransaction,
+    recurrence: CreateTransactionInput["recurrence"],
+  ) {
+    if (recurrence) return this.recurringSeries.start(draft, recurrence);
+    return this.transactionRepository.insert(draft);
+  }
+
+  private async findRetriedCreation(userId: string, id: string) {
+    const transaction = await this.transactionRepository.findOwned(userId, id);
+    if (!transaction) return fail("id_taken");
+    return { transaction, created: false };
   }
 }

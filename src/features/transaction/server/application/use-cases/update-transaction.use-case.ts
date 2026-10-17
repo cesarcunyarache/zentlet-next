@@ -1,29 +1,47 @@
-import type { UpdateTransactionInput } from "../../schemas/transaction-api.schema";
-import { isExpense, type TransactionChanges } from "../domain/transaction.entity";
-import { fail } from "../domain/transaction.errors";
-import type { BudgetMonitor } from "../domain/transaction.ports";
-import type { TransactionRepository } from "../domain/transaction.repository";
+import type { UpdateTransactionInput } from "../../../schemas/transaction-api.schema";
+import {
+  isExpense,
+  type TransactionChanges,
+} from "../../domain/entities/transaction.entity";
+import { fail } from "../../domain/errors/transaction.errors";
+import type { BudgetMonitor } from "../../domain/ports/transaction.ports";
+import type { TransactionRepository } from "../../domain/repositories/transaction.repository";
 
-function toChanges(input: UpdateTransactionInput): TransactionChanges {
-  const { transactionDate, ...fields } = input;
-  return { ...fields, transactionDate: transactionDate ? new Date(transactionDate) : undefined };
+function toChanges({
+  transactionDate,
+  ...fields
+}: UpdateTransactionInput): TransactionChanges {
+  if (!transactionDate) return { ...fields, transactionDate: undefined };
+  return { ...fields, transactionDate: new Date(transactionDate) };
 }
 
 export class UpdateTransactionUseCase {
   constructor(
-    private readonly transactions: TransactionRepository,
-    private readonly budget: BudgetMonitor,
+    private readonly transactionRepository: TransactionRepository,
+    private readonly budgetMonitor: BudgetMonitor,
   ) {}
 
   async execute(userId: string, id: string, input: UpdateTransactionInput) {
-    if (input.categoryId && !(await this.transactions.categoryBelongsTo(userId, input.categoryId))) {
-      return fail("category_not_found");
+    if (input.categoryId) {
+      const ownsCategory = await this.transactionRepository.categoryBelongsTo(
+        userId,
+        input.categoryId,
+      );
+      if (!ownsCategory) return fail("category_not_found");
     }
 
-    const updated = await this.transactions.updateOwned(userId, id, toChanges(input));
-    if (typeof updated === "string") return fail(updated);
+    const updated = await this.transactionRepository.updateOwned(
+      userId,
+      id,
+      toChanges(input),
+    );
 
-    if (isExpense(updated)) this.budget.scheduleCheck(userId, updated.categoryId);
+    if (updated === "not_found" || updated === "category_not_found")
+      return fail(updated);
+
+    if (isExpense(updated))
+      this.budgetMonitor.scheduleCheck(userId, updated.categoryId);
+
     return { transaction: updated };
   }
 }

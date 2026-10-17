@@ -1,5 +1,5 @@
 import type { RecurrenceFrequency } from "@/features/recurring/types";
-import type { NewTransaction, Transaction } from "./transaction.entity";
+import type { NewTransaction, Transaction } from "../entities/transaction.entity";
 
 export interface BudgetMonitor {
   scheduleCheck(userId: string, categoryId: string): void;

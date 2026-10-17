@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { CreateTransactionInput } from "../../../schemas/transaction-api.schema";
-import type { NewTransaction, Transaction } from "../../domain/transaction.entity";
-import type { BudgetMonitor, ListPlacement, RecurringSeries } from "../../domain/transaction.ports";
-import type { TransactionRepository } from "../../domain/transaction.repository";
-import { CreateTransactionUseCase } from "../create-transaction.usecase";
+import type { CreateTransactionInput } from "../../../../schemas/transaction-api.schema";
+import type { NewTransaction } from "../../../domain/entities/transaction.entity";
+import type { BudgetMonitor, ListPlacement, RecurringSeries } from "../../../domain/ports/transaction.ports";
+import { CreateTransactionUseCase } from "../create-transaction.use-case";
+import { fakeRepository, stored } from "./fake-transaction.repository";
 
 const USER = "user-1";
 const PRIVATE_LIST = "private-list";
@@ -17,25 +17,6 @@ const input: CreateTransactionInput = {
   categoryId: "health",
   transactionDate: "2026-09-20",
 };
-
-function stored(draft: NewTransaction, recurringTransactionId: string | null = null): Transaction {
-  return { ...draft, recurringTransactionId, createdAt: new Date() };
-}
-
-function fakeRepository(overrides: Partial<TransactionRepository> = {}): TransactionRepository {
-  return {
-    findById: vi.fn().mockResolvedValue(null),
-    findOwned: vi.fn().mockResolvedValue(null),
-    findFeed: vi.fn(),
-    summarize: vi.fn(),
-    findExistingIds: vi.fn(),
-    insert: vi.fn(async (draft: NewTransaction) => stored(draft)),
-    updateOwned: vi.fn(),
-    deleteOwned: vi.fn(),
-    categoryBelongsTo: vi.fn().mockResolvedValue(true),
-    ...overrides,
-  };
-}
 
 let budget: BudgetMonitor;
 let recurring: RecurringSeries;
