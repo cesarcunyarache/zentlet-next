@@ -1,9 +1,10 @@
 "use client";
 
-import type { PointerEvent, ReactNode } from "react";
+import { useEffect, type PointerEvent, type ReactNode } from "react";
 import { Drawer, cn } from "@heroui/react";
 import { X } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { showStatusBarScrim } from "@/core/theme/theme";
 
 interface SheetProps {
   isOpen: boolean;
@@ -44,6 +45,13 @@ export function Sheet({
   bodyClassName,
 }: SheetProps) {
   const t = useTranslations("common.actions");
+
+  // la barra de estado queda fuera de la página: el scrim no la cubre
+  useEffect(() => {
+    if (!isOpen) return;
+    return showStatusBarScrim();
+  }, [isOpen]);
+
   /**
    * Sin `<Drawer>` raíz a propósito: esa raíz es el `DialogTrigger` de
    * react-aria y monta un `PressResponder` que espera un hijo pulsable como

@@ -15,8 +15,17 @@ export function isThemePreference(value: unknown): value is ThemePreference {
   return value === "system" || value === "light" || value === "dark";
 }
 
-// el --app-bg de cada tema; iOS instalada pinta con él la barra de estado
-export const THEME_COLORS = { light: "#f7f6f9", dark: "#0e0e12" } as const;
+/*
+ * iOS instalada pinta la barra de estado con la theme-color, fuera de la
+ * página: "page" es el --app-bg de cada tema y "scrim" ese fondo bajo el
+ * --app-scrim de las hojas, para que la barra se oscurezca con ellas.
+ */
+export const THEME_COLORS = {
+  light: { page: "#f7f6f9", scrim: "#9a999e" },
+  dark: { page: "#0e0e12", scrim: "#08080a" },
+} as const;
+
+let openScrims = 0;
 
 const THEME_COLOR_META_ID = "theme-color-active";
 
@@ -37,22 +46,41 @@ function setThemeColor(color: string | null) {
   if (!current) document.head.prepend(meta);
 }
 
+function syncThemeColor() {
+  const theme = document.documentElement.dataset.theme;
+  if (theme !== "light" && theme !== "dark") {
+    setThemeColor(null);
+    return;
+  }
+  setThemeColor(THEME_COLORS[theme][openScrims > 0 ? "scrim" : "page"]);
+}
+
+/** Oscurece la barra de estado mientras la hoja esté abierta; devuelve cómo soltarla. */
+export function showStatusBarScrim() {
+  openScrims += 1;
+  syncThemeColor();
+  return () => {
+    openScrims -= 1;
+    syncThemeColor();
+  };
+}
+
 export function applyTheme(theme: "light" | "dark") {
   const root = document.documentElement;
   root.classList.toggle("dark", theme === "dark");
   root.dataset.theme = theme;
-  setThemeColor(THEME_COLORS[theme]);
+  syncThemeColor();
 }
 
 export function clearTheme() {
   const root = document.documentElement;
   root.classList.remove("dark");
   delete root.dataset.theme;
-  setThemeColor(null);
+  syncThemeColor();
 }
 
 /**
  * Se ejecuta en el <head> antes de pintar: sin esto una recarga en modo
  * oscuro mostraría un destello claro hasta hidratar.
  */
-export const themeInitScript = `(function(){try{if(!new RegExp(${JSON.stringify(THEME_SCOPE)}).test(location.pathname))return;var p=localStorage.getItem(${JSON.stringify(THEME_STORAGE_KEY)});var d=p==="dark"||(p!=="light"&&matchMedia("(prefers-color-scheme: dark)").matches);var r=document.documentElement;r.classList.toggle("dark",d);r.dataset.theme=d?"dark":"light";var m=document.createElement("meta");m.id=${JSON.stringify(THEME_COLOR_META_ID)};m.name="theme-color";m.content=d?${JSON.stringify(THEME_COLORS.dark)}:${JSON.stringify(THEME_COLORS.light)};document.head.prepend(m);}catch(e){}})();`;
+export const themeInitScript = `(function(){try{if(!new RegExp(${JSON.stringify(THEME_SCOPE)}).test(location.pathname))return;var p=localStorage.getItem(${JSON.stringify(THEME_STORAGE_KEY)});var d=p==="dark"||(p!=="light"&&matchMedia("(prefers-color-scheme: dark)").matches);var r=document.documentElement;r.classList.toggle("dark",d);r.dataset.theme=d?"dark":"light";var m=document.createElement("meta");m.id=${JSON.stringify(THEME_COLOR_META_ID)};m.name="theme-color";m.content=d?${JSON.stringify(THEME_COLORS.dark.page)}:${JSON.stringify(THEME_COLORS.light.page)};document.head.prepend(m);}catch(e){}})();`;
