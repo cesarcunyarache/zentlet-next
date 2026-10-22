@@ -48,6 +48,8 @@ export async function generateMetadata({ params }: LocaleLayoutProps): Promise<M
     description: t("metadata.description"),
     // instalada en iOS: pantalla completa y su propio icono
     appleWebApp: { capable: true, title: "Zentlet", statusBarStyle: "default", startupImage: splashStartupImages() },
+    // Next sólo emite "mobile-web-app-capable"; sin la variante apple iOS ignora las startupImage
+    other: { "apple-mobile-web-app-capable": "yes" },
     icons: { apple: "/icons/apple-touch-icon.png" },
     manifest: locale === routing.defaultLocale ? "/manifest.webmanifest" : `/manifest.webmanifest?lang=${locale}`,
   };
