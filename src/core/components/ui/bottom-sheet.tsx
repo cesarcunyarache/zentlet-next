@@ -7,7 +7,7 @@ import { X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { showStatusBarScrim } from "@/core/theme/theme";
 
-interface VaulSheetProps {
+interface BottomSheetProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   title: string;
@@ -23,7 +23,7 @@ interface VaulSheetProps {
  * y se redondea como las hojas de iOS. Requiere el `[vaul-drawer-wrapper]`
  * del layout raíz.
  */
-export function VaulSheet({
+export function BottomSheet({
   isOpen,
   onOpenChange,
   title,
@@ -32,7 +32,7 @@ export function VaulSheet({
   className,
   hideTitle = false,
   bodyClassName,
-}: VaulSheetProps) {
+}: BottomSheetProps) {
   const t = useTranslations("common.actions");
 
   useEffect(() => {
