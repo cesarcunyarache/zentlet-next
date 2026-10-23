@@ -1,23 +1,11 @@
 "use client";
 
-import { useEffect, type PointerEvent, type ReactNode } from "react";
+import { useEffect, type PointerEvent } from "react";
 import { Drawer, cn } from "@heroui/react";
 import { X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { showStatusBarScrim } from "@/core/theme/theme";
-
-interface SheetProps {
-  isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
-  title: string;
-  children: ReactNode;
-  footer?: ReactNode;
-  className?: string;
-  /** El título sigue ahí para lectores de pantalla, pero no se ve. */
-  hideTitle?: boolean;
-  /** Clases extra para el cuerpo scrollable. */
-  bodyClassName?: string;
-}
+import type { SheetProps } from "./sheet-props";
 
 /**
  * Los diálogos anidados (feedback, confirmaciones) viven en un portal, pero
@@ -34,7 +22,7 @@ function stopPortalPointer(event: PointerEvent<HTMLDivElement>) {
  * cabecera con título y cierre, cuerpo scrollable, pie fijo— sin atarlo
  * a la forma de un teléfono.
  */
-export function Sheet({
+export function HeroUISheet({
   isOpen,
   onOpenChange,
   title,

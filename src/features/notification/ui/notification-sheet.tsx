@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { BottomSheet } from "@/core/components/ui/bottom-sheet";
+import { Sheet } from "@/core/components/ui/sheet";
 import { useMarkNotificationsRead, useNotifications } from "../stores/notification.store";
 import { NotificationItem } from "./notification-item";
 
@@ -21,7 +21,7 @@ export function NotificationSheet({ isOpen, onOpenChange }: NotificationSheetPro
   }
 
   return (
-    <BottomSheet isOpen={isOpen} onOpenChange={handleOpenChange} title={t("title")}>
+    <Sheet isOpen={isOpen} onOpenChange={handleOpenChange} title={t("title")}>
       {items.length > 0 ? (
         <ul className="divide-app-border flex flex-col divide-y">
           {items.map((notification) => (
@@ -31,6 +31,6 @@ export function NotificationSheet({ isOpen, onOpenChange }: NotificationSheetPro
       ) : (
         <p className="text-app-muted py-10 text-center text-sm">{t("empty")}</p>
       )}
-    </BottomSheet>
+    </Sheet>
   );
 }

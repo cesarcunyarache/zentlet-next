@@ -1,27 +1,29 @@
 "use client";
 
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useRef, type PointerEvent } from "react";
 import { Drawer } from "vaul";
 import { cn } from "@heroui/react";
 import { X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { showStatusBarScrim } from "@/core/theme/theme";
+import type { SheetProps } from "./sheet-props";
 
-interface BottomSheetProps {
-  isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
-  title: string;
-  children: ReactNode;
-  footer?: ReactNode;
-  className?: string;
-  hideTitle?: boolean;
-  bodyClassName?: string;
+/**
+ * Los diálogos anidados viven en un portal, pero sus eventos suben por el
+ * árbol de React hasta el arrastre de vaul: un roce sobre ellos movía la hoja.
+ */
+function stopPortalPointer(event: PointerEvent<HTMLDivElement>) {
+  if (!event.currentTarget.contains(event.target as Node)) event.stopPropagation();
 }
 
 /**
- * Variante de `Sheet` sobre vaul: al abrirse, la página de detrás se encoge
- * y se redondea como las hojas de iOS. Requiere el `[vaul-drawer-wrapper]`
- * del layout raíz.
+ * Hoja sobre vaul: al abrirse, la página de detrás se encoge y se redondea
+ * como en iOS. Requiere el `[vaul-drawer-wrapper]` del layout raíz.
+ *
+ * Va sin `modal` a propósito: el modo modal de Radix atrapa el foco y anula
+ * los clics fuera de la hoja, y los popovers y diálogos de HeroUI que se
+ * abren desde dentro viven en otro portal. El fondo oscuro y el cierre al
+ * tocarlo los pone esta hoja.
  */
 export function BottomSheet({
   isOpen,
@@ -32,8 +34,9 @@ export function BottomSheet({
   className,
   hideTitle = false,
   bodyClassName,
-}: BottomSheetProps) {
+}: SheetProps) {
   const t = useTranslations("common.actions");
+  const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -41,11 +44,31 @@ export function BottomSheet({
   }, [isOpen]);
 
   return (
-    <Drawer.Root open={isOpen} onOpenChange={onOpenChange} shouldScaleBackground>
+    <Drawer.Root
+      open={isOpen}
+      onOpenChange={onOpenChange}
+      modal={false}
+      shouldScaleBackground
+      setBackgroundColorOnScale={false}
+    >
       <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 z-50 bg-[var(--app-scrim)]" />
+        <div
+          aria-hidden
+          data-state={isOpen ? "open" : "closed"}
+          onClick={() => onOpenChange(false)}
+          className={cn(
+            "fixed inset-0 z-50 touch-none bg-(--app-scrim)",
+            "data-[state=open]:animate-[fadeIn_0.5s_cubic-bezier(0.32,0.72,0,1)]",
+            "data-[state=closed]:animate-[fadeOut_0.5s_cubic-bezier(0.32,0.72,0,1)_forwards]",
+          )}
+        />
         <Drawer.Content
+          ref={contentRef}
           aria-describedby={undefined}
+          // Escape dentro de un diálogo anidado lo cierra a él, no a la hoja
+          onEscapeKeyDown={(event) => {
+            if (!contentRef.current?.contains(document.activeElement)) event.preventDefault();
+          }}
           className={cn(
             "[--sheet-visible-height:calc(var(--visual-viewport-height,100dvh)_-_env(safe-area-inset-top)_-_8px)]",
             "bg-app-bg fixed inset-x-0 bottom-0 z-50 mx-auto flex min-h-[min(85dvh,var(--sheet-visible-height))] max-h-[min(90dvh,var(--sheet-visible-height))] w-full flex-col outline-none",
@@ -55,7 +78,7 @@ export function BottomSheet({
           )}
         >
           <div className="grid shrink-0 place-items-center pt-[9px] pb-[3px]">
-            <Drawer.Handle className="!bg-app-border !h-[5px] !w-[38px] !opacity-100" />
+            <Drawer.Handle className="bg-app-border! h-[5px]! w-[38px]! opacity-100!" />
           </div>
 
           <div className="flex shrink-0 items-center justify-between pt-0.5 pr-3.5 pl-[22px] sm:pr-4 sm:pl-7">
@@ -79,6 +102,7 @@ export function BottomSheet({
 
           <div
             data-slot="drawer-body"
+            onPointerDown={stopPortalPointer}
             className={cn(
               "scroll-clean min-h-0 flex-1 overflow-y-auto px-[22px] pt-2.5 sm:px-7",
               bodyClassName,
@@ -88,7 +112,10 @@ export function BottomSheet({
           </div>
 
           {footer ? (
-            <div className="shrink-0 px-[22px] pt-3 pb-[calc(16px+env(safe-area-inset-bottom))] sm:px-7 sm:pb-6">
+            <div
+              onPointerDown={stopPortalPointer}
+              className="shrink-0 px-[22px] pt-3 pb-[calc(16px+env(safe-area-inset-bottom))] sm:px-7 sm:pb-6"
+            >
               {footer}
             </div>
           ) : (
