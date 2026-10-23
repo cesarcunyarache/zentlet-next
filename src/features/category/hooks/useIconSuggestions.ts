@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 import { generateCategory } from "../ai/actions/category-generator";
 import type { CategoryIcon } from "../ai/schemas/category-ai.schema";
+import { withCurrentFirst } from "../lib/icon-order";
 import { useCategoryStore } from "../stores/category.store";
 import type { EditableCategory } from "../types";
 
@@ -25,10 +26,6 @@ async function fetchAiIcons(name: string): Promise<CategoryIcon[] | null> {
   } catch {
     return null;
   }
-}
-
-function withCurrentFirst(icons: CategoryIcon[], current: CategoryIcon | null) {
-  return current ? [current, ...icons.filter((item) => item.icon !== current.icon)] : icons;
 }
 
 interface IconSuggestionsOptions {

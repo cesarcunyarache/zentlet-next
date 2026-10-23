@@ -1,9 +1,13 @@
 "use client";
 
+import { useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { Sheet } from "@/core/components/ui/sheet";
 import type { EditableCategory } from "../types";
 import { CategoryForm } from "./category-form";
+import { loadEmojiSearch } from "./category-icon-editor";
+
+const PRELOAD_DELAY_MS = 4000;
 
 interface CategoryFormSheetProps {
   isOpen: boolean;
@@ -14,6 +18,12 @@ interface CategoryFormSheetProps {
 
 export function CategoryFormSheet({ isOpen, category, initialName, onClose }: CategoryFormSheetProps) {
   const t = useTranslations("categories.form");
+
+  useEffect(() => {
+    if (!navigator.onLine) return;
+    const timer = setTimeout(() => void loadEmojiSearch().catch(() => undefined), PRELOAD_DELAY_MS);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <Sheet

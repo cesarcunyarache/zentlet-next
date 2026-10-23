@@ -6,7 +6,23 @@
     "edit": "Edit category",
     "nameLabel": "Category name",
     "namePlaceholder": "Category",
-    "aiUnavailable": "We couldn't suggest icons right now. Pick a basic one.",
-    "aiOffline": "You're offline: pick a basic icon. It will be saved on this device."
+    "aiUnavailable": "We couldn't suggest icons right now. Tap the icon to pick your own.",
+    "aiOffline": "You're offline: tap the icon to pick your own. It will be saved on this device.",
+    "customize": {
+      "open": "Choose icon and color",
+      "title": "Your icon",
+      "hue": "Hue",
+      "saturation": "Intensity",
+      "lightness": "Lightness",
+      "done": "Done",
+      "searchPlaceholder": "Search emoji",
+      "searchLabel": "Search for an emoji",
+      "searchClear": "Clear",
+      "searchResultsNone": "No results",
+      "categoryNavigation": "Categories",
+      "loading": "Loading…",
+      "loadingError": "Couldn't load the emojis.",
+      "retryLoading": "Retry"
+    }
   }
 }
