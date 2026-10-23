@@ -66,8 +66,8 @@ importers:
         specifier: 5.1.0
         version: 5.1.0(react@19.2.4)
       framer-motion:
-        specifier: ^12.42.2
-        version: 12.42.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+        specifier: ^14.4.0
+        version: 14.4.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       idb-keyval:
         specifier: ^6.3.0
         version: 6.3.0
@@ -3574,6 +3574,17 @@ packages:
       react-dom:
         optional: true
 
+  framer-motion@14.4.0:
+    resolution: {integrity: sha512-HtO1fxord2rnXYRyr1laG4uY7+OtgwDc9Szcg1wlMq/LF7BO3/S7a+KEo691U7pSi+i0ueRuRqaD1UaLEmZHuQ==}
+    peerDependencies:
+      react: ^18.0.0 || ^19.0.0
+      react-dom: ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-dom:
+        optional: true
+
   fresh@2.0.0:
     resolution: {integrity: sha512-Rx/WycZ60HOaqLKAi6cHRKKI7zxWbJ31MhntmtwMoaTeF7XFH9hhBp8vITaMidfljRQ6eYWCKkaTK+ykVJHP2A==}
     engines: {node: '>= 0.8'}
@@ -4381,8 +4392,14 @@ packages:
   motion-dom@12.42.2:
     resolution: {integrity: sha512-5gIMWLp/PycBtJRJWRgjxke5n8dlvkSn2DrYW+tr3XcqAZY1xZh6BJyooJXCM8wdfM7wfMjkBJNLge1CKPUIRA==}
 
+  motion-dom@14.4.0:
+    resolution: {integrity: sha512-1q8RyHSdr5COpzrv3JgJ9XRjOO88ZN9CwflpkGgyO/SR/SNRP/dD6EU8SEo092kcKY34IzHC5diJPKrQRMA8lQ==}
+
   motion-utils@12.39.0:
     resolution: {integrity: sha512-8nadJAJjTtqRkmRF36FoJTrywK9nnFmnPwnSMyxaOCU7GDjN9RTMJIxx9De8ErM+vpPhMccr/6fo5WciyQLnMQ==}
+
+  motion-utils@14.1.1:
+    resolution: {integrity: sha512-3VvN5Uvf8B6qG+OfOui6Nht5EWp+vLuU3IqcAj7ItZGKqtmTjCebl5sGZF7/08gEHRnEl1AP/fIwbcEyVrcQGQ==}
 
   motion@12.42.2:
     resolution: {integrity: sha512-Atvv11yUKIid41cVrRBDVX5m8tF8kNpExRSlbpt6APClhDjtwQssgFHhQzejxw7/7YYbjHSPKBVbHo05BuJT5Q==}
@@ -5830,7 +5847,7 @@ snapshots:
       '@react-types/shared': 3.36.0(react@19.2.4)
       '@spectrum-icons/ui': 3.7.1(@adobe/react-spectrum@3.47.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@spectrum-icons/workflow': 4.3.1(@adobe/react-spectrum@3.47.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
-      '@swc/helpers': 0.5.15
+      '@swc/helpers': 0.5.23
       client-only: 0.0.1
       clsx: 2.1.1
       react: 19.2.4
@@ -7495,7 +7512,7 @@ snapshots:
       '@adobe/react-spectrum': 3.47.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@adobe/react-spectrum-ui': 1.2.1(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@babel/runtime': 7.29.7
-      '@swc/helpers': 0.5.15
+      '@swc/helpers': 0.5.23
       react: 19.2.4
       react-dom: 19.2.4(react@19.2.4)
 
@@ -7503,7 +7520,7 @@ snapshots:
     dependencies:
       '@adobe/react-spectrum': 3.47.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@adobe/react-spectrum-workflow': 2.3.5(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
-      '@swc/helpers': 0.5.15
+      '@swc/helpers': 0.5.23
       react: 19.2.4
       react-dom: 19.2.4(react@19.2.4)
 
@@ -9076,6 +9093,15 @@ snapshots:
       react: 19.2.4
       react-dom: 19.2.4(react@19.2.4)
 
+  framer-motion@14.4.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
+    dependencies:
+      motion-dom: 14.4.0
+      motion-utils: 14.1.1
+      tslib: 2.8.1
+    optionalDependencies:
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
+
   fresh@2.0.0: {}
 
   fs-extra@11.4.1:
@@ -9792,7 +9818,13 @@ snapshots:
     dependencies:
       motion-utils: 12.39.0
 
+  motion-dom@14.4.0:
+    dependencies:
+      motion-utils: 14.1.1
+
   motion-utils@12.39.0: {}
+
+  motion-utils@14.1.1: {}
 
   motion@12.42.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
     dependencies:
@@ -10352,7 +10384,7 @@ snapshots:
     dependencies:
       '@internationalized/date': 3.12.2
       '@react-types/shared': 3.36.0(react@19.2.4)
-      '@swc/helpers': 0.5.15
+      '@swc/helpers': 0.5.23
       client-only: 0.0.1
       react: 19.2.4
       react-aria: 3.50.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -10379,7 +10411,7 @@ snapshots:
       '@internationalized/number': 3.6.7
       '@internationalized/string': 3.2.9
       '@react-types/shared': 3.36.0(react@19.2.4)
-      '@swc/helpers': 0.5.15
+      '@swc/helpers': 0.5.23
       aria-hidden: 1.2.6
       clsx: 2.1.1
       react: 19.2.4

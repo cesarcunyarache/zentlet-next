@@ -37,7 +37,7 @@
     "clsx": "^2.1.1",
     "dotenv": "^17.4.2",
     "emoji-picker-react": "5.1.0",
-    "framer-motion": "^12.42.2",
+    "framer-motion": "^14.4.0",
     "idb-keyval": "^6.3.0",
     "ioredis": "^6.0.0",
     "jsqr": "^1.4.0",
