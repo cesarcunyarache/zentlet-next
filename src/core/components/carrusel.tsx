@@ -12,6 +12,7 @@ interface GestureCarouselProps {
   items: CarouselItem[];
   value?: CarouselItem;
   onChange?: (item: CarouselItem) => void;
+  onTap?: () => void;
 }
 
 const slideVariants = {
@@ -39,6 +40,7 @@ export function GestureCarousel({
   items,
   value,
   onChange,
+  onTap,
 }: GestureCarouselProps) {
   const [direction, setDirection] = useState(0);
 
@@ -96,6 +98,7 @@ export function GestureCarousel({
           dragElastic={1}
           dragConstraints={{ left: 0, right: 0 }}
           onDragEnd={handleDragEnd}
+          onTap={onTap}
           className="absolute inset-0 flex cursor-grab items-center justify-center active:cursor-grabbing"
         >
           <div

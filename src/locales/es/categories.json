@@ -6,7 +6,23 @@
     "edit": "Editar categoría",
     "nameLabel": "Nombre de la categoría",
     "namePlaceholder": "Categoría",
-    "aiUnavailable": "No pudimos sugerir iconos ahora. Elige uno básico.",
-    "aiOffline": "Sin conexión: elige un icono básico. Se guardará en este dispositivo."
+    "aiUnavailable": "No pudimos sugerir iconos ahora. Toca el icono para elegir el tuyo.",
+    "aiOffline": "Sin conexión: toca el icono para elegir el tuyo. Se guardará en este dispositivo.",
+    "customize": {
+      "open": "Elegir icono y color",
+      "title": "Tu icono",
+      "hue": "Tono",
+      "saturation": "Intensidad",
+      "lightness": "Claridad",
+      "done": "Listo",
+      "searchPlaceholder": "Buscar emoji",
+      "searchLabel": "Buscar un emoji",
+      "searchClear": "Borrar",
+      "searchResultsNone": "Sin resultados",
+      "categoryNavigation": "Categorías",
+      "loading": "Cargando…",
+      "loadingError": "No se pudieron cargar los emojis.",
+      "retryLoading": "Reintentar"
+    }
   }
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
+import { useTranslations } from "next-intl";
 import { GestureCarousel } from "@/core/components/carrusel";
 import type { CategoryIcon } from "../ai/schemas/category-ai.schema";
 
@@ -18,11 +19,23 @@ interface CategoryIconPickerProps {
   value: CategoryIcon;
   isLoading: boolean;
   onChange: (icon: CategoryIcon) => void;
+  onCustomize: () => void;
 }
 
-export function CategoryIconPicker({ icons, value, isLoading, onChange }: CategoryIconPickerProps) {
+export function CategoryIconPicker({ icons, value, isLoading, onChange, onCustomize }: CategoryIconPickerProps) {
+  const t = useTranslations("categories.form.customize");
+
   return (
-    <div className="h-32 w-32">
+    <div className="relative h-32 w-32">
+      {icons.length > 0 && !isLoading ? (
+        <button
+          type="button"
+          onClick={onCustomize}
+          className="bg-app-surface text-app-fg sr-only z-20 rounded-full px-3 py-1 text-xs font-semibold focus:not-sr-only focus:absolute focus:-bottom-3 focus:left-1/2 focus:-translate-x-1/2 focus:whitespace-nowrap"
+        >
+          {t("open")}
+        </button>
+      ) : null}
       <AnimatePresence mode="wait">
         {isLoading ? (
           <motion.div
@@ -39,7 +52,7 @@ export function CategoryIconPicker({ icons, value, isLoading, onChange }: Catego
           </motion.div>
         ) : icons.length > 0 ? (
           <motion.div key="carousel" {...POP_IN} className="h-full w-full">
-            <GestureCarousel items={icons} value={value} onChange={onChange} />
+            <GestureCarousel items={icons} value={value} onChange={onChange} onTap={onCustomize} />
           </motion.div>
         ) : null}
       </AnimatePresence>
