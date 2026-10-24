@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@heroui/react";
 import { useTranslations } from "next-intl";
+import { SettingsRow } from "@/features/account/ui/settings-row";
 import { useWhatsappLink } from "../hooks/useWhatsappLink";
 import { WhatsappConnectionPanel } from "./whatsapp-connection-panel";
 
@@ -15,14 +16,11 @@ export function WhatsappRow() {
   if (!whatsapp.connection?.isAvailable) return null;
 
   return (
-    <div className="border-app-border border-b">
-      <div className="flex items-center justify-between gap-3.5 py-3.5">
-        <span>
-          <span className="text-app-fg block text-[14.5px] font-semibold">{t("label")}</span>
-          <span className="text-app-muted mt-px block text-xs">
-            {whatsapp.connection.phone ? t("connected") : t("hint")}
-          </span>
-        </span>
+    <div>
+      <SettingsRow
+        label={t("label")}
+        hint={whatsapp.connection.phone ? t("connected") : t("hint")}
+      >
         <button
           type="button"
           aria-expanded={isExpanded}
@@ -32,7 +30,7 @@ export function WhatsappRow() {
           {t(isExpanded ? "hide" : "configure")}
           <ChevronDown className={cn("size-3.5 transition-transform", isExpanded && "rotate-180")} aria-hidden />
         </button>
-      </div>
+      </SettingsRow>
       {isExpanded ? <WhatsappConnectionPanel whatsapp={whatsapp} /> : null}
     </div>
   );

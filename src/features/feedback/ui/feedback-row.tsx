@@ -1,9 +1,9 @@
 "use client";
 
-import { MessageSquare } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { AlertDialog } from "@heroui/react";
 import { useTranslations } from "next-intl";
+import { SettingsButtonRow } from "@/features/account/ui/settings-row";
 import { SPRING_LAYOUT } from "@/lib/ease";
 import { useFeedbackDialog } from "../hooks/useFeedbackDialog";
 import { feedbackViewOf } from "../lib/feedback-form";
@@ -21,18 +21,12 @@ export function FeedbackRow() {
 
   return (
     <>
-      <button
-        type="button"
+      <SettingsButtonRow
+        label={t("label")}
+        hint={t("hint")}
         onClick={dialog.open}
-        aria-haspopup="dialog"
-        className="border-app-border flex w-full items-center justify-between gap-3.5 border-b py-3.5 text-left"
-      >
-        <span>
-          <span className="text-app-fg block text-[14.5px] font-semibold">{t("label")}</span>
-          <span className="text-app-muted mt-px block text-xs">{t("hint")}</span>
-        </span>
-        <MessageSquare className="text-app-muted size-4 shrink-0" aria-hidden />
-      </button>
+        hasPopup
+      />
 
       <AlertDialog.Backdrop
         isOpen={dialog.isOpen}

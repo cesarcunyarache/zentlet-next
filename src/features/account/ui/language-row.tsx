@@ -29,7 +29,6 @@ export function LanguageRow() {
         value={locale}
         options={LANGUAGES}
         onChange={changeLanguage}
-        className="bg-app-fill"
       />
     </SettingsRow>
   );
