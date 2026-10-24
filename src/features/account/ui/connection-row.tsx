@@ -13,7 +13,7 @@ export function ConnectionRow() {
   const hint = connectionHint({ isOnline, pendingCount, syncingCount });
 
   return (
-    <div role="status" aria-live="polite" className="border-app-border border-b py-3.5">
+    <div role="status" aria-live="polite" className="mb-6">
       <div className="flex items-center justify-between gap-3.5">
         <SettingsRowText label={t("label")} hint={t(hint.key, hint.values)} />
         <ConnectionBadge isOnline={isOnline} label={t(isOnline ? "online" : "offline")} />

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@heroui/react";
 import { useTranslations } from "next-intl";
+import { SettingsRow } from "@/features/account/ui/settings-row";
 import { UpgradePrompt } from "@/features/billing/ui/upgrade-button";
 import { EmailConnectionPanel } from "./email-connection-panel";
 
@@ -14,12 +15,8 @@ export function EmailImportRow() {
   const isAllowed = true;
 
   return (
-    <div className="border-app-border border-b">
-      <div className="flex items-center justify-between gap-3.5 py-3.5">
-        <span>
-          <span className="text-app-fg block text-[14.5px] font-semibold">{t("label")}</span>
-          <span className="text-app-muted mt-px block text-xs">{isAllowed ? t("hint") : tPaywall("email_import")}</span>
-        </span>
+    <div>
+      <SettingsRow label={t("label")} hint={isAllowed ? t("hint") : tPaywall("email_import")}>
         {isAllowed ? (
           <button
             type="button"
@@ -33,7 +30,7 @@ export function EmailImportRow() {
         ) : (
           <UpgradePrompt />
         )}
-      </div>
+      </SettingsRow>
       {isAllowed && isExpanded ? <EmailConnectionPanel /> : null}
     </div>
   );

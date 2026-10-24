@@ -22,7 +22,6 @@ export function CurrencyRow({ currency, onCurrencyChange }: CurrencyRowProps) {
         options={options}
         onChange={onCurrencyChange}
         display={currencySymbol(currency)}
-        className="bg-app-fill"
       />
     </SettingsRow>
   );

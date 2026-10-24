@@ -15,6 +15,7 @@ import { CurrencyRow } from "./currency-row";
 import { DataExportRow } from "./data-export-row";
 import { DeleteAccountRow } from "./delete-account-row";
 import { LanguageRow } from "./language-row";
+import { SettingsGroup } from "./settings-row";
 import { SignOutRow } from "./sign-out-row";
 
 interface SettingsSheetProps {
@@ -36,18 +37,36 @@ export function SettingsSheet({
 
   return (
     <Sheet isOpen={isOpen} onOpenChange={onOpenChange} title={t("title")}>
-      <PlanRow />
       <ConnectionRow />
-      <CurrencyRow currency={currency} onCurrencyChange={onCurrencyChange} />
-      <LanguageRow />
-      <AppearanceRow />
-      <EmailImportRow />
-      <WhatsappRow />
-      <DataExportRow transactionCount={transactionCount} currencySymbol={currencySymbol(currency)} />
-      {analyticsAvailable && <AnalyticsRow />}
-      <FeedbackRow />
-      <SignOutRow />
-      <DeleteAccountRow transactionCount={transactionCount} />
+
+      <SettingsGroup>
+        <PlanRow />
+      </SettingsGroup>
+
+      <SettingsGroup title={t("groups.preferences")}>
+        <CurrencyRow currency={currency} onCurrencyChange={onCurrencyChange} />
+        <LanguageRow />
+        <AppearanceRow />
+      </SettingsGroup>
+
+      <SettingsGroup title={t("groups.integrations")}>
+        <EmailImportRow />
+        <WhatsappRow />
+      </SettingsGroup>
+
+      <SettingsGroup title={t("groups.data")}>
+        <DataExportRow transactionCount={transactionCount} currencySymbol={currencySymbol(currency)} />
+        {analyticsAvailable && <AnalyticsRow />}
+      </SettingsGroup>
+
+      <SettingsGroup>
+        <FeedbackRow />
+      </SettingsGroup>
+
+      <SettingsGroup title={t("groups.account")}>
+        <SignOutRow />
+        <DeleteAccountRow transactionCount={transactionCount} />
+      </SettingsGroup>
     </Sheet>
   );
 }

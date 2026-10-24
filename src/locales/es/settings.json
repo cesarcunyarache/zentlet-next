@@ -1,5 +1,11 @@
 {
   "title": "Ajustes",
+  "groups": {
+    "preferences": "Preferencias",
+    "integrations": "Integraciones",
+    "data": "Datos y privacidad",
+    "account": "Cuenta"
+  },
   "currency": {
     "label": "Moneda",
     "hint": "Solo cambia el símbolo mostrado",
