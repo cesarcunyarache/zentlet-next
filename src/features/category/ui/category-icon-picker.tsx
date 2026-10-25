@@ -18,11 +18,19 @@ interface CategoryIconPickerProps {
   icons: CategoryIcon[];
   value: CategoryIcon;
   isLoading: boolean;
+  canTapToCustomize: boolean;
   onChange: (icon: CategoryIcon) => void;
   onCustomize: () => void;
 }
 
-export function CategoryIconPicker({ icons, value, isLoading, onChange, onCustomize }: CategoryIconPickerProps) {
+export function CategoryIconPicker({
+  icons,
+  value,
+  isLoading,
+  canTapToCustomize,
+  onChange,
+  onCustomize,
+}: CategoryIconPickerProps) {
   const t = useTranslations("categories.form.customize");
 
   return (
@@ -52,7 +60,13 @@ export function CategoryIconPicker({ icons, value, isLoading, onChange, onCustom
           </motion.div>
         ) : icons.length > 0 ? (
           <motion.div key="carousel" {...POP_IN} className="h-full w-full">
-            <GestureCarousel items={icons} value={value} onChange={onChange} onTap={onCustomize} />
+            <GestureCarousel
+              items={icons}
+              value={value}
+              onChange={onChange}
+              onTap={canTapToCustomize ? onCustomize : undefined}
+              onLongPress={onCustomize}
+            />
           </motion.div>
         ) : null}
       </AnimatePresence>

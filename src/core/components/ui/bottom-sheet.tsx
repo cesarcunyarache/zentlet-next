@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef, type PointerEvent } from "react";
+import { useEffect, useRef, type CSSProperties, type PointerEvent } from "react";
 import { Drawer } from "vaul";
 import { cn } from "@heroui/react";
 import { X } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useVisualViewportHeight } from "@/core/hooks/useVisualViewportHeight";
 import { showStatusBarScrim } from "@/core/theme/theme";
 import type { SheetProps } from "./sheet-props";
 
@@ -37,6 +38,9 @@ export function BottomSheet({
 }: SheetProps) {
   const t = useTranslations("common.actions");
   const contentRef = useRef<HTMLDivElement>(null);
+  const viewportHeight = useVisualViewportHeight(isOpen);
+  const viewportStyle =
+    viewportHeight === null ? undefined : ({ "--visual-viewport-height": `${viewportHeight}px` } as CSSProperties);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -65,6 +69,7 @@ export function BottomSheet({
         <Drawer.Content
           ref={contentRef}
           aria-describedby={undefined}
+          style={viewportStyle}
           // Escape dentro de un diálogo anidado lo cierra a él, no a la hoja
           onEscapeKeyDown={(event) => {
             if (!contentRef.current?.contains(document.activeElement)) event.preventDefault();
