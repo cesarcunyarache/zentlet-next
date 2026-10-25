@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, type PanInfo } from "framer-motion";
 
 export interface CarouselItem {
@@ -13,6 +13,7 @@ interface GestureCarouselProps {
   value?: CarouselItem;
   onChange?: (item: CarouselItem) => void;
   onTap?: () => void;
+  onLongPress?: () => void;
 }
 
 const slideVariants = {
@@ -32,6 +33,7 @@ const slideVariants = {
 };
 
 const SWIPE_CONFIDENCE_THRESHOLD = 10000;
+const LONG_PRESS_MS = 500;
 
 const swipePower = (offset: number, velocity: number) =>
   Math.abs(offset) * velocity;
@@ -41,8 +43,29 @@ export function GestureCarousel({
   value,
   onChange,
   onTap,
+  onLongPress,
 }: GestureCarouselProps) {
   const [direction, setDirection] = useState(0);
+  const longPressTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const longPressFired = useRef(false);
+
+  useEffect(() => () => clearTimeout(longPressTimer.current), []);
+
+  const startLongPress = () => {
+    longPressFired.current = false;
+    if (!onLongPress) return;
+    longPressTimer.current = setTimeout(() => {
+      longPressFired.current = true;
+      onLongPress();
+    }, LONG_PRESS_MS);
+  };
+
+  const cancelLongPress = () => clearTimeout(longPressTimer.current);
+
+  const handleTap = () => {
+    cancelLongPress();
+    if (!longPressFired.current) onTap?.();
+  };
 
   const currentIndex = Math.max(
     items.findIndex((item) => item.icon === value?.icon),
@@ -97,9 +120,13 @@ export function GestureCarousel({
           drag="x"
           dragElastic={1}
           dragConstraints={{ left: 0, right: 0 }}
+          onDragStart={cancelLongPress}
           onDragEnd={handleDragEnd}
-          onTap={onTap}
-          className="absolute inset-0 flex cursor-grab items-center justify-center active:cursor-grabbing"
+          onTapStart={startLongPress}
+          onTap={handleTap}
+          onTapCancel={cancelLongPress}
+          onContextMenu={(event) => event.preventDefault()}
+          className="absolute inset-0 flex cursor-grab touch-pan-y items-center justify-center select-none [-webkit-touch-callout:none] active:cursor-grabbing"
         >
           <div
             className="flex h-full w-full items-center justify-center p-8"

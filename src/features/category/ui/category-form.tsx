@@ -100,6 +100,7 @@ export function CategoryForm({ onSuccess, initialName = "", category }: Category
           icons={icons}
           value={{ icon, color }}
           isLoading={isLoading}
+          canTapToCustomize={isAiUnavailable}
           onChange={selectIcon}
           onCustomize={() => setIsCustomizing(true)}
         />
