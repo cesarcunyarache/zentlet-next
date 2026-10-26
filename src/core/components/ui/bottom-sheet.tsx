@@ -5,7 +5,8 @@ import { Drawer } from "vaul";
 import { cn } from "@heroui/react";
 import { X } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useVisualViewportHeight } from "@/core/hooks/useVisualViewportHeight";
+import { useBodyScrollLock } from "@/core/hooks/useBodyScrollLock";
+import { isKeyboardOpen, useVisualViewportHeight } from "@/core/hooks/useVisualViewportHeight";
 import { showStatusBarScrim } from "@/core/theme/theme";
 import type { SheetProps } from "./sheet-props";
 
@@ -18,8 +19,11 @@ function stopPortalPointer(event: PointerEvent<HTMLDivElement>) {
 }
 
 /**
- * Hoja sobre vaul: al abrirse, la página de detrás se encoge y se redondea
- * como en iOS. Requiere el `[vaul-drawer-wrapper]` del layout raíz.
+ * Hoja sobre vaul. La página de detrás no se encoge: en la PWA de iOS la
+ * barra de estado queda fuera de la página y no puede encogerse con ella.
+ *
+ * El teclado lo resuelve esta hoja y no vaul, que no tiene en cuenta el
+ * desplazamiento de iOS al enfocar un campo y dejaba la hoja fuera de pantalla.
  *
  * Va sin `modal` a propósito: el modo modal de Radix atrapa el foco y anula
  * los clics fuera de la hoja, y los popovers y diálogos de HeroUI que se
@@ -38,9 +42,18 @@ export function BottomSheet({
 }: SheetProps) {
   const t = useTranslations("common.actions");
   const contentRef = useRef<HTMLDivElement>(null);
-  const viewportHeight = useVisualViewportHeight(isOpen);
+  const viewport = useVisualViewportHeight(isOpen);
   const viewportStyle =
-    viewportHeight === null ? undefined : ({ "--visual-viewport-height": `${viewportHeight}px` } as CSSProperties);
+    viewport === null
+      ? undefined
+      : ({
+          "--visual-viewport-height": `${viewport.height}px`,
+          // con el teclado fuera, la barra de inicio queda tapada y no hace falta dejarle sitio
+          ...(isKeyboardOpen(viewport) && { "--sheet-bottom-inset": "0px" }),
+          bottom: viewport.bottomOffset,
+        } as CSSProperties);
+
+  useBodyScrollLock(isOpen);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -52,8 +65,7 @@ export function BottomSheet({
       open={isOpen}
       onOpenChange={onOpenChange}
       modal={false}
-      shouldScaleBackground
-      setBackgroundColorOnScale={false}
+      repositionInputs={false}
     >
       <Drawer.Portal>
         <div
@@ -76,7 +88,7 @@ export function BottomSheet({
           }}
           className={cn(
             "[--sheet-visible-height:calc(var(--visual-viewport-height,100dvh)_-_env(safe-area-inset-top)_-_8px)]",
-            "bg-app-bg fixed inset-x-0 bottom-0 z-50 mx-auto flex min-h-[min(85dvh,var(--sheet-visible-height))] max-h-[min(90dvh,var(--sheet-visible-height))] w-full flex-col outline-none",
+            "bg-app-bg fixed inset-x-0 bottom-0 z-50 mx-auto flex h-[min(95dvh,var(--sheet-visible-height))] w-full flex-col outline-none",
             "rounded-t-[34px] shadow-[var(--shadow-sheet)]",
             "sm:max-w-[520px]",
             className,
@@ -109,7 +121,7 @@ export function BottomSheet({
             data-slot="drawer-body"
             onPointerDown={stopPortalPointer}
             className={cn(
-              "scroll-clean min-h-0 flex-1 overflow-y-auto px-[22px] pt-2.5 sm:px-7",
+              "scroll-clean min-h-0 flex-1 overflow-y-auto overscroll-contain px-[22px] pt-2.5 sm:px-7",
               bodyClassName,
             )}
           >
@@ -119,12 +131,12 @@ export function BottomSheet({
           {footer ? (
             <div
               onPointerDown={stopPortalPointer}
-              className="shrink-0 px-[22px] pt-3 pb-[calc(16px+env(safe-area-inset-bottom))] sm:px-7 sm:pb-6"
+              className="shrink-0 px-[22px] pt-3 pb-[max(12px,var(--sheet-bottom-inset,env(safe-area-inset-bottom)))] sm:px-7 sm:pb-6"
             >
               {footer}
             </div>
           ) : (
-            <div className="h-[calc(16px+env(safe-area-inset-bottom))] shrink-0 sm:h-6" />
+            <div className="h-[max(12px,var(--sheet-bottom-inset,env(safe-area-inset-bottom)))] shrink-0 sm:h-6" />
           )}
         </Drawer.Content>
       </Drawer.Portal>

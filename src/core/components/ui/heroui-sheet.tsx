@@ -60,7 +60,7 @@ export function HeroUISheet({
         <Drawer.Dialog
           className={cn(
             "[--sheet-visible-height:calc(var(--visual-viewport-height,100dvh)_-_env(safe-area-inset-top)_-_8px)]",
-            "bg-app-bg flex min-h-[min(85dvh,var(--sheet-visible-height))] max-h-[min(90dvh,var(--sheet-visible-height))] w-full flex-col p-0",
+            "bg-app-bg flex h-[min(95dvh,var(--sheet-visible-height))] w-full flex-col p-0",
             "rounded-t-[34px] shadow-[var(--shadow-sheet)]",
             "sm:max-w-[520px] sm:rounded-[28px]",
             className,
