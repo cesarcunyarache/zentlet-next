@@ -24,6 +24,8 @@ function stopPortalPointer(event: PointerEvent<HTMLDivElement>) {
  *
  * El teclado lo resuelve esta hoja y no vaul, que no tiene en cuenta el
  * desplazamiento de iOS al enfocar un campo y dejaba la hoja fuera de pantalla.
+ * La hoja se ancla por arriba al borde inferior de la zona visible, que es lo
+ * único que iOS informa bien con el teclado abierto.
  *
  * Va sin `modal` a propósito: el modo modal de Radix atrapa el foco y anula
  * los clics fuera de la hoja, y los popovers y diálogos de HeroUI que se
@@ -50,7 +52,8 @@ export function BottomSheet({
           "--visual-viewport-height": `${viewport.height}px`,
           // con el teclado fuera, la barra de inicio queda tapada y no hace falta dejarle sitio
           ...(isKeyboardOpen(viewport) && { "--sheet-bottom-inset": "0px" }),
-          bottom: viewport.bottomOffset,
+          top: `calc(${viewport.offsetTop + viewport.height}px - var(--sheet-height))`,
+          bottom: "auto",
         } as CSSProperties);
 
   useBodyScrollLock(isOpen);
@@ -96,7 +99,8 @@ export function BottomSheet({
           }}
           className={cn(
             "[--sheet-visible-height:calc(var(--visual-viewport-height,100dvh)_-_env(safe-area-inset-top)_-_8px)]",
-            "bg-app-bg fixed inset-x-0 bottom-0 z-50 mx-auto flex h-[min(95dvh,var(--sheet-visible-height))] w-full flex-col outline-none",
+            "[--sheet-height:min(95dvh,var(--sheet-visible-height))]",
+            "bg-app-bg fixed inset-x-0 bottom-0 z-50 mx-auto flex h-(--sheet-height) w-full flex-col outline-none",
             "rounded-t-[34px] shadow-[var(--shadow-sheet)]",
             "sm:max-w-[520px]",
             className,
