@@ -106,12 +106,9 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Con una hoja de vaul abierta, la página encogida deja ver este fondo y no
-   se desplaza detrás. Va en CSS porque al encadenar hojas el reinicio de
-   vaul dejaba el fondo claro mientras la siguiente seguía abierta. */
-body:has([data-vaul-drawer]) {
-  overflow: hidden;
-  background: black;
+/* Con una hoja abierta, ni el rebote de iOS mueve la página de detrás. */
+html:has([data-vaul-drawer]) {
+  overscroll-behavior: none;
 }
 
 /*

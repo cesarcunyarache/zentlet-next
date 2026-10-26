@@ -78,8 +78,7 @@ export default async function RootLayout({ children, params }: Readonly<LocaleLa
       <body className="min-h-full flex flex-col">
         <NextIntlClientProvider messages={messages}>
           <QueryProvider>
-            {/* vaul encoge este contenedor detrás de las hojas con `shouldScaleBackground` */}
-            <div vaul-drawer-wrapper="" className="bg-app-bg flex min-h-full flex-1 flex-col">
+            <div className="bg-app-bg flex min-h-full flex-1 flex-col">
               {children}
             </div>
           </QueryProvider>
