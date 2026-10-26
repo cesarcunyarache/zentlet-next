@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type CSSProperties, type PointerEvent } from "react";
+import { useEffect, useLayoutEffect, useRef, type CSSProperties, type PointerEvent } from "react";
 import { Drawer } from "vaul";
 import { cn } from "@heroui/react";
 import { X } from "lucide-react";
@@ -54,6 +54,14 @@ export function BottomSheet({
         } as CSSProperties);
 
   useBodyScrollLock(isOpen);
+
+  // `autoFocus` enfoca con la hoja aún fuera de pantalla por la animación y
+  // iOS desplaza toda la vista para mostrar el campo. Se enfoca en el mismo
+  // gesto para que salga el teclado, pero sin ese desplazamiento.
+  useLayoutEffect(() => {
+    if (!isOpen) return;
+    contentRef.current?.querySelector<HTMLElement>("[data-sheet-autofocus]")?.focus({ preventScroll: true });
+  }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen) return;

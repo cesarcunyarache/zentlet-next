@@ -106,7 +106,7 @@ export function TransactionFormSheet({
             maxLength={DESCRIPTION_MAX_LENGTH}
             autoComplete="off"
             aria-label={t("transactions.fields.description")}
-            autoFocus
+            data-sheet-autofocus
             className="font-display text-app-fg placeholder:text-app-muted/50 w-full border-0 bg-transparent text-[30px] leading-tight font-bold tracking-[-0.03em] outline-none"
           />
 
