@@ -27,7 +27,7 @@ export function BudgetAmountField({ currency, rawAmount, onChange }: BudgetAmoun
           placeholder="0"
           maxLength={MAX_AMOUNT_LENGTH}
           autoComplete="off"
-          autoFocus
+          data-sheet-autofocus
           className="placeholder:text-app-muted/40 min-w-0 flex-1 border-0 bg-transparent p-0 outline-none"
         />
       </span>
