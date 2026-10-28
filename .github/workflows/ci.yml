@@ -101,7 +101,7 @@ jobs:
           node-version-file: .nvmrc
 
       - run: pnpm install --frozen-lockfile
-      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm --filter @zentlet/web exec playwright install --with-deps chromium
       - run: pnpm test:e2e
 
       - uses: actions/upload-artifact@v4
@@ -109,6 +109,6 @@ jobs:
         with:
           name: playwright-report
           path: |
-            playwright-report
-            test-results
+            apps/web/playwright-report
+            apps/web/test-results
           retention-days: 7

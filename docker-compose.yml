@@ -39,7 +39,7 @@ services:
     ports:
       - "4010:4010"
     volumes:
-      - ./e2e/mock-mercadopago.mjs:/app/e2e/mock-mercadopago.mjs:ro
+      - ./apps/web/e2e/mock-mercadopago.mjs:/app/e2e/mock-mercadopago.mjs:ro
 
   app:
     build:
@@ -69,11 +69,13 @@ services:
     volumes:
       - .:/app
       - node-modules:/app/node_modules
-      - next-cache:/app/.next
+      - web-node-modules:/app/apps/web/node_modules
+      - next-cache:/app/apps/web/.next
       - pnpm-store:/pnpm/store
 
 volumes:
   db-data:
   node-modules:
+  web-node-modules:
   next-cache:
   pnpm-store:

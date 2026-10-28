@@ -10,7 +10,7 @@ if [ "$(cat node_modules/.lock-hash 2>/dev/null)" != "$lock_hash" ]; then
 fi
 
 echo "→ Aplicando migraciones…"
-pnpm exec prisma migrate deploy
-pnpm exec prisma generate > /dev/null
+pnpm --filter @zentlet/web exec prisma migrate deploy
+pnpm --filter @zentlet/web exec prisma generate > /dev/null
 
 exec "$@"

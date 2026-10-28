@@ -12,7 +12,7 @@ ENV NEXT_TELEMETRY_DISABLED=1 \
 WORKDIR /app
 
 # node_modules, .next y la store de pnpm son volúmenes: se crean aquí para que pertenezcan al usuario node
-RUN mkdir -p /app/node_modules /app/.next /pnpm/store && chown -R node:node /app /pnpm
+RUN mkdir -p /app/node_modules /app/apps/web/node_modules /app/apps/web/.next /pnpm/store && chown -R node:node /app /pnpm
 
 COPY --chmod=755 docker/dev-entrypoint.sh /usr/local/bin/dev-entrypoint
 
@@ -20,4 +20,4 @@ USER node
 EXPOSE 3000
 
 ENTRYPOINT ["dev-entrypoint"]
-CMD ["pnpm", "dev"]
+CMD ["pnpm", "--filter", "@zentlet/web", "dev"]
