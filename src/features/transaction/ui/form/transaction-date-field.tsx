@@ -76,7 +76,7 @@ export function TransactionDateField({ value, onChange }: TransactionDateFieldPr
               </DatePicker.Trigger>
             </DateField.Suffix>
           </DateField.Group>
-          <DatePicker.Popover>
+          <DatePicker.Popover className="pointer-events-auto">
             <PickerCalendar label={t("date.calendar")} />
           </DatePicker.Popover>
         </DatePicker>

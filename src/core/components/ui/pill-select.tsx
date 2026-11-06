@@ -46,7 +46,7 @@ export function PillSelect<T extends string>({
         {display ?? selected?.label}
         <ChevronsUpDown className="text-app-muted size-3 shrink-0" aria-hidden />
       </Select.Trigger>
-      <Select.Popover className="w-auto min-w-44">
+      <Select.Popover className="pointer-events-auto w-auto min-w-44">
         <ListBox>
           {options.map((option) => (
             <ListBox.Item key={option.value} id={option.value} textValue={option.label}>
