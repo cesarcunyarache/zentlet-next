@@ -96,4 +96,27 @@ describe("savePreferences", () => {
     await expect(savePreferences("user-1", { currency: "USD" })).rejects.toThrow("offline");
     expect(readPendingPreferences("user-1")).toEqual({ currency: "USD" });
   });
+
+  it("los extras se acumulan por clave en vez de reemplazarse", () => {
+    addPendingPreferences("user-1", { extras: { hideBalance: true } });
+    addPendingPreferences("user-1", { extras: { feedPeriod: "month" } });
+
+    expect(readPendingPreferences("user-1")).toEqual({ extras: { hideBalance: true, feedPeriod: "month" } });
+  });
+
+  it("al confirmar un extra solo se quita esa clave y el resto sigue pendiente", () => {
+    addPendingPreferences("user-1", { extras: { hideBalance: true, feedPeriod: "month" } });
+
+    clearPendingPreferences("user-1", { extras: { hideBalance: true } });
+
+    expect(readPendingPreferences("user-1")).toEqual({ extras: { feedPeriod: "month" } });
+  });
+
+  it("un extra cambiado mientras se guardaba sigue pendiente", () => {
+    addPendingPreferences("user-1", { extras: { feedPeriod: "previous" } });
+
+    clearPendingPreferences("user-1", { extras: { feedPeriod: "month" } });
+
+    expect(readPendingPreferences("user-1")).toEqual({ extras: { feedPeriod: "previous" } });
+  });
 });

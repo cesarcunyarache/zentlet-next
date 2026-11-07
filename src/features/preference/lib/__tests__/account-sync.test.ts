@@ -40,6 +40,7 @@ async function load() {
   const sync = await import("../account-sync");
   const device = await import("../device-currency");
   const pending = await import("../pending");
+  const extras = await import("../device-extras");
   const { preferenceService } = await import("../../services/preference.service");
   const { reportClientError } = await import("@/lib/observability/client");
   const getPreferences = vi.mocked(preferenceService.getPreferences);
@@ -59,6 +60,7 @@ async function load() {
     ...sync,
     ...device,
     ...pending,
+    ...extras,
     getPreferences,
     updatePreferences,
     reportClientError: vi.mocked(reportClientError),
@@ -114,6 +116,27 @@ describe("sincronizar al abrir la app", () => {
     await t.syncPreferences(t.options());
 
     expect(t.updatePreferences).toHaveBeenCalledWith({ timezone: TIMEZONE });
+  });
+
+  it("con fila, los extras de la cuenta se copian al dispositivo", async () => {
+    const t = await load();
+    t.getPreferences.mockResolvedValue(serverRow({ extras: { hideBalance: true, feedPeriod: "month" } }));
+
+    await t.syncPreferences(t.options());
+
+    expect(t.getDeviceExtras(USER)).toEqual({ hideBalance: true, feedPeriod: "month" });
+    expect(t.updatePreferences).not.toHaveBeenCalled();
+  });
+
+  it("un extra pendiente manda sobre el de la cuenta y se reenvía", async () => {
+    const t = await load();
+    t.addPendingPreferences(USER, { extras: { feedPeriod: "previous" } });
+    t.getPreferences.mockResolvedValue(serverRow({ extras: { hideBalance: true, feedPeriod: "month" } }));
+
+    await t.syncPreferences(t.options());
+
+    expect(t.getDeviceExtras(USER)).toEqual({ hideBalance: true, feedPeriod: "previous" });
+    expect(t.updatePreferences).toHaveBeenCalledWith({ extras: { feedPeriod: "previous" } });
   });
 
   it("lo pendiente manda sobre el servidor y se reenvía", async () => {

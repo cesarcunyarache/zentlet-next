@@ -36,6 +36,8 @@
     "updated": "Movimiento actualizado"
   },
   "summary": {
+    "hideBalance": "Ocultar saldo",
+    "showBalance": "Mostrar saldo",
     "filterByType": "Filtrar por tipo",
     "period": "Periodo",
     "periods": {

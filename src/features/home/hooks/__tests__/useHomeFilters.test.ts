@@ -10,7 +10,14 @@ const lists = [
 
 vi.mock("@/features/list/stores/list.store", () => ({ useLists: () => ({ lists }) }));
 
-beforeEach(() => vi.useFakeTimers({ now: new Date("2026-10-16T12:00:00Z"), toFake: ["Date"] }));
+const preferences = { feedPeriod: null as "month" | "previous" | "all" | null, setFeedPeriod: vi.fn() };
+vi.mock("@/features/preference/hooks/useDisplayPreferences", () => ({ useDisplayPreferences: () => preferences }));
+
+beforeEach(() => {
+  vi.useFakeTimers({ now: new Date("2026-10-16T12:00:00Z"), toFake: ["Date"] });
+  preferences.feedPeriod = null;
+  preferences.setFeedPeriod.mockClear();
+});
 afterEach(() => vi.useRealTimers());
 
 describe("useHomeFilters", () => {
@@ -20,6 +27,33 @@ describe("useHomeFilters", () => {
     expect(result.current.period).toBe("all");
     expect(result.current.listId).toBe("private");
     expect(result.current.feedFilters).toMatchObject({ listId: "private", type: undefined, categoryId: undefined });
+  });
+
+  it("arranca en el periodo guardado en las preferencias", () => {
+    preferences.feedPeriod = "month";
+
+    const { result } = renderHook(() => useHomeFilters());
+
+    expect(result.current.period).toBe("month");
+  });
+
+  it("al elegir un periodo se guarda para la próxima vez", () => {
+    const { result } = renderHook(() => useHomeFilters());
+
+    act(() => result.current.changePeriod("previous"));
+
+    expect(result.current.period).toBe("previous");
+    expect(preferences.setFeedPeriod).toHaveBeenCalledWith("previous");
+  });
+
+  it("mostrar todo tras guardar un movimiento no cambia el periodo guardado", () => {
+    preferences.feedPeriod = "month";
+    const { result } = renderHook(() => useHomeFilters());
+
+    act(() => result.current.showAll());
+
+    expect(result.current.period).toBe("all");
+    expect(preferences.setFeedPeriod).not.toHaveBeenCalled();
   });
 
   it("cambiar de periodo o de lista quita la categoría elegida", () => {

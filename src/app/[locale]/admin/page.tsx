@@ -26,6 +26,7 @@ import { SettingsSheet } from "@/features/account/ui/settings-sheet";
 import { Onboarding } from "@/features/onboarding/ui/onboarding";
 import { useHomeCategories } from "@/features/home/hooks/useHomeCategories";
 import { useHomeFilters } from "@/features/home/hooks/useHomeFilters";
+import { useDisplayPreferences } from "@/features/preference/hooks/useDisplayPreferences";
 import { useHomeSheets } from "@/features/home/hooks/useHomeSheets";
 import { useHomeSummary } from "@/features/home/hooks/useHomeSummary";
 import { useHomeTransactions } from "@/features/home/hooks/useHomeTransactions";
@@ -47,6 +48,7 @@ export default function HomePage() {
 
   const { categories, categoriesById } = useHomeCategories();
   const filters = useHomeFilters();
+  const display = useDisplayPreferences();
   const sheets = useHomeSheets();
   const transactions = useHomeTransactions({
     listId: filters.listId,
@@ -97,6 +99,8 @@ export default function HomePage() {
           incomeTotal={summary.incomeTotal}
           period={filters.period}
           kind={filters.kind}
+          isHidden={display.hideBalance}
+          onToggleHidden={() => display.setHideBalance(!display.hideBalance)}
           onPeriodChange={filters.changePeriod}
           onKindChange={filters.changeKind}
         >
