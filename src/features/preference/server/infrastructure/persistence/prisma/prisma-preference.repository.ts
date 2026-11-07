@@ -1,4 +1,6 @@
+import type { Prisma } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
+import { mergeExtras } from "../../../domain/merge-extras";
 import { preferencesSchema, type PreferenceUpdate } from "../../../../schemas/preference.schema";
 import type { PreferenceRepository } from "../../../domain/repositories/preference.repository";
 
@@ -11,14 +13,23 @@ export class PrismaPreferenceRepository implements PreferenceRepository {
     return preferencesSchema.parse(row);
   }
 
-  async save(userId: string, changes: PreferenceUpdate) {
-    const row = await prisma.userPreference.upsert({
-      where: { userId },
-      create: { userId, ...changes },
-      update: changes,
-      select: PREFERENCE_SELECT,
+  async save(userId: string, { extras, ...fields }: PreferenceUpdate) {
+    if (!extras) return preferencesSchema.parse(await this.upsert(prisma, userId, fields));
+
+    const row = await prisma.$transaction(async (db) => {
+      const stored = await db.userPreference.findUnique({ where: { userId }, select: { extras: true } });
+      return this.upsert(db, userId, { ...fields, extras: mergeExtras(stored?.extras, extras) });
     });
     return preferencesSchema.parse(row);
+  }
+
+  private upsert(db: Pick<typeof prisma, "userPreference">, userId: string, data: Prisma.UserPreferenceUpdateInput) {
+    return db.userPreference.upsert({
+      where: { userId },
+      create: { userId, ...data } as Prisma.UserPreferenceUncheckedCreateInput,
+      update: data,
+      select: PREFERENCE_SELECT,
+    });
   }
 
   async findTimezone(userId: string) {

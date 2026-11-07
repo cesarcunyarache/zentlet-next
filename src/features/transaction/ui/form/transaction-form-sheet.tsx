@@ -94,7 +94,7 @@ export function TransactionFormSheet({
             {isEditing ? null : (
               <TransactionRepeatField value={transactionForm.recurrence} onChange={transactionForm.changeRecurrence} />
             )}
-            {isEditing || transactionForm.recurrence ? null : (
+            {transactionForm.recurrence ? null : (
               <ListSelect value={transactionForm.listId} onChange={transactionForm.changeList} className="bg-app-fill min-h-9 max-w-48 px-3" />
             )}
           </div>

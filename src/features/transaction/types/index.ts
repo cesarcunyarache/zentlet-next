@@ -19,7 +19,7 @@ export interface TNewTransaction extends TTransaction {
   recurrence?: RecurrenceFrequency;
 }
 
-export type Period = "month" | "previous" | "all";
+export type Period = "all" | "month" | "week" | "previous";
 
 export interface DateRange {
   from?: string;

@@ -5,7 +5,7 @@ import { GET, PATCH } from "../route";
 
 vi.mock("@/lib/auth", () => ({ auth: { api: { getSession: vi.fn() } } }));
 vi.mock("@/lib/prisma", () => ({
-  default: { userPreference: { findUnique: vi.fn(), upsert: vi.fn() }, $queryRaw: vi.fn() },
+  default: { userPreference: { findUnique: vi.fn(), upsert: vi.fn() }, $queryRaw: vi.fn(), $transaction: vi.fn() },
 }));
 
 const db = vi.mocked(prisma, { deep: true });
@@ -23,6 +23,7 @@ beforeEach(() => {
   getSession.mockResolvedValue({ user: { id: "user-1" } } as never);
   db.$queryRaw.mockResolvedValue([{ count: 1 }] as never);
   db.userPreference.upsert.mockResolvedValue(stored as never);
+  db.$transaction.mockImplementation(((run: (tx: typeof db) => unknown) => run(db)) as never);
 });
 
 describe("GET /api/account/preferences", () => {
@@ -85,6 +86,17 @@ describe("PATCH /api/account/preferences", () => {
         create: { userId: "user-1", currency: "USD" },
         update: { currency: "USD" },
       }),
+    );
+  });
+
+  it("un extra nuevo se suma a los ya guardados sin borrarlos", async () => {
+    db.userPreference.findUnique.mockResolvedValue({ extras: { hideBalance: true } } as never);
+
+    const response = await update({ extras: { feedPeriod: "month" } });
+
+    expect(response.status).toBe(200);
+    expect(db.userPreference.upsert).toHaveBeenCalledWith(
+      expect.objectContaining({ update: { extras: { hideBalance: true, feedPeriod: "month" } } }),
     );
   });
 

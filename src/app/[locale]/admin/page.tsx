@@ -13,7 +13,7 @@ import { useGmailConnectResult } from "@/features/inbox/hooks/useGmailConnectRes
 import { InboxSheet } from "@/features/inbox/ui/inbox-sheet";
 import { ListFilterSelect } from "@/features/list/ui/filter/list-filter-select";
 import { ListActionsMenu } from "@/features/list/ui/actions/list-actions-menu";
-import { TransactionListField } from "@/features/list/ui/picker/transaction-list-field";
+import { TransactionListRow } from "@/features/list/ui/picker/transaction-list-row";
 import { usePendingTransactions, useTransactionFeed } from "@/features/transaction/stores/transaction.store";
 import { SummaryHeader } from "@/features/transaction/ui/summary/summary-header";
 import { CategoryStrip } from "@/features/transaction/ui/summary/category-strip";
@@ -26,6 +26,7 @@ import { SettingsSheet } from "@/features/account/ui/settings-sheet";
 import { Onboarding } from "@/features/onboarding/ui/onboarding";
 import { useHomeCategories } from "@/features/home/hooks/useHomeCategories";
 import { useHomeFilters } from "@/features/home/hooks/useHomeFilters";
+import { useDisplayPreferences } from "@/features/preference/hooks/useDisplayPreferences";
 import { useHomeSheets } from "@/features/home/hooks/useHomeSheets";
 import { useHomeSummary } from "@/features/home/hooks/useHomeSummary";
 import { useHomeTransactions } from "@/features/home/hooks/useHomeTransactions";
@@ -47,11 +48,12 @@ export default function HomePage() {
 
   const { categories, categoriesById } = useHomeCategories();
   const filters = useHomeFilters();
+  const display = useDisplayPreferences();
   const sheets = useHomeSheets();
   const transactions = useHomeTransactions({
     listId: filters.listId,
     openForm: () => sheets.open("new"),
-    onCreated: filters.showThisMonth,
+    onCreated: filters.showAll,
     toast,
   });
   const budgetEditor = useBudgetEditor(toast);
@@ -97,6 +99,8 @@ export default function HomePage() {
           incomeTotal={summary.incomeTotal}
           period={filters.period}
           kind={filters.kind}
+          isHidden={display.hideBalance}
+          onToggleHidden={() => display.setHideBalance(!display.hideBalance)}
           onPeriodChange={filters.changePeriod}
           onKindChange={filters.changeKind}
         >
@@ -156,7 +160,7 @@ export default function HomePage() {
         categories={categories}
         currency={currency}
         draft={transactions.formDraft}
-        defaultListId={filters.listId}
+        defaultListId={transactions.isEditing ? transactions.editingListId : filters.listId}
         isEditing={transactions.isEditing}
         onSubmit={transactions.submitForm}
       />
@@ -176,16 +180,8 @@ export default function HomePage() {
         category={detail ? categoriesById.get(detail.categoryId) : undefined}
         currency={currency}
         onOpenChange={(isOpen) => !isOpen && transactions.showDetail(null)}
-        onEdit={(transaction) => {
-          transactions.showDetail(null);
-          transactions.startEditing(transaction);
-        }}
-        onDelete={(id) => {
-          transactions.showDetail(null);
-          if (detail?.id === id) transactions.remove(detail);
-        }}
       >
-        <TransactionListField transaction={detail} onMessage={toast} />
+        <TransactionListRow transaction={detail} />
       </TransactionDetailSheet>
 
       <BudgetSheet

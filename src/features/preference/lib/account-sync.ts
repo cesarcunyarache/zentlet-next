@@ -5,7 +5,8 @@ import type { Locale } from "@/i18n/routing";
 import { preferenceService } from "../services/preference.service";
 import { DEFAULT_CURRENCY } from "./currency";
 import { getDeviceCurrency, setDeviceCurrency } from "./device-currency";
-import { readPendingPreferences } from "./pending";
+import { setDeviceExtras } from "./device-extras";
+import { mergePreferenceUpdates, readPendingPreferences } from "./pending";
 import { savePreferences } from "./save";
 import { planPreferenceSync } from "./sync";
 
@@ -29,7 +30,7 @@ export async function syncPreferences({ userId, currentLocale, switchLanguage, c
 
   const locale = currentLocale();
   const currencyNow = getDeviceCurrency(userId);
-  const pending = { ...pendingBefore, ...readPendingPreferences(userId) };
+  const pending = mergePreferenceUpdates(pendingBefore, readPendingPreferences(userId));
   if (currencyNow !== null && currencyNow !== currencyBefore) pending.currency = currencyNow;
   if (locale !== localeBefore) pending.language = locale;
 
@@ -41,6 +42,7 @@ export async function syncPreferences({ userId, currentLocale, switchLanguage, c
   const { language, currency, update } = planPreferenceSync(server, device, pending);
   syncedUserIds.add(userId);
   setDeviceCurrency(userId, currency);
+  if (server) setDeviceExtras(userId, { ...server.extras, ...pending.extras });
   if (language !== locale) switchLanguage(language);
   if (update) await savePreferences(userId, update);
 }

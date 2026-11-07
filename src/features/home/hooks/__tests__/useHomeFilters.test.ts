@@ -10,16 +10,50 @@ const lists = [
 
 vi.mock("@/features/list/stores/list.store", () => ({ useLists: () => ({ lists }) }));
 
-beforeEach(() => vi.useFakeTimers({ now: new Date("2026-10-16T12:00:00Z"), toFake: ["Date"] }));
+const preferences = { feedPeriod: null as "month" | "previous" | "all" | null, setFeedPeriod: vi.fn() };
+vi.mock("@/features/preference/hooks/useDisplayPreferences", () => ({ useDisplayPreferences: () => preferences }));
+
+beforeEach(() => {
+  vi.useFakeTimers({ now: new Date("2026-10-16T12:00:00Z"), toFake: ["Date"] });
+  preferences.feedPeriod = null;
+  preferences.setFeedPeriod.mockClear();
+});
 afterEach(() => vi.useRealTimers());
 
 describe("useHomeFilters", () => {
-  it("empieza en el mes actual, en la lista privada y sin otros filtros", () => {
+  it("empieza mostrando todo, en la lista privada y sin otros filtros", () => {
+    const { result } = renderHook(() => useHomeFilters());
+
+    expect(result.current.period).toBe("all");
+    expect(result.current.listId).toBe("private");
+    expect(result.current.feedFilters).toMatchObject({ listId: "private", type: undefined, categoryId: undefined });
+  });
+
+  it("arranca en el periodo guardado en las preferencias", () => {
+    preferences.feedPeriod = "month";
+
     const { result } = renderHook(() => useHomeFilters());
 
     expect(result.current.period).toBe("month");
-    expect(result.current.listId).toBe("private");
-    expect(result.current.feedFilters).toMatchObject({ listId: "private", type: undefined, categoryId: undefined });
+  });
+
+  it("al elegir un periodo se guarda para la próxima vez", () => {
+    const { result } = renderHook(() => useHomeFilters());
+
+    act(() => result.current.changePeriod("previous"));
+
+    expect(result.current.period).toBe("previous");
+    expect(preferences.setFeedPeriod).toHaveBeenCalledWith("previous");
+  });
+
+  it("mostrar todo tras guardar un movimiento no cambia el periodo guardado", () => {
+    preferences.feedPeriod = "month";
+    const { result } = renderHook(() => useHomeFilters());
+
+    act(() => result.current.showAll());
+
+    expect(result.current.period).toBe("all");
+    expect(preferences.setFeedPeriod).not.toHaveBeenCalled();
   });
 
   it("cambiar de periodo o de lista quita la categoría elegida", () => {
@@ -44,7 +78,7 @@ describe("useHomeFilters", () => {
     expect(result.current.listId).toBe("private");
   });
 
-  it("al guardar un movimiento se vuelve a todo el mes, sin tipo ni categoría", () => {
+  it("al guardar un movimiento se vuelve a mostrar todo, sin tipo ni categoría", () => {
     const { result } = renderHook(() => useHomeFilters());
 
     act(() => {
@@ -52,9 +86,9 @@ describe("useHomeFilters", () => {
       result.current.changeKind("income");
       result.current.changeCategory("salary");
     });
-    act(() => result.current.showThisMonth());
+    act(() => result.current.showAll());
 
-    expect(result.current).toMatchObject({ period: "month", kind: null, categoryId: null });
+    expect(result.current).toMatchObject({ period: "all", kind: null, categoryId: null });
   });
 
   it("cerrar la búsqueda borra lo escrito", () => {

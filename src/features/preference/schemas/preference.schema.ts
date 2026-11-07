@@ -19,7 +19,16 @@ const language = z.enum(routing.locales);
 const currency = z.enum(CURRENCY_CODES);
 const timezone = z.string().min(1).max(TIMEZONE_MAX_LENGTH).refine(isTimezone, "Zona horaria no válida");
 
-const preferenceExtrasSchema = z.object({});
+export const FEED_PERIODS = ["all", "month", "week", "previous"] as const;
+
+const extraFields = { hideBalance: z.boolean(), feedPeriod: z.enum(FEED_PERIODS) };
+
+const preferenceExtrasSchema = z.object(extraFields).partial();
+
+const storedExtrasSchema = z.object({
+  hideBalance: extraFields.hideBalance.optional().catch(undefined),
+  feedPeriod: extraFields.feedPeriod.optional().catch(undefined),
+});
 
 export const preferenceUpdateSchema = z
   .object({ language, currency, timezone, extras: preferenceExtrasSchema })
@@ -31,8 +40,9 @@ export const preferencesSchema = z.object({
   language: language.catch(routing.defaultLocale),
   currency: currency.catch(DEFAULT_CURRENCY),
   timezone: timezone.catch(DEFAULT_TIMEZONE),
-  extras: preferenceExtrasSchema.catch({}),
+  extras: storedExtrasSchema.catch({}),
 });
 
 export type Preferences = z.infer<typeof preferencesSchema>;
+export type PreferenceExtras = z.infer<typeof preferenceExtrasSchema>;
 export type PreferenceUpdate = z.infer<typeof preferenceUpdateSchema>;

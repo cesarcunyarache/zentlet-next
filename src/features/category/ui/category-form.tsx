@@ -33,6 +33,7 @@ export function CategoryForm({ onSuccess, initialName = "", category }: Category
   const [isCustomizing, setIsCustomizing] = useState(false);
   const [customIcon, setCustomIcon] = useState<CategoryIcon | null>(null);
   const customIconRef = useRef<CategoryIcon | null>(null);
+  const [draftId, setDraftId] = useState(() => crypto.randomUUID());
 
   const form = useForm<CategoryFormValues>({
     resolver: zodResolver(categorySchema),
@@ -86,7 +87,7 @@ export function CategoryForm({ onSuccess, initialName = "", category }: Category
       });
       track("category_updated", {});
     } else {
-      createCategory({ ...values, aiSuggestions: aiSuggestions ?? null });
+      createCategory({ ...values, aiSuggestions: aiSuggestions ?? null }, draftId);
       track("category_created", { ai_suggested: !isAiUnavailable });
     }
     form.reset();
@@ -109,7 +110,10 @@ export function CategoryForm({ onSuccess, initialName = "", category }: Category
           value={name}
           inputSize="text-4xl sm:text-3xl"
           placeholder={t("categories.form.namePlaceholder")}
-          onChange={(value) => form.setValue("name", value, TOUCH_FIELD)}
+          onChange={(value) => {
+            setDraftId(crypto.randomUUID());
+            form.setValue("name", value, TOUCH_FIELD);
+          }}
         />
       </div>
 

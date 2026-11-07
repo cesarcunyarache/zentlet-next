@@ -53,7 +53,7 @@ export function useIconSuggestions({ name, category, onIconsChange }: IconSugges
 
   const icons = withCurrentFirst(
     isOriginalName || !lastResult ? saved : (lastResult.icons ?? FALLBACK_ICONS),
-    current,
+    isOriginalName ? current : null,
   );
 
   useEffect(() => {
@@ -67,7 +67,7 @@ export function useIconSuggestions({ name, category, onIconsChange }: IconSugges
     fetchAiIcons(debouncedName).then((fromAi) => {
       if (cancelled) return;
       setLastResult({ name: debouncedName, icons: fromAi });
-      onIconsChange(withCurrentFirst(fromAi ?? FALLBACK_ICONS, current));
+      onIconsChange(fromAi ?? FALLBACK_ICONS);
     });
     return () => {
       cancelled = true;

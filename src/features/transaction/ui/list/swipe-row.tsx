@@ -4,7 +4,15 @@ import { useEffect, useRef } from "react";
 import { animate, motion, useMotionValue, useTransform, type PanInfo } from "motion/react";
 import { Pencil, Trash2 } from "lucide-react";
 import { SPRING_LAYOUT } from "@/lib/ease";
-import { SWIPE_ACTION, SWIPE_REVEAL, swipeOffset, swipeSideOnRelease, type SwipeSide } from "../../lib/swipe";
+import {
+  SWIPE_ACTION,
+  SWIPE_GAP,
+  SWIPE_MAX,
+  fullSwipeSide,
+  swipeOffset,
+  swipeSideOnRelease,
+  type SwipeSide,
+} from "../../lib/swipe";
 
 const ACTION_FADE_DISTANCE = 16;
 const DRAG_ELASTICITY = 0.15;
@@ -38,6 +46,8 @@ export function SwipeRow({
   const x = useMotionValue(0);
   const editOpacity = useTransform(x, [0, ACTION_FADE_DISTANCE], [0, 1]);
   const deleteOpacity = useTransform(x, [-ACTION_FADE_DISTANCE, 0], [1, 0]);
+  const editWidth = useTransform(x, (value) => Math.max(SWIPE_ACTION, value - SWIPE_GAP));
+  const deleteWidth = useTransform(x, (value) => Math.max(SWIPE_ACTION, -value - SWIPE_GAP));
   const canSwipe = canEdit || canDelete;
 
   useEffect(() => {
@@ -46,6 +56,14 @@ export function SwipeRow({
   }, [openSide, x]);
 
   function handleDragEnd(_: unknown, info: PanInfo) {
+    const committed = fullSwipeSide({ offset: x.get(), canEdit, canDelete });
+    if (committed) {
+      animate(x, 0, SPRING_LAYOUT);
+      onOpenChange(null);
+      setTimeout(() => (wasDragged.current = false), 0);
+      (committed === "edit" ? onEdit : onDelete)();
+      return;
+    }
     const side = swipeSideOnRelease({ offset: x.get(), velocity: info.velocity.x, canEdit, canDelete });
     animate(x, swipeOffset(side), SPRING_LAYOUT);
     onOpenChange(side);
@@ -67,7 +85,7 @@ export function SwipeRow({
           tabIndex={openSide === "edit" ? 0 : -1}
           onClick={onEdit}
           className="bg-app-fg text-app-surface absolute inset-y-0 left-0 grid place-items-center rounded-2xl"
-          style={{ width: SWIPE_ACTION, opacity: editOpacity }}
+          style={{ width: editWidth, opacity: editOpacity }}
         >
           <Pencil className="size-5" strokeWidth={2} aria-hidden />
         </motion.button>
@@ -79,7 +97,7 @@ export function SwipeRow({
           tabIndex={openSide === "delete" ? 0 : -1}
           onClick={onDelete}
           className="bg-app-expense text-app-surface absolute inset-y-0 right-0 grid place-items-center rounded-2xl"
-          style={{ width: SWIPE_ACTION, opacity: deleteOpacity }}
+          style={{ width: deleteWidth, opacity: deleteOpacity }}
         >
           <Trash2 className="size-5" strokeWidth={2} aria-hidden />
         </motion.button>
@@ -88,7 +106,7 @@ export function SwipeRow({
         type="button"
         drag={canSwipe ? "x" : false}
         dragDirectionLock
-        dragConstraints={{ left: canDelete ? -SWIPE_REVEAL : 0, right: canEdit ? SWIPE_REVEAL : 0 }}
+        dragConstraints={{ left: canDelete ? -SWIPE_MAX : 0, right: canEdit ? SWIPE_MAX : 0 }}
         dragElastic={{ left: canDelete ? DRAG_ELASTICITY : 0, right: canEdit ? DRAG_ELASTICITY : 0 }}
         style={{ x }}
         onDragStart={() => {

@@ -36,10 +36,13 @@
     "updated": "Transaction updated"
   },
   "summary": {
+    "hideBalance": "Hide balance",
+    "showBalance": "Show balance",
     "filterByType": "Filter by type",
     "period": "Period",
     "periods": {
       "month": "This month",
+      "week": "This week",
       "previous": "Last month",
       "all": "All time"
     }
