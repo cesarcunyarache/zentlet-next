@@ -156,7 +156,7 @@ export default function HomePage() {
         categories={categories}
         currency={currency}
         draft={transactions.formDraft}
-        defaultListId={filters.listId}
+        defaultListId={transactions.isEditing ? transactions.editingListId : filters.listId}
         isEditing={transactions.isEditing}
         onSubmit={transactions.submitForm}
       />

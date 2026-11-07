@@ -1,8 +1,10 @@
 export type SwipeSide = "edit" | "delete";
 
 export const SWIPE_ACTION = 72;
-const SWIPE_GAP = 10;
+export const SWIPE_GAP = 10;
 export const SWIPE_REVEAL = SWIPE_ACTION + SWIPE_GAP;
+export const SWIPE_COMMIT = 150;
+export const SWIPE_MAX = SWIPE_COMMIT + 50;
 const FLICK_VELOCITY = 400;
 const OPEN_THRESHOLD = SWIPE_REVEAL / 2;
 
@@ -23,5 +25,11 @@ export function swipeSideOnRelease({ offset, velocity, canEdit, canDelete }: Swi
   const isFlick = Math.abs(velocity) > FLICK_VELOCITY && Math.sign(velocity) === Math.sign(offset);
   if (canDelete && (offset < -OPEN_THRESHOLD || (isFlick && offset < 0))) return "delete";
   if (canEdit && (offset > OPEN_THRESHOLD || (isFlick && offset > 0))) return "edit";
+  return null;
+}
+
+export function fullSwipeSide({ offset, canEdit, canDelete }: Omit<SwipeRelease, "velocity">): SwipeSide | null {
+  if (canDelete && offset < -SWIPE_COMMIT) return "delete";
+  if (canEdit && offset > SWIPE_COMMIT) return "edit";
   return null;
 }
