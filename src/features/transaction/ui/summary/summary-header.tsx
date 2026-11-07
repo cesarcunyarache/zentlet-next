@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@heroui/react";
-import { motion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Eye, EyeOff } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { AnimatedNumber } from "@/core/components/ui/animated-number";
@@ -12,6 +12,8 @@ import type { Period, TransactionType } from "../../types";
 
 const PERIODS: Period[] = ["month", "previous", "all"];
 const HIDDEN_AMOUNT = "••••";
+const SWAP_SECONDS = 0.2;
+const SWAP_BLUR = "blur(8px)";
 
 type SummaryTone = "neutral" | "expense" | "income";
 
@@ -75,16 +77,14 @@ export function SummaryHeader({
 
       <h1
         className={cn(
-          "font-display m-0 mt-1 flex items-baseline gap-1.5 leading-none font-bold tracking-[-0.045em] tabular-nums transition-colors duration-300",
+          "font-display relative m-0 mt-1 flex items-baseline gap-1.5 leading-none font-bold tracking-[-0.045em] tabular-nums transition-colors duration-300",
           TONE_CLASS[tone],
         )}
       >
-        {!isHidden && headline < 0 ? <span className="text-app-muted text-[28px] font-semibold">−</span> : null}
-        {isHidden ? (
-          <span className="text-[clamp(52px,15vw,72px)]">{HIDDEN_AMOUNT}</span>
-        ) : (
+        <HiddenSwap isHidden={isHidden} hiddenClassName="text-[clamp(52px,15vw,72px)]">
+          {headline < 0 ? <span className="text-app-muted text-[28px] font-semibold">−</span> : null}
           <AnimatedNumber value={Math.abs(headline)} format={formatNumber} className="text-[clamp(52px,15vw,72px)]" />
-        )}
+        </HiddenSwap>
         <span className="text-app-muted text-[22px] font-semibold tracking-normal">{currency}</span>
       </h1>
 
@@ -94,10 +94,16 @@ export function SummaryHeader({
         className="bg-app-fill mt-4 inline-flex items-center gap-0.5 rounded-full p-[3px]"
       >
         <KindChip kind="expense" isActive={kind === "expense"} onClick={() => toggleKind("expense")}>
-          −{isHidden ? HIDDEN_AMOUNT : <AnimatedNumber value={expenseTotal} format={formatNumber} />}
+          −
+          <HiddenSwap isHidden={isHidden}>
+            <AnimatedNumber value={expenseTotal} format={formatNumber} />
+          </HiddenSwap>
         </KindChip>
         <KindChip kind="income" isActive={kind === "income"} onClick={() => toggleKind("income")}>
-          +{isHidden ? HIDDEN_AMOUNT : <AnimatedNumber value={incomeTotal} format={formatNumber} />}
+          +
+          <HiddenSwap isHidden={isHidden}>
+            <AnimatedNumber value={incomeTotal} format={formatNumber} />
+          </HiddenSwap>
         </KindChip>
       </div>
 
@@ -112,6 +118,32 @@ export function SummaryHeader({
         {children}
       </div>
     </section>
+  );
+}
+
+interface HiddenSwapProps {
+  isHidden: boolean;
+  hiddenClassName?: string;
+  children: React.ReactNode;
+}
+
+function HiddenSwap({ isHidden, hiddenClassName, children }: HiddenSwapProps) {
+  const shouldReduceMotion = useReducedMotion();
+  const transition = { duration: shouldReduceMotion ? 0 : SWAP_SECONDS };
+
+  return (
+    <AnimatePresence mode="popLayout" initial={false}>
+      <motion.span
+        key={isHidden ? "hidden" : "visible"}
+        initial={{ opacity: 0, filter: SWAP_BLUR }}
+        animate={{ opacity: 1, filter: "blur(0px)" }}
+        exit={{ opacity: 0, filter: SWAP_BLUR }}
+        transition={transition}
+        className={cn("inline-flex items-baseline gap-1.5", isHidden && hiddenClassName)}
+      >
+        {isHidden ? HIDDEN_AMOUNT : children}
+      </motion.span>
+    </AnimatePresence>
   );
 }
 
