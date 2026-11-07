@@ -5,9 +5,10 @@ import { periodRange } from "@/features/transaction/lib/format";
 import type { Period, TransactionFilters, TransactionType } from "@/features/transaction/types";
 
 const SEARCH_DEBOUNCE_MS = 300;
+const DEFAULT_PERIOD: Period = "all";
 
 export function useHomeFilters() {
-  const [period, setPeriod] = useState<Period>("month");
+  const [period, setPeriod] = useState<Period>(DEFAULT_PERIOD);
   const [kind, setKind] = useState<TransactionType | null>(null);
   const [categoryId, setCategoryId] = useState<string | null>(null);
   const [chosenListId, setChosenListId] = useState<string | null>(null);
@@ -44,10 +45,10 @@ export function useHomeFilters() {
     setIsSearching((current) => !current);
   }
 
-  function showThisMonth() {
+  function showAll() {
     setCategoryId(null);
     setKind(null);
-    setPeriod("month");
+    setPeriod(DEFAULT_PERIOD);
   }
 
   return {
@@ -67,6 +68,6 @@ export function useHomeFilters() {
     changeList,
     changeQuery: setQuery,
     toggleSearch,
-    showThisMonth,
+    showAll,
   };
 }

@@ -51,7 +51,7 @@ export default function HomePage() {
   const transactions = useHomeTransactions({
     listId: filters.listId,
     openForm: () => sheets.open("new"),
-    onCreated: filters.showThisMonth,
+    onCreated: filters.showAll,
     toast,
   });
   const budgetEditor = useBudgetEditor(toast);
