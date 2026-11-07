@@ -154,7 +154,7 @@ export function useCategoryStore() {
   return {
     categories: query.data ?? [],
     isLoading: query.isLoading,
-    createCategory: (payload: TCategoryPayload) => create.mutate({ ...payload, id: crypto.randomUUID() }),
+    createCategory: (payload: TCategoryPayload, id = crypto.randomUUID()) => create.mutate({ ...payload, id }),
     updateCategory: (categoryId: string, data: Partial<TCategoryPayload>) => update.mutate({ categoryId, data }),
   };
 }
