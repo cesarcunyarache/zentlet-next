@@ -176,14 +176,6 @@ export default function HomePage() {
         category={detail ? categoriesById.get(detail.categoryId) : undefined}
         currency={currency}
         onOpenChange={(isOpen) => !isOpen && transactions.showDetail(null)}
-        onEdit={(transaction) => {
-          transactions.showDetail(null);
-          transactions.startEditing(transaction);
-        }}
-        onDelete={(id) => {
-          transactions.showDetail(null);
-          if (detail?.id === id) transactions.remove(detail);
-        }}
       >
         <TransactionListRow transaction={detail} />
       </TransactionDetailSheet>
