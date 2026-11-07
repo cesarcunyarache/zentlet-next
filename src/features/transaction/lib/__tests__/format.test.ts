@@ -19,6 +19,21 @@ describe("formato de movimientos", () => {
   });
 
 
+  it("periodRange de la semana va de lunes a lunes siguiente", () => {
+    expect(periodRange("week")).toEqual({ from: "2026-09-21", to: "2026-09-28" });
+    vi.setSystemTime(new Date(2026, 8, 21, 8));
+    expect(periodRange("week")).toEqual({ from: "2026-09-21", to: "2026-09-28" });
+    vi.setSystemTime(new Date(2026, 8, 27, 22));
+    expect(periodRange("week")).toEqual({ from: "2026-09-21", to: "2026-09-28" });
+  });
+
+  it("periodRange de la semana cruza el cambio de mes y de año", () => {
+    vi.setSystemTime(new Date(2026, 9, 1, 9));
+    expect(periodRange("week")).toEqual({ from: "2026-09-28", to: "2026-10-05" });
+    vi.setSystemTime(new Date(2026, 0, 1, 9));
+    expect(periodRange("week")).toEqual({ from: "2025-12-29", to: "2026-01-05" });
+  });
+
   it("periodRange cruza el cambio de año", () => {
     vi.setSystemTime(new Date(2026, 0, 10, 9));
     expect(periodRange("previous")).toEqual({ from: "2025-12-01", to: "2026-01-01" });

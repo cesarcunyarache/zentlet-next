@@ -42,6 +42,7 @@
     "period": "Periodo",
     "periods": {
       "month": "Este mes",
+      "week": "Esta semana",
       "previous": "Mes pasado",
       "all": "Todo"
     }

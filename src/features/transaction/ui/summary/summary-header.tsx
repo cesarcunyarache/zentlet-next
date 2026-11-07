@@ -10,7 +10,7 @@ import { SPRING_LAYOUT, SPRING_PRESS } from "@/lib/ease";
 import { formatNumber } from "@/lib/money";
 import type { Period, TransactionType } from "../../types";
 
-const PERIODS: Period[] = ["month", "previous", "all"];
+const PERIODS: Period[] = ["all", "month", "week", "previous"];
 const HIDDEN_AMOUNT = "••••";
 const SWAP_SECONDS = 0.2;
 const SWAP_BLUR = "blur(8px)";

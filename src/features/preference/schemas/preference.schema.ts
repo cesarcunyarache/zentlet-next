@@ -19,7 +19,7 @@ const language = z.enum(routing.locales);
 const currency = z.enum(CURRENCY_CODES);
 const timezone = z.string().min(1).max(TIMEZONE_MAX_LENGTH).refine(isTimezone, "Zona horaria no válida");
 
-export const FEED_PERIODS = ["month", "previous", "all"] as const;
+export const FEED_PERIODS = ["all", "month", "week", "previous"] as const;
 
 const extraFields = { hideBalance: z.boolean(), feedPeriod: z.enum(FEED_PERIODS) };
 
