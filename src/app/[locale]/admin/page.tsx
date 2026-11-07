@@ -13,7 +13,7 @@ import { useGmailConnectResult } from "@/features/inbox/hooks/useGmailConnectRes
 import { InboxSheet } from "@/features/inbox/ui/inbox-sheet";
 import { ListFilterSelect } from "@/features/list/ui/filter/list-filter-select";
 import { ListActionsMenu } from "@/features/list/ui/actions/list-actions-menu";
-import { TransactionListField } from "@/features/list/ui/picker/transaction-list-field";
+import { TransactionListRow } from "@/features/list/ui/picker/transaction-list-row";
 import { usePendingTransactions, useTransactionFeed } from "@/features/transaction/stores/transaction.store";
 import { SummaryHeader } from "@/features/transaction/ui/summary/summary-header";
 import { CategoryStrip } from "@/features/transaction/ui/summary/category-strip";
@@ -185,7 +185,7 @@ export default function HomePage() {
           if (detail?.id === id) transactions.remove(detail);
         }}
       >
-        <TransactionListField transaction={detail} onMessage={toast} />
+        <TransactionListRow transaction={detail} />
       </TransactionDetailSheet>
 
       <BudgetSheet
