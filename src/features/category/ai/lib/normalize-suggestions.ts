@@ -1,7 +1,7 @@
 import type { CategoryAI, CategoryIcon } from "../schemas/category-ai.schema";
 
 const MAX_OPTIONS = 4;
-const PASTEL_LIGHTNESS = [0.84, 0.92] as const;
+const PASTEL_LIGHTNESS = [0.89, 0.95] as const;
 const PASTEL_SATURATION = [0.4, 0.95] as const;
 const GRAY_MAX_SATURATION = 0.08;
 

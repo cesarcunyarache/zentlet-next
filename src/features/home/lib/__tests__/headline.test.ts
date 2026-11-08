@@ -2,15 +2,28 @@ import { describe, expect, it } from "vitest";
 import { headlineFor } from "../headline";
 
 const labels = { category: "Categoría", expenses: "Gastos", income: "Ingresos", total: "Balance" };
-const base = { categoryId: null, categoryName: undefined, categoryValue: 0, kind: null, expenseTotal: 300, incomeTotal: 1000, labels };
+const base = {
+  categoryId: null,
+  categoryName: undefined,
+  categoryValue: 0,
+  kind: null,
+  expenseTotal: 300,
+  incomeTotal: 1000,
+  accountBalance: 5000,
+  labels,
+};
 
 describe("headlineFor", () => {
-  it("sin filtros muestra el balance del periodo", () => {
-    expect(headlineFor(base)).toEqual({ value: 700, label: "Balance", tone: "income" });
+  it("sin filtros muestra el saldo de la cuenta, no el del periodo", () => {
+    expect(headlineFor(base)).toEqual({ value: 5000, label: "Balance", tone: "income" });
   });
 
-  it("un balance negativo se muestra en tono neutro, no como gasto", () => {
-    expect(headlineFor({ ...base, expenseTotal: 1200 })).toEqual({ value: -200, label: "Balance", tone: "neutral" });
+  it("el saldo de la cuenta no cambia aunque cambien los totales del periodo", () => {
+    expect(headlineFor({ ...base, expenseTotal: 0, incomeTotal: 0 }).value).toBe(5000);
+  });
+
+  it("un saldo negativo se muestra en tono neutro, no como gasto", () => {
+    expect(headlineFor({ ...base, accountBalance: -200 })).toEqual({ value: -200, label: "Balance", tone: "neutral" });
   });
 
   it("filtrando por tipo muestra sólo los gastos o sólo los ingresos", () => {

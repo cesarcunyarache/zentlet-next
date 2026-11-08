@@ -114,8 +114,18 @@ describe("budgetRangeForView", () => {
     expect(budgetRangeForView(budget({ ...weekly, startDate: "2026-07-06" }), lastMonth, today)).toBeNull();
   });
 
-  it("viendo todo el historial no hay presupuestos", () => {
-    expect(budgetRangeForView(budget(), {}, today)).toBeNull();
+  it("viendo todo el historial, cada presupuesto se mide en su propio periodo actual", () => {
+    expect(budgetRangeForView(budget(), {}, today)).toEqual(thisMonth);
+    expect(budgetRangeForView(budget({ ...weekly, startDate: "2026-09-21" }), {}, today)).toEqual({
+      from: "2026-09-21",
+      to: "2026-09-28",
+    });
+  });
+
+  it("viendo todo el historial, uno que ya pasó o aún no empieza no se muestra", () => {
+    const once = budget({ kind: "once", ...weekly, startDate: "2026-09-14" });
+    expect(budgetRangeForView(once, {}, today)).toBeNull();
+    expect(budgetRangeForView(budget({ startDate: "2026-10-01" }), {}, today)).toBeNull();
   });
 
   it("uno de una sola vez que ya pasó no se muestra", () => {

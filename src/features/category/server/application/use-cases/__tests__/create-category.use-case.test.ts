@@ -38,15 +38,15 @@ describe("CreateCategoryUseCase", () => {
     await new CreateCategoryUseCase(repository).execute(USER, {
       ...input,
       aiSuggestions: [
-        { icon: "💊", color: "#D5F0DD" },
-        { icon: "💊", color: "#CFE3F7" },
-        { icon: "texto", color: "#CFE3F7" },
+        { icon: "💊", color: "#E2F4E7" },
+        { icon: "💊", color: "#DDEBF9" },
+        { icon: "texto", color: "#DDEBF9" },
       ],
     });
 
     expect(repository.insert).toHaveBeenCalledWith(
       expect.objectContaining({
-        aiSuggestions: [{ icon: "💊", color: "#D5F0DD" }],
+        aiSuggestions: [{ icon: "💊", color: "#E2F4E7" }],
       }),
     );
   });

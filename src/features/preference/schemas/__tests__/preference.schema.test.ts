@@ -12,6 +12,10 @@ describe("preferenceUpdateSchema", () => {
     expect(preferenceUpdateSchema.parse({ extras: { feedPeriod: "month" } })).toEqual({ extras: { feedPeriod: "month" } });
   });
 
+  it("acepta marcar el tour de presupuestos como visto", () => {
+    expect(preferenceUpdateSchema.parse({ extras: { budgetTourSeen: true } })).toEqual({ extras: { budgetTourSeen: true } });
+  });
+
   it("rechaza un periodo de feed desconocido", () => {
     expect(preferenceUpdateSchema.safeParse({ extras: { feedPeriod: "year" } }).success).toBe(false);
   });

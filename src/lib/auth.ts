@@ -53,8 +53,8 @@ export const auth = betterAuth({
    */
   session: {
     cookieCache: { enabled: true, maxAge: 5 * 60 },
-    // caduca tras 7 días sin uso; usarla al menos una vez al día la prorroga otros 7
-    expiresIn: 7 * DAY,
+    // caduca tras 30 días sin uso; usarla al menos una vez al día la prorroga otros 30
+    expiresIn: 30 * DAY,
     updateAge: DAY,
   },
 

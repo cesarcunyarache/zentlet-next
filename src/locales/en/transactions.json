@@ -24,7 +24,7 @@
     "create": "Add transaction"
   },
   "headline": {
-    "total": "Total",
+    "total": "Balance",
     "expenses": "Expenses",
     "income": "Income",
     "category": "Category"

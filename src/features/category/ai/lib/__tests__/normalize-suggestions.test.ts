@@ -30,8 +30,8 @@ describe("toPastel", () => {
       const pastel = toPastel(color);
       expect(pastel).toMatch(/^#[0-9A-F]{6}$/);
       const { l, s } = hsl(pastel as string);
-      expect(l).toBeGreaterThanOrEqual(0.835);
-      expect(l).toBeLessThanOrEqual(0.925);
+      expect(l).toBeGreaterThanOrEqual(0.885);
+      expect(l).toBeLessThanOrEqual(0.955);
       expect(s).toBeLessThanOrEqual(0.97);
     }
   });
@@ -42,7 +42,7 @@ describe("toPastel", () => {
   });
 
   it("deja intactos los colores de los ejemplos del prompt", () => {
-    for (const color of ["#FDDCC4", "#FCE8B2", "#CFF0D6", "#CFE3F7", "#F0DEC2", "#D0EFE6"]) {
+    for (const color of ["#FEE6D6", "#FDEFC9", "#DDF4E2", "#DDEBF9", "#F4E8D4", "#DEF4EE"]) {
       expect(toPastel(color)).toBe(color);
     }
   });

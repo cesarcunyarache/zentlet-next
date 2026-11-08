@@ -29,9 +29,11 @@ export function useHomeSummary({
   categoriesById,
 }: UseHomeSummaryOptions) {
   const t = useTranslations("transactions");
-  const { budgets } = useBudgetStore();
+  const { budgets, isLoading: areBudgetsLoading } = useBudgetStore();
   const { data: summary } = useTransactionSummary(summaryFilters);
   const { data: lifetime } = useTransactionSummary(ALL_TIME);
+  const { data: account } = useTransactionSummary({ listId: listId ?? undefined });
+  const accountBalance = (account?.incomeTotal ?? 0) - (account?.expenseTotal ?? 0);
 
   const expenseTotal = summary?.expenseTotal ?? 0;
   const incomeTotal = summary?.incomeTotal ?? 0;
@@ -63,6 +65,7 @@ export function useHomeSummary({
         kind,
         expenseTotal,
         incomeTotal,
+        accountBalance,
         labels: {
           category: t("headline.category"),
           expenses: t("headline.expenses"),
@@ -70,7 +73,7 @@ export function useHomeSummary({
           total: t("headline.total"),
         },
       }),
-    [categoryId, categoriesById, valueOfCategory, kind, expenseTotal, incomeTotal, t],
+    [categoryId, categoriesById, valueOfCategory, kind, expenseTotal, incomeTotal, accountBalance, t],
   );
 
   return {
@@ -78,6 +81,7 @@ export function useHomeSummary({
     incomeTotal,
     lifetimeCount: lifetime?.count ?? 0,
     stripData,
+    isStripReady: !areBudgetsLoading,
     headline,
   };
 }

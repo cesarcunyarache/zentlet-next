@@ -33,5 +33,10 @@
   "strip": {
     "spentOf": "gastos {spent} de {budget}",
     "hint": "Mantén pulsado para fijar un presupuesto"
+  },
+  "tour": {
+    "title": "Establece un presupuesto",
+    "body": "Mantén pulsada esta categoría para fijar cuánto quieres gastar en ella.",
+    "dismiss": "Entendido"
   }
 }
