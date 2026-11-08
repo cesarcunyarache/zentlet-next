@@ -216,7 +216,14 @@ export default function HomePage() {
         onRemoved={budgetEditor.removed}
       />
 
-      <CategoriesSheet {...sheets.sheetProps("categories")} categories={categories} />
+      <CategoriesSheet
+        {...sheets.sheetProps("categories")}
+        categories={categories}
+        onOpenBudget={(category) => {
+          sheets.open(null);
+          budgetEditor.open(category);
+        }}
+      />
 
       <SettingsSheet
         {...sheets.sheetProps("settings")}

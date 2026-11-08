@@ -11,9 +11,10 @@ interface CategoriesSheetProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   categories: CategoryBase[];
+  onOpenBudget?: (category: EditableCategory) => void;
 }
 
-export function CategoriesSheet({ isOpen, onOpenChange, categories }: CategoriesSheetProps) {
+export function CategoriesSheet({ isOpen, onOpenChange, categories, onOpenBudget }: CategoriesSheetProps) {
   const t = useTranslations("categories");
   const [isCreating, setIsCreating] = useState(false);
   const [editing, setEditing] = useState<EditableCategory | null>(null);
@@ -22,6 +23,11 @@ export function CategoriesSheet({ isOpen, onOpenChange, categories }: Categories
   function closeForm() {
     setIsCreating(false);
     setEditing(null);
+  }
+
+  function openBudget(category: EditableCategory) {
+    closeForm();
+    onOpenBudget?.(category);
   }
 
   return (
@@ -43,7 +49,12 @@ export function CategoriesSheet({ isOpen, onOpenChange, categories }: Categories
         />
       </Sheet>
 
-      <CategoryFormSheet isOpen={isFormOpen} category={editing} onClose={closeForm} />
+      <CategoryFormSheet
+        isOpen={isFormOpen}
+        category={editing}
+        onClose={closeForm}
+        onOpenBudget={onOpenBudget ? openBudget : undefined}
+      />
     </>
   );
 }
