@@ -27,6 +27,8 @@ import { Onboarding } from "@/features/onboarding/ui/onboarding";
 import { useHomeCategories } from "@/features/home/hooks/useHomeCategories";
 import { useHomeFilters } from "@/features/home/hooks/useHomeFilters";
 import { useDisplayPreferences } from "@/features/preference/hooks/useDisplayPreferences";
+import { useBudgetTour } from "@/features/home/hooks/useBudgetTour";
+import { CoachMark } from "@/core/components/ui/coach-mark";
 import { useHomeSheets } from "@/features/home/hooks/useHomeSheets";
 import { useHomeSummary } from "@/features/home/hooks/useHomeSummary";
 import { useHomeTransactions } from "@/features/home/hooks/useHomeTransactions";
@@ -40,6 +42,7 @@ import { HomeActionBar } from "@/features/home/ui/home-action-bar";
 export default function HomePage() {
   const tSync = useTranslations("offline.syncErrors");
   const tInbox = useTranslations("inbox");
+  const tBudgetTour = useTranslations("budgets.tour");
   const { message, show: toast } = useToast();
   const { currency, currencyCode, setCurrency } = useCurrency();
   const { unreadCount } = useNotifications();
@@ -57,6 +60,13 @@ export default function HomePage() {
     toast,
   });
   const budgetEditor = useBudgetEditor(toast);
+  const budgetTour = useBudgetTour({
+    isBlocked:
+      sheets.isAnyOpen ||
+      Boolean(budgetEditor.category) ||
+      Boolean(transactions.pendingDelete) ||
+      transactions.detailId !== null,
+  });
 
   const feed = useTransactionFeed(filters.feedFilters);
   const summary = useHomeSummary({
@@ -116,7 +126,10 @@ export default function HomePage() {
             currency={currency}
             selectedId={filters.categoryId}
             onSelect={filters.changeCategory}
-            onLongPress={budgetEditor.open}
+            onLongPress={(category) => {
+              budgetTour.complete();
+              budgetEditor.open(category);
+            }}
           />
         </div>
 
@@ -145,6 +158,15 @@ export default function HomePage() {
         onToggleSearch={filters.toggleSearch}
         onCreate={transactions.startCreating}
         onQuickSave={(values) => transactions.create(values)}
+      />
+
+      <CoachMark
+        isOpen={budgetTour.isActive}
+        target='[data-tour="budget"]'
+        title={tBudgetTour("title")}
+        body={tBudgetTour("body")}
+        dismissLabel={tBudgetTour("dismiss")}
+        onDismiss={budgetTour.complete}
       />
 
       <ToastBubble message={message} />

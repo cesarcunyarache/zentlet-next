@@ -21,13 +21,14 @@ const timezone = z.string().min(1).max(TIMEZONE_MAX_LENGTH).refine(isTimezone, "
 
 export const FEED_PERIODS = ["all", "month", "week", "previous"] as const;
 
-const extraFields = { hideBalance: z.boolean(), feedPeriod: z.enum(FEED_PERIODS) };
+const extraFields = { hideBalance: z.boolean(), feedPeriod: z.enum(FEED_PERIODS), budgetTourSeen: z.boolean() };
 
 const preferenceExtrasSchema = z.object(extraFields).partial();
 
 const storedExtrasSchema = z.object({
   hideBalance: extraFields.hideBalance.optional().catch(undefined),
   feedPeriod: extraFields.feedPeriod.optional().catch(undefined),
+  budgetTourSeen: extraFields.budgetTourSeen.optional().catch(undefined),
 });
 
 export const preferenceUpdateSchema = z

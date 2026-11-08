@@ -12,5 +12,5 @@ export function useHomeSheets() {
     };
   }
 
-  return { open: setOpenSheet, sheetProps };
+  return { open: setOpenSheet, isAnyOpen: openSheet !== null, sheetProps };
 }

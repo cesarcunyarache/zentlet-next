@@ -158,6 +158,7 @@ export function useBudgetStore() {
 
   return {
     budgets,
+    isLoading: query.isLoading,
     saveBudget,
     deleteBudget: (budgetId: string) => remove.mutate(budgetId),
   };

@@ -72,6 +72,7 @@ export function CategoryColumn({
       aria-pressed={isSelected}
       aria-label={`${category.name}, ${amountLabel}`}
       aria-description={tBudget("hint")}
+      data-tour={index === 0 ? "budget" : undefined}
       title={`${category.name} · ${amountLabel}`}
       onClick={handleClick}
       {...handlers}

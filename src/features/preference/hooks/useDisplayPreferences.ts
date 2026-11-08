@@ -19,7 +19,11 @@ export function useDisplayPreferences() {
     [userId],
   );
 
+  const markBudgetTourSeen = useCallback(() => changeExtras(userId, { budgetTourSeen: true }), [userId]);
+
   return {
+    isBudgetTourSeen: extras.budgetTourSeen ?? false,
+    markBudgetTourSeen,
     hideBalance: extras.hideBalance ?? false,
     feedPeriod: extras.feedPeriod ?? null,
     setHideBalance,

@@ -33,5 +33,10 @@
   "strip": {
     "spentOf": "spent {spent} of {budget}",
     "hint": "Press and hold to set a budget"
+  },
+  "tour": {
+    "title": "Set a budget",
+    "body": "Press and hold this category to set how much you want to spend on it.",
+    "dismiss": "Got it"
   }
 }
