@@ -38,7 +38,7 @@ export function CategoryStrip({ data, isPending = false, currency, selectedId, o
       role="group"
       aria-label={t("label")}
       className="scroll-clean -mx-5 flex items-end gap-2.5 overflow-x-auto px-5 sm:-mx-6 sm:px-6"
-      style={{ height: CHART_HEIGHT }}
+      style={{ height: CHART_HEIGHT, overscrollBehaviorY: "auto" }}
     >
       <AnimatePresence initial={false} mode="popLayout">
         {data.map((item, index) => (
