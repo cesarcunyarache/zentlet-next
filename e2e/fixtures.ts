@@ -102,6 +102,9 @@ export async function createAccount(page: Page, user: TestUser) {
   });
   expect(signUp).toBe(200);
   expect(await apiStatus(page, "/api/account/onboarding", { method: "POST" })).toBe(204);
+  expect(
+    await apiStatus(page, "/api/account/preferences", { method: "PATCH", body: { extras: { budgetTourSeen: true } } }),
+  ).toBe(200);
   expect(await apiStatus(page, "/api/auth/get-session?disableCookieCache=true")).toBe(200);
 
   await page.goto("/admin");

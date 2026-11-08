@@ -25,6 +25,21 @@ async function registerTransaction(
   await page.getByRole("button", { name: "Guardar", exact: true }).click();
 }
 
+const FULL_SWIPE_PX = 220;
+
+async function swipeRow(page: Page, description: string, action: "edit" | "delete") {
+  const row = page.getByRole("button").filter({ hasText: description }).first();
+  const box = await row.boundingBox();
+  if (!box) throw new Error(`La fila "${description}" no está visible`);
+  const y = box.y + box.height / 2;
+  const startX = box.x + box.width / 2;
+  const endX = startX + (action === "edit" ? FULL_SWIPE_PX : -FULL_SWIPE_PX);
+  await page.mouse.move(startX, y);
+  await page.mouse.down();
+  await page.mouse.move(endX, y, { steps: 15 });
+  await page.mouse.up();
+}
+
 test.describe("movimientos", () => {
   test("registrar un gasto y un ingreso actualiza el total y queda guardado en la cuenta", async ({ browser }) => {
     const { page } = await freshAccount(browser);
@@ -46,19 +61,14 @@ test.describe("movimientos", () => {
     await registerTransaction(page, { description: "Taxi", amount: "12" });
     await expect(page.getByText("Gasto registrado")).toBeVisible();
 
-    await page.getByText("Taxi").click();
-    await page.getByRole("button", { name: "Editar", exact: true }).click();
+    await swipeRow(page, "Taxi", "edit");
     await page.getByLabel("Monto").fill("15");
     await page.getByRole("button", { name: "Guardar", exact: true }).click();
     await expect(page.getByText("Movimiento actualizado")).toBeVisible();
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(/15\.00/);
 
-    await page.getByText("Taxi").click();
-    await page.getByRole("button", { name: "Eliminar movimiento" }).click();
-    await page
-      .getByRole("button", { name: /Eliminar/ })
-      .last()
-      .click();
+    await swipeRow(page, "Taxi", "delete");
+    await page.getByRole("button", { name: "Eliminar", exact: true }).click();
     await expect(page.getByText("Movimiento eliminado")).toBeVisible();
 
     await page.reload();
@@ -77,7 +87,9 @@ test.describe("movimientos", () => {
     await page.getByRole("button", { name: "Toca de nuevo para confirmar" }).click();
     await expect(page.getByText("Ya no se repetirá. Los movimientos anteriores se mantienen.")).toBeVisible();
 
-    await page.getByRole("button", { name: "Editar", exact: true }).click();
+    await page.keyboard.press("Escape");
+    await expect(page.getByText(/Cada mes · próximo/)).toHaveCount(0);
+    await swipeRow(page, "Netflix", "edit");
     await expect(page.getByRole("button", { name: "Repetir" })).toHaveCount(0);
   });
 
