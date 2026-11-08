@@ -46,13 +46,13 @@ describe("useHomeFilters", () => {
     expect(preferences.setFeedPeriod).toHaveBeenCalledWith("previous");
   });
 
-  it("mostrar todo tras guardar un movimiento no cambia el periodo guardado", () => {
+  it("tras guardar un movimiento se respeta el periodo elegido y no se toca el guardado", () => {
     preferences.feedPeriod = "month";
     const { result } = renderHook(() => useHomeFilters());
 
-    act(() => result.current.showAll());
+    act(() => result.current.clearNarrowingFilters());
 
-    expect(result.current.period).toBe("all");
+    expect(result.current.period).toBe("month");
     expect(preferences.setFeedPeriod).not.toHaveBeenCalled();
   });
 
@@ -78,7 +78,7 @@ describe("useHomeFilters", () => {
     expect(result.current.listId).toBe("private");
   });
 
-  it("al guardar un movimiento se vuelve a mostrar todo, sin tipo ni categoría", () => {
+  it("al guardar un movimiento se quitan tipo y categoría pero el periodo elegido se mantiene", () => {
     const { result } = renderHook(() => useHomeFilters());
 
     act(() => {
@@ -86,9 +86,9 @@ describe("useHomeFilters", () => {
       result.current.changeKind("income");
       result.current.changeCategory("salary");
     });
-    act(() => result.current.showAll());
+    act(() => result.current.clearNarrowingFilters());
 
-    expect(result.current).toMatchObject({ period: "all", kind: null, categoryId: null });
+    expect(result.current).toMatchObject({ period: "previous", kind: null, categoryId: null });
   });
 
   it("cerrar la búsqueda borra lo escrito", () => {

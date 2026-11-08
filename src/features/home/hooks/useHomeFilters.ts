@@ -49,10 +49,9 @@ export function useHomeFilters() {
     setIsSearching((current) => !current);
   }
 
-  function showAll() {
+  function clearNarrowingFilters() {
     setCategoryId(null);
     setKind(null);
-    setChosenPeriod(DEFAULT_PERIOD);
   }
 
   return {
@@ -72,6 +71,6 @@ export function useHomeFilters() {
     changeList,
     changeQuery: setQuery,
     toggleSearch,
-    showAll,
+    clearNarrowingFilters,
   };
 }
