@@ -22,11 +22,12 @@ interface HeadlineInput {
   kind: TransactionType | null;
   expenseTotal: number;
   incomeTotal: number;
+  accountBalance: number;
   labels: HeadlineLabels;
 }
 
 export function headlineFor(input: HeadlineInput): Headline {
-  const { categoryId, categoryName, categoryValue, kind, expenseTotal, incomeTotal, labels } = input;
+  const { categoryId, categoryName, categoryValue, kind, expenseTotal, incomeTotal, accountBalance, labels } = input;
 
   if (categoryId) {
     const tone = categoryValue > 0 ? "income" : "expense";
@@ -36,7 +37,6 @@ export function headlineFor(input: HeadlineInput): Headline {
   if (kind === "expense") return { value: -expenseTotal, label: labels.expenses, tone: "expense" };
   if (kind === "income") return { value: incomeTotal, label: labels.income, tone: "income" };
 
-  const balance = incomeTotal - expenseTotal;
-  const tone = balance < 0 ? "neutral" : "income";
-  return { value: balance, label: labels.total, tone };
+  const tone = accountBalance < 0 ? "neutral" : "income";
+  return { value: accountBalance, label: labels.total, tone };
 }

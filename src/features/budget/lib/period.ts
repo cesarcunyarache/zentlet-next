@@ -57,10 +57,11 @@ export function activePeriod(budget: TBudget, date: string): PeriodRange | null 
 }
 
 export function budgetRangeForView(budget: TBudget, view: DateRange, date: string): PeriodRange | null {
-  if (!view.from || !view.to) return null;
-  if (view.from <= date && date < view.to) return activePeriod(budget, date);
-  const period = activePeriod(budget, view.from);
-  return period?.from === view.from && period.to === view.to ? period : null;
+  const { from, to } = view;
+  if (!from || !to) return activePeriod(budget, date);
+  if (from <= date && date < to) return activePeriod(budget, date);
+  const period = activePeriod(budget, from);
+  return period?.from === from && period.to === to ? period : null;
 }
 
 export function todayISO() {

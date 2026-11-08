@@ -24,7 +24,7 @@
     "create": "Registrar movimiento"
   },
   "headline": {
-    "total": "Total",
+    "total": "Saldo",
     "expenses": "Gastos",
     "income": "Ingresos",
     "category": "Categoría"
