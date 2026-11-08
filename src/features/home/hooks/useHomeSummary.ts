@@ -29,7 +29,7 @@ export function useHomeSummary({
   categoriesById,
 }: UseHomeSummaryOptions) {
   const t = useTranslations("transactions");
-  const { budgets } = useBudgetStore();
+  const { budgets, isLoading: areBudgetsLoading } = useBudgetStore();
   const { data: summary } = useTransactionSummary(summaryFilters);
   const { data: lifetime } = useTransactionSummary(ALL_TIME);
 
@@ -78,6 +78,7 @@ export function useHomeSummary({
     incomeTotal,
     lifetimeCount: lifetime?.count ?? 0,
     stripData,
+    isStripReady: !areBudgetsLoading,
     headline,
   };
 }

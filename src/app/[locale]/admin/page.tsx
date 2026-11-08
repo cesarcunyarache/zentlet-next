@@ -123,6 +123,7 @@ export default function HomePage() {
         <div className="mt-8">
           <CategoryStrip
             data={summary.stripData}
+            isPending={!summary.isStripReady}
             currency={currency}
             selectedId={filters.categoryId}
             onSelect={filters.changeCategory}

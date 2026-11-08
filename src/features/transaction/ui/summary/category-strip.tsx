@@ -18,17 +18,19 @@ const GHOST_STAGGER_SECONDS = 0.06;
 
 interface CategoryStripProps {
   data: CategoryTotal[];
+  isPending?: boolean;
   currency: string;
   selectedId: string | null;
   onSelect: (categoryId: string | null) => void;
   onLongPress: (category: CategoryLike) => void;
 }
 
-export function CategoryStrip({ data, currency, selectedId, onSelect, onLongPress }: CategoryStripProps) {
+export function CategoryStrip({ data, isPending = false, currency, selectedId, onSelect, onLongPress }: CategoryStripProps) {
   const t = useTranslations("transactions.strip");
   const shouldReduceMotion = Boolean(useReducedMotion());
   const max = stripScaleMax(data);
 
+  if (isPending) return <div aria-hidden style={{ height: CHART_HEIGHT }} />;
   if (max === 0) return <GhostStrip shouldReduceMotion={shouldReduceMotion} />;
 
   return (

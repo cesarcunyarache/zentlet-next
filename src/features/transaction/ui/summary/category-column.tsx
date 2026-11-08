@@ -79,7 +79,7 @@ export function CategoryColumn({
       title={`${category.name} · ${amountLabel}`}
       onClick={handleClick}
       {...handlers}
-      initial={{ opacity: 0, y: 16 }}
+      initial={hasTrack ? false : { opacity: 0, y: 16 }}
       animate={{ opacity: selectedId && !isSelected ? DIMMED_OPACITY : 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.85 }}
       whileTap={{ scale: 0.94 }}
@@ -96,7 +96,8 @@ export function CategoryColumn({
           } as React.CSSProperties
         }
         className={cn(
-          "relative flex h-(--bar-height) w-full items-center justify-end overflow-hidden rounded-3xl transition-[height] duration-600 motion-reduce:transition-none starting:h-11",
+          "relative flex h-(--bar-height) w-full items-center justify-end overflow-hidden rounded-3xl",
+          !hasTrack && "transition-[height] duration-600 motion-reduce:transition-none starting:h-11",
           isIdle ? "flex-row justify-center gap-1" : "flex-col gap-1.5 pb-3.5",
           isLabelOnFill ? "text-app-on-pastel" : "text-app-fg",
         )}
@@ -109,12 +110,12 @@ export function CategoryColumn({
             ...(!isOverBudget && color && { backgroundColor: color }),
           }}
           className={cn(
-            "absolute inset-x-0 bottom-0 h-(--fill-height) transition-[background-color,height] duration-[300ms,600ms] motion-reduce:transition-none starting:h-0",
+            "absolute inset-x-0 bottom-0 h-(--fill-height) rounded-t-3xl transition-[background-color,height] duration-[300ms,600ms] motion-reduce:transition-none starting:h-0",
             isOverBudget && "bg-app-expense-soft",
             !isOverBudget && !color && "bg-app-fill-strong group-hover:bg-[color-mix(in_oklch,var(--app-fg)_16%,transparent)]",
           )}
         />
-        {hasTrack ? <BudgetMarker growthStyle={growthStyle} /> : null}
+        {hasTrack ? <BudgetMarker /> : null}
         <motion.span
           aria-hidden
           className={cn("relative leading-none", isIdle ? "text-base" : "text-2xl")}
@@ -129,12 +130,11 @@ export function CategoryColumn({
   );
 }
 
-function BudgetMarker({ growthStyle }: { growthStyle: React.CSSProperties }) {
+function BudgetMarker() {
   return (
     <span
       aria-hidden
-      style={growthStyle}
-      className="border-app-fg/25 pointer-events-none absolute inset-x-0 bottom-0 h-(--track-height) rounded-3xl border-2 border-dashed transition-[height] duration-600 motion-reduce:transition-none"
+      className="border-app-fg/25 pointer-events-none absolute inset-x-0 bottom-0 h-(--track-height) rounded-3xl border-2 border-dashed"
     />
   );
 }
