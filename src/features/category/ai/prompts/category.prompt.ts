@@ -16,8 +16,8 @@ El usuario escribe el nombre de una categoría y tú propones 4 combinaciones de
 - Evita emojis con doble sentido o que se vean ofensivos.
 
 ## Colores
-- Fondo pastel en HEX de 6 dígitos en mayúsculas (#RRGGBB): muy claro y suave, con luminosidad alta (HSL L entre 84% y 92%) y saturación entre 40% y 95% (a esa luminosidad sigue viéndose suave).
-- El color complementa a su emoji: es una versión clara del tono dominante del emoji o del concepto, para que el emoji resalte encima (🍔 → melocotón #FDDCC4, 🥗 → verde menta #CFF0D6, 🚌 → celeste #CFE3F7, 💊 → rosa #F9D5DF).
+- Fondo pastel en HEX de 6 dígitos en mayúsculas (#RRGGBB): muy claro y suave, con luminosidad muy alta (HSL L entre 89% y 95%) y saturación entre 40% y 95% (a esa luminosidad sigue viéndose suave y tenue, nunca encendido).
+- El color complementa a su emoji: es una versión clara del tono dominante del emoji o del concepto, para que el emoji resalte encima (🍔 → melocotón #FEE6D6, 🥗 → verde menta #DDF4E2, 🚌 → celeste #DDEBF9, 💊 → rosa #FBE2E9).
 - Nada de blancos, grises, beiges casi blancos (#F5F5F5, #FAFAF0), colores saturados, neón ni oscuros: sobre el fondo va texto oscuro.
 - Las 4 opciones usan 4 tonos claramente distintos entre sí.
 
@@ -29,13 +29,13 @@ El usuario escribe el nombre de una categoría y tú propones 4 combinaciones de
 ## Ejemplos
 
 <categoria>comida</categoria>
-{"categories":[{"icon":"🍔","color":"#FDDCC4"},{"icon":"🍕","color":"#FCE8B2"},{"icon":"🥗","color":"#CFF0D6"},{"icon":"🍜","color":"#F9D5DF"}]}
+{"categories":[{"icon":"🍔","color":"#FEE6D6"},{"icon":"🍕","color":"#FDEFC9"},{"icon":"🥗","color":"#DDF4E2"},{"icon":"🍜","color":"#FBE2E9"}]}
 
 <categoria>pasajes</categoria>
-{"categories":[{"icon":"🚌","color":"#CFE3F7"},{"icon":"🚕","color":"#FCEFB4"},{"icon":"🚇","color":"#DCD6F7"},{"icon":"🚲","color":"#CFF0E4"}]}
+{"categories":[{"icon":"🚌","color":"#DDEBF9"},{"icon":"🚕","color":"#FDF4CA"},{"icon":"🚇","color":"#E6E2F9"},{"icon":"🚲","color":"#DDF4EC"}]}
 
 <categoria>sueldo</categoria>
-{"categories":[{"icon":"💼","color":"#F0DEC2"},{"icon":"💵","color":"#D3F0D2"},{"icon":"🏦","color":"#D6E4F5"},{"icon":"📈","color":"#D0EFE6"}]}
+{"categories":[{"icon":"💼","color":"#F4E8D4"},{"icon":"💵","color":"#E0F4E0"},{"icon":"🏦","color":"#E2ECF8"},{"icon":"📈","color":"#DEF4EE"}]}
 
 <categoria>${userPrompt}</categoria>
 `;

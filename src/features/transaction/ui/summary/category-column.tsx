@@ -8,6 +8,7 @@ import { formatMoney, formatShort } from "@/lib/money";
 import { CATEGORY_FALLBACK_ICON } from "@/features/category/constants";
 import { useLongPress } from "../../hooks/useLongPress";
 import { barLayout, isOverBudget as exceedsBudget } from "../../lib/category-strip";
+import { IDLE_HEIGHT } from "../../lib/chart";
 import type { CategoryLike, CategoryTotal } from "../../types";
 
 const COLUMN_CLASS = "flex h-full w-[76px] shrink-0 flex-col justify-end sm:w-[88px]";
@@ -55,6 +56,8 @@ export function CategoryColumn({
   const isOverBudget = exceedsBudget(item);
   const { isIdle, height, fill, track } = barLayout(item, max);
   const hasTrack = track !== null;
+  const color = category.color || null;
+  const isLabelOnFill = color !== null && fill >= IDLE_HEIGHT;
   const amountLabel = useAmountLabel(item, isIdle, currency);
 
   const delay = `${shouldReduceMotion ? 0 : index * COLUMN_STAGGER_MS}ms`;
@@ -95,8 +98,7 @@ export function CategoryColumn({
         className={cn(
           "relative flex h-(--bar-height) w-full items-center justify-end overflow-hidden rounded-3xl transition-[height] duration-600 motion-reduce:transition-none starting:h-11",
           isIdle ? "flex-row justify-center gap-1" : "flex-col gap-1.5 pb-3.5",
-          hasTrack && "bg-app-fill",
-          isSelected && category.color ? "text-app-on-pastel" : "text-app-fg",
+          isLabelOnFill ? "text-app-on-pastel" : "text-app-fg",
         )}
       >
         <span
@@ -104,17 +106,15 @@ export function CategoryColumn({
           style={{
             transitionDelay: `0ms, ${delay}`,
             transitionTimingFunction: `ease, ${EASE_OUT_CSS}`,
-            ...(isSelected && { backgroundColor: category.color || "var(--app-fill-strong)" }),
+            ...(!isOverBudget && color && { backgroundColor: color }),
           }}
           className={cn(
             "absolute inset-x-0 bottom-0 h-(--fill-height) transition-[background-color,height] duration-[300ms,600ms] motion-reduce:transition-none starting:h-0",
-            !isSelected &&
-              (isOverBudget
-                ? "bg-app-expense-soft"
-                : "bg-app-fill-strong group-hover:bg-[color-mix(in_oklch,var(--app-fg)_16%,transparent)]"),
+            isOverBudget && "bg-app-expense-soft",
+            !isOverBudget && !color && "bg-app-fill-strong group-hover:bg-[color-mix(in_oklch,var(--app-fg)_16%,transparent)]",
           )}
         />
-        {hasTrack ? <BudgetMarker isOverBudget={isOverBudget} growthStyle={growthStyle} /> : null}
+        {hasTrack ? <BudgetMarker growthStyle={growthStyle} /> : null}
         <motion.span
           aria-hidden
           className={cn("relative leading-none", isIdle ? "text-base" : "text-2xl")}
@@ -129,25 +129,12 @@ export function CategoryColumn({
   );
 }
 
-interface BudgetMarkerProps {
-  isOverBudget: boolean;
-  growthStyle: React.CSSProperties;
-}
-
-function BudgetMarker({ isOverBudget, growthStyle }: BudgetMarkerProps) {
-  if (isOverBudget) {
-    return (
-      <span
-        aria-hidden
-        style={growthStyle}
-        className="border-app-expense/60 pointer-events-none absolute inset-x-0 bottom-(--track-height) border-t-2 border-dashed transition-[bottom] duration-600 motion-reduce:transition-none"
-      />
-    );
-  }
+function BudgetMarker({ growthStyle }: { growthStyle: React.CSSProperties }) {
   return (
     <span
       aria-hidden
-      className="border-app-fg/25 pointer-events-none absolute inset-0 rounded-3xl border-[1.5px] border-dashed"
+      style={growthStyle}
+      className="border-app-fg/25 pointer-events-none absolute inset-x-0 bottom-0 h-(--track-height) rounded-3xl border-2 border-dashed transition-[height] duration-600 motion-reduce:transition-none"
     />
   );
 }
