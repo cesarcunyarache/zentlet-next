@@ -3,6 +3,7 @@
 import { Button, Form } from "@heroui/react";
 import { Check } from "@gravity-ui/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { PiggyBank } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRef, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
@@ -24,9 +25,10 @@ interface CategoryFormProps {
   onSuccess: () => void;
   initialName?: string;
   category?: EditableCategory;
+  onOpenBudget?: (category: EditableCategory) => void;
 }
 
-export function CategoryForm({ onSuccess, initialName = "", category }: CategoryFormProps) {
+export function CategoryForm({ onSuccess, initialName = "", category, onOpenBudget }: CategoryFormProps) {
   const t = useTranslations();
   const { createCategory, updateCategory } = useCategoryStore();
   const online = useIsOnline();
@@ -123,10 +125,23 @@ export function CategoryForm({ onSuccess, initialName = "", category }: Category
         </p>
       )}
 
-      <Button type="submit" className="w-full" isDisabled={!form.formState.isValid}>
-        <Check />
-        {t("common.actions.save")}
-      </Button>
+      <div className="flex gap-2">
+        {category && onOpenBudget ? (
+          <Button
+            type="button"
+            isIconOnly
+            variant="secondary"
+            aria-label={t("budgets.sheet.heading")}
+            onPress={() => onOpenBudget(category)}
+          >
+            <PiggyBank />
+          </Button>
+        ) : null}
+        <Button type="submit" className="flex-1" isDisabled={!form.formState.isValid}>
+          <Check />
+          {t("common.actions.save")}
+        </Button>
+      </div>
     </Form>
   );
 }

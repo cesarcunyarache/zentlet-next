@@ -14,9 +14,10 @@ interface CategoryFormSheetProps {
   category?: EditableCategory | null;
   initialName?: string;
   onClose: () => void;
+  onOpenBudget?: (category: EditableCategory) => void;
 }
 
-export function CategoryFormSheet({ isOpen, category, initialName, onClose }: CategoryFormSheetProps) {
+export function CategoryFormSheet({ isOpen, category, initialName, onClose, onOpenBudget }: CategoryFormSheetProps) {
   const t = useTranslations("categories.form");
 
   useEffect(() => {
@@ -39,6 +40,7 @@ export function CategoryFormSheet({ isOpen, category, initialName, onClose }: Ca
           category={category ?? undefined}
           initialName={initialName}
           onSuccess={onClose}
+          onOpenBudget={onOpenBudget}
         />
       </div>
     </Sheet>
