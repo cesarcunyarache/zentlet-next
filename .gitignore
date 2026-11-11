@@ -7,3 +7,10 @@ node_modules
 .next
 next-env.d.ts
 *.tsbuildinfo
+
+# Xcode
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+DerivedData/
+.build/
