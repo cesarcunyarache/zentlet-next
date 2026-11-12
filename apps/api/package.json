@@ -24,6 +24,7 @@
     "db:generate": "prisma generate"
   },
   "dependencies": {
+    "@ai-sdk/google": "^4.0.24",
     "@nestjs/common": "^12.0.1",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^12.0.1",
@@ -31,11 +32,13 @@
     "@nestjs/platform-express": "^12.0.1",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
+    "ai": "^7.0.37",
     "ioredis": "^6.0.0",
     "jose": "^6.0.11",
     "pino": "^10.3.1",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@nestjs/cli": "^12.0.0",

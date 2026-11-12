@@ -5,7 +5,14 @@ import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { AuthModule } from './modules/auth/auth.module.js';
 import { BillingModule } from './modules/billing/billing.module.js';
+import { BudgetModule } from './modules/budget/budget.module.js';
 import { CategoryModule } from './modules/category/category.module.js';
+import { FeatureFlagModule } from './modules/feature-flag/feature-flag.module.js';
+import { FeedbackModule } from './modules/feedback/feedback.module.js';
+import { PreferenceModule } from './modules/preference/preference.module.js';
+import { RecurringModule } from './modules/recurring/recurring.module.js';
+import { TransactionModule } from './modules/transaction/transaction.module.js';
+import { AiModule } from './shared/ai/ai.module.js';
 import { BackgroundModule } from './shared/background/background.module.js';
 import { EmailModule } from './shared/email/email.module.js';
 import { KvModule } from './shared/kv/kv.module.js';
@@ -30,9 +37,16 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     EmailModule,
     KvModule,
     BackgroundModule,
+    AiModule,
     AuthModule,
     BillingModule,
     CategoryModule,
+    TransactionModule,
+    BudgetModule,
+    RecurringModule,
+    FeedbackModule,
+    PreferenceModule,
+    FeatureFlagModule,
   ],
   controllers: [AppController],
   providers: [AppService],
