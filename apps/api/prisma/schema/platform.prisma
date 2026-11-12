@@ -1,0 +1,77 @@
+model Feedback {
+  id      String @id @default(uuid())
+  type    String @default("comment")
+  status  String @default("open")
+  message String @db.VarChar(2000)
+
+  context Json?
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([status, createdAt(sort: Desc)])
+  @@map("feedback")
+}
+
+model RateLimit {
+  id          String @id
+  key         String @unique
+  count       Int
+  lastRequest BigInt
+
+  @@map("rate_limit")
+}
+
+model UsageLimit {
+  key         String   @id
+  count       Int
+  windowStart DateTime @default(now())
+
+  @@map("usage_limit")
+}
+
+enum FeatureType {
+  RELEASE
+  EXPERIMENT
+  OPERATIONAL
+  KILL_SWITCH
+  PERMISSION
+}
+
+model Feature {
+  slug        String        @id
+  enabled     Boolean       @default(false)
+  rollout     Int           @default(100)
+  description String?
+  type        FeatureType   @default(RELEASE)
+  stale       Boolean       @default(false)
+  lastUsedAt  DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  updatedBy   String?
+  users       UserFeature[]
+
+  @@index([enabled])
+  @@index([stale])
+  @@map("feature")
+}
+
+model UserFeature {
+  userId     String
+  featureId  String
+  enabled    Boolean
+  assignedAt DateTime @default(now())
+  assignedBy String
+  updatedAt  DateTime @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  feature Feature @relation(fields: [featureId], references: [slug], onDelete: Cascade)
+
+  @@id([userId, featureId])
+  @@index([featureId])
+  @@map("user_feature")
+}
