@@ -133,6 +133,17 @@
         }
       }
     },
+    "A payment is already in progress.": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ya hay un pago en curso."
+          }
+        }
+      }
+    },
     "A spreadsheet with all your movements.": {
       "extractionState": "manual",
       "localizations": {
@@ -140,6 +151,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Una hoja de cálculo con todos tus movimientos."
+          }
+        }
+      }
+    },
+    "Active": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activa"
           }
         }
       }
@@ -254,6 +276,17 @@
         }
       }
     },
+    "All features are free while testing.": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Todas las funciones son gratis mientras probamos."
+          }
+        }
+      }
+    },
     "All time": {
       "extractionState": "manual",
       "localizations": {
@@ -272,6 +305,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Todos tus movimientos ya están en esta lista."
+          }
+        }
+      }
+    },
+    "Allow microphone and speech recognition in Settings to dictate.": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permite el micrófono y el reconocimiento de voz en Ajustes para dictar."
           }
         }
       }
@@ -353,6 +397,17 @@
         }
       }
     },
+    "Bank emails": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Correos del banco"
+          }
+        }
+      }
+    },
     "Biweekly": {
       "extractionState": "manual",
       "localizations": {
@@ -360,6 +415,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Quincenal"
+          }
+        }
+      }
+    },
+    "Blocked": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloqueado"
           }
         }
       }
@@ -408,6 +474,28 @@
         }
       }
     },
+    "By email": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Por correo"
+          }
+        }
+      }
+    },
+    "Camera": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cámara"
+          }
+        }
+      }
+    },
     "Can't connect. Check your connection and try again.": {
       "extractionState": "manual",
       "localizations": {
@@ -437,6 +525,39 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cancelar"
+          }
+        }
+      }
+    },
+    "Cancel subscription": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancelar suscripción"
+          }
+        }
+      }
+    },
+    "Cancel your subscription?": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Cancelar tu suscripción?"
+          }
+        }
+      }
+    },
+    "Canceled": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancelada"
           }
         }
       }
@@ -518,6 +639,17 @@
         }
       }
     },
+    "Choose": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elegir"
+          }
+        }
+      }
+    },
     "Choose a color.": {
       "extractionState": "manual",
       "localizations": {
@@ -569,6 +701,61 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cerrar"
+          }
+        }
+      }
+    },
+    "Code": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Código"
+          }
+        }
+      }
+    },
+    "Connect Gmail": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conectar Gmail"
+          }
+        }
+      }
+    },
+    "Connections": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conexiones"
+          }
+        }
+      }
+    },
+    "Couldn't connect Gmail. Try again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo conectar Gmail. Inténtalo de nuevo."
+          }
+        }
+      }
+    },
+    "Couldn't read the receipt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo leer el recibo."
           }
         }
       }
@@ -635,6 +822,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Crear categoría"
+          }
+        }
+      }
+    },
+    "Create forwarding address": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crear dirección de reenvío"
           }
         }
       }
@@ -815,6 +1013,50 @@
         }
       }
     },
+    "Dictate": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dictar"
+          }
+        }
+      }
+    },
+    "Dictation isn't available right now.": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El dictado no está disponible ahora."
+          }
+        }
+      }
+    },
+    "Disconnect Gmail": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desconectar Gmail"
+          }
+        }
+      }
+    },
+    "Dismiss": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Descartar"
+          }
+        }
+      }
+    },
     "Don't have an account? Sign up": {
       "extractionState": "manual",
       "localizations": {
@@ -910,6 +1152,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Correo"
+          }
+        }
+      }
+    },
+    "Email import": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importar correos"
+          }
+        }
+      }
+    },
+    "Email import settings": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ajustes de importación de correos"
           }
         }
       }
@@ -1123,6 +1387,50 @@
         }
       }
     },
+    "Forward to": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reenviar a"
+          }
+        }
+      }
+    },
+    "Forward your bank's notification emails to this address to import them.": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reenvía a esta dirección los correos de notificación de tu banco para importarlos."
+          }
+        }
+      }
+    },
+    "Forwarding": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reenvío"
+          }
+        }
+      }
+    },
+    "From": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De"
+          }
+        }
+      }
+    },
     "From next period": {
       "extractionState": "manual",
       "localizations": {
@@ -1141,6 +1449,39 @@
           "stringUnit": {
             "state": "translated",
             "value": "Desde este periodo"
+          }
+        }
+      }
+    },
+    "Gmail connected.": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gmail conectado."
+          }
+        }
+      }
+    },
+    "Gmail connection cancelled.": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se canceló la conexión con Gmail."
+          }
+        }
+      }
+    },
+    "Gmail isn't available right now.": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gmail no está disponible ahora."
           }
         }
       }
@@ -1174,6 +1515,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ícono"
+          }
+        }
+      }
+    },
+    "Importing bank emails needs the Zentlet server. It works when the app is connected to your account online.": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importar correos del banco necesita el servidor de Zentlet. Funciona cuando la app está conectada a tu cuenta en línea."
           }
         }
       }
@@ -1218,6 +1570,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Código de invitación"
+          }
+        }
+      }
+    },
+    "Invite sent": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invitación enviada"
           }
         }
       }
@@ -1343,6 +1706,28 @@
         }
       }
     },
+    "Link WhatsApp": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vincular WhatsApp"
+          }
+        }
+      }
+    },
+    "Linked": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vinculado"
+          }
+        }
+      }
+    },
     "List": {
       "extractionState": "manual",
       "localizations": {
@@ -1394,6 +1779,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gestionar"
+          }
+        }
+      }
+    },
+    "Manage your subscription on the Zentlet website.": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gestiona tu suscripción en la web de Zentlet."
           }
         }
       }
@@ -1541,6 +1937,17 @@
         }
       }
     },
+    "No bank emails waiting.": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hay correos del banco pendientes."
+          }
+        }
+      }
+    },
     "No budgets": {
       "extractionState": "manual",
       "localizations": {
@@ -1603,6 +2010,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "No está activo en este periodo."
+          }
+        }
+      }
+    },
+    "Not available": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No disponible"
           }
         }
       }
@@ -1717,6 +2135,28 @@
         }
       }
     },
+    "Payment due": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pago pendiente"
+          }
+        }
+      }
+    },
+    "Pending": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pendiente"
+          }
+        }
+      }
+    },
     "Pending invites": {
       "extractionState": "manual",
       "localizations": {
@@ -1739,6 +2179,39 @@
         }
       }
     },
+    "Phone": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Teléfono"
+          }
+        }
+      }
+    },
+    "Plan": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plan"
+          }
+        }
+      }
+    },
+    "Possible duplicate": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Posible duplicado"
+          }
+        }
+      }
+    },
     "Preferences": {
       "extractionState": "manual",
       "localizations": {
@@ -1746,6 +2219,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Preferencias"
+          }
+        }
+      }
+    },
+    "Pro: %@ %@ per %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pro: %1$@ %2$@ por %3$@."
           }
         }
       }
@@ -1768,6 +2252,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Trimestral"
+          }
+        }
+      }
+    },
+    "Reading receipt…": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leyendo recibo…"
+          }
+        }
+      }
+    },
+    "Receipt": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recibo"
           }
         }
       }
@@ -1816,6 +2322,17 @@
         }
       }
     },
+    "Renews": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se renueva"
+          }
+        }
+      }
+    },
     "Repeat": {
       "extractionState": "manual",
       "localizations": {
@@ -1845,6 +2362,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Se repite el mismo día y siempre se guarda en tu lista privada."
+          }
+        }
+      }
+    },
+    "Review": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Revisar"
           }
         }
       }
@@ -1893,6 +2421,17 @@
         }
       }
     },
+    "Say something like “I spent 35 on lunch yesterday”": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Di algo como «ayer gasté 35 en almuerzo»"
+          }
+        }
+      }
+    },
     "Search description or category": {
       "extractionState": "manual",
       "localizations": {
@@ -1900,6 +2439,39 @@
           "stringUnit": {
             "state": "translated",
             "value": "Buscar descripción o categoría"
+          }
+        }
+      }
+    },
+    "Send by email": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enviar por correo"
+          }
+        }
+      }
+    },
+    "Send messages like “lunch 25” to Zentlet on WhatsApp to record them.": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envía mensajes como «almuerzo 25» a Zentlet por WhatsApp para registrarlos."
+          }
+        }
+      }
+    },
+    "Senders": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remitentes"
           }
         }
       }
@@ -2091,6 +2663,28 @@
         }
       }
     },
+    "Start free trial": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Empezar prueba gratis"
+          }
+        }
+      }
+    },
+    "Start speaking": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Empezar a hablar"
+          }
+        }
+      }
+    },
     "Starts": {
       "extractionState": "manual",
       "localizations": {
@@ -2102,6 +2696,17 @@
         }
       }
     },
+    "Status": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estado"
+          }
+        }
+      }
+    },
     "Stop repeating": {
       "extractionState": "manual",
       "localizations": {
@@ -2109,6 +2714,50 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dejar de repetir"
+          }
+        }
+      }
+    },
+    "Subscription": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suscripción"
+          }
+        }
+      }
+    },
+    "Suggest icon and color": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sugerir ícono y color"
+          }
+        }
+      }
+    },
+    "That Gmail account is linked to another Zentlet account.": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esa cuenta de Gmail ya está vinculada a otra cuenta de Zentlet."
+          }
+        }
+      }
+    },
+    "That doesn't look like a receipt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eso no parece un recibo."
           }
         }
       }
@@ -2131,6 +2780,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "La descripción es demasiado larga."
+          }
+        }
+      }
+    },
+    "The invite email couldn't be sent.": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo enviar el correo de invitación."
           }
         }
       }
@@ -2256,6 +2916,17 @@
         }
       }
     },
+    "This feature isn't available right now.": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esta función no está disponible ahora."
+          }
+        }
+      }
+    },
     "This invite has expired or is no longer valid.": {
       "extractionState": "manual",
       "localizations": {
@@ -2322,6 +2993,17 @@
         }
       }
     },
+    "To review": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Por revisar"
+          }
+        }
+      }
+    },
     "Today": {
       "extractionState": "manual",
       "localizations": {
@@ -2333,6 +3015,17 @@
         }
       }
     },
+    "Too many scans. Try again in a minute.": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demasiados escaneos. Inténtalo en un minuto."
+          }
+        }
+      }
+    },
     "Totals": {
       "extractionState": "manual",
       "localizations": {
@@ -2340,6 +3033,50 @@
           "stringUnit": {
             "state": "translated",
             "value": "Totales"
+          }
+        }
+      }
+    },
+    "Trial": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prueba"
+          }
+        }
+      }
+    },
+    "Trial ends": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La prueba termina"
+          }
+        }
+      }
+    },
+    "Trusted": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De confianza"
+          }
+        }
+      }
+    },
+    "Try again": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intentar de nuevo"
           }
         }
       }
@@ -2366,6 +3103,17 @@
         }
       }
     },
+    "Unlink WhatsApp": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desvincular WhatsApp"
+          }
+        }
+      }
+    },
     "Up to %lld characters.": {
       "extractionState": "manual",
       "localizations": {
@@ -2373,6 +3121,39 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hasta %lld caracteres."
+          }
+        }
+      }
+    },
+    "Up to 20 invite emails per day.": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hasta 20 correos de invitación por día."
+          }
+        }
+      }
+    },
+    "Upgrade to Pro": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pasar a Pro"
+          }
+        }
+      }
+    },
+    "Use a JPEG, PNG or WebP photo.": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usa una foto JPEG, PNG o WebP."
           }
         }
       }
@@ -2388,6 +3169,17 @@
         }
       }
     },
+    "Use this": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usar esto"
+          }
+        }
+      }
+    },
     "Use up to 5 different alerts; percentages between 1 and 99.": {
       "extractionState": "manual",
       "localizations": {
@@ -2395,6 +3187,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Usa hasta 5 alertas distintas; porcentajes entre 1 y 99."
+          }
+        }
+      }
+    },
+    "Verification code": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Código de verificación"
           }
         }
       }
@@ -2428,6 +3231,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Las semanas empiezan el lunes; las quincenas van del 1 al 15 y del 16 a fin de mes."
+          }
+        }
+      }
+    },
+    "WhatsApp needs the Zentlet server. It works when the app is connected to your account online.": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WhatsApp necesita el servidor de Zentlet. Funciona cuando la app está conectada a tu cuenta en línea."
+          }
+        }
+      }
+    },
+    "WhatsApp opens with a message ready. Send it to link this phone; the code lasts 10 minutes.": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WhatsApp se abre con un mensaje listo. Envíalo para vincular este teléfono; el código dura 10 minutos."
           }
         }
       }
@@ -2531,6 +3356,28 @@
         }
       }
     },
+    "You're already subscribed.": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ya tienes una suscripción."
+          }
+        }
+      }
+    },
+    "You've sent too many invite emails today.": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enviaste demasiados correos de invitación hoy."
+          }
+        }
+      }
+    },
     "Your month, clear at a glance": {
       "extractionState": "manual",
       "localizations": {
@@ -2560,6 +3407,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tu sesión venció. Inicia sesión de nuevo."
+          }
+        }
+      }
+    },
+    "Zentlet needs permission to read your bank emails.": {
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zentlet necesita permiso para leer los correos de tu banco."
           }
         }
       }

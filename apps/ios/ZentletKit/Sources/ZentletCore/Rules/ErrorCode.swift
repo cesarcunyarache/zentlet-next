@@ -33,6 +33,11 @@ public enum ErrorCode {
     public static let invalidPeriodStart = "invalid_period_start"
     public static let limitBeforeStart = "limit_before_start"
     public static let singlePeriod = "single_period"
+    public static let tooManyInviteEmails = "too_many_invite_emails"
+    public static let emailFailed = "email_failed"
+    public static let featureUnavailable = "feature_unavailable"
+    public static let alreadySubscribed = "already_subscribed"
+    public static let checkoutInProgress = "checkout_in_progress"
 }
 
 public enum ValidationMessages {
@@ -69,6 +74,11 @@ public enum ValidationMessages {
         case ErrorCode.invalidPeriodStart: String(localized: "The date must be the start of a period.")
         case ErrorCode.limitBeforeStart: String(localized: "The limit can't start before the budget.")
         case ErrorCode.singlePeriod: String(localized: "A one-time budget has a single period.")
+        case ErrorCode.tooManyInviteEmails: String(localized: "You've sent too many invite emails today.")
+        case ErrorCode.emailFailed: String(localized: "The invite email couldn't be sent.")
+        case ErrorCode.featureUnavailable: String(localized: "This feature isn't available right now.")
+        case ErrorCode.alreadySubscribed: String(localized: "You're already subscribed.")
+        case ErrorCode.checkoutInProgress: String(localized: "A payment is already in progress.")
         default: String(localized: "Check the data and try again.")
         }
     }

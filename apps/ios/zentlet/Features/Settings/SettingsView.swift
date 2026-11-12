@@ -23,6 +23,12 @@ struct SettingsView: View {
                 NavigationLink("Budgets") { BudgetsView() }
             }
 
+            Section("Connections") {
+                NavigationLink("Bank emails") { InboxView() }
+                NavigationLink("WhatsApp") { WhatsAppView() }
+                NavigationLink("Subscription") { BillingView() }
+            }
+
             Section {
                 Picker("Currency", selection: preferenceBinding(\.currency)) {
                     ForEach(Currency.allCases, id: \.self) { currency in

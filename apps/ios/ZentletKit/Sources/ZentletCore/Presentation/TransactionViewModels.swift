@@ -111,6 +111,9 @@ public final class TransactionFormViewModel {
         }
     }
     public var categoryId: UUID?
+    /// True once the user chose a category by hand; suggestions never override it.
+    public private(set) var categoryChosenByUser = false
+    public private(set) var isScanning = false
     public var date: CalendarDay
     public var description: String
     public var reference: String
@@ -132,14 +135,18 @@ public final class TransactionFormViewModel {
     private let categoryRepository: CategoryRepository
     private let listRepository: ListRepository
     private let recurringRepository: RecurringRepository?
+    private let ai: AIRepository?
+    private let language: AppLanguage
     private let accountCurrency: Currency
 
     public init(
         transactions: TransactionRepository, categories: CategoryRepository, lists: ListRepository,
         accountCurrency: Currency, today: CalendarDay, editing: Transaction? = nil, defaultListId: UUID? = nil,
-        recurring: RecurringRepository? = nil
+        recurring: RecurringRepository? = nil, ai: AIRepository? = nil, language: AppLanguage = .es
     ) {
         recurringRepository = recurring
+        self.ai = ai
+        self.language = language
         self.transactions = transactions
         categoryRepository = categories
         listRepository = lists
@@ -152,6 +159,61 @@ public final class TransactionFormViewModel {
         description = editing?.description ?? ""
         reference = editing?.reference ?? ""
         listId = editing?.listId ?? defaultListId
+        categoryChosenByUser = editing != nil
+    }
+
+    public func pickCategory(_ id: UUID?) {
+        categoryId = id
+        categoryChosenByUser = true
+    }
+
+    /// While typing: suggest a category (and income/expense) unless the user already picked one.
+    public func suggestFromDescription() async {
+        guard !categoryChosenByUser, editing == nil, let ai else { return }
+        guard let suggestion = try? await ai.suggestCategory(description: description, categories: categories, language: language) else { return }
+        guard !categoryChosenByUser else { return }
+        if let id = suggestion.categoryId { categoryId = id }
+        type = suggestion.type
+    }
+
+    /// Fills the form from a spoken sentence; asks the assistant for a category when the rules found none.
+    public func apply(transcript: String, today: CalendarDay) async {
+        let draft = VoiceParser.parse(transcript, categories: categories, language: language, today: today)
+        type = draft.type
+        if let amount = draft.amount { amountText = "\(amount)" }
+        description = draft.description
+        date = draft.transactionDate
+        if let id = draft.categoryId {
+            categoryId = id
+        } else if let ai, let suggestion = try? await ai.suggestCategory(description: draft.description, categories: categories, language: language),
+                  let id = suggestion.categoryId {
+            categoryId = id
+        }
+    }
+
+    /// Reads a receipt photo and fills amount, date, description and category.
+    public func scanReceipt(_ image: Data, mimeType: String, today: CalendarDay) async {
+        guard let ai else { return }
+        isScanning = true
+        errorMessage = nil
+        defer { isScanning = false }
+        do {
+            let receipt = try await ai.scanReceipt(image: image, mimeType: mimeType, categories: categories, today: today)
+            type = receipt.type
+            if let amount = receipt.amount { amountText = "\(amount)" }
+            if let day = receipt.date { date = day }
+            if !receipt.description.isEmpty { description = String(receipt.description.prefix(Self.descriptionMaxLength)) }
+            if let id = receipt.categoryId, !categoryChosenByUser { categoryId = id }
+        } catch let error as ReceiptScanError {
+            errorMessage = switch error {
+            case .notReceipt: String(localized: "That doesn't look like a receipt.")
+            case .invalidImage: String(localized: "Use a JPEG, PNG or WebP photo.")
+            case .limited: String(localized: "Too many scans. Try again in a minute.")
+            case .failed: String(localized: "Couldn't read the receipt.")
+            }
+        } catch {
+            errorMessage = UserMessage.from(error)
+        }
     }
 
     public var amount: Decimal { Money.parse(amountText) }

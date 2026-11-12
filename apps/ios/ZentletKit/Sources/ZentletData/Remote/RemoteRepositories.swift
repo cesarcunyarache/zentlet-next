@@ -246,6 +246,12 @@ public struct RemoteListInviteRepository: ListInviteRepository {
             .domain(listId: listId)
     }
 
+    public func createEmailInvite(listId: UUID, role: InviteRole, email: String, language: AppLanguage) async throws -> ListInvite {
+        let body = EmailInviteBodyDTO(role: role, email: try EmailAddress.normalized(email), locale: language)
+        return try await client.send(try .send(.post, "/api/list/\(listId)/invites/email", body: body), as: InviteDTO.self)
+            .domain(listId: listId)
+    }
+
     public func revoke(listId: UUID, inviteId: UUID) async throws {
         try await client.send(.delete("/api/list/\(listId)/invites/\(inviteId)"))
     }
@@ -332,5 +338,149 @@ public struct RemoteDataExportRepository: DataExportRepository {
         let disposition = response.value(forHTTPHeaderField: "Content-Disposition") ?? ""
         let fileName = disposition.components(separatedBy: "filename=\"").last?.components(separatedBy: "\"").first
         return ExportFile(data: data, fileName: fileName?.isEmpty == false ? fileName! : "zentlet.xlsx")
+    }
+}
+
+/// The web runs these three as Next.js server actions, which a native client can't call. The routes below are
+/// the REST equivalents the API must expose, with the same input and output as the actions
+/// (`category-suggester.ts`, `category-generator.ts`, `receipt-scanner.ts`). Until then remote mode falls back
+/// to the on-device assistant.
+public struct RemoteAIRepository: AIRepository {
+    let client: APIClient
+    let fallback = LocalAIRepository()
+
+    public func suggestCategory(description: String, categories: [ZentletCore.Category], language: AppLanguage) async throws -> CategorySuggestion? {
+        let text = String(description.trimmingCharacters(in: .whitespacesAndNewlines).prefix(AILimits.maxDescriptionLength))
+        guard text.count >= AILimits.minDescriptionLength, !categories.isEmpty else { return nil }
+        let body = SuggestCategoryBodyDTO(description: text, categories: categories.map { CategoryRefDTO(id: $0.id, name: $0.name) })
+        do {
+            let result = try await client.send(try .send(.post, "/api/ai/category-suggestion", body: body), as: CategorySuggestionDTO?.self)
+            return result.map { CategorySuggestion(categoryId: $0.categoryId, type: $0.type) }
+        } catch AppError.notFound {
+            return try await fallback.suggestCategory(description: description, categories: categories, language: language)
+        }
+    }
+
+    public func categoryStyles(for prompt: String) async throws -> [CategoryStyle] {
+        let text = String(prompt.trimmingCharacters(in: .whitespacesAndNewlines).prefix(AILimits.maxPromptLength))
+        guard !text.isEmpty else { return [] }
+        do {
+            let result = try await client.send(try .send(.post, "/api/ai/category-styles", body: ["prompt": text]), as: CategoryStylesDTO?.self)
+            return result?.categories.map { CategoryStyle(icon: $0.icon, color: $0.color) } ?? []
+        } catch AppError.notFound {
+            return try await fallback.categoryStyles(for: prompt)
+        }
+    }
+
+    public func scanReceipt(image: Data, mimeType: String, categories: [ZentletCore.Category], today: CalendarDay) async throws -> ReceiptExtraction {
+        guard image.count <= AILimits.maxReceiptBytes, ["image/jpeg", "image/png", "image/webp"].contains(mimeType) else {
+            throw ReceiptScanError.invalidImage
+        }
+        let categoriesJSON = String(decoding: try JSONEncoder().encode(categories.map { CategoryRefDTO(id: $0.id, name: $0.name) }), as: UTF8.self)
+        let result: ReceiptScanDTO
+        do {
+            result = try await client.sendMultipart(
+                path: "/api/ai/receipt", fields: ["categories": categoriesJSON, "today": today.iso],
+                file: (name: "image", fileName: "receipt", mimeType: mimeType, data: image), as: ReceiptScanDTO.self
+            )
+        } catch AppError.notFound {
+            return try await fallback.scanReceipt(image: image, mimeType: mimeType, categories: categories, today: today)
+        }
+        guard result.ok, let extraction = result.extraction else {
+            throw ReceiptScanError(rawValue: result.error ?? "") ?? .failed
+        }
+        return ReceiptExtraction(
+            amount: extraction.amount.map(Money.rounded), currency: extraction.currency, date: extraction.date.flatMap(CalendarDay.init(iso:)),
+            summary: extraction.summary, description: extraction.description, categoryId: extraction.categoryId, type: extraction.type
+        )
+    }
+}
+
+public struct RemoteInboxRepository: InboxRepository {
+    let client: APIClient
+    let configuration: NetworkConfiguration
+    let session: RemoteSession
+
+    public func items() async throws -> [InboxItem] {
+        try await client.send(.get("/api/inbox"), as: [InboxItemDTO].self).map(\.domain)
+    }
+
+    public func connection() async throws -> InboxConnection {
+        try await client.send(.get("/api/inbox/connection"), as: InboxConnectionDTO.self).domain
+    }
+
+    public func createForwardingAddress() async throws -> InboxConnection {
+        try await client.send(.post("/api/inbox/connection"), as: InboxConnectionDTO.self).domain
+    }
+
+    /// Opened in an authentication browser session; the server answers with a redirect to `/admin?gmail=<result>`.
+    public func gmailConnectURL() async throws -> URL {
+        configuration.baseURL.appending(path: "/api/inbox/gmail/connect")
+    }
+
+    public func disconnectGmail() async throws -> InboxConnection {
+        try await client.send(.delete("/api/inbox/gmail"), as: InboxConnectionDTO.self).domain
+    }
+
+    public func addSender(address: String) async throws -> InboxSender {
+        let address = address.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard (3...254).contains(address.count) else { throw AppError.validation(ErrorCode.emailInvalid) }
+        return try await client.send(try .send(.post, "/api/inbox/senders", body: ["address": address]), as: InboxSenderDTO.self).domain
+    }
+
+    public func removeSender(id: UUID) async throws {
+        try await client.send(.delete("/api/inbox/senders/\(id)"))
+    }
+
+    public func accept(itemId: UUID, _ draft: TransactionDraft) async throws -> Transaction {
+        let draft = try draft.validated()
+        let userId = try await session.requireUserId()
+        let body = InboxAcceptBodyDTO(
+            description: draft.description ?? "", amount: draft.amount, type: draft.type, categoryId: draft.categoryId,
+            transactionDate: draft.transactionDate
+        )
+        let created = try await client.send(try .send(.post, "/api/inbox/\(itemId)/accept", body: body), as: TransactionDTO.self)
+        return created.domain(author: userId, fallbackListId: nil)
+    }
+
+    public func dismiss(itemId: UUID) async throws {
+        try await client.send(.post("/api/inbox/\(itemId)/dismiss"))
+    }
+}
+
+public struct RemoteWhatsAppRepository: WhatsAppRepository {
+    let client: APIClient
+
+    public func connection() async throws -> WhatsAppConnection {
+        try await client.send(.get("/api/whatsapp/connection"), as: WhatsAppConnectionDTO.self).domain
+    }
+
+    public func createLinkCode() async throws -> WhatsAppLinkCode {
+        try await client.send(.post("/api/whatsapp/connection"), as: WhatsAppLinkDTO.self).domain
+    }
+
+    public func unlink() async throws -> WhatsAppConnection {
+        try await client.send(.delete("/api/whatsapp/connection"), as: WhatsAppConnectionDTO.self).domain
+    }
+}
+
+/// Mercado Pago subscriptions. See the README about App Store rules before enabling checkout on iOS.
+public struct RemoteBillingRepository: BillingRepository {
+    let client: APIClient
+
+    public func summary() async throws -> BillingSummary {
+        try await client.send(.get("/api/billing/me"), as: BillingSummaryDTO.self).domain
+    }
+
+    public func checkout(plan: String) async throws -> URL {
+        try await client.send(try .send(.post, "/api/billing/checkout", body: ["planKey": plan]), as: CheckoutDTO.self).redirectUrl
+    }
+
+    public func sync() async throws -> BillingSummary {
+        try await client.send(.post("/api/billing/sync"), as: BillingSummaryDTO.self).domain
+    }
+
+    public func cancel() async throws -> BillingSummary {
+        try await client.send(.post("/api/billing/cancel"), as: BillingSummaryDTO.self).domain
     }
 }

@@ -417,3 +417,176 @@ struct NotificationFeedDTO: Decodable {
         )
     }
 }
+
+// MARK: - AI (shapes of the web server actions)
+
+struct CategoryRefDTO: Encodable {
+    let id: UUID
+    let name: String
+}
+
+struct SuggestCategoryBodyDTO: Encodable {
+    let description: String
+    let categories: [CategoryRefDTO]
+}
+
+struct CategorySuggestionDTO: Decodable {
+    let categoryId: UUID?
+    let type: TransactionType
+}
+
+struct CategoryStylesDTO: Decodable {
+    struct Style: Decodable {
+        let icon: String
+        let color: String
+    }
+
+    let categories: [Style]
+}
+
+struct ReceiptScanDTO: Decodable {
+    struct Extraction: Decodable {
+        let isReceipt: Bool
+        let amount: Decimal?
+        let currency: String?
+        let date: String?
+        let summary: String
+        let description: String
+        let categoryId: UUID?
+        let type: TransactionType
+    }
+
+    let ok: Bool
+    let extraction: Extraction?
+    let error: String?
+}
+
+// MARK: - Inbox
+
+struct InboxItemDTO: Decodable {
+    let id: UUID
+    let bank: String?
+    let senderAddress: String
+    let subject: String
+    let isVerified: Bool
+    let isNewSender: Bool
+    let type: TransactionType
+    let amount: Decimal?
+    let currency: String?
+    let merchant: String?
+    let description: String
+    let categoryId: UUID?
+    let transactionDate: CalendarDay
+    let cardLast4: String?
+    let duplicateOfId: UUID?
+    let receivedAt: Date
+
+    var domain: InboxItem {
+        InboxItem(
+            id: id, bank: bank, senderAddress: senderAddress, subject: subject, isVerified: isVerified, isNewSender: isNewSender,
+            type: type, amount: amount.map(Money.rounded), currency: currency, merchant: merchant, description: description,
+            categoryId: categoryId, transactionDate: transactionDate, cardLast4: cardLast4, duplicateOfId: duplicateOfId,
+            receivedAt: receivedAt
+        )
+    }
+}
+
+struct InboxSenderDTO: Decodable {
+    let id: UUID
+    let address: String
+    let status: String
+    let origin: String
+    let acceptedCount: Int
+
+    var domain: InboxSender {
+        InboxSender(id: id, address: address, status: status == "blocked" ? .blocked : .trusted, isLearned: origin == "learned", acceptedCount: acceptedCount)
+    }
+}
+
+struct InboxConnectionDTO: Decodable {
+    struct Gmail: Decodable {
+        let isAvailable: Bool
+        let email: String?
+        let status: String?
+    }
+
+    let isAvailable: Bool
+    let address: String?
+    let verificationCode: String?
+    let verificationUrl: String?
+    let lastReceivedAt: Date?
+    let senders: [InboxSenderDTO]
+    let gmail: Gmail
+
+    var domain: InboxConnection {
+        InboxConnection(
+            isAvailable: isAvailable, address: address, verificationCode: verificationCode,
+            verificationURL: verificationUrl.flatMap(URL.init(string:)), lastReceivedAt: lastReceivedAt,
+            senders: senders.map(\.domain), gmailAvailable: gmail.isAvailable, gmailEmail: gmail.email,
+            gmailActive: gmail.status == "active"
+        )
+    }
+}
+
+struct InboxAcceptBodyDTO: Encodable {
+    let description: String
+    let amount: Decimal
+    let type: TransactionType
+    let categoryId: UUID
+    let transactionDate: CalendarDay
+}
+
+// MARK: - WhatsApp
+
+struct WhatsAppConnectionDTO: Decodable {
+    let isAvailable: Bool
+    let phone: String?
+    let linkedAt: Date?
+
+    var domain: WhatsAppConnection { WhatsAppConnection(isAvailable: isAvailable, phone: phone, linkedAt: linkedAt) }
+}
+
+struct WhatsAppLinkDTO: Decodable {
+    let code: String
+    let url: URL
+    let expiresAt: Date
+
+    var domain: WhatsAppLinkCode { WhatsAppLinkCode(code: code, url: url, expiresAt: expiresAt) }
+}
+
+// MARK: - Billing
+
+struct BillingSummaryDTO: Decodable {
+    struct Price: Decodable {
+        let amount: Decimal
+        let currency: String
+        let interval: String
+    }
+
+    let plan: String
+    let features: [String]
+    let status: String?
+    let trialEndsAt: Date?
+    let currentPeriodEnd: Date?
+    let isTrialEligible: Bool
+    let hasPendingCheckout: Bool
+    let price: Price
+
+    var domain: BillingSummary {
+        BillingSummary(
+            plan: plan, features: features, status: status.flatMap(SubscriptionStatus.init(rawValue:)), trialEndsAt: trialEndsAt,
+            currentPeriodEnd: currentPeriodEnd, isTrialEligible: isTrialEligible, hasPendingCheckout: hasPendingCheckout,
+            price: Money.rounded(price.amount), currency: price.currency, interval: price.interval
+        )
+    }
+}
+
+struct CheckoutDTO: Decodable {
+    let redirectUrl: URL
+}
+
+struct EmailInviteBodyDTO: Encodable {
+    let role: InviteRole
+    let email: String
+    let locale: AppLanguage
+}

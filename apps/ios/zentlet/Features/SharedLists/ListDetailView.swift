@@ -186,8 +186,11 @@ private struct ListDetailScreen: View {
 /// Creates an invite and shows its code once, ready to share.
 private struct InviteSheet: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(SessionViewModel.self) private var session
     let model: ListDetailViewModel
     @State private var role: InviteRole = .viewer
+    @State private var email = ""
+    @State private var emailSent = false
 
     var body: some View {
         NavigationStack {
@@ -200,6 +203,31 @@ private struct InviteSheet: View {
                     .pickerStyle(.segmented)
                 } footer: {
                     Text("Editors can add their movements; viewers can only see the list. Invites expire in 7 days and work once.")
+                }
+
+                if let error = model.errorMessage {
+                    Section { Text(error).foregroundStyle(Palette.destructive) }
+                }
+
+                if model.canSendEmailInvites {
+                    Section {
+                        TextField("Email", text: $email)
+                            .keyboardType(.emailAddress)
+                            .textContentType(.emailAddress)
+                            .textInputAutocapitalization(.never)
+                            .autocorrectionDisabled()
+                        Button(emailSent ? "Invite sent" : "Send by email") {
+                            Task {
+                                emailSent = await model.sendEmailInvite(email: email, role: role, language: session.preference.language)
+                                if emailSent { email = "" }
+                            }
+                        }
+                        .disabled(email.isEmpty)
+                    } header: {
+                        Text("By email")
+                    } footer: {
+                        Text("Up to 20 invite emails per day.")
+                    }
                 }
 
                 if let token = model.createdInvite?.token {

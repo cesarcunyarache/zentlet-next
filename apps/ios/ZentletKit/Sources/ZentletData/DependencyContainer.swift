@@ -44,6 +44,11 @@ public enum DependencyContainer {
             recurring: RemoteRecurringRepository(client: client),
             notifications: RemoteNotificationRepository(client: client),
             exports: RemoteDataExportRepository(client: client),
+            ai: RemoteAIRepository(client: client),
+            inbox: RemoteInboxRepository(client: client, configuration: network, session: session),
+            whatsApp: RemoteWhatsAppRepository(client: client),
+            billing: RemoteBillingRepository(client: client),
+            hasServer: true,
             clock: clock
         )
     }
@@ -65,6 +70,11 @@ public enum DependencyContainer {
             recurring: LocalRecurringRepository(store: store, session: session, clock: clock),
             notifications: LocalNotificationRepository(store: store, session: session, clock: clock),
             exports: LocalDataExportRepository(store: store, session: session, clock: clock),
+            ai: LocalAIRepository(),
+            inbox: LocalInboxRepository(),
+            whatsApp: LocalWhatsAppRepository(),
+            billing: LocalBillingRepository(),
+            hasServer: false,
             clock: clock
         )
     }

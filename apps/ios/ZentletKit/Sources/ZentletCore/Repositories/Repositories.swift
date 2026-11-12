@@ -101,6 +101,8 @@ public protocol ListMemberRepository: Sendable {
 public protocol ListInviteRepository: Sendable {
     func invites(listId: UUID) async throws -> [ListInvite]
     func create(listId: UUID, role: InviteRole) async throws -> ListInvite
+    /// Emails the invite (server only; at most 20 per day).
+    func createEmailInvite(listId: UUID, role: InviteRole, email: String, language: AppLanguage) async throws -> ListInvite
     func revoke(listId: UUID, inviteId: UUID) async throws
     func preview(token: String) async throws -> InvitePreview
     /// Returns false when the caller already was a member.
@@ -146,6 +148,45 @@ public protocol DataExportRepository: Sendable {
     func export(language: AppLanguage, currency: Currency) async throws -> ExportFile
 }
 
+/// AI helpers. Local mode answers on the device (rules and text recognition); remote mode asks the server.
+public protocol AIRepository: Sendable {
+    /// nil when there is nothing to suggest (short text, no categories, rate limit).
+    func suggestCategory(description: String, categories: [Category], language: AppLanguage) async throws -> CategorySuggestion?
+    /// Icon and color options for a category name.
+    func categoryStyles(for prompt: String) async throws -> [CategoryStyle]
+    /// JPEG, PNG or WebP up to 900 KB. Throws `ReceiptScanError`.
+    func scanReceipt(image: Data, mimeType: String, categories: [Category], today: CalendarDay) async throws -> ReceiptExtraction
+}
+
+/// Bank emails turned into movements (forwarding address or Gmail).
+public protocol InboxRepository: Sendable {
+    func items() async throws -> [InboxItem]
+    func connection() async throws -> InboxConnection
+    func createForwardingAddress() async throws -> InboxConnection
+    /// Browser URL that starts the Gmail authorization.
+    func gmailConnectURL() async throws -> URL
+    func disconnectGmail() async throws -> InboxConnection
+    func addSender(address: String) async throws -> InboxSender
+    func removeSender(id: UUID) async throws
+    func accept(itemId: UUID, _ draft: TransactionDraft) async throws -> Transaction
+    func dismiss(itemId: UUID) async throws
+}
+
+public protocol WhatsAppRepository: Sendable {
+    func connection() async throws -> WhatsAppConnection
+    func createLinkCode() async throws -> WhatsAppLinkCode
+    func unlink() async throws -> WhatsAppConnection
+}
+
+public protocol BillingRepository: Sendable {
+    func summary() async throws -> BillingSummary
+    /// Payment page to open in the browser.
+    func checkout(plan: String) async throws -> URL
+    /// Call after returning from the payment page.
+    func sync() async throws -> BillingSummary
+    func cancel() async throws -> BillingSummary
+}
+
 /// Everything the UI needs, as protocols. Built by the dependency container for the configured source.
 public struct AppDependencies: Sendable {
     public let auth: AuthRepository
@@ -160,13 +201,20 @@ public struct AppDependencies: Sendable {
     public let recurring: RecurringRepository
     public let notifications: NotificationRepository
     public let exports: DataExportRepository
+    public let ai: AIRepository
+    public let inbox: InboxRepository
+    public let whatsApp: WhatsAppRepository
+    public let billing: BillingRepository
+    /// False in local mode: inbox, WhatsApp, billing and email invites need the server.
+    public let hasServer: Bool
     public let clock: @Sendable () -> Date
 
     public init(
         auth: AuthRepository, preferences: PreferenceRepository, categories: CategoryRepository,
         transactions: TransactionRepository, lists: ListRepository, listEntries: ListEntryRepository,
         listMembers: ListMemberRepository, listInvites: ListInviteRepository, budgets: BudgetRepository,
-        recurring: RecurringRepository, notifications: NotificationRepository, exports: DataExportRepository, clock: @escaping @Sendable () -> Date = { .now }
+        recurring: RecurringRepository, notifications: NotificationRepository, exports: DataExportRepository, ai: AIRepository,
+        inbox: InboxRepository, whatsApp: WhatsAppRepository, billing: BillingRepository, hasServer: Bool, clock: @escaping @Sendable () -> Date = { .now }
     ) {
         self.auth = auth
         self.preferences = preferences
@@ -180,6 +228,11 @@ public struct AppDependencies: Sendable {
         self.recurring = recurring
         self.notifications = notifications
         self.exports = exports
+        self.ai = ai
+        self.inbox = inbox
+        self.whatsApp = whatsApp
+        self.billing = billing
+        self.hasServer = hasServer
         self.clock = clock
     }
 }

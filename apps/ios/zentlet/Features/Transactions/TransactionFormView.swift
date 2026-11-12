@@ -1,4 +1,6 @@
+import PhotosUI
 import SwiftUI
+import UIKit
 import ZentletCore
 
 struct TransactionFormView: View {
@@ -23,7 +25,8 @@ private struct TransactionFormLoader: View {
             transactions: dependencies.transactions, categories: dependencies.categories, lists: dependencies.lists,
             accountCurrency: session.preference.currency,
             today: CalendarDay.today(in: session.preference.timeZone, now: dependencies.clock()),
-            editing: editing, defaultListId: defaultListId, recurring: dependencies.recurring
+            editing: editing, defaultListId: defaultListId, recurring: dependencies.recurring,
+            ai: dependencies.ai, language: session.preference.language
         ))
     }
 }
@@ -33,6 +36,10 @@ private struct TransactionFormScreen: View {
     @Environment(SessionViewModel.self) private var session
     @State private var model: TransactionFormViewModel
     @FocusState private var amountFocused: Bool
+    @State private var isDictating = false
+    @State private var receiptItem: PhotosPickerItem?
+    @State private var isTakingPhoto = false
+    @State private var suggestionTask: Task<Void, Never>?
 
     init(model: TransactionFormViewModel) {
         _model = State(initialValue: model)
@@ -63,8 +70,35 @@ private struct TransactionFormScreen: View {
                     .listRowBackground(Color.clear)
                 }
 
+                if model.editing == nil {
+                    Section {
+                        HStack(spacing: Spacing.sm) {
+                            Button { isDictating = true } label: {
+                                Label("Dictate", systemImage: "mic").frame(maxWidth: .infinity)
+                            }
+                            PhotosPicker(selection: $receiptItem, matching: .images) {
+                                Label("Receipt", systemImage: "doc.text.viewfinder").frame(maxWidth: .infinity)
+                            }
+                            if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                                Button { isTakingPhoto = true } label: {
+                                    Label("Camera", systemImage: "camera").frame(maxWidth: .infinity)
+                                }
+                            }
+                        }
+                        .buttonStyle(.bordered)
+                        .labelStyle(.iconOnly)
+                        .disabled(model.categories.isEmpty || model.isScanning)
+                        .listRowBackground(Color.clear)
+                        .listRowInsets(EdgeInsets())
+                        if model.isScanning {
+                            HStack { ProgressView(); Text("Reading receipt…").foregroundStyle(Palette.muted) }
+                                .listRowBackground(Color.clear)
+                        }
+                    }
+                }
+
                 Section {
-                    Picker("Category", selection: $model.categoryId) {
+                    Picker("Category", selection: Binding(get: { model.categoryId }, set: { model.pickCategory($0) })) {
                         ForEach(model.categories) { category in
                             Text("\(category.icon) \(category.name)").tag(UUID?.some(category.id))
                         }
@@ -72,6 +106,7 @@ private struct TransactionFormScreen: View {
                     DatePicker("Date", selection: dateBinding, displayedComponents: .date)
                         .environment(\.timeZone, TimeZone(identifier: "UTC")!)
                     TextField("Description", text: $model.description)
+                        .onChange(of: model.description) { scheduleSuggestion() }
                     if model.description.count > TransactionFormViewModel.descriptionMaxLength {
                         Text("Up to \(TransactionFormViewModel.descriptionMaxLength) characters.")
                             .font(Typography.caption)
@@ -135,9 +170,42 @@ private struct TransactionFormScreen: View {
                 await model.load()
                 if model.editing == nil { amountFocused = true }
             }
+            .sheet(isPresented: $isDictating) {
+                VoiceEntrySheet { transcript in
+                    Task { await model.apply(transcript: transcript, today: today) }
+                }
+            }
+            .fullScreenCover(isPresented: $isTakingPhoto) {
+                CameraPicker { image in
+                    guard let data = ReceiptImage.jpeg(from: image) else { return }
+                    Task { await model.scanReceipt(data, mimeType: "image/jpeg", today: today) }
+                }
+                .ignoresSafeArea()
+            }
+            .onChange(of: receiptItem) {
+                guard let item = receiptItem else { return }
+                receiptItem = nil
+                Task {
+                    guard let data = try? await item.loadTransferable(type: Data.self), let image = UIImage(data: data),
+                          let jpeg = ReceiptImage.jpeg(from: image) else { return }
+                    await model.scanReceipt(jpeg, mimeType: "image/jpeg", today: today)
+                }
+            }
             .errorAlert($model.errorMessage)
         }
         .presentationDragIndicator(.visible)
+    }
+
+    private var today: CalendarDay { CalendarDay.today(in: session.preference.timeZone) }
+
+    /// Waits for typing to pause, then asks for a category suggestion.
+    private func scheduleSuggestion() {
+        suggestionTask?.cancel()
+        suggestionTask = Task {
+            try? await Task.sleep(for: .milliseconds(600))
+            guard !Task.isCancelled else { return }
+            await model.suggestFromDescription()
+        }
     }
 
     private var dateBinding: Binding<Date> {
@@ -156,6 +224,54 @@ enum RecurrenceLabel {
         case .quarterly: String(localized: "Every 3 months")
         case .semiannual: String(localized: "Every 6 months")
         case .annual: String(localized: "Every year")
+        }
+    }
+}
+
+/// Receipt photos go out as JPEG under the 900 KB limit of the scanner.
+enum ReceiptImage {
+    static func jpeg(from image: UIImage) -> Data? {
+        let maxSide: CGFloat = 1600
+        let scale = min(1, maxSide / max(image.size.width, image.size.height))
+        let size = CGSize(width: image.size.width * scale, height: image.size.height * scale)
+        let resized = UIGraphicsImageRenderer(size: size).image { _ in image.draw(in: CGRect(origin: .zero, size: size)) }
+        for quality in stride(from: 0.8, through: 0.3, by: -0.1) {
+            if let data = resized.jpegData(compressionQuality: quality), data.count <= AILimits.maxReceiptBytes { return data }
+        }
+        return nil
+    }
+}
+
+/// System camera for photographing a receipt.
+struct CameraPicker: UIViewControllerRepresentable {
+    @Environment(\.dismiss) private var dismiss
+    let onImage: (UIImage) -> Void
+
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let picker = UIImagePickerController()
+        picker.sourceType = .camera
+        picker.delegate = context.coordinator
+        return picker
+    }
+
+    func updateUIViewController(_ controller: UIImagePickerController, context: Context) {}
+
+    func makeCoordinator() -> Coordinator { Coordinator(parent: self) }
+
+    final class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+        let parent: CameraPicker
+
+        init(parent: CameraPicker) {
+            self.parent = parent
+        }
+
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+            if let image = info[.originalImage] as? UIImage { parent.onImage(image) }
+            parent.dismiss()
+        }
+
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+            parent.dismiss()
         }
     }
 }

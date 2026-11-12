@@ -12,6 +12,9 @@ struct AppConfiguration: Sendable {
     let dataSourceMode: DataSourceMode
     /// nil until the production API URL is decided; `.remote` refuses to start without it.
     let network: NetworkConfiguration?
+    /// Opens the web payment page for subscriptions. Off by default: the App Store requires In-App Purchase
+    /// for digital subscriptions sold inside the app (guideline 3.1.1). See README.
+    var allowsExternalCheckout = false
 
     static let current: AppConfiguration = {
         #if DEBUG

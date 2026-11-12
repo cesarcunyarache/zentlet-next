@@ -84,7 +84,7 @@ struct CategoryFormView: View {
 
     var body: some View {
         WithDependencies { dependencies in
-            CategoryFormScreen(model: CategoryFormViewModel(repository: dependencies.categories, editing: editing))
+            CategoryFormScreen(model: CategoryFormViewModel(repository: dependencies.categories, editing: editing), ai: dependencies.ai)
         }
     }
 }
@@ -93,9 +93,12 @@ private struct CategoryFormScreen: View {
     @Environment(\.dismiss) private var dismiss
     @State private var model: CategoryFormViewModel
     @State private var isCreatingBudget = false
+    @State private var ideas: [CategoryStyle] = []
+    let ai: AIRepository
 
-    init(model: CategoryFormViewModel) {
+    init(model: CategoryFormViewModel, ai: AIRepository) {
         _model = State(initialValue: model)
+        self.ai = ai
     }
 
     var body: some View {
@@ -113,6 +116,19 @@ private struct CategoryFormScreen: View {
                     TextField("Name", text: $model.name)
                     EmojiField(icon: $model.icon)
                     ColorRow(selection: $model.color)
+                    Button("Suggest icon and color", systemImage: "sparkles") {
+                        Task { ideas = await model.styleIdeas(using: ai) }
+                    }
+                    .disabled(model.name.trimmingCharacters(in: .whitespaces).isEmpty)
+                    if !ideas.isEmpty {
+                        HStack(spacing: Spacing.sm) {
+                            ForEach(ideas, id: \.self) { idea in
+                                Button { model.apply(idea) } label: { IconBadge(icon: idea.icon, color: idea.color, size: 44) }
+                                    .buttonStyle(.plain)
+                                    .accessibilityLabel(idea.icon)
+                            }
+                        }
+                    }
                 }
                 Section("Description") {
                     TextField("Optional", text: $model.description, axis: .vertical)

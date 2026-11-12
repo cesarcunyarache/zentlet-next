@@ -167,6 +167,16 @@ public final class ListDetailViewModel {
         }
     }
 
+    /// Sends the invite by email (server only). Returns true when sent.
+    public func sendEmailInvite(email: String, role: InviteRole, language: AppLanguage) async -> Bool {
+        await run {
+            _ = try await self.dependencies.listInvites.createEmailInvite(listId: self.listId, role: role, email: email, language: language)
+            self.invites = try await self.dependencies.listInvites.invites(listId: self.listId)
+        }
+    }
+
+    public var canSendEmailInvites: Bool { dependencies.hasServer }
+
     public func revoke(_ invite: ListInvite) async {
         await run {
             try await self.dependencies.listInvites.revoke(listId: self.listId, inviteId: invite.id)

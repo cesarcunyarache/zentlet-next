@@ -258,6 +258,11 @@ public struct LocalListInviteRepository: ListInviteRepository {
         }
     }
 
+    /// Sending email needs the server.
+    public func createEmailInvite(listId: UUID, role: InviteRole, email: String, language: AppLanguage) async throws -> ListInvite {
+        throw AppError.notImplemented("Email invites")
+    }
+
     public func revoke(listId: UUID, inviteId: UUID) async throws {
         let userId = try session.requireUserId()
         let now = clock()

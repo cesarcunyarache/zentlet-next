@@ -32,6 +32,21 @@ public final class APIClient: Sendable {
         _ = try await perform(endpoint)
     }
 
+    /// multipart/form-data upload.
+    func sendMultipart<Response: Decodable>(path: String, fields: [String: String], file: (name: String, fileName: String, mimeType: String, data: Data), as type: Response.Type) async throws -> Response {
+        let boundary = "zentlet-\(UUID().uuidString)"
+        var body = Data()
+        for (name, value) in fields {
+            body.append(Data("--\(boundary)\r\nContent-Disposition: form-data; name=\"\(name)\"\r\n\r\n\(value)\r\n".utf8))
+        }
+        body.append(Data("--\(boundary)\r\nContent-Disposition: form-data; name=\"\(file.name)\"; filename=\"\(file.fileName)\"\r\nContent-Type: \(file.mimeType)\r\n\r\n".utf8))
+        body.append(file.data)
+        body.append(Data("\r\n--\(boundary)--\r\n".utf8))
+        var endpoint = Endpoint(method: .post, path: path, body: body)
+        endpoint.headers["Content-Type"] = "multipart/form-data; boundary=\(boundary)"
+        return try await send(endpoint, as: type)
+    }
+
     /// Raw body, for file downloads.
     func download(_ endpoint: Endpoint) async throws -> (Data, HTTPURLResponse) {
         try await perform(endpoint)
@@ -114,6 +129,16 @@ enum APIErrorMapping {
         "Invalid period start": ErrorCode.invalidPeriodStart,
         "Limit before budget start": ErrorCode.limitBeforeStart,
         "One-time budget has a single period": ErrorCode.singlePeriod,
+        "Too many invite emails": ErrorCode.tooManyInviteEmails,
+        "The invite email could not be sent": ErrorCode.emailFailed,
+        "WhatsApp is not available": ErrorCode.featureUnavailable,
+        "WhatsApp is not linked": ErrorCode.featureUnavailable,
+        "Email import is not configured": ErrorCode.featureUnavailable,
+        "Inbox item not found": ErrorCode.notFound,
+        "Sender not found": ErrorCode.notFound,
+        "Invalid sender": ErrorCode.emailInvalid,
+        "Already subscribed": ErrorCode.alreadySubscribed,
+        "Checkout in progress": ErrorCode.checkoutInProgress,
     ]
 
     static func error(status: Int, message: String?) -> AppError {
@@ -121,8 +146,13 @@ enum APIErrorMapping {
         switch status {
         case 401: return .unauthorized
         case 403: return .forbidden
-        case 404: return code == ErrorCode.memberNotFound ? .validation(ErrorCode.memberNotFound) : .notFound
+        case 404 where code == ErrorCode.memberNotFound: return .validation(ErrorCode.memberNotFound)
+        case 404 where code == ErrorCode.featureUnavailable: return .validation(ErrorCode.featureUnavailable)
+        case 404: return .notFound
         case 409, 410: return .conflict(code ?? "conflict")
+        case 429 where code == ErrorCode.tooManyInviteEmails: return .validation(ErrorCode.tooManyInviteEmails)
+        case 502 where code == ErrorCode.emailFailed: return .validation(ErrorCode.emailFailed)
+        case 503 where code == ErrorCode.featureUnavailable: return .validation(ErrorCode.featureUnavailable)
         case 400, 422: return .validation(code ?? "invalid_request", code == nil ? message : nil)
         default: return .server(status: status, message: message)
         }

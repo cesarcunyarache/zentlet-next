@@ -82,9 +82,28 @@ If `apps/api` replaces Better Auth with its own auth, only `RemoteAuthRepository
 
 `MainTabView` handles `…/list/invite/<token>` and `zentlet://invite/<token>`. For these links to open the app, the project still needs Associated Domains or a URL type.
 
-## Not ported (needs the server or a product decision)
+## Server features
 
-- AI: category suggestions while typing, the category generator, receipt scanning and voice dictation (the onboarding steps "type" and "voice" describe these, so they are left out).
-- Gmail inbox import, WhatsApp, billing.
-- Email invites (`POST /api/list/:id/invites/email`): the response contract wasn't audited.
+| Feature | Local mode | Remote mode |
+| --- | --- | --- |
+| Dictation ("ayer gasté 35 en almuerzo") | Apple Speech + `VoiceParser`, a port of the web rules (`parse-voice.ts`, `lib/voice/*`) | Same, on the device |
+| Category suggestion while typing | Rules (`DescriptionHints`, synonyms) | `POST /api/ai/category-suggestion` (**to be created**) |
+| Icon and color ideas | Keyword table | `POST /api/ai/category-styles` (**to be created**) |
+| Receipt scan | Vision text recognition + `ReceiptTextParser` | `POST /api/ai/receipt`, multipart (**to be created**) |
+| Bank emails (forwarding, Gmail) | Unavailable | `/api/inbox/**` (existing) |
+| WhatsApp linking | Unavailable | `/api/whatsapp/connection` (existing) |
+| Subscription | Free plan | `/api/billing/{me,checkout,sync,cancel}` (existing) |
+| Email invites | Unavailable | `POST /api/list/:id/invites/email` (existing) |
+
+**AI routes.** On the web, suggestion, category generator and receipt scanner are Next.js server actions, which a native client can't call. `RemoteAIRepository` expects REST routes with the same input and output as those actions (see the doc comment there). While the routes return 404, it falls back to the on-device assistant.
+
+**Gmail.** The flow runs in `ASWebAuthenticationSession` against `/api/inbox/gmail/connect`, and the result is read from `?gmail=` on the `/admin` return URL. The server currently keeps the OAuth state in a cookie and needs a browser session. It must accept the native client's session (for example a short-lived token in the connect URL).
+
+**Subscriptions and the App Store.** Apple requires In-App Purchase for digital subscriptions sold inside an iOS app (guideline 3.1.1), so linking to Mercado Pago checkout risks App Review rejection. Checkout is behind `AppConfiguration.allowsExternalCheckout` (off). The screen shows plan status and lets users cancel. Options: add StoreKit In-App Purchase, or keep purchases on the web.
+
+**Permissions.** Camera, microphone and speech recognition usage strings are set in the target build settings.
+
+## Still open
+
 - Legal pages and cookie consent screens.
+- Associated Domains for invite links and the Gmail return URL.
