@@ -9,9 +9,12 @@ import { BudgetModule } from './modules/budget/budget.module.js';
 import { CategoryModule } from './modules/category/category.module.js';
 import { FeatureFlagModule } from './modules/feature-flag/feature-flag.module.js';
 import { FeedbackModule } from './modules/feedback/feedback.module.js';
+import { InboxModule } from './modules/inbox/inbox.module.js';
+import { NotificationModule } from './modules/notification/notification.module.js';
 import { PreferenceModule } from './modules/preference/preference.module.js';
 import { RecurringModule } from './modules/recurring/recurring.module.js';
 import { TransactionModule } from './modules/transaction/transaction.module.js';
+import { WhatsappModule } from './modules/whatsapp/whatsapp.module.js';
 import { AiModule } from './shared/ai/ai.module.js';
 import { BackgroundModule } from './shared/background/background.module.js';
 import { EmailModule } from './shared/email/email.module.js';
@@ -47,6 +50,9 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     FeedbackModule,
     PreferenceModule,
     FeatureFlagModule,
+    NotificationModule,
+    InboxModule,
+    WhatsappModule,
   ],
   controllers: [AppController],
   providers: [AppService],

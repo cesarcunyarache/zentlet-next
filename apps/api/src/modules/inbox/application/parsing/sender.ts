@@ -1,0 +1,46 @@
+import type { SenderRule, SenderVerdict } from '../../domain/inbox-sender/inbox-sender.js';
+import { knownBankFor, senderDomain } from './banks.js';
+
+const ADDRESS = /[\w.+-]+@[\w-]+(?:\.[\w-]+)+/;
+const AUTO_BLOCK_DISMISSALS = 3;
+
+export function normalizeAddress(value: string): string {
+  return ADDRESS.exec(value)?.[0].toLowerCase() ?? '';
+}
+
+export function normalizeSenderPattern(value: string): string {
+  const trimmed = value.trim().toLowerCase();
+  if (/^@?[\w-]+(?:\.[\w-]+)+$/.test(trimmed) && !trimmed.includes('@', 1)) {
+    return trimmed.startsWith('@') ? trimmed : `@${trimmed}`;
+  }
+  return normalizeAddress(trimmed);
+}
+
+function ruleMatches(rule: Pick<SenderRule, 'address'>, address: string): boolean {
+  if (rule.address.startsWith('@')) {
+    const domain = senderDomain(address);
+    const pattern = rule.address.slice(1);
+    return domain === pattern || domain.endsWith(`.${pattern}`);
+  }
+  return rule.address === address;
+}
+
+function findSenderRule<T extends Pick<SenderRule, 'address'>>(rules: T[], address: string): T | null {
+  return rules.find((rule) => rule.address === address) ?? rules.find((rule) => ruleMatches(rule, address)) ?? null;
+}
+
+export function senderVerdict(address: string, rules: SenderRule[]): SenderVerdict {
+  const rule = findSenderRule(rules, address);
+  if (rule?.status === 'blocked') return 'blocked';
+  if (knownBankFor(address)) return 'known';
+  return rule && isTrustedRule(rule) ? 'trusted' : 'unknown';
+}
+
+export function isTrustedRule(rule: Pick<SenderRule, 'status' | 'origin' | 'acceptedCount'>): boolean {
+  return rule.status === 'trusted' && (rule.origin === 'manual' || rule.acceptedCount > 0);
+}
+
+export function shouldAutoBlock(address: string, rule: Pick<SenderRule, 'origin' | 'acceptedCount' | 'dismissedCount'>): boolean {
+  if (knownBankFor(address) || rule.origin === 'manual') return false;
+  return rule.acceptedCount === 0 && rule.dismissedCount >= AUTO_BLOCK_DISMISSALS;
+}
