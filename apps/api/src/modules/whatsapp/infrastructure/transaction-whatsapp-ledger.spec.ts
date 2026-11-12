@@ -47,9 +47,10 @@ function buildFakeDeps() {
     execute: (input: { userId: string }) => Promise<Category[]>;
   };
   const createTransaction = { execute } as unknown as { execute: typeof execute };
-  const logger: Logger = { debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn() };
+  const logError = vi.fn();
+  const logger: Logger = { debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: logError };
 
-  return { store, execute, listCategories, createTransaction, logger };
+  return { store, execute, listCategories, createTransaction, logger, logError };
 }
 
 describe('TransactionWhatsappLedger', () => {
@@ -81,9 +82,8 @@ describe('TransactionWhatsappLedger', () => {
   });
 
   it('returns false and logs instead of throwing when the transaction use-case rejects the call', async () => {
-    const { listCategories, logger } = buildFakeDeps();
+    const { listCategories, logger, logError } = buildFakeDeps();
     const createTransaction = { execute: vi.fn().mockRejectedValue(new Error('category not owned')) };
-    const logError = logger.error;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const ledger = new TransactionWhatsappLedger(listCategories as any, createTransaction as any, logger);
 
