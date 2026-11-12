@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		AA0000000000000000000A03 /* ZentletCore in Frameworks */ = {isa = PBXBuildFile; productRef = AA0000000000000000000A01 /* ZentletCore */; };
+		AA0000000000000000000A04 /* ZentletData in Frameworks */ = {isa = PBXBuildFile; productRef = AA0000000000000000000A02 /* ZentletData */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		C15DFA6330A4B92100437991 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +57,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA0000000000000000000A03 /* ZentletCore in Frameworks */,
+				AA0000000000000000000A04 /* ZentletData in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +119,8 @@
 			);
 			name = zentlet;
 			packageProductDependencies = (
+				AA0000000000000000000A01 /* ZentletCore */,
+				AA0000000000000000000A02 /* ZentletData */,
 			);
 			productName = zentlet;
 			productReference = C15DFA5530A4B91E00437991 /* zentlet.app */;
@@ -192,9 +201,13 @@
 			knownRegions = (
 				en,
 				Base,
+				es,
 			);
 			mainGroup = C15DFA4C30A4B91E00437991;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				AA0000000000000000000A00 /* XCLocalSwiftPackageReference "ZentletKit" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C15DFA5630A4B91E00437991 /* Products */;
 			projectDirPath = "";
@@ -558,6 +571,24 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		AA0000000000000000000A00 /* XCLocalSwiftPackageReference "ZentletKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ZentletKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		AA0000000000000000000A01 /* ZentletCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ZentletCore;
+		};
+		AA0000000000000000000A02 /* ZentletData */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ZentletData;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C15DFA4D30A4B91E00437991 /* Project object */;
 }
