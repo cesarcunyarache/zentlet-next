@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { AccountRepository } from '../../../domain/account.repository.js';
+import { AccountRepository } from '../../../domain/account/account.repository.js';
 import { InvalidCredentialsError } from '../../../domain/auth.errors.js';
-import { PasswordHasher } from '../../../domain/password-hasher.js';
-import { SessionRepository } from '../../../domain/session.repository.js';
-import { UserRepository } from '../../../domain/user.repository.js';
+import { PasswordHasher } from '../../../domain/password/password-hasher.js';
+import { SessionRepository } from '../../../domain/session/session.repository.js';
+import { UserRepository } from '../../../domain/user/user.repository.js';
 import { sessionExpiryFrom } from '../../session-ttl.js';
 import type { SignInWithPasswordInput } from './sign-in-with-password.input.js';
 import type { SignInWithPasswordOutput } from './sign-in-with-password.output.js';

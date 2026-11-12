@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import type { PaymentStatus } from '../domain/billing.types.js';
 import { BillingPaymentRepository } from '../domain/billing-payment.repository.js';
-import type { BillingPayment, PaymentRecord, PaymentWithSubscription, Refund } from '../domain/entities/billing-payment.js';
-import type { Subscription } from '../domain/entities/subscription.js';
+import type { BillingPayment, PaymentRecord, PaymentWithSubscription, Refund } from '../domain/billing-payment.js';
+import type { Subscription } from '../domain/subscription.js';
 
 @Injectable()
 export class InMemoryBillingPaymentRepository extends BillingPaymentRepository {

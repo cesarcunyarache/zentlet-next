@@ -1,5 +1,5 @@
-import type { Session } from '../../../domain/session.js';
-import type { User } from '../../../domain/user.js';
+import type { Session } from '../../../domain/session/session.js';
+import type { User } from '../../../domain/user/user.js';
 
 export type SignInWithPasswordOutput = {
   user: User;

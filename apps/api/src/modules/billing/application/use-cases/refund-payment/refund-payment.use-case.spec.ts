@@ -1,10 +1,11 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import type { BillingPayment } from '../../../domain/entities/billing-payment.js';
+import type { BillingPayment } from '../../../domain/billing-payment.js';
 import { InMemoryBillingEventRepository } from '../../../infrastructure/in-memory-billing-event.repository.js';
 import { InMemoryBillingPaymentRepository } from '../../../infrastructure/in-memory-billing-payment.repository.js';
 import { InMemorySubscriptionRepository } from '../../../infrastructure/in-memory-subscription.repository.js';
 import { SubscriptionLifecycleService } from '../../services/subscription-lifecycle.service.js';
-import { FakeBillingProvider, FakeBillingProviderRegistry } from '../billing-test-doubles.js';
+import { FakeBillingProvider } from '../../../infrastructure/fake-billing-provider.js';
+import { FakeBillingProviderRegistry } from '../../../infrastructure/fake-billing-provider-registry.js';
 import { RefundPaymentUseCase } from './refund-payment.use-case.js';
 
 const NOW = new Date('2026-10-15T12:00:00Z');

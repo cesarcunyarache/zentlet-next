@@ -11,7 +11,7 @@ import {
   type WebhookRequest,
   type WebhookResource,
 } from '../../domain/billing-provider.js';
-import { Logger } from '../../../../shared/logger/types.js';
+import { Logger } from '../../../../shared/logger/domain/logger.js';
 import {
   checkoutBody,
   fromCents,
@@ -87,8 +87,8 @@ export class MercadoPagoProvider extends BillingProvider {
     const body = this.readWebhookBody(rawBody);
     const bodyDataId = body?.data?.id === undefined ? null : String(body.data.id);
 
-    const signature = this.verifyWebhook(headers, [...new Set([query.dataId, bodyDataId])]);
-    if (signature !== 'valid' || !body) {
+    const { check: signature, validatedDataId } = this.verifyWebhook(headers, [...new Set([query.dataId, bodyDataId])]);
+    if (signature !== 'valid' || !body || !validatedDataId) {
       this.logger.warn(
         { signature, hasQueryDataId: query.dataId !== null, hasRequestId: headers.requestId !== null, hasBody: body !== null },
         'billing.webhook_rejected',
@@ -97,9 +97,13 @@ export class MercadoPagoProvider extends BillingProvider {
     }
 
     const type = query.type ?? body.type ?? 'unknown';
-    const resourceId = query.dataId ?? bodyDataId;
+    // The resource id must be the one the signature actually validated for,
+    // never re-derived from the (unsigned) query/body independently — otherwise
+    // a request reusing someone else's valid ts/v1/request-id could point a
+    // validly-signed webhook at an arbitrary resource id.
+    const resourceId = validatedDataId;
     const eventId = body.id === undefined ? headers.requestId : `${type}:${body.id}`;
-    if (!resourceId || !eventId) return null;
+    if (!eventId) return null;
 
     return { eventId, type, resource: WEBHOOK_RESOURCES[type] ?? 'ignored', resourceId };
   }
@@ -157,14 +161,19 @@ export class MercadoPagoProvider extends BillingProvider {
     }
   }
 
-  private verifyWebhook(headers: WebhookRequest['headers'], dataIds: (string | null)[]): SignatureCheck {
+  private verifyWebhook(
+    headers: WebhookRequest['headers'],
+    dataIds: (string | null)[],
+  ): { check: SignatureCheck; validatedDataId: string | null } {
     const input = {
       header: headers.signature,
       requestId: headers.requestId,
       secret: this.requireEnv('MERCADOPAGO_WEBHOOK_SECRET'),
       now: Date.now(),
     };
-    const checks = dataIds.map((dataId) => checkSignature({ ...input, dataId }));
-    return checks.find((check) => check === 'valid') ?? checks[0];
+    const checks = dataIds.map((dataId) => ({ dataId, check: checkSignature({ ...input, dataId }) }));
+    const validated = checks.find((entry) => entry.check === 'valid');
+    if (validated) return { check: 'valid', validatedDataId: validated.dataId };
+    return { check: checks[0]?.check ?? 'missing', validatedDataId: null };
   }
 }

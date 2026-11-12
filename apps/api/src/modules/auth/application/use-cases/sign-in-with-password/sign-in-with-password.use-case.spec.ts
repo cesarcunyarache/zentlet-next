@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { InvalidCredentialsError } from '../../../domain/auth.errors.js';
-import { InMemoryAccountRepository } from '../../../infrastructure/in-memory-account.repository.js';
-import { InMemorySessionRepository } from '../../../infrastructure/in-memory-session.repository.js';
-import { InMemoryUserRepository } from '../../../infrastructure/in-memory-user.repository.js';
-import { NodePasswordHasher } from '../../../infrastructure/node-password-hasher.js';
+import { InMemoryAccountRepository } from '../../../infrastructure/account/in-memory-account.repository.js';
+import { InMemorySessionRepository } from '../../../infrastructure/session/in-memory-session.repository.js';
+import { InMemoryUserRepository } from '../../../infrastructure/user/in-memory-user.repository.js';
+import { NodePasswordHasher } from '../../../infrastructure/password/node-password-hasher.js';
 import { SignUpWithPasswordUseCase } from '../sign-up-with-password/sign-up-with-password.use-case.js';
 import { SignInWithPasswordUseCase } from './sign-in-with-password.use-case.js';
 

@@ -1,11 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type { Logger } from '../../../../../shared/logger/types.js';
+import type { Logger } from '../../../../../shared/logger/domain/logger.js';
 import { BillingProviderError, type WebhookNotification, type WebhookRequest } from '../../../domain/billing-provider.js';
 import { InMemoryBillingEventRepository } from '../../../infrastructure/in-memory-billing-event.repository.js';
 import { InMemoryBillingPaymentRepository } from '../../../infrastructure/in-memory-billing-payment.repository.js';
 import { InMemorySubscriptionRepository } from '../../../infrastructure/in-memory-subscription.repository.js';
 import { SubscriptionLifecycleService } from '../../services/subscription-lifecycle.service.js';
-import { FakeBillingProvider, FakeBillingProviderRegistry } from '../billing-test-doubles.js';
+import { FakeBillingProvider } from '../../../infrastructure/fake-billing-provider.js';
+import { FakeBillingProviderRegistry } from '../../../infrastructure/fake-billing-provider-registry.js';
 import { RecordPaymentUseCase } from '../record-payment/record-payment.use-case.js';
 import { HandleWebhookUseCase } from './handle-webhook.use-case.js';
 

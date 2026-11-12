@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { EmailAlreadyRegisteredError } from '../../../domain/auth.errors.js';
-import { InMemoryAccountRepository } from '../../../infrastructure/in-memory-account.repository.js';
-import { InMemorySessionRepository } from '../../../infrastructure/in-memory-session.repository.js';
-import { InMemoryUserRepository } from '../../../infrastructure/in-memory-user.repository.js';
-import { NodePasswordHasher } from '../../../infrastructure/node-password-hasher.js';
+import { InMemoryAccountRepository } from '../../../infrastructure/account/in-memory-account.repository.js';
+import { InMemorySessionRepository } from '../../../infrastructure/session/in-memory-session.repository.js';
+import { InMemoryUserRepository } from '../../../infrastructure/user/in-memory-user.repository.js';
+import { NodePasswordHasher } from '../../../infrastructure/password/node-password-hasher.js';
 import { SignUpWithPasswordUseCase } from './sign-up-with-password.use-case.js';
 
 function buildUseCase() {
@@ -45,5 +45,34 @@ describe('SignUpWithPasswordUseCase', () => {
     await expect(
       useCase.execute({ email: 'taken@example.com', password: 'second-password', name: 'Second' }),
     ).rejects.toThrow(EmailAlreadyRegisteredError);
+  });
+
+  it('rejects sign-up when a user already exists for the email without a credential account (e.g. an Apple-only user), instead of attaching a password to it', async () => {
+    const { useCase, userRepository, accountRepository } = buildUseCase();
+    const now = new Date();
+    const appleOnlyUser = await userRepository.create({
+      id: crypto.randomUUID(),
+      email: 'apple-only@example.com',
+      name: 'Apple Only',
+      emailVerified: true,
+      image: null,
+      createdAt: now,
+      updatedAt: now,
+    });
+    await accountRepository.create({
+      id: crypto.randomUUID(),
+      accountId: 'apple-subject',
+      providerId: 'apple',
+      userId: appleOnlyUser.id,
+      password: null,
+      createdAt: now,
+      updatedAt: now,
+    });
+
+    await expect(
+      useCase.execute({ email: 'apple-only@example.com', password: 'attacker-password', name: 'Attacker' }),
+    ).rejects.toThrow(EmailAlreadyRegisteredError);
+
+    await expect(accountRepository.findCredentialByUserId(appleOnlyUser.id)).resolves.toBeNull();
   });
 });

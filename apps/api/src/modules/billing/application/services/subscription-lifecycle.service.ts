@@ -3,7 +3,7 @@ import type { BillingEventSource } from '../../domain/billing.types.js';
 import { BillingProviderRegistry } from '../../domain/billing-provider-registry.js';
 import type { SubscriptionSnapshot } from '../../domain/billing-provider.js';
 import { BillingEventRepository } from '../../domain/billing-event.repository.js';
-import type { Subscription } from '../../domain/entities/subscription.js';
+import type { Subscription } from '../../domain/subscription.js';
 import { SubscriptionRepository } from '../../domain/subscription.repository.js';
 import { resolveStatus } from '../rules/subscription-lifecycle.rules.js';
 import { BillingPaymentRepository } from '../../domain/billing-payment.repository.js';

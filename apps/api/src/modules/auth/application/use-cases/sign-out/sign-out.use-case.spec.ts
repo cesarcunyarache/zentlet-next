@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { InMemorySessionRepository } from '../../../infrastructure/in-memory-session.repository.js';
+import { InMemorySessionRepository } from '../../../infrastructure/session/in-memory-session.repository.js';
 import { SignOutUseCase } from './sign-out.use-case.js';
 
 describe('SignOutUseCase', () => {

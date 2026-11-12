@@ -30,6 +30,8 @@ Out of scope (exists on web, pending): budgets, recurring transactions, AI, inbo
 
 - [~] T9 S7 Budgets (periods, limits, alerts, notices), recurring movements, notifications, export, onboarding, Spanish catalog, assign-to-list, invite links — inline — written, not compiled
 
+- [~] T10 AI (on-device + proposed REST), voice dictation (Speech + VoiceParser port), receipt scan (Vision), Gmail/forwarding inbox, WhatsApp, billing (checkout behind flag), email invites — inline — written, not compiled
+
 Route evidence: no Writer trigger (units share the domain module; no parallel independent units), so all inline.
 Pending proof: `swift test` in ZentletKit and an `xcodebuild` of the app; no iOS simulator runtime installed.
 
@@ -43,3 +45,4 @@ Pending proof: `swift test` in ZentletKit and an `xcodebuild` of the app; no iOS
 - L6 Manual review fixes before handoff: WithDependencies view, labeled tuples, async let capture of MainActor state, ISO date parsing, `ZentletCore.Category` qualification in app target.
 - Next: run `swift test` + `xcodebuild -scheme zentlet -destination 'generic/platform=iOS Simulator' build`, fix compile errors, then commit in slices (not committed yet: unverified).
 - L7 (2026-11-11) User: "enfocate en migrar por completo la vistas y pantallas y funcionalida que quede todo slisto y migrado luego revsiamos la buidl y los test" → ported budgets, recurring, notifications, export, onboarding (budget/month steps only: type/voice need server AI), Spanish String Catalog (234 entries), assign-to-list UI, invite links. No build/test run; no new tests yet for budget/recurring logic.
+- L8 (2026-11-11) User: "IA (sugerencia de categoría, generador, escaneo de recibos, dictado), Gmail, WhatsApp, pagos e invitaciones por email. termina de implementar eso pues en ios luego revisamos la integracion" → implemented. Findings: AI features are server actions (no REST) → RemoteAIRepository targets proposed /api/ai/* routes with on-device fallback; dictation is client-only rules on web → ported fully; billing checkout behind allowsExternalCheckout (App Store 3.1.1).

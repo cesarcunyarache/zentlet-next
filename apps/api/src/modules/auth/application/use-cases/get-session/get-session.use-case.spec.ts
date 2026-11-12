@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { InMemorySessionRepository } from '../../../infrastructure/in-memory-session.repository.js';
-import { InMemoryUserRepository } from '../../../infrastructure/in-memory-user.repository.js';
+import { InMemorySessionRepository } from '../../../infrastructure/session/in-memory-session.repository.js';
+import { InMemoryUserRepository } from '../../../infrastructure/user/in-memory-user.repository.js';
 import { GetSessionUseCase } from './get-session.use-case.js';
 
 const BASE_USER = {

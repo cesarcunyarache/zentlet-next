@@ -6,7 +6,7 @@ import type {
   NewSubscription,
   ProviderState,
   Subscription,
-} from '../domain/entities/subscription.js';
+} from '../domain/subscription.js';
 import { SubscriptionRepository } from '../domain/subscription.repository.js';
 
 @Injectable()

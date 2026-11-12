@@ -1,7 +1,7 @@
 import { Global, Module } from '@nestjs/common';
-import { ResendEmailSender } from './adapters/resend-email-sender.js';
-import { EmailService } from './email.service.js';
-import { EmailSender } from './types.js';
+import { ResendEmailSender } from './infrastructure/resend-email-sender.js';
+import { EmailService } from './application/email.service.js';
+import { EmailSender } from './domain/email.js';
 
 const PROVIDERS: Record<string, () => EmailSender | null> = {
   resend: () => (process.env.RESEND_API_KEY ? new ResendEmailSender(process.env.RESEND_API_KEY) : null),

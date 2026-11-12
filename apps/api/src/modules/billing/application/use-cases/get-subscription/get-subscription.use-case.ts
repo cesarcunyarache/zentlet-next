@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import type { Subscription } from '../../../domain/entities/subscription.js';
+import type { Subscription } from '../../../domain/subscription.js';
 import { SubscriptionRepository } from '../../../domain/subscription.repository.js';
 import { SubscriptionLifecycleService } from '../../services/subscription-lifecycle.service.js';
 import type { GetSubscriptionInput } from './get-subscription.input.js';

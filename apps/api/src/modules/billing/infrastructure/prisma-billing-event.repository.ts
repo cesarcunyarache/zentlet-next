@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Logger } from '../../../shared/logger/types.js';
-import { PrismaService } from '../../../shared/prisma/prisma.service.js';
+import { Logger } from '../../../shared/logger/domain/logger.js';
+import { PrismaService } from '../../../shared/prisma/infrastructure/prisma.service.js';
 import type { WebhookNotification } from '../domain/billing-provider.js';
 import { BillingEventRepository } from '../domain/billing-event.repository.js';
-import type { ClaimedWebhookEvent, NewBillingEvent, WebhookEventOutcome } from '../domain/entities/billing-event.js';
+import type { ClaimedWebhookEvent, NewBillingEvent, WebhookEventOutcome } from '../domain/billing-event.js';
 import { isUniqueViolation } from './db-errors.js';
 
 @Injectable()

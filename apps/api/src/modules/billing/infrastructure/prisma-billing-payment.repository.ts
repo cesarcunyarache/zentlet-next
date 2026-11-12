@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../../shared/prisma/prisma.service.js';
+import { PrismaService } from '../../../shared/prisma/infrastructure/prisma.service.js';
 import { BillingPaymentRepository } from '../domain/billing-payment.repository.js';
-import type { PaymentRecord, Refund } from '../domain/entities/billing-payment.js';
+import type { PaymentRecord, Refund } from '../domain/billing-payment.js';
 import { toPaymentStatus, toPaymentWithSubscription } from './prisma-billing.mapper.js';
 
 const byProviderId = (provider: string, externalId: string) => ({ provider_externalId: { provider, externalId } });

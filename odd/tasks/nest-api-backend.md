@@ -17,7 +17,14 @@ Branch: chore/migrate-turborepo. Delivery: ask-on-risk (default), work-unit comm
 - S11: "nada de acoplar redis todo ello debe vivir descoplado" — cache/rate-limit store behind a port, swappable (Redis adapter, degrade without it).
 - S12: "implementa por fa todo lo es la api tal cual" — implement the above for the API, following the exact same ports-and-adapters pattern already documented in `docs/architecture.md`.
 
-**Explicitly out of scope for this pass** (apps/web features not named by the user and large enough to need their own round): WhatsApp integration, in-app notifications, Gmail/inbox auto-import, recurring transactions, budgets, transaction lists/sharing, feature flags. Flagged to the user; continue only if asked.
+- S13 (2026-11-11): "faltavarios modulo en backend... completa por completo el backend que es la api" / "todooo tienes que quedar migrado" — full scope confirmed: every remaining apps/web feature gets ported, not just the originally-named ones. User explicitly selected Transaction + Budget + Recurring Transactions first (via AskUserQuestion), then overrode to "everything" immediately after.
+
+**Full remaining scope (grouped into modules, by Prisma model), in planned wave order:**
+- Wave A (in progress): `transaction` (Transaction), `budget` (Budget, BudgetAlert, BudgetLimit), `recurring` (RecurringTransaction) — explorer mapping apps/web now (agent abfa10380257f39a7).
+- Wave B (next, lower complexity): `transaction-list` (TransactionList, TransactionListMember, TransactionListInvite — sharing), `feedback` (Feedback), `preference` (UserPreference), `feature-flag` (Feature, UserFeature).
+- Wave C (needs a new shared AI port first — `ObjectGenerator`, mirroring apps/web's `src/lib/ai`): `notification` (Notification, NotificationDelivery), `inbox` (EmailInbox, GmailConnection, InboxSender, InboxTransaction, MerchantRule — Gmail OAuth + AI parsing), `whatsapp` (WhatsappLink, WhatsappLinkCode, WhatsappMessage — webhook + AI parsing).
+- Legal/consent (UserConsent, UserCookieConsent) ports alongside whichever wave touches sign-up flow again.
+- `RateLimit`/`UsageLimit` (platform.prisma) are infra-level, likely absorbed into existing `KvService`-backed rate limiting rather than their own module — revisit when something actually needs rate limiting wired in.
 
 ## Tasks
 
@@ -28,7 +35,10 @@ Branch: chore/migrate-turborepo. Delivery: ask-on-risk (default), work-unit comm
 | T3 | S1 | inline (parent) | done | (part of T2 commit — PrismaCategoryRepository) |
 | T4 | S4,S6 | delegated writer (independent unit; Risk: item 2 — auth) | writer done, own checks clean (typecheck/lint/9 files/20 tests) — pending wiring + independent verification | — |
 | T5 | S4,S10 | delegated writer (independent unit; Risk: item 1, item 3 — money/contracts) | writer done, own checks clean (typecheck/lint/22 files/108 tests) | — |
-| T6 | all | inline (parent) | wired (AuthModule + BillingModule registered in AppModule); full suite clean (typecheck/lint/22 files/108 tests); independent verifier running (agent a64464754cc38dc6f) over T4+T5 | — |
+| T6 | all | inline (parent) | done — verifier rechecked all 3 fixes independently: PASS on all 3 (account-takeover, Apple audience fail-open, MP resourceId binding). Item 4 (VERCEL_ENV→NODE_ENV) correctly left open — a deployment/ops decision, not a code defect. `shared/**` and all three `modules/**` reorganized into a consistent domain/application/infrastructure convention per user request (flattened billing's `domain/entities/`, moved billing's loose use-case test doubles into `infrastructure/fake-*.ts`, renamed the registry adapter; auth further split domain/infra into per-aggregate subfolders user/session/account/password/apple). Full suite clean (typecheck/lint/23 files/114 tests/e2e 1/1). | pending commit (by explicit path only, per user's concurrent-session instruction) |
+| T7 | S13 | delegated writer (foundational unit — Budget/Recurring depend on its exported SummarizeTransactionsUseCase) | in progress — Transaction module + minimal private-list slice (agent a7bfd6345c4e7879d) | — |
+| T8 | S13 | TBD per complexity | pending — transaction-list, feedback, preference, feature-flag | — |
+| T9 | S13 | TBD per complexity | pending — needs shared AI port first; notification, inbox, whatsapp | — |
 
 - T1: category module first slice (create/list use-cases, domain port, in-memory adapter, `src/modules/category`). Already done before this doc existed.
 - T2: shared infra skeleton under `src/shared/`: `prisma` (PrismaModule/PrismaService, schema copied from apps/web pointed at the same `DATABASE_URL`, generate-only — **migrations stay owned by apps/web**, never run `prisma migrate` from apps/api until schema ownership formally moves to a shared package), `logger` (port + Pino adapter), `email` (port + Resend adapter, dev console fallback), `kv` (port + ioredis adapter, no-op fallback), `background` (port + simple adapter).

@@ -4,7 +4,7 @@ import type {
   NewSubscription,
   ProviderState,
   Subscription,
-} from './entities/subscription.js';
+} from './subscription.js';
 
 export abstract class SubscriptionRepository {
   abstract findHistory(userId: string, limit: number): Promise<Subscription[]>;

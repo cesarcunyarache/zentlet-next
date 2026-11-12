@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Logger } from '../../../../../shared/logger/types.js';
+import { Logger } from '../../../../../shared/logger/domain/logger.js';
 import { BillingProviderRegistry } from '../../../domain/billing-provider-registry.js';
 import {
   BillingProviderError,
@@ -9,7 +9,7 @@ import {
   type WebhookRequest,
 } from '../../../domain/billing-provider.js';
 import { BillingEventRepository } from '../../../domain/billing-event.repository.js';
-import type { WebhookEventOutcome } from '../../../domain/entities/billing-event.js';
+import type { WebhookEventOutcome } from '../../../domain/billing-event.js';
 import { SubscriptionRepository } from '../../../domain/subscription.repository.js';
 import { SubscriptionLifecycleService } from '../../services/subscription-lifecycle.service.js';
 import { RecordPaymentUseCase } from '../record-payment/record-payment.use-case.js';

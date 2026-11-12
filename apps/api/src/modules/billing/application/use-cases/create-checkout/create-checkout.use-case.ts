@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { BillingProviderRegistry } from '../../../domain/billing-provider-registry.js';
 import { BillingEventRepository } from '../../../domain/billing-event.repository.js';
-import { SUBSCRIPTION_HISTORY_LIMIT, type Subscription } from '../../../domain/entities/subscription.js';
+import { SUBSCRIPTION_HISTORY_LIMIT, type Subscription } from '../../../domain/subscription.js';
 import { SubscriptionRepository } from '../../../domain/subscription.repository.js';
 import { grantsAccess } from '../../rules/subscription-access.rules.js';
 import { canReuseCheckout, firstChargeDate, isTrialEligible, TRIAL_DAYS } from '../../rules/subscription-lifecycle.rules.js';

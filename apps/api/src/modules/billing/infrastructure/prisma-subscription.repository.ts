@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import type { Prisma } from '../../../generated/prisma/client.js';
-import { PrismaService } from '../../../shared/prisma/prisma.service.js';
+import { PrismaService } from '../../../shared/prisma/infrastructure/prisma.service.js';
 import { LIVE_STATUSES } from '../application/rules/subscription-lifecycle.rules.js';
 import type {
   Cancellation,
@@ -8,7 +8,7 @@ import type {
   NewSubscription,
   ProviderState,
   Subscription,
-} from '../domain/entities/subscription.js';
+} from '../domain/subscription.js';
 import { SubscriptionRepository } from '../domain/subscription.repository.js';
 import { isUniqueViolation } from './db-errors.js';
 import { toSubscription, toSubscriptionOrNull } from './prisma-billing.mapper.js';

@@ -1,6 +1,6 @@
 import { createHmac } from 'node:crypto';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { Logger } from '../../../../shared/logger/types.js';
+import type { Logger } from '../../../../shared/logger/domain/logger.js';
 import { BillingProviderError } from '../../domain/billing-provider.js';
 import type { WebhookRequest } from '../../domain/billing-provider.js';
 import { MercadoPagoProvider } from './mercadopago.provider.js';
@@ -207,6 +207,17 @@ describe('parseWebhook', () => {
   it('a topic we do not handle is ignored', () => {
     const request = signedNotification({ ts: nowSeconds(), type: 'payment' });
     expect(provider().parseWebhook(request)).toMatchObject({ resource: 'ignored' });
+  });
+
+  it('binds resourceId to whichever dataId the signature actually validated, never to an independently-chosen query value', () => {
+    const signed = signedNotification({ ts: nowSeconds(), dataId: 'PRE-1' });
+    // The signature was computed for PRE-1 (via the request body); an attacker
+    // reusing that valid ts/v1/request-id can still freely set the query string.
+    const tampered: WebhookRequest = { ...signed, query: { ...signed.query, dataId: 'VICTIM-99' } };
+
+    const notification = provider().parseWebhook(tampered);
+
+    expect(notification).toMatchObject({ resourceId: 'PRE-1' });
   });
 
   it('rejects a signature from another secret, a stale one, and a non-JSON body', () => {

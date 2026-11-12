@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { InMemoryAccountRepository } from '../../../infrastructure/in-memory-account.repository.js';
-import { InMemorySessionRepository } from '../../../infrastructure/in-memory-session.repository.js';
-import { InMemoryUserRepository } from '../../../infrastructure/in-memory-user.repository.js';
-import { FakeAppleIdentityVerifier } from '../../../infrastructure/fake-apple-identity-verifier.js';
+import { InMemoryAccountRepository } from '../../../infrastructure/account/in-memory-account.repository.js';
+import { InMemorySessionRepository } from '../../../infrastructure/session/in-memory-session.repository.js';
+import { InMemoryUserRepository } from '../../../infrastructure/user/in-memory-user.repository.js';
+import { FakeAppleIdentityVerifier } from '../../../infrastructure/apple/fake-apple-identity-verifier.js';
 import { SignInWithAppleUseCase } from './sign-in-with-apple.use-case.js';
 
 function buildUseCase() {

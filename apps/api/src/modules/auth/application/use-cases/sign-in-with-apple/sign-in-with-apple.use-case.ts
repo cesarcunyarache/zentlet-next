@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { AccountRepository } from '../../../domain/account.repository.js';
-import { AppleIdentityVerifier } from '../../../domain/apple-identity-verifier.js';
-import { SessionRepository } from '../../../domain/session.repository.js';
-import { UserRepository } from '../../../domain/user.repository.js';
+import { AccountRepository } from '../../../domain/account/account.repository.js';
+import { AppleIdentityVerifier } from '../../../domain/apple/apple-identity-verifier.js';
+import { SessionRepository } from '../../../domain/session/session.repository.js';
+import { UserRepository } from '../../../domain/user/user.repository.js';
 import { sessionExpiryFrom } from '../../session-ttl.js';
 import type { SignInWithAppleInput } from './sign-in-with-apple.input.js';
 import type { SignInWithAppleOutput } from './sign-in-with-apple.output.js';

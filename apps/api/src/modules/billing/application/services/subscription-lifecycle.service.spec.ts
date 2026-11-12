@@ -2,7 +2,8 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { InMemoryBillingEventRepository } from '../../infrastructure/in-memory-billing-event.repository.js';
 import { InMemoryBillingPaymentRepository } from '../../infrastructure/in-memory-billing-payment.repository.js';
 import { InMemorySubscriptionRepository } from '../../infrastructure/in-memory-subscription.repository.js';
-import { FakeBillingProvider, FakeBillingProviderRegistry } from '../use-cases/billing-test-doubles.js';
+import { FakeBillingProvider } from '../../infrastructure/fake-billing-provider.js';
+import { FakeBillingProviderRegistry } from '../../infrastructure/fake-billing-provider-registry.js';
 import { SubscriptionLifecycleService } from './subscription-lifecycle.service.js';
 
 describe('SubscriptionLifecycleService', () => {

@@ -10,7 +10,7 @@ import { BillingEventRepository } from './domain/billing-event.repository.js';
 import { BillingPaymentRepository } from './domain/billing-payment.repository.js';
 import { BillingProviderRegistry } from './domain/billing-provider-registry.js';
 import { SubscriptionRepository } from './domain/subscription.repository.js';
-import { DefaultBillingProviderRegistry } from './infrastructure/billing-provider-registry.js';
+import { DefaultBillingProviderRegistry } from './infrastructure/default-billing-provider-registry.js';
 import { MercadoPagoProvider } from './infrastructure/mercadopago/mercadopago.provider.js';
 import { PrismaBillingEventRepository } from './infrastructure/prisma-billing-event.repository.js';
 import { PrismaBillingPaymentRepository } from './infrastructure/prisma-billing-payment.repository.js';

@@ -1,7 +1,7 @@
 import { Global, Module } from '@nestjs/common';
-import { Logger } from '../logger/types.js';
-import { InProcessBackgroundRunner } from './adapters/in-process-background-runner.js';
-import { BackgroundRunner } from './types.js';
+import { Logger } from '../logger/domain/logger.js';
+import { InProcessBackgroundRunner } from './infrastructure/in-process-background-runner.js';
+import { BackgroundRunner } from './domain/background-runner.js';
 
 @Global()
 @Module({

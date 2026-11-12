@@ -3,7 +3,8 @@ import { InMemoryBillingEventRepository } from '../../../infrastructure/in-memor
 import { InMemoryBillingPaymentRepository } from '../../../infrastructure/in-memory-billing-payment.repository.js';
 import { InMemorySubscriptionRepository } from '../../../infrastructure/in-memory-subscription.repository.js';
 import { SubscriptionLifecycleService } from '../../services/subscription-lifecycle.service.js';
-import { FakeBillingProvider, FakeBillingProviderRegistry } from '../billing-test-doubles.js';
+import { FakeBillingProvider } from '../../../infrastructure/fake-billing-provider.js';
+import { FakeBillingProviderRegistry } from '../../../infrastructure/fake-billing-provider-registry.js';
 import { CreateCheckoutUseCase } from './create-checkout.use-case.js';
 
 const DAY_MS = 24 * 60 * 60 * 1000;

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { SessionRepository } from '../../../domain/session.repository.js';
-import { UserRepository } from '../../../domain/user.repository.js';
+import { SessionRepository } from '../../../domain/session/session.repository.js';
+import { UserRepository } from '../../../domain/user/user.repository.js';
 import type { GetSessionInput } from './get-session.input.js';
 import type { GetSessionOutput } from './get-session.output.js';
 

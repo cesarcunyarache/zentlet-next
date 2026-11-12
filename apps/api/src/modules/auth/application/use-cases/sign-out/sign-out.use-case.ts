@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { SessionRepository } from '../../../domain/session.repository.js';
+import { SessionRepository } from '../../../domain/session/session.repository.js';
 import type { SignOutInput } from './sign-out.input.js';
 
 @Injectable()

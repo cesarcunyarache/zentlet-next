@@ -1,5 +1,5 @@
 import type { PaymentStatus } from './billing.types.js';
-import type { PaymentRecord, PaymentWithSubscription, Refund } from './entities/billing-payment.js';
+import type { PaymentRecord, PaymentWithSubscription, Refund } from './billing-payment.js';
 
 export abstract class BillingPaymentRepository {
   abstract findStatus(provider: string, externalId: string): Promise<PaymentStatus | null>;
